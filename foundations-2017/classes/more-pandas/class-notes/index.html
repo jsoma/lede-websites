@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Class notes about dogs and beer - NaN, value_counts, converting, and more</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2017/classes/more-pandas/class-notes/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Class notes about dogs and beer - NaN, value_counts, converting, and more">
+  <meta property="twitter:title" content="Class notes about dogs and beer - NaN, value_counts, converting, and more">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2017</a> &gt;  Class notes about dogs and beer - NaN, value_counts, converting, and more</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Class notes about dogs and beer - NaN, value_counts, converting, and more</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="reading-in-files">Reading in files</h2>
+
+<h3 id="not-reading-everything-in">Not reading everything in</h3>
+
+<p>If you’d like to try to analyze a subset of your data first, you can pass <code class="highlighter-rouge">nrows</code> to <code class="highlighter-rouge">read_csv</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Only read in 3000 rows</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"../dataset.csv"</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">3000</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>It doesn’t work for <code class="highlighter-rouge">read_excel</code>, though! In that case you can either save the file as a csv or read it all then, then take the first 3000.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Read in the whole file, but then</span>
+<span class="c"># only use the first 3000</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s">"dataset.xlsx"</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3000</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>And yes, list slicing would work here, too.</p>
+
+<h2 id="leaving-one-set-of-data-out-of-a-graph">Leaving one set of data out of a graph</h2>
+
+<p>Say you’re making a graph of the top industries in a graphic, you might use</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Plot the count of every industry</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'industry'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>But oh no, you don’t like the <code class="highlighter-rouge">Oil</code> industry! You want to get it out of the graphic! There are a few ways to do it, but the easiest is to **filter the oil companies out before you do your <code class="highlighter-rouge">.value_counts()</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># First, get rid of the oil industry</span>
+<span class="c"># by doing df[df['industry'] != 'Oil']</span>
+<span class="c"># then use ['industry'].value_counts()</span>
+<span class="c"># to get the counts of the remaining industries</span>
+<span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'industry'</span><span class="p">]</span> <span class="o">!=</span> <span class="s">'Oil'</span><span class="p">][</span><span class="s">'industry'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<h2 id="count-the-number-of-rows-that-meet-some-condition">Count the number of rows that meet some condition</h2>
+
+<p>When you want to count the rows of a dataframe, you often use <code class="highlighter-rouge">.shape</code>.
+<code class="highlighter-rouge">python
+# Get the number of rows of a dataframe
+df.shape
+</code></p>
+
+<p>You can also do this after you filter!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># First, filter for people over age 64</span>
+<span class="c"># Then, get the row and column count</span>
+<span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'age'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">64</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</code></pre>
+</div>
+
+<p>You can also use <code class="highlighter-rouge">.count()</code> but it’s a little different.</p>
+
+<h2 id="working-with-strings">Working with strings</h2>
+
+<h3 id="converting-strings-to-floats-or-ints">Converting strings to floats or ints</h3>
+
+<p>You can convert a string to a float by using <code class="highlighter-rouge">astype</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Convert height to a float</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'height'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p><strong>Make sure you only have numbers before you do this</strong>. If you get an error, it’s probably because you have a percent sign or a measurement (<code class="highlighter-rouge">lbs</code>, <code class="highlighter-rouge">mm</code>, etc) or something else in there that can’t be converted to a number.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Convert height to a float after getting</span>
+<span class="c"># rid of the measurement</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'height'</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">"cm"</span><span class="p">,</span><span class="s">""</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>It works for ints, too!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Convert age to an int</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'age'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="replacing-or-removing-part-of-a-string">Replacing or removing part of a string</h3>
+
+<p>You can use <code class="highlighter-rouge">.str.replace</code> to replace part of a string with some other string.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Replace "Mister" with "Mr"</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'Mister'</span><span class="p">,</span> <span class="s">'Mr'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>To remove something, just “replace” it with <code class="highlighter-rouge">''</code>, an empty string!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Remove "lbs" completely</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'weight'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'weight'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'lbs.'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="exact-matches">Exact matches</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Exactly match "Strawberry"</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'Strawberry'</span>
+</code></pre>
+</div>
+
+<h3 id="partial-matches">Partial matches</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Match strawberry, blueberry, raspberry</span>
+<span class="c"># and any other 'berry'</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"berry"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p><strong>But NaN values will be trouble!</strong> To ignore them, use <code class="highlighter-rouge">na=False</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Match strawberry, blueberry, raspberry</span>
+<span class="c"># and any other 'berry'</span>
+<span class="c"># Does NOT have an error if a name is missing</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"berry"</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="match-many-possibilities">Match many possibilities</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s">'strawberry'</span><span class="p">,</span> <span class="s">'blueberry'</span><span class="p">,</span> <span class="s">'raspberry'</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<p>This looks nicer when you do it with a separate variable</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Get an exact match with a few different options</span>
+<span class="n">berries</span> <span class="o">=</span> <span class="p">[</span><span class="s">'strawberry'</span><span class="p">,</span> <span class="s">'blueberry'</span><span class="p">,</span> <span class="s">'raspberry'</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">berries</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="value-counts">Value counts</h2>
+
+<p>If you ever get excited and think “I should use <code class="highlighter-rouge">groupby</code>!” you might first want to think : “wait maybe I should just use <code class="highlighter-rouge">.value_counts()</code> instead?”</p>
+
+<h3 id="normal-counting">Normal counting</h3>
+
+<p><code class="highlighter-rouge">.value_counts()</code> is great for figuring out how often something shows up. Use it all of the time with non-numeric data.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># How many rows from each state?</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'state'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<h3 id="get-the-counts-as-percentages">Get the counts as percentages</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># How many rows from each state as a percent?</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'state'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="count-missing-data">Count missing data</h3>
+
+<p>By default, <code class="highlighter-rouge">value_counts()</code> ignores missing data. If you have 100 dogs and 25 are male and 25 are female, <code class="highlighter-rouge">value_counts()</code> will tell you the sex split is 50/50. If you’d like to know it’s really 50/25/25, use <code class="highlighter-rouge">dropna=False</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># How many rows from each state as a percent?</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'state'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>You can combine this with <code class="highlighter-rouge">normalize=True</code> if you’d like.</p>
+
+<h3 id="graphing-valuecounts-with-big-numbers-on-top">Graphing value_counts() with big numbers on top</h3>
+
+<p>When you do <code class="highlighter-rouge">value_counts()</code> and want the top values, you normally do this</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Get the 10 most popular states and graph them</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'state'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>But if you try to graph it, the longest bars will be on the bottom! To fix that, you need to reverse your sort and use <code class="highlighter-rouge">.tail()</code> instead of <code class="highlighter-rouge">head()</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Get the 10 most popular states and graph them</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'state'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>You could also just remove <code class="highlighter-rouge">ascending=True</code> since it’s the default.</p>
+
+<h3 id="value-counts-for-different-categories">Value counts for different categories</h3>
+
+<p>A popular way to phrase this is <strong>the most popular CATEGORY_X based on CATEGORY_Y</strong> (jobs based on gender, crime based on city, export based on country).</p>
+
+<p>If you don’t use this code you’re going to get the top values for some categories and the lowest categories for some other values.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Top 3 most popular occupations by gender</span>
+<span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">"Gender"</span><span class="p">)[</span><span class="s">'Occupation'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>You can also use <code class="highlighter-rouge">nlargest</code> instead of <code class="highlighter-rouge">head</code>.</p>
+
+<h2 id="graphing">Graphing</h2>
+
+<h3 id="plotting-charts-on-top-of-each-other">Plotting charts on top of each other</h3>
+
+<p>We didn’t talk about this in class, but we use <code class="highlighter-rouge">ax=ax</code>, my least favorite thing in the pandas world!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># First draw one plot, save it as "ax"</span>
+<span class="c"># Then draw another plot, passing it "ax=ax"</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">'scatter'</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">'Age'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'Min Income'</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">'yellow'</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">'scatter'</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">'Age'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'Max Income'</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">'blue'</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>We’ll talk more about this in the future</p>
+
+<h3 id="changing-the-number-of-bins-in-a-histogram">Changing the number of bins in a histogram</h3>
+
+<p>By default, a histogram uses 10 bins. Use <code class="highlighter-rouge">bins=</code> to increase that number</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Plot a histogram of ages, with 30 bins</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'age'</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>You can also use <code class="highlighter-rouge">bins</code> to set the specific bins</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Set specific boundaries for the bins</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'age'</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">108</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<p>If you want to get really fancy, you can use <code class="highlighter-rouge">range</code> to automatically generate even bins for a given range.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Set bins to be between 0 and 100, with 10 step increments</span>
+<span class="c"># range(0, 101, 10) gives you</span>
+<span class="c"># [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]</span>
+<span class="c"># (you need to make it be 101 because the end isn't inclusive)</span>
+<span class="n">boundaries</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'age'</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="n">boundaries</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="joining-together-data-files">Joining together data files</h2>
+
+<h3 id="using-merge-to-make-sql-like-joins-in-pandas">Using .merge to make SQL-like joins in pandas</h3>
+
+<p>Use <code class="highlighter-rouge">.merge</code> to combine a “left” and “right” dataframe - you can remember which one is which because “left” is the one on the… left. <code class="highlighter-rouge">right_on</code> and <code class="highlighter-rouge">left_on</code> are the names of the columns you’re matching up.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># match 'zip' from df</span>
+<span class="c"># to 'zip code' from other_df</span>
+<span class="c"># save it as a new dataframe</span>
+<span class="n">combined_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">other_df</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s">"zip"</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s">"zip code"</span><span class="p">)</span>
+<span class="n">combined_df</span>
+</code></pre>
+</div>
+
+<p>Check out <a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.merge.html">the documentation</a> for more options.</p>
+
+<h2 id="missing-data">Missing data</h2>
+
+<p>Missing data has a lot of names! <code class="highlighter-rouge">NaN</code> is the official pandas name for it, but we can also call it <code class="highlighter-rouge">na</code> or <code class="highlighter-rouge">nan</code> or null` or just “../missing.”</p>
+
+<h3 id="changing-values-to-nan-when-reading-in-your-file">Changing values to <code class="highlighter-rouge">NaN</code> when reading in your file</h3>
+
+<p>When you’re reading in your file, there’s usually missing data. Sometimes the missing data isn’t empty, though, it’s “Unknown” or “-999” or “???”. You can tell pandas to replace this data with <code class="highlighter-rouge">NaN</code> when reading it in.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Read in a CSV, forcing 'Unknown', '-999' and '???' to be NaN</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"my-file.csv"</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="p">[</span><span class="s">"Unknown"</span><span class="p">,</span> <span class="s">"-999"</span><span class="p">,</span> <span class="s">"???"</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<p><strong>Make sure it is always a list</strong>. If it isn’t a list, it won’t work.</p>
+
+<h3 id="to-search-for-nan-values">To search for <code class="highlighter-rouge">NaN</code> values</h3>
+
+<p>To find something that’s <code class="highlighter-rouge">NaN</code>, you <strong>do not</strong> type <code class="highlighter-rouge">== "NaN"</code> - that’s a string! <code class="highlighter-rouge">NaN</code> is a special value, so it gets special ways to find it.</p>
+
+<p><strong>Filter a column to show <code class="highlighter-rouge">NaN</code> values</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Find NaN values</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'colname'</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p><strong>Find a column to show values that are NOT <code class="highlighter-rouge">NaN</code></strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Find values that are **not** NaN</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'colname'</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<h3 id="getting-rid-of-nan-values-with-dropna">Getting rid of <code class="highlighter-rouge">NaN</code> values with <code class="highlighter-rouge">.dropna()</code></h3>
+
+<p>If you have a <code class="highlighter-rouge">Series</code> (the two-column ugly thing) and you want to get rid of NaN values, use <code class="highlighter-rouge">.dropna()</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Get every name that is not NaN</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'Name'</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>If you have a <code class="highlighter-rouge">DataFrame</code> (the nice table thing) and you want to get rid of every row with a NaN value, use <code class="highlighter-rouge">.dropna()</code> with a <em>subset</em>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Get rid of every row where Name is NaN</span>
+<span class="c"># BUT!!!! you don't overwrite df,</span>
+<span class="c"># df still has the NaN values in it</span>
+<span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s">'Name'</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<p><strong>If you want to permanently remove the <code class="highlighter-rouge">NaN</code> rows</strong>, use <code class="highlighter-rouge">inplace=True</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Get rid of every row where Name is NaN</span>
+<span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s">'Name'</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="counting-nan-values-with-valuecounts">Counting <code class="highlighter-rouge">NaN</code> values with <code class="highlighter-rouge">value_counts()</code></h3>
+
+<p>By default, <code class="highlighter-rouge">value_counts()</code> ignores missing data. It might say “50% of your dogs are white and 50% of your dogs are black,” even if half of your dogs are missing colors!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Have NaN pay attention to missing values</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'colname'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="replacing-nan-values-with-other-values">Replacing <code class="highlighter-rouge">NaN</code> values with other values</h3>
+
+<p>Maybe you think <code class="highlighter-rouge">NaN</code> values should be something else instead - “Unknown” or “0” or “Butterscotch.” You can fill in missing values with <code class="highlighter-rouge">fillna</code>. It does NOT save it back to the dataframe, though!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Get everyone's name, but if it's NaN</span>
+<span class="c"># replace it with "Not sure"</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'Name'</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s">"Not sure"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>To save it back to the dataframe, you can add <code class="highlighter-rouge">inplace=True</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Permanently replace all NaN names</span>
+<span class="c"># with the string "Not sure"</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'Name'</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s">"Not sure"</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="send-nan-to-a-certain-position-on-a-list">Send <code class="highlighter-rouge">NaN</code> to a certain position on a list</h3>
+
+<p>When sorting, you can easily tell <code class="highlighter-rouge">NaN</code> values to go to the top or the bottom.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'colname'</span><span class="p">,</span> <span class="n">na_position</span><span class="o">=</span><span class="s">'first'</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'colname'</span><span class="p">,</span> <span class="n">na_position</span><span class="o">=</span><span class="s">'last'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>or if you’re doing a <code class="highlighter-rouge">value_counts()</code>, you don’t need to give it a column name</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="p">[</span><span class="s">'colname'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">na_position</span><span class="o">=</span><span class="s">'first'</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'colname'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">na_position</span><span class="o">=</span><span class="s">'last'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="avoiding-errors-with-strcontains-and-missing-data">Avoiding errors with <code class="highlighter-rouge">.str.contains</code> and missing data</h3>
+
+<p>By default, <code class="highlighter-rouge">.str.contains</code> gives you <code class="highlighter-rouge">True</code> for a match, <code class="highlighter-rouge">False</code> for not a match, and <code class="highlighter-rouge">NaN</code> for an <code class="highlighter-rouge">NaN</code> value. That <code class="highlighter-rouge">NaN</code> will screw things up if you’re trying to filter rows! To prevent this trouble, add <code class="highlighter-rouge">na=False</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Match strawberry, blueberry, raspberry</span>
+<span class="c"># and any other 'berry'</span>
+<span class="c"># Does NOT have an error if a name is missing</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"berry"</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre>
+</div>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

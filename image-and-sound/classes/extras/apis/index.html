@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>APIs</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/image-and-sound/classes/extras/apis/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="APIs">
+  <meta property="twitter:title" content="APIs">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Image and Sound, Data, CJS 2017</a> &gt;  APIs</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">APIs</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>Web pages are easy for people to read, but difficult for computers to understand. APIs are sources of data that are easy for computers to understand.</p>
+
+<p>If I said, hey API, what’s your favorite musician? It might say something like</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
+ <span class="s">'name'</span><span class="p">:</span> <span class="s">'Operation Ivy'</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Every API is different</strong>, but they usually involve going to a specific URL to get information. The URL might be something like</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v3</span><span class="o">/</span><span class="n">dogs</span><span class="err">?</span><span class="n">color</span><span class="o">=</span><span class="n">brown</span>
+</code></pre>
+</div>
+
+<p>Different URLs might give different information. These URLs are called <strong>endpoints</strong>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Several example endpoints</span>
+<span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v3</span><span class="o">/</span><span class="n">dogs</span><span class="err">?</span><span class="n">color</span><span class="o">=</span><span class="n">brown</span>
+<span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v3</span><span class="o">/</span><span class="n">cats</span><span class="err">?</span><span class="n">color</span><span class="o">=</span><span class="n">black</span>
+<span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v3</span><span class="o">/</span><span class="n">goats</span><span class="err">?</span><span class="n">color</span><span class="o">=</span><span class="n">white</span>
+</code></pre>
+</div>
+
+<h2 id="an-api-is-just-a-web-page">An API is just a web page</h2>
+
+<p>Honestly, seriously, truly: an API is <strong>just a web page!</strong> (…most of the time)</p>
+
+<p>Want to ask Spotify what Drake’s top tracks are? Check right here: <a href="https://api.spotify.com/v1/artists/4W9G3Vnt9eXWTo4VeOQkSa/top-tracks?country=US"><code class="highlighter-rouge">https://api.spotify.com/v1/artists/4W9G3Vnt9eXWTo4VeOQkSa/top-tracks?country=US</code></a></p>
+
+<p>While what’s on that page isn’t easy to read, <strong>you can read closely and probably figure it out</strong>. A computer just does it much more quickly.</p>
+
+<blockquote>
+  <p>Since you’re able to kind of read the response, it’s usually a good idea to test API requests in your browser before you really start coding with them - it’s also really useful for debugging errors!</p>
+</blockquote>
+
+<p>Most modern APIs (including Spotify’s) give you something called <strong>JSON</strong>, which stands for <strong>JavaScript Object Notation</strong>. Even though it says “JavaScript” in the name, it’s a format that every programming language can easily understand. It’s more or less the same as a dictionary in Python.</p>
+
+<h2 id="making-a-request">Making a request</h2>
+
+<p>A Spotify API request to search for 80’s playlists might look like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://api.spotify.com/v1/search?query=80s&amp;type=playlist
+</code></pre>
+</div>
+
+<p>API requests are usually built up of two parts, an endpoint and parameters.</p>
+
+<ul>
+  <li><strong>Endpoint:</strong> <code class="highlighter-rouge">/v1/search</code> (it’s just a URL!)</li>
+  <li><strong>Parameters:</strong> <code class="highlighter-rouge">query=80s&amp;type=playlist</code>
+    <ul>
+      <li><code class="highlighter-rouge">query</code> is <code class="highlighter-rouge">80s</code></li>
+      <li><code class="highlighter-rouge">type</code> is <code class="highlighter-rouge">playlist</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p>Note that a <code class="highlighter-rouge">?</code> is used to separate the endpoint from the parameters, but a <code class="highlighter-rouge">&amp;</code> is used to separate different parameters!</p>
+
+<p>If you want to know what endpoints and parameters exist for an API, you’ll want to <a href="https://developer.spotify.com/web-api/">read the documentation</a>.</p>
+
+<h3 id="fill-in-the-blank-endpoints">Fill-in-the-blank endpoints</h3>
+
+<p>You might also see documentation that notes an endpoint like one of these two</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://api.spotify.com/v1/artists/{id}/top-tracks?country=US
+https://api.spotify.com/v1/artists/[id]/top-tracks?country=US
+</code></pre>
+</div>
+
+<p>This is for the top tracks for a given artist, the <code class="highlighter-rouge"><span class="p">{</span><span class="err">id</span><span class="p">}</span></code> or <code class="highlighter-rouge">[id]</code> means <strong>fill in the blank with the id of the artist you want</strong>. You can use the search endpoint to discover Drake’s Spotify id is <code class="highlighter-rouge">4W9G3Vnt9eXWTo4VeOQkSa</code>, and then use</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://api.spotify.com/v1/artists/4W9G3Vnt9eXWTo4VeOQkSa/top-tracks?country=US
+</code></pre>
+</div>
+
+<p>to get his top tracks. <strong>Make sure you remove the <code class="highlighter-rouge">[]</code> or <code class="highlighter-rouge"><span class="p">{}</span></code></strong>, and if it doesn’t work try visiting the URL in the browser - it might provide a helpful error message.</p>
+
+<h2 id="dealing-with-api-responses">Dealing with API responses</h2>
+
+<p>90% of the time when you’re dealing with an API, you’re going to do something like the following.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Import the requests library, which will access the API URL</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="c"># Have requests go fetch the URL and store it in 'result'</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://api.spotify.com/v1/artists/4W9G3Vnt9eXWTo4VeOQkSa/top-tracks?country=US'</span><span class="p">)</span>
+
+<span class="c"># The result is technically text, but you know it's </span>
+<span class="c"># actually JSON, so you tell Python to process the JSON</span>
+<span class="c"># into a dictionary (since that's what JSON basically is),</span>
+<span class="c"># then store that dictionary inside of the 'data' variable</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+<span class="c"># And now we can take a look at what we've got</span>
+<span class="c"># There will most likely be dictionaries and lists and</span>
+<span class="c"># strings and all sorts of stuff in there!</span>
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c"># You'll probably want to look at the keys instead of</span>
+<span class="c"># everything all at once, to see what you can access</span>
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+<span class="c"># Once we know some keys, we can poke deeper...</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"There are"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">'tracks'</span><span class="p">]),</span> <span class="s">"top tracks"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">track</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s">'tracks'</span><span class="p">]:</span>
+  <span class="k">print</span><span class="p">(</span><span class="n">track</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<p>The other 10% of the time when an API doesn’t work like this, you’re probably dealing with an “OAuth API”. They require you to prove who you are with each request, and require a lot more effort.</p>
+
+<p>But even though you deal with each API similarly, <strong>every single API is different.</strong> They all have different endpoints, different formats, different everything. That’s where API documentation comes in handy.</p>
+
+<h2 id="authentication-and-api-keys">Authentication and API keys</h2>
+
+<p>Sometimes you need to identify yourself to the API in order to ask it for data. This is called <strong>authentication</strong>. There are roughly three levels of security with an API.</p>
+
+<h3 id="level-one-no-authentication">Level One: No Authentication</h3>
+
+<p><a href="https://developer.spotify.com/web-api/">Spotify’s Web API</a> (generally) doesn’t care who you are. You use a URL and wham! you’re good to go.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://api.spotify.com/v1/search?query=80s&amp;type=playlist
+</code></pre>
+</div>
+
+<h3 id="level-two-api-keys">Level Two: API keys</h3>
+
+<p>The <a href="https://darksky.net/dev/docs">Dark Sky API</a> requires you to sign up with your email address and gives you an <strong>API key</strong>.</p>
+
+<p>An API key is a semi-secret string of letters and numbers that identifies who you are each time you ask for data. That way if you make too many requests they can start asking you for money!</p>
+
+<blockquote>
+  <p>You generally don’t want to share your API keys with the world. I’ve faked API keys for the following urls, so opening them in a browser probably won’t work.</p>
+</blockquote>
+
+<p>In the Dark Sky API, the API key <code class="highlighter-rouge">1074402c474e3dab67f7377e1f95519</code> is part of the URL.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://api.darksky.net/forecast/1074402c474e3dab67f7377e1f95519/37.8267,-122.4233
+</code></pre>
+</div>
+
+<p>Sometimes you’ll also see it in the parameters, like in the <a href="https://developer.nytimes.com">New York Times Article Search API</a>, you can see <code class="highlighter-rouge">key=1074402c474e3dab</code> as a parameter.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=1074402c474e3dab&amp;q=syria
+</code></pre>
+</div>
+
+<h3 id="level-three-oauth">Level Three: OAuth</h3>
+
+<p>The <a href="https://dev.twitter.com/docs">Twitter API</a> (and Facebook’s, some of Spotify’s, and more) use something called <a href="https://en.wikipedia.org/wiki/OAuth">OAuth</a>.</p>
+
+<p>OAuth is a lot more complicated than an API key - you wind up having an API key, access tokens, and a lot of extra legwork. For OAuth APIs it’s usually best to rely on a package for your language of choice (see the next section).</p>
+
+<h2 id="api-packages">API packages</h2>
+
+<p>Instead of making the raw requests yourself (as above), you can usually find a library to do the work for you. For example, Spotify has the <a href="https://github.com/plamere/spotipy"><code class="highlighter-rouge">spotipy</code></a> package (yes, that’s spotify but with a <code class="highlighter-rouge">py</code> Python shout-out at the end).</p>
+
+<p>Let’s search for tracks by Weezer.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">spotipy</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">spotipy</span><span class="o">.</span><span class="n">Spotify</span><span class="p">()</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s">'weezer'</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s">'tracks'</span><span class="p">][</span><span class="s">'items'</span><span class="p">]):</span>
+  <span class="k">print</span> <span class="s">' '</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span>
+</code></pre>
+</div>
+
+<p>You need to be careful when using these libraries, though! Sometimes they fall out of date if their owner doesn’t update them each time the API itself is updated. If that happens you might run into problems getting the data from the API even if your code is 100% correct.</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

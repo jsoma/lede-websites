@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Scraping into pandas</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2019/classes/selenium/scraping-into-pandas/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Scraping into pandas">
+  <meta property="twitter:title" content="Scraping into pandas">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2019</a> &gt;  Scraping into pandas</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Scraping into pandas</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations-2019/classes/selenium/scraping-into-pandas.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h3 id="lets-say-we-want-to-save-a-csv-of-data-from-hm">Let’s say we want to save a CSV of data from H&amp;M.</h3>
+
+<p>Before we get started we’ll do all the normal imports. Notice we’re also
+importing pandas! We’re going to use pandas to save our content as a CSV once
+we’re done scraping. Why else would we scrape anything, if not to save it?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span></code></pre></figure>
+
+<p>First, we’ll just visit the page as usual. In this case H&amp;M is trying to protect
+itself from bots, so we’re pretending we’re a totally normal human being.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'User-Agent'</span><span class="p">:</span> <span class="s">'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'</span>
+<span class="p">}</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://www2.hm.com/en_us/sale/home/view-all.html'</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<p>We then use the inspector to find out that the class of each product is <code class="highlighter-rouge">item-
+heading</code> and the price of each product is <code class="highlighter-rouge">item-price</code></p>
+
+<p><img src="identify.jpg" alt="" /></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Using [:3] to only go through the first 3</span>
+<span class="n">names</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">"item-heading"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Knit Throw with Fringe
+Patterned Duvet Cover
+Cotton Pillowcase
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Using [:3] to only go through the first 3</span>
+<span class="c"># (it looks like more because 2 prices per item)</span>
+<span class="n">prices</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">"item-price"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">price</span> <span class="ow">in</span> <span class="n">prices</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">price</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$29.99
+$59.99
+$44.99
+$119.00
+$9.99
+$17.99
+</code></pre>
+</div>
+
+<h3 id="converting-to-a-list-of-dictionaries">Converting to a list of dictionaries</h3>
+
+<p>The problem is that we want to keep the first name attached to the first price,
+and the second name attached to the second price, and the third name attached to
+the third price. Right now they’re in two separate lists, when want we <em>really</em>
+want is one list, where each element has a <code class="highlighter-rouge">name</code> and a <code class="highlighter-rouge">price</code>. Like a list of
+dictionaries, right?</p>
+
+<p>First, let’s work on building our dictionaries. Instead of selecting all of the
+names and all of the prices, we need to figure out thing container that has the
+name <em>and</em> the price inside.</p>
+
+<p><img src="identify-block.jpg" alt="" /></p>
+
+<p>Basically “find the thing that surrounds every item”. Now, instead of finding
+each name or each price or whatever, we’re going to find each one of these
+blocks.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Using [:3] to only go through the first 3</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">"hm-product-item"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[:</span><span class="mi">2</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"----this is an item------"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>----this is an item------
+SAVE AS FAVORITE
+
+
+
+Knit Throw with Fringe
+
+$29.99
+$59.99
+
+
+
+				Dark gray
+----this is an item------
+SAVE AS FAVORITE
+
+
+
+		CLASSIC COLLECTION
+
+Patterned Duvet Cover
+
+$44.99
+$119.00
+
+
+
+				White/striped
+</code></pre>
+</div>
+
+<p>See? It has all of the information inside of it! Name, price, even the
+collection and the colorways. But we need it <strong>organized</strong>, not just in a weird
+random string.</p>
+
+<p>We’re going to change what we do in the loop. Right now we just <strong>print out
+everything inside of the block.</strong> Instead, we’re going to <strong>just find the
+name</strong>, and then <strong>just find the price</strong>. It’s just like what we were doing
+before when we found <em>all</em> of the names, but we’re only looking for the one
+inside of each block, <em>not</em> across the whole page.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Using [:5] to only go through the first 5</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">"hm-product-item"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"----this is an item------"</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'item-heading'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">price</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'item-price'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>----this is an item------
+Knit Throw with Fringe $29.99
+$59.99
+----this is an item------
+Patterned Duvet Cover $44.99
+$119.00
+----this is an item------
+Cotton Pillowcase $9.99
+$17.99
+----this is an item------
+Pillowcase with Pin-tucks $9.99
+$17.99
+----this is an item------
+Linen-blend Bedspread $54.99
+$99.00
+</code></pre>
+</div>
+
+<p>Notice we’re doing <code class="highlighter-rouge">item.find</code>, not <code class="highlighter-rouge">doc.find</code>! Just like we usually use <code class="highlighter-rouge">.text</code>
+to get the text of an element, <code class="highlighter-rouge">.find</code> will only find the pieces inside of it.</p>
+
+<p>If that doesn’t make sense, it’s ok to just memorize it! Use <code class="highlighter-rouge">.find_all</code> to find
+the big blocks, then use <code class="highlighter-rouge">.find</code> to find the individual pieces inside.</p>
+
+<p>Now, we’re looking to put together some dictionaries. Each product will be a row
+in the CSV we want to create. What is each column? Oh, name and price - the same
+as the things we’re printing out! We’re going to make a dictionary out of them,
+where each key ends up being a column in our CSV.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Find each product block</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">"hm-product-item"</span><span class="p">)</span>
+
+<span class="c"># Go through each of the blocks... (well, [:5] means the first 5)</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"----this is an item------"</span><span class="p">)</span>
+
+    <span class="c"># Create an empty row for our CSV file </span>
+    <span class="n">row</span> <span class="o">=</span> <span class="p">{}</span>
+    
+    <span class="c"># Fill in the 'name' and 'price' headers</span>
+    <span class="n">row</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'item-heading'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">row</span><span class="p">[</span><span class="s">'price'</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'item-price'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="c"># Print it out to double-check</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>----this is an item------
+{'name': 'Knit Throw with Fringe', 'price': '$29.99\n$59.99'}
+----this is an item------
+{'name': 'Patterned Duvet Cover', 'price': '$44.99\n$119.00'}
+----this is an item------
+{'name': 'Cotton Pillowcase', 'price': '$9.99\n$17.99'}
+----this is an item------
+{'name': 'Pillowcase with Pin-tucks', 'price': '$9.99\n$17.99'}
+----this is an item------
+{'name': 'Linen-blend Bedspread', 'price': '$54.99\n$99.00'}
+</code></pre>
+</div>
+
+<p>Now that we’ve got these dictionaries, we need to save them as we go along.
+Let’s make an empty list, and every time we look at a new product we can save it
+to the list.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Find each product block</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">"hm-product-item"</span><span class="p">)</span>
+
+<span class="c"># A list of rows. Each row will be a row in our final CSV</span>
+<span class="c"># We start without any!</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c"># Go through each of the blocks... (well, [:5] means the first 5)</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"----this is an item------"</span><span class="p">)</span>
+
+    <span class="c"># Create an empty row for our CSV file </span>
+    <span class="n">row</span> <span class="o">=</span> <span class="p">{}</span>
+    
+    <span class="c"># Fill in the 'name' and 'price' headers</span>
+    <span class="n">row</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'item-heading'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">row</span><span class="p">[</span><span class="s">'price'</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'item-price'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="c"># Now that we've filled in our row, add it to our list</span>
+    <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    
+    <span class="c"># Print it out to double-check</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"------"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Final list:"</span><span class="p">,</span><span class="n">rows</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>----this is an item------
+{'name': 'Knit Throw with Fringe', 'price': '$29.99\n$59.99'}
+----this is an item------
+{'name': 'Patterned Duvet Cover', 'price': '$44.99\n$119.00'}
+----this is an item------
+{'name': 'Cotton Pillowcase', 'price': '$9.99\n$17.99'}
+----this is an item------
+{'name': 'Pillowcase with Pin-tucks', 'price': '$9.99\n$17.99'}
+----this is an item------
+{'name': 'Linen-blend Bedspread', 'price': '$54.99\n$99.00'}
+------
+Final list: [{'name': 'Knit Throw with Fringe', 'price': '$29.99\n$59.99'}, {'name': 'Patterned Duvet Cover', 'price': '$44.99\n$119.00'}, {'name': 'Cotton Pillowcase', 'price': '$9.99\n$17.99'}, {'name': 'Pillowcase with Pin-tucks', 'price': '$9.99\n$17.99'}, {'name': 'Linen-blend Bedspread', 'price': '$54.99\n$99.00'}]
+</code></pre>
+</div>
+
+<p>Okay, cool, a list of dictionaries. But what we are going to do with it?</p>
+
+<p>Convert it into a dataframe with pandas, of course! Pandas will easily take a
+list of dictionaries and save it right into a dataframe.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Find each product block</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">"hm-product-item"</span><span class="p">)</span>
+
+<span class="c"># A list of rows. Each row will be a row in our final CSV</span>
+<span class="c"># We start without any!</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c"># Go through each of the blocks... (well, [:5] means the first 5)</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+    <span class="c"># Create an empty row for our CSV file </span>
+    <span class="n">row</span> <span class="o">=</span> <span class="p">{}</span>
+    
+    <span class="c"># Fill in the 'name' and 'price' headers</span>
+    <span class="n">row</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'item-heading'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">row</span><span class="p">[</span><span class="s">'price'</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'item-price'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="c"># Now that we've filled in our row, add it to our list</span>
+    <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Knit Throw with Fringe</td>
+      <td>$29.99\n$59.99</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Patterned Duvet Cover</td>
+      <td>$44.99\n$119.00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Cotton Pillowcase</td>
+      <td>$9.99\n$17.99</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Pillowcase with Pin-tucks</td>
+      <td>$9.99\n$17.99</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Linen-blend Bedspread</td>
+      <td>$54.99\n$99.00</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Now we just need to save it to a CSV. Just remember to do <code class="highlighter-rouge">index=False</code> so that
+it gets saved without the weird nameless index column!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">"../scraped.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

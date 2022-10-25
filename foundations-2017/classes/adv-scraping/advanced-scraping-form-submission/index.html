@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Advanced Scraping - Form Submission</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2017/classes/adv-scraping/advanced-scraping-form-submission/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Advanced Scraping - Form Submission">
+  <meta property="twitter:title" content="Advanced Scraping - Form Submission">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2017</a> &gt;  Advanced Scraping - Form Submission</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Advanced Scraping - Form Submission</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations-2017/classes/adv-scraping/advanced-scraping-form-submission.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span></code></pre></figure>
+
+<h2 id="in-the-beginning-there-were-get-forms">In the beginning there were GET forms</h2>
+
+<p>When you’re searching for <a href="https://www.walmart.com/search/?query=water&amp;cat_id=0">water at
+Walmart</a>, the URL looks
+like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://www.walmart.com/search/?query=water&amp;cat_id=0
+</code></pre>
+</div>
+
+<p>It’s easy to scrape! If you wanted to search for <code class="highlighter-rouge">guns</code> instead, you’d just
+change <code class="highlighter-rouge">water</code> to <code class="highlighter-rouge">guns</code> in the URL and off you go. This nice way of living is
+<strong>parameters in the query string</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Get the page</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://www.walmart.com/search/?query=water&amp;cat_id=0"</span><span class="p">)</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'html.parser'</span><span class="p">)</span>
+
+<span class="c"># Grab all of the titles</span>
+<span class="n">title_tags</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'prod-ProductTitle'</span><span class="p">)</span>
+
+<span class="c"># Let's print the first 5</span>
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">title_tags</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Sam's Choice Purified Drinking Water, 10 fl oz, 12 pack
+Nestlé Pure Life Purified Water 12 x 16.9fl oz (202.8fl oz)
+Fiji Natural Artesian Water, 6pk
+Gerber Pure Purified Water, 1.0 GAL
+ArrowHead 100% Mountain Spring Water 6 x 23.7 fl oz (142.2 fl oz)
+</code></pre>
+</div>
+
+<p><em>But it isn’t always like that.</em></p>
+
+<h2 id="but-then-post-forms">But then: POST Forms</h2>
+
+<p>But for most forms, though, it isn’t that easy. You type in your info, you click
+“Search”, and <em>there’s nothing in the URL.</em> For example, try searching at
+<a href="http://www2.dca.ca.gov/pls/wllpub/wllqr
+yna$lcev2.startup?p_qte_code=ENG&amp;p_qte_pgm_code=7500">California’s Engineer License Database</a>.</p>
+
+<p>The URL you end up at is something like
+<code class="highlighter-rouge">http://www2.dca.ca.gov/pls/wllpub/WLLQRYNA$LCEV2.ActionQuery</code>, which doesn’t
+mean <em>anything</em>. No parameters in that query string!</p>
+
+<p>If you search through the browser you see a lot of table rows, but if you try it
+in Python it doesn’t give you anything.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Get the page</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"http://www2.dca.ca.gov/pls/wllpub/WLLQRYNA$LCEV2.ActionQuery"</span><span class="p">)</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'html.parser'</span><span class="p">)</span>
+
+<span class="c"># Grab all of the rows</span>
+<span class="n">row_tags</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'tr'</span><span class="p">)</span>
+
+<span class="c"># Let's print the first 5</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">row_tags</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></figure>
+
+<p>Nothing at all! What did it give us? Let’s look at <code class="highlighter-rouge">response.text</code>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">response</span><span class="o">.</span><span class="n">text</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'&lt;HTML&gt;\n&lt;HEAD&gt;\n&lt;TITLE&gt;License Holders : &lt;/TITLE&gt;\n&lt;/HEAD&gt;\n&lt;BODY bgcolor="#ffffff"&gt;\n&lt;H1&gt;License Holders : &lt;/H1&gt;\n&lt;P&gt;\n&lt;B&gt;&lt;font color="ff4040" size=+2&gt;&lt;I&gt;Error!&lt;/I&gt;&lt;/font&gt;&lt;br&gt;&lt;/B&gt;\n&lt;B&gt;The following unhandled error has occurred in the routine WLLQRYNA$LCEV2.ActionQuery:&lt;/B&gt;\n&lt;P&gt;\nORA-01403: no data found\n&lt;P&gt;\n&lt;B&gt;Please contact your support representative.&lt;/B&gt;\n&lt;P&gt;\n&lt;/BODY&gt;\n&lt;/HTML&gt;\n'
+</code></pre>
+</div>
+
+<p>If you read closely, <strong>that’s an error</strong>. It’s because <strong>we didn’t send it any
+search data.</strong></p>
+
+<blockquote>
+  <p>Looking at <code class="highlighter-rouge">response.text</code> is THE BEST WAY to find out whether your search
+worked. You can ctrl+f or just visually search for words you know should be on
+the page.</p>
+</blockquote>
+
+<h2 id="finding-our-form-data">Finding our form data</h2>
+
+<p>When we clicked “Search,” it also sent the server a bunch of data - all of the
+options we typed in, or the dropdowns we selected. Here are the steps to find
+out what data needs to be sent along with your request.</p>
+
+<p>We’re going to use Chrome’s <strong>Network tools</strong> to analyze all of the requests our
+browser sends to the server, then imitate them in Python.</p>
+
+<ol>
+  <li>Open up <strong>Developer Tools</strong> in Chrome by selecting <code class="highlighter-rouge">View &gt; Developer &gt;
+Developer Tools</code>.</li>
+  <li>Select the <strong>Network Tab</strong></li>
+  <li>Visit the page you’re going to do your search from</li>
+  <li>Click the <strong>Clear</strong> button up top - 🚫 - then submit your form</li>
+  <li>The Network tab will fill with activity!</li>
+  <li>Find the thing in the Network tab that looks like the same name as your
+webpage. Click it.</li>
+  <li>On the right-hand side you get a new pane. If you scroll allllll the way down
+it lists <strong>Form Data</strong>.</li>
+</ol>
+
+<p>This <strong>Form Data</strong> is what we need to send along with our request. We just need
+to convert it to a dictionary and send it along.</p>
+
+<h2 id="sending-data-with-the-form-request">Sending data with the form request</h2>
+
+<p>Once we’ve converted our form data into a dictionary, we need to make sure of
+two things:</p>
+
+<ol>
+  <li>We’re using <code class="highlighter-rouge">requests.post</code> to make our request</li>
+  <li>We’re sending the form data with the request</li>
+</ol>
+
+<p>Normal browser requests are sent as <code class="highlighter-rouge">GET</code> requests, but these very fancy ones
+are sent as <code class="highlighter-rouge">POST</code>. <code class="highlighter-rouge">POST</code> just means “hey I’m sending extra data along with
+this.”</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'P_QTE_CODE'</span><span class="p">:</span> <span class="s">'ENG'</span><span class="p">,</span>
+    <span class="s">'P_QTE_PGM_CODE'</span><span class="p">:</span> <span class="s">'7500'</span><span class="p">,</span>
+    <span class="s">'P_LAST_NAME'</span><span class="p">:</span> <span class="s">'smith'</span><span class="p">,</span>
+    <span class="s">'P_FIRST_NAME'</span><span class="p">:</span> <span class="s">''</span><span class="p">,</span>
+    <span class="s">'P_INITIAL'</span><span class="p">:</span> <span class="s">''</span><span class="p">,</span>
+    <span class="s">'P_LICENSE_NUM'</span><span class="p">:</span> <span class="s">''</span><span class="p">,</span>
+    <span class="s">'P_CITY'</span><span class="p">:</span> <span class="s">''</span><span class="p">,</span>
+    <span class="s">'P_COUNTY'</span><span class="p">:</span> <span class="s">'LOS ANGELES'</span><span class="p">,</span>
+    <span class="s">'P_RECORD_SET_SIZE'</span><span class="p">:</span> <span class="s">'50'</span><span class="p">,</span>
+    <span class="s">'Z_ACTION'</span><span class="p">:</span> <span class="s">'Find'</span>
+<span class="p">}</span>
+
+<span class="c"># Get the page</span>
+<span class="c"># use .post</span>
+<span class="c"># send the data</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"http://www2.dca.ca.gov/pls/wllpub/WLLQRYNA$LCEV2.ActionQuery"</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'html.parser'</span><span class="p">)</span>
+
+<span class="c"># Grab all of the rows</span>
+<span class="n">row_tags</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'tr'</span><span class="p">)</span>
+
+<span class="c"># Let's print the first 5</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">row_tags</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>NameTypeNumberStatusAddressCityZipCounty
+SMITH                              A              M  OM2554CANCELLED2245 ASHBOURNE DRSAN MARINO91108LOS ANGELES
+SMITH                              ALLEN          EL2352CANCELLED713 N CALIFORNIA STBURBANK91505LOS ANGELES
+SMITH                              ALVIN          JE490DECEASED5004 RAMSDELL AVELA CRESCENTA91214LOS ANGELES
+SMITH                              ARTHUR         KERMITCS3124CANCELLED28803 CEDARBLUFF DRRANCHO PALOS VERDES90275LOS ANGELES
+</code></pre>
+</div>
+
+<p>If we didn’t know if it worked or not, we could also check the response by
+looking at <code class="highlighter-rouge">response.text</code>.</p>
+
+<h2 id="sending-headers-with-your-request">Sending headers with your request</h2>
+
+<p>Sometimes that isn’t enough! Some web servers check to make sure you’re a real
+browser, or you came from their site, or other stuff like that.</p>
+
+<p><strong>We don’t need to do this for the Engineers page, but I’m going to do it
+anyway.</strong></p>
+
+<p>When you send a request, you also send thing called “Headers.” You can see the
+headers inside of the same Network tab part where you found Form Data. It’s
+listed as <strong>Request Headers</strong> - <em>ignore the response headers</em>.</p>
+
+<h3 id="pretending-to-be-the-browser">Pretending to be the browser</h3>
+
+<p>The most common thing you’ll need to do is impersonate a browser by sending a
+<code class="highlighter-rouge">User-Agent</code> string. If we wanted to visit Columbia’s website pretending to be
+Chrome, we might do this:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'User-Agent'</span><span class="p">:</span><span class="s">'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'</span>
+<span class="p">}</span>
+<span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"http://journalism.columbia.edu"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Response [200]&gt;
+</code></pre>
+</div>
+
+<h3 id="finding-the-appropriate-headers">Finding the appropriate headers</h3>
+
+<p>Sometimes pretending to be the browser just isn’t enough. If you want to 100%
+imitate your browser when sending a request, you need to copy aaaaalllll of the
+headers from the request.</p>
+
+<p>It’s just above the Form Data information, but I’ll tell you how to find it
+again just to be sure:</p>
+
+<ol>
+  <li>Open up <strong>Developer Tools</strong> in Chrome by selecting <code class="highlighter-rouge">View &gt; Developer &gt;
+Developer Tools</code>.</li>
+  <li>Select the <strong>Network Tab</strong></li>
+  <li>Visit the page you’re going to do your search from</li>
+  <li>Click the <strong>Clear</strong> button up top - 🚫 - then submit your form</li>
+  <li>The Network tab will fill with activity!</li>
+  <li>Find the thing in the Network tab that looks like the same name as your
+webpage. Click it.</li>
+  <li>On the right-hand side you get a new pane. If you scroll near to the bottom
+it shows you <strong>Request Headers</strong>.</li>
+</ol>
+
+<p>You just need to convert these into a dictionary, and send them along with your
+request.</p>
+
+<h3 id="sending-the-appropriate-headers">Sending the appropriate headers</h3>
+
+<p>I just checked my results for the Engineers bit. It has a lot of headers!</p>
+
+<p><code class="highlighter-rouge">Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q
+=0.8
+Accept-Encoding:gzip, deflate
+Accept-Language:en-US,en;q=0.8
+Cache-Control:max-age=0
+Connection:keep-alive
+Content-Length:156
+Content-Type:application/x-www-form-urlencoded
+Host:www2.dca.ca.gov
+Origin:http://www2.dca.ca.gov
+Referer:http://www2.dca.ca.gov/pls/wllpub/wllqryna$lcev2.startup?p_qte_code=ENG&amp;
+p_qte_pgm_code=7500
+Upgrade-Insecure-Requests:1
+User-Agent:Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36
+(KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36</code></p>
+
+<p>I’m usually too lazy to copy all of them so I only take the ones I think I need,
+but if you’d like to it’s probably easier than the weird <code class="highlighter-rouge">curl</code> thing I talked
+about in class.</p>
+
+<p>Let’s make a request using both <strong>headers and POST data</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Here are all of our headers</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'Accept'</span><span class="p">:</span><span class="s">'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'</span><span class="p">,</span>
+    <span class="s">'Accept-Encoding'</span><span class="p">:</span><span class="s">'gzip, deflate'</span><span class="p">,</span>
+    <span class="s">'Accept-Language'</span><span class="p">:</span><span class="s">'en-US,en;q=0.8'</span><span class="p">,</span>
+    <span class="s">'Cache-Control'</span><span class="p">:</span><span class="s">'max-age=0'</span><span class="p">,</span>
+    <span class="s">'Connection'</span><span class="p">:</span><span class="s">'keep-alive'</span><span class="p">,</span>
+    <span class="s">'Content-Length'</span><span class="p">:</span><span class="s">'156'</span><span class="p">,</span>
+    <span class="s">'Content-Type'</span><span class="p">:</span><span class="s">'application/x-www-form-urlencoded'</span><span class="p">,</span>
+    <span class="s">'Host'</span><span class="p">:</span><span class="s">'www2.dca.ca.gov'</span><span class="p">,</span>
+    <span class="s">'Origin'</span><span class="p">:</span><span class="s">'http://www2.dca.ca.gov'</span><span class="p">,</span>
+    <span class="s">'Referer'</span><span class="p">:</span><span class="s">'http://www2.dca.ca.gov/pls/wllpub/wllqryna$lcev2.startup?p_qte_code=ENG&amp;p_qte_pgm_code=7500'</span><span class="p">,</span>
+    <span class="s">'Upgrade-Insecure-Requests'</span><span class="p">:</span><span class="s">'1'</span><span class="p">,</span>
+    <span class="s">'User-Agent'</span><span class="p">:</span><span class="s">'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'</span>
+<span class="p">}</span>
+
+<span class="c"># Here is the form data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'P_QTE_CODE'</span><span class="p">:</span> <span class="s">'ENG'</span><span class="p">,</span>
+    <span class="s">'P_QTE_PGM_CODE'</span><span class="p">:</span> <span class="s">'7500'</span><span class="p">,</span>
+    <span class="s">'P_LAST_NAME'</span><span class="p">:</span> <span class="s">'smith'</span><span class="p">,</span>
+    <span class="s">'P_FIRST_NAME'</span><span class="p">:</span> <span class="s">''</span><span class="p">,</span>
+    <span class="s">'P_INITIAL'</span><span class="p">:</span> <span class="s">''</span><span class="p">,</span>
+    <span class="s">'P_LICENSE_NUM'</span><span class="p">:</span> <span class="s">''</span><span class="p">,</span>
+    <span class="s">'P_CITY'</span><span class="p">:</span> <span class="s">''</span><span class="p">,</span>
+    <span class="s">'P_COUNTY'</span><span class="p">:</span> <span class="s">'LOS ANGELES'</span><span class="p">,</span>
+    <span class="s">'P_RECORD_SET_SIZE'</span><span class="p">:</span> <span class="s">'50'</span><span class="p">,</span>
+    <span class="s">'Z_ACTION'</span><span class="p">:</span> <span class="s">'Find'</span>
+<span class="p">}</span>
+
+<span class="c"># Get the page</span>
+<span class="c"># use .post</span>
+<span class="c"># send the data</span>
+<span class="c"># send the headers</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"http://www2.dca.ca.gov/pls/wllpub/WLLQRYNA$LCEV2.ActionQuery"</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'html.parser'</span><span class="p">)</span>
+
+<span class="c"># Grab all of the rows</span>
+<span class="n">row_tags</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'tr'</span><span class="p">)</span>
+
+<span class="c"># Let's print the first 5</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">row_tags</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>NameTypeNumberStatusAddressCityZipCounty
+SMITH                              A              M  OM2554CANCELLED2245 ASHBOURNE DRSAN MARINO91108LOS ANGELES
+SMITH                              ALLEN          EL2352CANCELLED713 N CALIFORNIA STBURBANK91505LOS ANGELES
+SMITH                              ALVIN          JE490DECEASED5004 RAMSDELL AVELA CRESCENTA91214LOS ANGELES
+SMITH                              ARTHUR         KERMITCS3124CANCELLED28803 CEDARBLUFF DRRANCHO PALOS VERDES90275LOS ANGELES
+</code></pre>
+</div>
+
+<p>Perfect! By learning how <code class="highlighter-rouge">.post</code> requests, form data and headers work, you’re
+now going to be able to scrape a lot of very difficult sites.</p>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

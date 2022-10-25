@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Creating and updating your GitHub repository</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2019/github/creating-repo/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Creating and updating your GitHub repository">
+  <meta property="twitter:title" content="Creating and updating your GitHub repository">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Foundations, Lede 2019</a> &gt;  Creating and updating your GitHub repository</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Creating and updating your GitHub repository</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>Let’s walk through the steps necessary to <strong>create a new GitHub repository</strong>. A “repository” is just a fancy word for “a project.” The pieces of the project will all be saved together at their own URL on GitHub.</p>
+
+<blockquote>
+  <p>Remember, the git software is different than GitHub! git allows you to save checkpoints of your work, while GitHub is a place on the web where you can send your code for safekeeping and sharing.</p>
+</blockquote>
+
+<h2 id="download-github-desktop">Download GitHub Desktop</h2>
+
+<p>First, download GitHub Desktop from <a href="https://desktop.github.com/">https://desktop.github.com/</a>.</p>
+
+<h2 id="creating-our-repository">Creating our repository</h2>
+
+<p>When you first open GitHub Desktop, you’ll have a few options. We want to <strong>create a new repo on our own computer</strong>.</p>
+
+<p><img src="../images/github-desktop-homepage.png" alt="" /></p>
+
+<p>A new window will open where you can fill in some details.</p>
+
+<ul>
+  <li><strong>Name</strong> will be the name of the folder that’s created</li>
+  <li><strong>Local Path</strong> will be the directory where the folder is created</li>
+  <li><strong>Initialize with a README</strong> will put a blank <code class="highlighter-rouge">README.md</code> in your repo. You don’t have to do this, but it’s useful to remember that you should have a README!</li>
+  <li><strong>Git ignore</strong> will provide a list of files to ignore. Python is a great choice. You can also use <a href="https://gitignore.io/">gitignore.io</a> to create one later</li>
+</ul>
+
+<p><img src="../images/creating-repo.png" alt="" /></p>
+
+<p>To finish, click <strong>Create Repository</strong></p>
+
+<h2 id="files-it-made">Files it made</h2>
+
+<p>A few files were created in your new project! One is README.md, which doesn’t have much in it (yet!). This will show up whenever someone visits your page on GitHub.</p>
+
+<p><img src="../images/opening-readme.png" alt="" /></p>
+
+<p>The other is <code class="highlighter-rouge">.gitignore</code>, which is a list of files git will ignore. This is useful for secret, large, or temporary files.</p>
+
+<p><img src="../images/gitignore-file.png" alt="" /></p>
+
+<h2 id="sending-our-repo-to-github">Sending our repo to GitHub</h2>
+
+<p>At the beginning, everything we’ve made is on <strong>our computer</strong> and not on the GitHub website. To fix this, we’ll need to <strong>publish our repository</strong>. After you’ve clicked this, when you visit github.com you’ll find it listed on your repository page.</p>
+
+<p><img src="../images/publish-repo.png" alt="" /></p>
+
+<p>It’s so important it gets two buttons! Once you click it you’ll be asked for some details. You can provide a little description and uncheck the <strong>Keep this code private</strong> checkbox - this will let people see your code (like teaching assistants or potential employers).</p>
+
+<p><img src="../images/publish-repo-details.png" alt="" /></p>
+
+<p>Once this is done, you can click the “View on GitHub” link to open up your repo on GitHub.</p>
+
+<p><img src="../images/visit-github.png" alt="" /></p>
+
+<h2 id="making-edits-and-sending-data-to-our-repository">Making edits and sending data to our repository</h2>
+
+<p>A quick way to start editing your code is by clicking the very obvious <strong>Open in Visual Studio Code</strong> button. This will open your repo up in Visual Studio Code.</p>
+
+<p><img src="../images/open-vscode.png" alt="" /></p>
+
+<p>If you open up <code class="highlighter-rouge">README.md</code>, you’ll see it’s pretty much blank. Let’s edit it and add some content!</p>
+
+<p><img src="../images/editing-readme.png" alt="" /></p>
+
+<p>If you go back to GitHub Desktop, it will show you that <code class="highlighter-rouge">README.md</code> has changes (left hand panel) and what the changes are (right hand panel). Additions are green and have a <code class="highlighter-rouge">+</code>, while removals are red with a <code class="highlighter-rouge">-</code>.</p>
+
+<p>To save your changes as a checkpoint, check <strong>Commit to master</strong> on the bottom left. This is called a… commit!</p>
+
+<p><img src="../images/github-diff.png" alt="" /></p>
+
+<p>If you have multiple files, you’ll need to write some details about your changes before it will let you commit.</p>
+
+<p>Now that we’ve saved a checkpoint, <strong>it’s only saved on our machine</strong>, so we need to send our data up to GitHub (“push”). It’s so important there are two buttons for it! Click one to send your data up to GitHub.</p>
+
+<p><img src="../images/need-to-push.png" alt="" /></p>
+
+<h2 id="seeing-our-changes-on-github">Seeing our changes on GitHub</h2>
+
+<p>If you visit your repository on GitHub, you’ll see all your code as well as your README.md displayed in nice nice Markdown.</p>
+
+<p><img src="../images/show-repo-on-github.png" alt="" /></p>
+
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

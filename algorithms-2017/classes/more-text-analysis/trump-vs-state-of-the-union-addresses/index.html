@@ -1,0 +1,2151 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Trump vs State of the Union addresses</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/algorithms-2017/classes/more-text-analysis/trump-vs-state-of-the-union-addresses/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Trump vs State of the Union addresses">
+  <meta property="twitter:title" content="Trump vs State of the Union addresses">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Algorithms, Lede 2017</a> &gt;  Trump vs State of the Union addresses</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Trump vs State of the Union addresses</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/algorithms-2017/classes/more-text-analysis/trump-vs-state-of-the-union-addresses.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="trumps-tone-to-congress">Trump’s tone to Congress</h1>
+
+<p>We’re going to reproduce <a href="https://www.nytimes.com/interactive/2017/02/28/upshot/trump-sounds-
+different-tone-in-first-address-to-congress.html">Trump Sounds a Different Tone in First Address to
+Congress</a> from the Upshot.</p>
+
+<p><strong>Datasource 1:</strong> The <a href="http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm">NRC Emotional
+Lexicon</a>, a list of
+English words and their associations with eight basic emotions (anger, fear,
+anticipation, trust, surprise, sadness, joy, and disgust) and two sentiments
+(negative and positive). The annotations were manually done by crowdsourcing.</p>
+
+<p><strong>Datasource 2:</strong> A database of <a href="https://github.com/PedramNavid/trump_speeches">Trump
+speeches</a>, one speech per file.
+There are a lot of GitHub repositories of Trump speeches, but this one is better
+than the vast majority.</p>
+
+<p><strong>Datasource 3:</strong> State of the Union addresses taken from <a href="https://github.com/m-aleem/SOTU-Analyzer">this repo’s data
+directory</a>. I also cheated and pasted
+Trump’s SOTU-y address in.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span></code></pre></figure>
+
+<h1 id="reading-in-the-emolex">Reading in the EmoLex</h1>
+
+<p>I’m just copying this from the other notebook! It’s the one at the very bottom
+that does a lot of reshaping. I think it’s the easiest to work with.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">filepath</span> <span class="o">=</span> <span class="s">"NRC-Emotion-Lexicon-v0.92/NRC-emotion-lexicon-wordlevel-alphabetized-v0.92.txt"</span>
+<span class="n">emolex_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span>  <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s">"word"</span><span class="p">,</span> <span class="s">"emotion"</span><span class="p">,</span> <span class="s">"association"</span><span class="p">],</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">)</span>
+<span class="n">emolex_df</span> <span class="o">=</span> <span class="n">emolex_df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s">'word'</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s">'emotion'</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s">'association'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">emolex_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>emotion</th>
+      <th>word</th>
+      <th>anger</th>
+      <th>anticipation</th>
+      <th>disgust</th>
+      <th>fear</th>
+      <th>joy</th>
+      <th>negative</th>
+      <th>positive</th>
+      <th>sadness</th>
+      <th>surprise</th>
+      <th>trust</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>aback</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>abacus</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>abandon</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>abandoned</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>abandonment</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="reading-in-trumps-speeches">Reading in Trump’s speeches</h2>
+
+<h3 id="get-a-list-of-all-of-the-files">Get a list of all of the files</h3>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="n">filenames</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">"trump_speeches-master/data/speech*"</span><span class="p">)</span>
+<span class="n">filenames</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>['trump_speeches-master/data/speech_0.txt',
+ 'trump_speeches-master/data/speech_1.txt',
+ 'trump_speeches-master/data/speech_10.txt',
+ 'trump_speeches-master/data/speech_11.txt',
+ 'trump_speeches-master/data/speech_12.txt']
+</code></pre>
+</div>
+
+<h3 id="read-them-all-in-individually">Read them all in individually</h3>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">speeches</span> <span class="o">=</span> <span class="p">[</span><span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">]</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">speeches</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>56
+</code></pre>
+</div>
+
+<h3 id="create-a-dataframe-out-of-the-results">Create a dataframe out of the results</h3>
+
+<p>Instead of passing a list of dictionaries to <code class="highlighter-rouge">pd.DataFrame</code>, we pass a
+dictionary that says “here are all of the filenames” and “here are all of the
+texts” and it puts each list into a column.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">speeches_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s">'text'</span><span class="p">:</span> <span class="n">speeches</span><span class="p">,</span>
+    <span class="s">'filename'</span><span class="p">:</span> <span class="n">filenames</span>
+<span class="p">})</span>
+<span class="n">speeches_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>filename</th>
+      <th>text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>trump_speeches-master/data/speech_0.txt</td>
+      <td>Remarks Announcing Candidacy for President in ...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>trump_speeches-master/data/speech_1.txt</td>
+      <td>Remarks at the AIPAC Policy Conference in Wash...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>trump_speeches-master/data/speech_10.txt</td>
+      <td>Remarks at the Washington County Fair Park in ...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="splitting-out-the-title-and-content-of-the-speech">Splitting out the title and content of the speech</h3>
+
+<p>The “text” column is formatted with first the title of the speech, then the
+text. Like this:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">speeches_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">'text'</span><span class="p">][:</span><span class="mi">200</span><span class="p">]</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>"Remarks Announcing Candidacy for President in New York City\nTrump: Wow. Whoa. That is some group of people. Thousands.So nice, thank you very much. That's really nice. Thank you. It's great to be at T"
+</code></pre>
+</div>
+
+<p>We’re going to split those out into multiple columns, then delete the original
+column so we don’t get mixed up later.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">speeches_df</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">speeches_df</span><span class="p">[</span><span class="s">'text'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">value</span><span class="p">:</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">speeches_df</span><span class="p">[</span><span class="s">'content'</span><span class="p">]</span> <span class="o">=</span> <span class="n">speeches_df</span><span class="p">[</span><span class="s">'text'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">value</span><span class="p">:</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">del</span> <span class="n">speeches_df</span><span class="p">[</span><span class="s">'text'</span><span class="p">]</span>
+<span class="n">speeches_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>filename</th>
+      <th>name</th>
+      <th>content</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>trump_speeches-master/data/speech_0.txt</td>
+      <td>Remarks Announcing Candidacy for President in ...</td>
+      <td>Trump: Wow. Whoa. That is some group of people...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>trump_speeches-master/data/speech_1.txt</td>
+      <td>Remarks at the AIPAC Policy Conference in Wash...</td>
+      <td>Good evening. Thank you very much. I speak to...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="how-does-trump-sound">How does Trump sound?</h1>
+
+<p>Let’s analyze by counting words.</p>
+
+<p>We would use the code below to count all of his words. <strong>Do we really want all
+of them?</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
+
+<span class="n">vec</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">()</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">speeches_df</span><span class="p">[</span><span class="s">'content'</span><span class="p">])</span>
+<span class="n">vocab</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
+<span class="n">wordcount_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">vocab</span><span class="p">)</span>
+<span class="n">wordcount_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">emolex_df</span><span class="p">[</span><span class="s">'word'</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0      aback
+1     abacus
+2    abandon
+Name: word, dtype: object
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+
+<span class="c"># I only want you to look for words in the emotional lexicon</span>
+<span class="c"># because we don't know what's up with the other words</span>
+<span class="n">vec</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">vocabulary</span><span class="o">=</span><span class="n">emolex_df</span><span class="o">.</span><span class="n">word</span><span class="p">,</span>
+                      <span class="n">use_idf</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
+                      <span class="n">norm</span><span class="o">=</span><span class="s">'l1'</span><span class="p">)</span> <span class="c"># ELL - ONE</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">speeches_df</span><span class="p">[</span><span class="s">'content'</span><span class="p">])</span>
+<span class="n">vocab</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
+<span class="n">wordcount_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">vocab</span><span class="p">)</span>
+<span class="n">wordcount_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>aback</th>
+      <th>abacus</th>
+      <th>abandon</th>
+      <th>abandoned</th>
+      <th>abandonment</th>
+      <th>abate</th>
+      <th>abatement</th>
+      <th>abba</th>
+      <th>abbot</th>
+      <th>abbreviate</th>
+      <th>...</th>
+      <th>zephyr</th>
+      <th>zeppelin</th>
+      <th>zest</th>
+      <th>zip</th>
+      <th>zodiac</th>
+      <th>zone</th>
+      <th>zoo</th>
+      <th>zoological</th>
+      <th>zoology</th>
+      <th>zoom</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000677</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.001321</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 14182 columns</p>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># wordcount_df.sort_values(by='america', ascending=False).head(5)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># wordcount_df[['murder', 'america', 'great', 'prison', 'immigrant']].head(2)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># bad bad bad = 100% negative</span>
+<span class="c"># bad bad evil evil = 50% bad + 50% evil = 100% negative</span>
+<span class="c"># bad fish evil fish = 25% bad + 25% evil = 50% negative </span>
+<span class="c"># awful % + hate % + bad % + worse % + evil % = negative %</span>
+
+<span class="n">wordcount_df</span><span class="p">[[</span><span class="s">'awful'</span><span class="p">,</span> <span class="s">'hate'</span><span class="p">,</span> <span class="s">'bad'</span><span class="p">,</span> <span class="s">'worse'</span><span class="p">,</span> <span class="s">'evil'</span><span class="p">]]</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0     0.007442
+1     0.010121
+2     0.007926
+3     0.003871
+4     0.001709
+5     0.000000
+6     0.005051
+7     0.000000
+8     0.000000
+9     0.001506
+10    0.001391
+11    0.013943
+12    0.002304
+13    0.000000
+14    0.004525
+15    0.000000
+16    0.000000
+17    0.002066
+18    0.004785
+19    0.001166
+20    0.000000
+21    0.000000
+22    0.004367
+23    0.007979
+24    0.000000
+25    0.001626
+26    0.001873
+27    0.000000
+28    0.002008
+29    0.000000
+30    0.000000
+31    0.006631
+32    0.000000
+33    0.002976
+34    0.002535
+35    0.001511
+36    0.003810
+37    0.000000
+38    0.000000
+39    0.001658
+40    0.001802
+41    0.000000
+42    0.003704
+43    0.001812
+44    0.002165
+45    0.002976
+46    0.002247
+47    0.003937
+48    0.001592
+49    0.000000
+50    0.003401
+51    0.002950
+52    0.002430
+53    0.005650
+54    0.014153
+55    0.009298
+dtype: float64
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># speeches_df['negative'] = wordcount_df[['awful', 'hate', 'bad', 'worse', 'evil']].sum(axis=1)</span>
+<span class="c"># speeches_df.head(3)</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>filename</th>
+      <th>name</th>
+      <th>content</th>
+      <th>negative</th>
+      <th>policy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>trump_speeches-master/data/speech_0.txt</td>
+      <td>Remarks Announcing Candidacy for President in ...</td>
+      <td>Trump: Wow. Whoa. That is some group of people...</td>
+      <td>0.007442</td>
+      <td>0.00128</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>trump_speeches-master/data/speech_1.txt</td>
+      <td>Remarks at the AIPAC Policy Conference in Wash...</td>
+      <td>Good evening. Thank you very much. I speak to...</td>
+      <td>0.010121</td>
+      <td>0.00000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>trump_speeches-master/data/speech_10.txt</td>
+      <td>Remarks at the Washington County Fair Park in ...</td>
+      <td>It's so great to be here tonight. I am honored...</td>
+      <td>0.007926</td>
+      <td>0.00709</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># speeches_df['policy'] = wordcount_df[['crime', 'discrimination', 'poverty', 'border']].sum(axis=1)</span>
+<span class="c"># speeches_df.head(3)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># speeches_df.plot(x='negative', </span>
+<span class="c">#                  y='policy', </span>
+<span class="c">#                  kind='scatter',</span>
+<span class="c">#                  ylim=(0,0.01),</span>
+<span class="c">#                  xlim=(0,0.005))</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">emolex_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>emotion</th>
+      <th>word</th>
+      <th>anger</th>
+      <th>anticipation</th>
+      <th>disgust</th>
+      <th>fear</th>
+      <th>joy</th>
+      <th>negative</th>
+      <th>positive</th>
+      <th>sadness</th>
+      <th>surprise</th>
+      <th>trust</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>aback</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>abacus</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>abandon</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>abandoned</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>abandonment</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">emolex_df</span><span class="p">[</span><span class="n">emolex_df</span><span class="o">.</span><span class="n">anger</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>emotion</th>
+      <th>word</th>
+      <th>anger</th>
+      <th>anticipation</th>
+      <th>disgust</th>
+      <th>fear</th>
+      <th>joy</th>
+      <th>negative</th>
+      <th>positive</th>
+      <th>sadness</th>
+      <th>surprise</th>
+      <th>trust</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3</th>
+      <td>abandoned</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>abandonment</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>abhor</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>abhorrent</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>abolish</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Get your list of angry words</span>
+<span class="n">angry_words</span> <span class="o">=</span> <span class="n">emolex_df</span><span class="p">[</span><span class="n">emolex_df</span><span class="o">.</span><span class="n">anger</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s">'word'</span><span class="p">]</span>
+<span class="n">angry_words</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>3       abandoned
+4     abandonment
+17          abhor
+18      abhorrent
+27        abolish
+Name: word, dtype: object
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">wordcount_df</span><span class="p">[</span><span class="n">angry_words</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>abandoned</th>
+      <th>abandonment</th>
+      <th>abhor</th>
+      <th>abhorrent</th>
+      <th>abolish</th>
+      <th>abomination</th>
+      <th>abuse</th>
+      <th>accursed</th>
+      <th>accusation</th>
+      <th>accused</th>
+      <th>...</th>
+      <th>wreck</th>
+      <th>wrecked</th>
+      <th>wretch</th>
+      <th>wring</th>
+      <th>wrongdoing</th>
+      <th>wrongful</th>
+      <th>wrongly</th>
+      <th>yell</th>
+      <th>yelp</th>
+      <th>youth</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.000677</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000677</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.001321</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 1247 columns</p>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Only give me the columns of angry words</span>
+<span class="n">speeches_df</span><span class="p">[</span><span class="s">'anger'</span><span class="p">]</span> <span class="o">=</span> <span class="n">wordcount_df</span><span class="p">[</span><span class="n">angry_words</span><span class="p">]</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">speeches_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>filename</th>
+      <th>name</th>
+      <th>content</th>
+      <th>negative</th>
+      <th>policy</th>
+      <th>anger</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>trump_speeches-master/data/speech_0.txt</td>
+      <td>Remarks Announcing Candidacy for President in ...</td>
+      <td>Trump: Wow. Whoa. That is some group of people...</td>
+      <td>0.007442</td>
+      <td>0.00128</td>
+      <td>0.055480</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>trump_speeches-master/data/speech_1.txt</td>
+      <td>Remarks at the AIPAC Policy Conference in Wash...</td>
+      <td>Good evening. Thank you very much. I speak to...</td>
+      <td>0.010121</td>
+      <td>0.00000</td>
+      <td>0.099190</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>trump_speeches-master/data/speech_10.txt</td>
+      <td>Remarks at the Washington County Fair Park in ...</td>
+      <td>It's so great to be here tonight. I am honored...</td>
+      <td>0.007926</td>
+      <td>0.00709</td>
+      <td>0.133421</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Get your list of positive words</span>
+<span class="n">positive_words</span> <span class="o">=</span> <span class="n">emolex_df</span><span class="p">[</span><span class="n">emolex_df</span><span class="o">.</span><span class="n">positive</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s">'word'</span><span class="p">]</span>
+
+<span class="c"># Only give me the columns of angry words</span>
+<span class="n">speeches_df</span><span class="p">[</span><span class="s">'positivity'</span><span class="p">]</span> <span class="o">=</span> <span class="n">wordcount_df</span><span class="p">[</span><span class="n">positive_words</span><span class="p">]</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">speeches_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>filename</th>
+      <th>name</th>
+      <th>content</th>
+      <th>negative</th>
+      <th>policy</th>
+      <th>anger</th>
+      <th>positivity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>trump_speeches-master/data/speech_0.txt</td>
+      <td>Remarks Announcing Candidacy for President in ...</td>
+      <td>Trump: Wow. Whoa. That is some group of people...</td>
+      <td>0.007442</td>
+      <td>0.00128</td>
+      <td>0.055480</td>
+      <td>0.261164</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>trump_speeches-master/data/speech_1.txt</td>
+      <td>Remarks at the AIPAC Policy Conference in Wash...</td>
+      <td>Good evening. Thank you very much. I speak to...</td>
+      <td>0.010121</td>
+      <td>0.00000</td>
+      <td>0.099190</td>
+      <td>0.315789</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>trump_speeches-master/data/speech_10.txt</td>
+      <td>Remarks at the Washington County Fair Park in ...</td>
+      <td>It's so great to be here tonight. I am honored...</td>
+      <td>0.007926</td>
+      <td>0.00709</td>
+      <td>0.133421</td>
+      <td>0.214003</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">speeches_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'positivity'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'anger'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">'scatter'</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1134dea20&gt;
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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
+h4yZmWXm/wPKLYAzDTsCCwAAAABJRU5ErkJggg==" alt="png" /></p>
+
+<h1 id="reading-in-the-sotu-addresses">Reading in the SOTU addresses</h1>
+
+<p>Pretty much the same thing as what we did with Trump!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Get the filenames</span>
+<span class="c"># Read them in</span>
+<span class="c"># Create a dataframe from the results</span>
+<span class="n">filenames</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">"SOTU/*.txt"</span><span class="p">)</span>
+<span class="n">contents</span> <span class="o">=</span> <span class="p">[</span><span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">]</span>
+<span class="n">sotu_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s">'content'</span><span class="p">:</span> <span class="n">contents</span><span class="p">,</span>
+    <span class="s">'filename'</span><span class="p">:</span> <span class="n">filenames</span>
+<span class="p">})</span>
+<span class="n">sotu_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>content</th>
+      <th>filename</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Gentlemen of the Congress:\n\nIn pursuance of ...</td>
+      <td>SOTU/1913.txt</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>GENTLEMEN OF THE CONGRESS:\n\nThe session upon...</td>
+      <td>SOTU/1914.txt</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>GENTLEMEN OF THE CONGRESS:\n\nSince I last had...</td>
+      <td>SOTU/1915.txt</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="add-a-column-for-the-name">Add a column for the name</h3>
+
+<p>We don’t have a name for these, so we’ll just use the filename.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">sotu_df</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">sotu_df</span><span class="p">[</span><span class="s">'filename'</span><span class="p">]</span>
+<span class="n">sotu_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>content</th>
+      <th>filename</th>
+      <th>name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Gentlemen of the Congress:\n\nIn pursuance of ...</td>
+      <td>SOTU/1913.txt</td>
+      <td>SOTU/1913.txt</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>GENTLEMEN OF THE CONGRESS:\n\nThe session upon...</td>
+      <td>SOTU/1914.txt</td>
+      <td>SOTU/1914.txt</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>GENTLEMEN OF THE CONGRESS:\n\nSince I last had...</td>
+      <td>SOTU/1915.txt</td>
+      <td>SOTU/1915.txt</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>GENTLEMEN OF THE CONGRESS:\n\nIn fulfilling at...</td>
+      <td>SOTU/1916.txt</td>
+      <td>SOTU/1916.txt</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Gentlemen of the Congress:\n\nEight months hav...</td>
+      <td>SOTU/1917.txt</td>
+      <td>SOTU/1917.txt</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="how-do-state-of-the-unions-sound">How do State of the Unions sound?</h1>
+
+<p>Let’s analyze by counting words.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+
+<span class="c"># I only want you to look for words in the emotional lexicon</span>
+<span class="c"># because we don't know what's up with the other words</span>
+<span class="n">vec</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">vocabulary</span><span class="o">=</span><span class="n">emolex_df</span><span class="o">.</span><span class="n">word</span><span class="p">,</span>
+                      <span class="n">use_idf</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
+                      <span class="n">norm</span><span class="o">=</span><span class="s">'l1'</span><span class="p">)</span> <span class="c"># ELL - ONE</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">sotu_df</span><span class="p">[</span><span class="s">'content'</span><span class="p">])</span>
+<span class="n">vocab</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
+<span class="n">sotu_wordcount_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">vocab</span><span class="p">)</span>
+<span class="n">sotu_wordcount_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>aback</th>
+      <th>abacus</th>
+      <th>abandon</th>
+      <th>abandoned</th>
+      <th>abandonment</th>
+      <th>abate</th>
+      <th>abatement</th>
+      <th>abba</th>
+      <th>abbot</th>
+      <th>abbreviate</th>
+      <th>...</th>
+      <th>zephyr</th>
+      <th>zeppelin</th>
+      <th>zest</th>
+      <th>zip</th>
+      <th>zodiac</th>
+      <th>zone</th>
+      <th>zoo</th>
+      <th>zoological</th>
+      <th>zoology</th>
+      <th>zoom</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000923</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 14182 columns</p>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Get your list of positive words</span>
+<span class="n">positive_words</span> <span class="o">=</span> <span class="n">emolex_df</span><span class="p">[</span><span class="n">emolex_df</span><span class="o">.</span><span class="n">positive</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s">'word'</span><span class="p">]</span>
+
+<span class="c"># Only give me the columns of angry words</span>
+<span class="n">sotu_df</span><span class="p">[</span><span class="s">'positivity'</span><span class="p">]</span> <span class="o">=</span> <span class="n">sotu_wordcount_df</span><span class="p">[</span><span class="n">positive_words</span><span class="p">]</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sotu_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>content</th>
+      <th>filename</th>
+      <th>name</th>
+      <th>positivity</th>
+      <th>anger</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Gentlemen of the Congress:\n\nIn pursuance of ...</td>
+      <td>SOTU/1913.txt</td>
+      <td>SOTU/1913.txt</td>
+      <td>0.272425</td>
+      <td>0.019934</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>GENTLEMEN OF THE CONGRESS:\n\nThe session upon...</td>
+      <td>SOTU/1914.txt</td>
+      <td>SOTU/1914.txt</td>
+      <td>0.277932</td>
+      <td>0.042475</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>GENTLEMEN OF THE CONGRESS:\n\nSince I last had...</td>
+      <td>SOTU/1915.txt</td>
+      <td>SOTU/1915.txt</td>
+      <td>0.267757</td>
+      <td>0.051099</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Get your list of positive words</span>
+<span class="n">angry_words</span> <span class="o">=</span> <span class="n">emolex_df</span><span class="p">[</span><span class="n">emolex_df</span><span class="o">.</span><span class="n">anger</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s">'word'</span><span class="p">]</span>
+
+<span class="c"># Only give me the columns of angry words</span>
+<span class="n">sotu_df</span><span class="p">[</span><span class="s">'anger'</span><span class="p">]</span> <span class="o">=</span> <span class="n">sotu_wordcount_df</span><span class="p">[</span><span class="n">angry_words</span><span class="p">]</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sotu_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>content</th>
+      <th>filename</th>
+      <th>name</th>
+      <th>positivity</th>
+      <th>anger</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Gentlemen of the Congress:\n\nIn pursuance of ...</td>
+      <td>SOTU/1913.txt</td>
+      <td>SOTU/1913.txt</td>
+      <td>0.272425</td>
+      <td>0.019934</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>GENTLEMEN OF THE CONGRESS:\n\nThe session upon...</td>
+      <td>SOTU/1914.txt</td>
+      <td>SOTU/1914.txt</td>
+      <td>0.277932</td>
+      <td>0.042475</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>GENTLEMEN OF THE CONGRESS:\n\nSince I last had...</td>
+      <td>SOTU/1915.txt</td>
+      <td>SOTU/1915.txt</td>
+      <td>0.267757</td>
+      <td>0.051099</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="comparing-sotu-vs-trump">Comparing SOTU vs Trump</h1>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">ax</span> <span class="o">=</span> <span class="n">speeches_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'positivity'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'anger'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">'scatter'</span><span class="p">)</span>
+<span class="n">sotu_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'positivity'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'anger'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">'scatter'</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">'red'</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x115edcb00&gt;
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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" alt="png" /></p>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

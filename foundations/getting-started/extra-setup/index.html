@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Extra Setup</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/getting-started/extra-setup/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Extra Setup">
+  <meta property="twitter:title" content="Extra Setup">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Foundations, Lede 2016</a> &gt;  Extra Setup</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Extra Setup</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="utf-8-all-the-things">UTF-8 all the things</h2>
+
+<p>Open up your shell and run the following commands to set your default character encoding to UTF-8 (for now we’ll call that: worldwide characters, instead of just U.S.). If you’re typing instead of cutting and pasting, <strong>make sure you’re using »</strong>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>echo 'export LC_ALL=en_US.UTF-8' &gt;&gt; ~/.bash_profile
+echo 'export LANG=en_US.UTF-8' &gt;&gt; ~/.bash_profile
+</code></pre>
+</div>
+
+<h2 id="having-matplotlib-play-nice-with-virtual-environments">Having <code class="highlighter-rouge">matplotlib</code> play nice with virtual environments</h2>
+
+<p>The <code class="highlighter-rouge">matplotlib</code> library has some issues when you’re using a Python 3 virtual environment. The error looks like this:</p>
+
+<blockquote>
+  <p>RuntimeError: Python is not installed as a framework. The Mac OS X backend will not be able to function correctly if Python is not installed as a framework. See the Python documentation for more information on installing Python as a framework on Mac OS X. Please either reinstall Python as a framework, or try one of the other backends. If you are Working with Matplotlib in a virtual enviroment see ‘Working with Matplotlib in Virtual environments’ in the Matplotlib FAQ</p>
+</blockquote>
+
+<p>Luckily it’s an easy fix.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mkdir -p ~/.matplotlib &amp;&amp; echo 'backend: TkAgg' &gt;&gt; ~/.matplotlib/matplotlibrc
+</code></pre>
+</div>
+
+<p>This adds a line to the <code class="highlighter-rouge">matplotlib</code> startup script to set the backend to TkAgg, whatever that means.</p>
+
+<h2 id="customizing-atom">Customizing Atom</h2>
+
+<p>IDE’s are great (in theory) because they do things like <strong>notice typos</strong> and help you along with your coding. Luckily, Atom’s claim to fame is that it’s extensible - you can use plugins called packages to add extra functionality. We’re going to <a href="http://www.marinamele.com/install-and-configure-atom-editor-for-python">follow this guide</a> to customize Atom for Python, making sure we do the following:</p>
+
+<h4 id="ignore-that-first-section-about-autocomplete">1. Ignore that first section about autocomplete</h4>
+
+<p>It isn’t important at all! It’s just testing out Atom.</p>
+
+<h4 id="install-the-linter-on-your-machine">2. Install the linter on your machine</h4>
+
+<p>A <strong>linter</strong> is a tool that lets you know when your code looks a little suspicious. It’s your computer’s way of saying “hey, are you sure you meant to do this?” It’s a great way to fix typos and other mixtakes (or avoid writing them in the first place).</p>
+
+<p>To install a Python linter for Atom, we need to do this in two steps. First, we need to install <strong>flake8</strong>, which is a weirdly-named Python… <em>thing</em> that powers the linter. We’ll explain what this mysterious <code class="highlighter-rouge">pip</code> is later, too.</p>
+
+<blockquote>
+  <p>If you’re on <strong>Windows</strong>, you’ll need to go visit <a href="http://www.python.org/downloads">http://www.python.org/downloads</a> to download and install Python 3.5. During the installation be sure to check with “Add Python 3.5 to PATH” checkbox. You should even do this if you installed Python in babun - this is a separate Python.</p>
+</blockquote>
+
+<p>On OS X, open update the <strong>Terminal</strong>. In Windows, run the <strong>cmd</strong> command (Command Prompt). Run the following command.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip install flake8
+</code></pre>
+</div>
+
+<p>Take a look at the output that it spits back at you - it probably won’t be anything you can understand, but keep an eye out for words and phrases like <code class="highlighter-rouge">Error</code>, <code class="highlighter-rouge">Couldn't...</code>, or <code class="highlighter-rouge">Didn't have permission to...</code>. If you aren’t sure if it installed correctly, feel free to ask someone near you! TAs and instructors will also be happy to help.</p>
+
+<h4 id="add-the-plugins-to-atom">3. Add the plugins to Atom</h4>
+
+<p>Open up your Preferences menu in Atom through either <code class="highlighter-rouge">Atom</code> &gt; <code class="highlighter-rouge">Preferences</code> (OS X) or <code class="highlighter-rouge">File</code> &gt; <code class="highlighter-rouge">Settings</code> (Windows). Then click the <strong>Install</strong> tab on the bottom left. Search for <code class="highlighter-rouge">linter-flake8</code> and click the <strong>Install</strong> button.</p>
+
+<h4 id="auto-fix-the-spacing">4. Auto-fix the spacing</h4>
+
+<p>Click the <strong>Settings</strong> tab in Preferences and update the Soft Tabs (yes) and Tab Length (4).</p>
+
+<h4 id="stop-the-enter-key-from-autocompleting">5. Stop the enter key from autocompleting</h4>
+
+<p><strong>You know how sometimes autocomplete on your phone can be good, and sometimes it can be terrible?</strong></p>
+
+<p>It’s the same with Atom. You usually use the tab key to say “yes, sure, I like your programming-thing suggestion” but by default Atom also has the enter key accept autocomplete. This is terrible when you’re just trying to go down to the next line and ignore the suggestion!</p>
+
+<p>To turn it off, select the <strong>Keybindings tab</strong>, then click the link that says <strong>your keymap file</strong>. Scroll down to the bottom and paste the following in.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># Disable Enter key for confirming an autocomplete suggestion
+'atom-text-editor:not(mini).autocomplete-active':
+  'enter': 'editor:newline'
+</code></pre>
+</div>
+
+<p>Be sure to save.</p>
+
+<h4 id="install-minimap-and-autocomplete-python">6. Install minimap and autocomplete-python</h4>
+
+<p>If you have a large file, it’s sometimes hard to know exactly where you’re at. Near the top? At the bottom? Somewhere in the middle? Helpfully,
+<a href="https://atom.io/packages/minimap">minimap</a> lets you see where in your code you’re at. You can install minimap by going back to the <strong>Install</strong> section of Preferences and searching for <code class="highlighter-rouge">minimap</code> (be sure you pick the one with the plain name <code class="highlighter-rouge">minimap</code>, not any of the minimap-plus-other-things plugins).</p>
+
+<p>Do the same with <code class="highlighter-rouge">autocomplete-python</code>.</p>
+
+<h4 id="restart-atom">7. Restart Atom</h4>
+
+<p>Now that you’ve installed all of these awesome additions to Atom, you’ll need to restart it for everything to take effect.</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

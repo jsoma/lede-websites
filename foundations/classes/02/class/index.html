@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Python Data Structures</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/02/class/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Python Data Structures">
+  <meta property="twitter:title" content="Python Data Structures">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt;  Python Data Structures</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Python Data Structures</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="do-now">Do Now</h2>
+
+<p><strong>1) Given the following code, what is the output?</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>i = 5
+print(5 * 5)
+# 25
+print(i)
+# 5
+print("cat" + "dog")
+# catdog
+print("cat", "dog")
+# cat dog
+</code></pre>
+</div>
+
+<p><strong>2a) The code below doesn’t work. Why not?</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>print(5 + "5")
+</code></pre>
+</div>
+
+<p>We can’t add a string to an integer!</p>
+
+<p><strong>3) What is wrong with the following if statement?</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>if n = 2:
+  print("two")
+</code></pre>
+</div>
+
+<p>This sets n equal to 2, which is always true; it will always print “two”. We want n == 2, which is how python structures comparisons.</p>
+
+<p><strong>4) What is the command to list the files in a directory? What is the command to go “up” one folder?</strong></p>
+
+<p><code class="highlighter-rouge">cd ..</code>
+<code class="highlighter-rouge">.</code> means current directory and <code class="highlighter-rouge">..</code> means the directory above.</p>
+
+<p>5) Given the following code, what would the outputs be for n = 0, 10, -1, 3, and -5?</p>
+
+<p><strong>Note:</strong> The printed version of the do-now had an typo; the “elseif” on the printed version should read “elif”.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>print(n)
+if n &gt; 0:
+  print("A")
+  if n &gt;= 3:
+    print("B")
+    print("C")
+  elif n &gt; 2:
+    print("D")
+  else:
+    print("E")
+elif 1 &gt; n &gt; -2:
+  print("F")
+else:
+  print("G")
+if n &lt; 5:
+  print("H")
+</code></pre>
+</div>
+
+<p><strong>Output for 0:</strong>
+0
+F
+H</p>
+
+<p><strong>Output for 10:</strong>
+10
+A
+B
+C</p>
+
+<p><strong>Output for -1:</strong>
+-1
+F
+H</p>
+
+<p><strong>Output for 3:</strong>
+3
+A
+B
+C
+H</p>
+
+<p><strong>Output for -5:</strong>
+-5
+G
+H</p>
+
+<h2 id="on-the-command-line">On the Command Line</h2>
+
+<p><code class="highlighter-rouge">export CLICOLOR=1</code></p>
+
+<p><code class="highlighter-rouge">atom ~/.bash_profile</code></p>
+
+<ul>
+  <li><code class="highlighter-rouge">atom</code> : opens atom</li>
+  <li><code class="highlighter-rouge">~</code>: home directory</li>
+  <li><code class="highlighter-rouge">.</code>: hidden &amp; important file</li>
+  <li><code class="highlighter-rouge">bash</code>: official name of the terminal/command line program</li>
+</ul>
+
+<p>Add the <code class="highlighter-rouge">export CLICOLOR=1</code> line.</p>
+
+<h2 id="counting-with-computers">Counting with Computers!</h2>
+
+<p>Let’s look at our food survey data. <code class="highlighter-rouge">cat food-survey.txt</code></p>
+
+<p>What if we wanted to know all the unique responses to the food survey? Does this work: <code class="highlighter-rouge">uniq food-survey.txt</code>? Nah, because <code class="highlighter-rouge">uniq</code> only consolidates terms that are adjacent to one another.</p>
+
+<p>So, let’s order the terms in our file so that like terms are next to each other: <code class="highlighter-rouge">sort food-survey.txt</code>. NOW, we’ll run <code class="highlighter-rouge">uniq</code>: <code class="highlighter-rouge">sort food-survey.txt | uniq</code>.</p>
+
+<ul>
+  <li>AN ALTERNATE WAY, but piping is more efficient: <code class="highlighter-rouge">sort food-survey.txt &gt; sorted-food.txt</code> and then <code class="highlighter-rouge">uniq sorted-food.txt</code>.</li>
+  <li><code class="highlighter-rouge">sort food-survey.txt | uniq | wc -l</code>: gives you back the number of unique terms in food-survey.txt</li>
+  <li><code class="highlighter-rouge">sort food-survey.txt | uniq | grep "P" | wc -l</code>: if you want to know how many unique foods start with the letter P.</li>
+  <li><code class="highlighter-rouge">sort food-survey.txt | uniq -c</code>: give you a count of the unique terms</li>
+  <li><code class="highlighter-rouge">sort food-survey.txt | uniq -c | sort -r</code>: orders the unique terms based on their count</li>
+</ul>
+
+<p>osha.tar.gz:
++ tar : collects files into a bundle.
++ gz : gzip (GNUZIP); indicates that file is compressed.</p>
+
+<p><code class="highlighter-rouge">tar xvf osha.tar.gz</code>: opens our zipped file
+Navigate to osha (<code class="highlighter-rouge">cd osha</code>). <code class="highlighter-rouge">ls</code> to see what’s in there.
+<code class="highlighter-rouge">cat FatalitiesFY* &gt; everything.csv</code>: copies from multiple files into everything.csv
++ Oh no, everything.csv has the column headers in the
++ <code class="highlighter-rouge">tail -n 2</code>: shows us last two lines of the file
++ <code class="highlighter-rouge">tail -n +2</code>: shows us everything except for the first line of the file
++ <code class="highlighter-rouge">tail -n +2 FatalitiesFY* &gt; new-everthing.csv</code>
++ <code class="highlighter-rouge">rm new-everything.csv</code></p>
+
+<h2 id="writing-python-things">Writing python things</h2>
+
+<p>Don’t forget to setup your virtual environment! On the command line, navigate to the folder where you’d like to save your python script (do this using <code class="highlighter-rouge">cd [filepath]</code>). Once in the correct folder, use <code class="highlighter-rouge">mkvirtualenv [some_name]</code> to get your virtual environment started.</p>
+
+<blockquote>
+  <p>One of the primary reasons why we’re using a virtual environment in class is so we can run Python 3. The code you write in class won’t work/will eventually crash unless you’re in an environment that is using Python 3. Check by typing <code class="highlighter-rouge">python --version</code> in command line.</p>
+</blockquote>
+
+<p>Start up a new file in Atom – <strong>be sure to save that file in the same folder where you are running your virtual environment</strong>. For python scripts, your file name should end in <code class="highlighter-rouge">.py</code>. For example, in class, we saved our file as <code class="highlighter-rouge">data-structures.py</code>.</p>
+
+<p>In Atom, edit data-structures.py. Let’s save some data in variables so that we can start playing with them!</p>
+
+<h3 id="variable-assignment">Variable Assignment</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>name = "Soma"
+city = "Brooklyn"
+hometown = "Virginia"
+age = 33
+
+print("Hi, I'm", name, "from", hometown)
+
+friend_name = "Jen"
+friend_city = "Brooklyn"
+friend_age = 31
+friend_hometown = "Ludlow"
+
+print("This is", friend_name, "from", friend_hometown)
+
+other_friend_name = "Larissa"
+other_friend_city = "Brooklyn"
+other_friend_age = 29
+other_friend_hometown = "New Jersey"
+
+print("Here's", other_friend_name, "from", other_friend_hometown)
+</code></pre>
+</div>
+
+<p><strong>Variable assignment</strong> can be more complicated than it seems at first glance. Particularly, once you start manipulating your variables with math. For example, what should print if you run the following code?</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>fingers = 5
+fingers + 5
+print(fingers + 5)
+print(fingers)
+</code></pre>
+</div>
+
+<p>If you run this code in command line (type <code class="highlighter-rouge">python3</code> and then type out what you see above), you’ll notice that you don’t print 10 as you might expect, but rather, you’ll print 5 again. <code class="highlighter-rouge">fingers + 5</code> didn’t actually change the variable <code class="highlighter-rouge">fingers</code>.</p>
+
+<p>In order to pass add onto the old value, we have to do something like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>fingers = fingers + 5
+</code></pre>
+</div>
+
+<p>In math, we couldn’t do this! If your calculations get you to the point where x = x + 5, you know something has gone terribly wrong. BUT, in the world of coding, we HAVE to do this to add onto the existing value of a variable. The reason it works is that your computer, or python interpreter, always reads the <strong>right-hand side</strong> of a variable assignment first. <a href="http://anh.cs.luc.edu/python/hands-on/3.1/handsonHtml/variables.html">This is worth reading up on if you’re unconvinced</a>!</p>
+
+<p>For now, what if we could keep all the information about a specific thing in one place, instead of using a billion variables?</p>
+
+<h3 id="dictionaries--lists">Dictionaries &amp; Lists</h3>
+
+<p><strong>Dictionaries</strong> allow us to save lots of information about one particular thing.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>me = { 'name': "Soma", 'city': "Brooklyn", 'age': 33 }
+# In order to get things out you use me['name']
+print(me['name']) # output will be: Soma
+print(me['city']) # output will be: Brooklyn
+</code></pre>
+</div>
+
+<p>The data in a dictionary is structured in comma-separated <strong>key-value pairs</strong>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="err">'key':</span><span class="w"> </span><span class="err">'value',</span><span class="w"> </span><span class="err">'key2':</span><span class="w"> </span><span class="err">'value2'</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>When you see curly braces, <code class="highlighter-rouge"><span class="p">{</span><span class="w"> </span><span class="p">}</span></code>, you’ll know that you’re dealing with a dictionary.</p>
+
+<p>The key-value pairs in a dictionary are not ordered, meaning that each time you <code class="highlighter-rouge">print(me)</code>, you may see <code class="highlighter-rouge">name</code>, <code class="highlighter-rouge">city</code>, and <code class="highlighter-rouge">age</code> appear in different orders.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>friend = { 'name': 'Jen', 'city': 'Brooklyn', 'age': 31 }
+print(friend['name'])
+
+# 'name' is a key
+# 'city' is a key, 'age' is a key
+# keys are the words in your dictionary
+# 'Blake' is a value
+# every key can only have one value
+other = { 'name': 'Blake', 'city': 'Brooklyn', 'name': 'Blakie' }
+print(other['name'])
+
+</code></pre>
+</div>
+
+<p><strong>Lists</strong> are a bit different. They ARE ordered (and therefore will print the same way each time).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># this is a list
+names = [ 'Blake', 'Blakie', 'Blakester', 'Watch Guy', 'Balake' ]
+
+# prints them all pretty good
+# programming languages always start counting from zero
+print(names)
+print(names[2])
+
+# This is how we get the first one in the list
+print(names[0])
+</code></pre>
+</div>
+
+<p>In the code above, we are printing by specifying the <strong>index</strong>, or position, of an item in our list. In programming, we count starting with 0 (so the first index position is 0). Forgetting this can lead to the ever popular <strong>off-by-one error</strong>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># we don't do these things in Python:
+# names.len
+# names.length
+# names.length()
+
+# instead we do this:
+print(len(names))
+
+numbers = [ 56, 23, 87, 43, 1, 67, 9 ]
+</code></pre>
+</div>
+
+<h3 id="functions--methods">Functions &amp; Methods</h3>
+
+<p>Functions and methods are ways of interacting with your data.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>print(numbers)
+# Length of the list
+print(len(numbers))
+# Biggest of the list
+print(max(numbers))
+# Smallest from the list
+print(min(numbers))
+
+# These are called FUNCTIONS!!!!!!!
+# Functions are like factories
+# You send a list to the min factory and get back the smallest
+
+print(sorted(numbers))
+print(numbers)
+sorted_numbers = sorted(numbers)
+print("sorted:", sorted_numbers)
+print("unsorted:", numbers)
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># This is called a METHOD
+print(numbers.sort)
+print(numbers.sort())
+print(numbers)
+
+print(len)
+
+
+name = "Soma"
+print(name)
+# You like quiet
+print(name.lower())
+# I like yellin'
+print(name.upper())
+# Let's see a crazy thing
+print("Ten Things I Hate About You".swapcase())
+
+# What's the method for figuring out how many
+# o's are in "Google" (a Python string)
+word = "Google"
+number_of_os = word.count('o')
+print("There are", number_of_os, "o's in ", word)
+
+cats = [ "Smushface", "Callery", "Naples" ]
+
+print("Hello", cats)
+
+print("Hello", cats[0])
+print("Hello", cats[1])
+print("Hello", cats[2])
+</code></pre>
+</div>
+
+<h3 id="for-loops">For Loops</h3>
+
+<p><strong>For Loops</strong> are used to loop through a list of things. It basically says, “for each item in my list, do something to each item.”</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># This is called a for loop
+# it... loops through stuff
+# "Flow control" "language construct"
+print("THIS IS THE CAT IN CATS ONE:")
+
+for cat in cats:
+    print("Hello", cat)
+</code></pre>
+</div>
+
+<p>The code above basically says, for each cat in my list of cats, print that cat! But, just because we called out list ‘cats’ doesn’t mean that we have to refer to each item/cat in that list as a cat in our for loop.</p>
+
+<p>This still works:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>print("THIS IS THE AIRPLANE ONE:")
+for airplane in cats:
+    print("Hello", airplane)
+</code></pre>
+</div>
+
+<p>Our structure is: <code class="highlighter-rouge">For [arbitrary_name] in [list_name]:</code>. Be careful about using variable names you’ve already used before though! That will not work so well.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># This should still be "Soma"
+print(name)
+
+print("THIS IS THE NAME IN CATS ONE:")
+for name in cats:
+    print("Hello", name)
+    if name == "Smushface":
+        print("Here's some food, my fattest cat")
+    else:
+        print("Sorry it looks like we're out of food, I guess?")
+
+#print(name)
+</code></pre>
+</div>
+
+<p>You can also have a <strong>list of dictionaries</strong>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cat_info = [
+    { 'name': 'Smushface', 'age': 6 },
+    { 'name': 'Callery', 'age': 2 },
+    { 'name': 'Naples', 'age': 'unknown' }
+]
+</code></pre>
+</div>
+
+<p>You can pull out information from your list of dictionaries by using what you know about list indices and dictionary keys! Use the following structure: <code class="highlighter-rouge">list_name[list_index][dictionary_key]</code>. Examples below:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+# prints the first dictionary in your list
+print(cat_info[0])
+
+# prints the value associated with the 'name' key in the second dictionary in your list
+print(cat_info[1]['name'])
+
+callery_the_cat = cat_info[1]
+print(callery_the_cat['name'])
+
+cat = { 'name': 'Stranger cat'}
+cat['name']
+</code></pre>
+</div>
+
+<p>If you have a list of dictionaries, you can also use a for loop to loop through the data contained inside. <strong>Get really accustomed to this! This is literally like the most important thing ever.</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cat_info = [
+    { 'name': 'Smushface', 'age': 6 },
+    { 'name': 'Callery', 'age': 2 },
+    { 'name': 'Naples', 'age': 'unknown' }
+]
+
+for cat in cat_info:
+    if str(cat['age']).lower() == 'unknown'.lower():
+        print("NO ONE KNOWS HOW OLD", cat['name'].upper(), "IS")
+    else:
+        print(cat['name'].upper(), "is", cat['age'], "years old")
+</code></pre>
+</div>
+
+<h2 id="common-errors">Common Errors</h2>
+
+<ul>
+  <li>Don’t forget to <strong>save</strong> before re-running your script!</li>
+  <li>Are you in the right folder? Atom tells you where your file is located if you look at the top of your window.</li>
+  <li>Indentation is super import – be sure that the indentation of your for loops and if-statements are what you’d like them to be.</li>
+</ul>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

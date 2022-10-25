@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Using OpenRefine on your Digital Ocean or AWS EC2 server</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/algorithms-2017/servers/openrefine/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Using OpenRefine on your Digital Ocean or AWS EC2 server">
+  <meta property="twitter:title" content="Using OpenRefine on your Digital Ocean or AWS EC2 server">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Algorithms, Lede 2017</a> &gt;  Using OpenRefine on your Digital Ocean or AWS EC2 server</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Using OpenRefine on your Digital Ocean or AWS EC2 server</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>Running OpenRefine on a server - whether it’s a Digital Ocean server or an AWS/EC2 server - is pretty easy, and allows you a lot of flexibility to might otherwise not have.</p>
+
+<p>When you run OpenRefine on your own computer, you’re running a “local server”, a.k.a. your computer becomes a server. This makes it easy to adapt to run on a <em>real</em> server! But why would you want to do that?</p>
+
+<p><strong>Need extra RAM for OpenRefine but don’t want to buy a new computer?</strong> If you run a Digital Ocean or AWS server, you can have all the RAM you want!</p>
+
+<p><strong>Trying to teach a class but not everyone has permissions to run or install OpenRefine on their machine?</strong> If you run a Digital Ocean or AWS server, you can create one server that everyone can use!</p>
+
+<h2 id="create-your-server">Create your server</h2>
+
+<p>Create a new server using Ubuntu. I’m using 4GB of RAM in the example below, but having more RAM is always better (note that it won’t run with only 1 gig of ram).</p>
+
+<p>If you need help creating a new server, read my documentation on <a href="../creating/">creating</a> and <a href="../setting-up/">setting up</a> a Digital Ocean server. If you’re using AWS/EC2, that’s okay, the rest of this will be more or less the same.</p>
+
+<h2 id="connect-to-your-server">Connect to your server</h2>
+
+<p>Use SSH to connect to your server as the <code class="highlighter-rouge">root</code> user. When I connect give the server a specific SSH key to use, which is the <code class="highlighter-rouge">-i ~/.ssh/do-droplet</code> part.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh -i ~/.ssh/do-droplet root@12.34.56.78
+</code></pre>
+</div>
+
+<p>Instead of <code class="highlighter-rouge">12.34.56.78</code> you’ll use the IP address of your server. Mine in this case is <code class="highlighter-rouge">104.131.31.81</code>.</p>
+
+<p>When it tells you “The authenticity of host ‘12.34.56.78 (12.34.56.78)’ can’t be established” just type “yes” - your computer is just warning you it hasn’t seen the server before and wants to know if you can trust it.</p>
+
+<h2 id="setting-up-the-server">Setting up the server</h2>
+
+<p>Once you’re connected, you’ll want to download and unzip OpenRefine. We’re specifically using the <code class="highlighter-rouge">2.8</code> release here, although by the time you read this a newer version might be out. We’re unzipping the <code class="highlighter-rouge">.tar.gz</code> file with the <code class="highlighter-rouge">tar</code> command.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wget https://github.com/OpenRefine/OpenRefine/releases/download/2.8/openrefine-linux-2.8.tar.gz
+tar -xvzf openrefine-linux-2.8.tar.gz
+</code></pre>
+</div>
+
+<blockquote>
+  <p>Is there a newer OpenRefine out? Check <a href="http://openrefine.org/download.html">their site</a> - you can copy the  “Linux kit” link.</p>
+</blockquote>
+
+<h2 id="installing-java-on-the-server">Installing Java on the server</h2>
+
+<p>OpenRefine is a Java application, which means we need to install Java on the server. Install it with</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt install default-jre
+</code></pre>
+</div>
+
+<p>JRE stands for Java Runtime Enviroment. It will ask if you really want to install it (<code class="highlighter-rouge">y</code>es!) and take a little time to download and install all of the pieces.</p>
+
+<blockquote>
+  <p>If you get the message <code class="highlighter-rouge">Error: Could not find the 'java' executable at '', are you sure your JAVA_HOME environment variable is pointing to a proper java installation?</code> when trying to run OpenRefine later, Java was not successfully installed.</p>
+</blockquote>
+
+<h2 id="running-and-connecting-to-openrefine">Running and connecting to OpenRefine</h2>
+
+<p>All of the documentation out there says “just run <code class="highlighter-rouge">./refine</code>,” but that only works if you’re using a Linux laptop. We’re using a server, so we need to allow connections <strong>between our computer and the server</strong>!</p>
+
+<p><strong>WARNING: OPENREFINE IS GOING TO START VERY, VERY, VERY SLOWLY.</strong> It might take 20 minutes! I’ve spent hours trying to figure out why but I just can’t. Sorry! It works once it’s up, though.</p>
+
+<h3 id="changing-how-much-memory-openrefine-uses">Changing how much memory OpenRefine uses</h3>
+
+<p>OpenRefine uses a lot of memory/RAM if you’re doing work on a large dataset. By default it uses very little RAM (only a gig!)</p>
+
+<p>If you want OpenRefine to use more of the RAM on your machine, you’ll want to use the <code class="highlighter-rouge">-m</code> option to set the amount of memory it can use. An easy way to think about the right setting is to take the gigabytes of RAM, subtract 1, then multiply by 1000.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>RAM</th>
+      <th>RAM for OpenRefine</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1 GB</td>
+      <td>It won’t run!</td>
+      <td>x</td>
+    </tr>
+    <tr>
+      <td>2 GB</td>
+      <td>1 GB</td>
+      <td><code class="highlighter-rouge">./openrefine-2.8/refine -m 1000M</code></td>
+    </tr>
+    <tr>
+      <td>3 GB</td>
+      <td>2 GB</td>
+      <td><code class="highlighter-rouge">./openrefine-2.8/refine -m 2000M</code></td>
+    </tr>
+    <tr>
+      <td>4 GB</td>
+      <td>3 GB</td>
+      <td><code class="highlighter-rouge">./openrefine-2.8/refine -m 3000M</code></td>
+    </tr>
+    <tr>
+      <td>8 GB</td>
+      <td>7 GB</td>
+      <td><code class="highlighter-rouge">./openrefine-2.8/refine -m 7000M</code></td>
+    </tr>
+    <tr>
+      <td>16 GB</td>
+      <td>15 GB</td>
+      <td><code class="highlighter-rouge">./openrefine-2.8/refine -m 15000M</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><em>Technically</em> you should be multiplying by 1024, but I wanted to keep it simple.</p>
+
+<blockquote>
+  <p>If you’re using an external server like you see below, you’ll need to add the <code class="highlighter-rouge">-i</code> command to this one. For example, <code class="highlighter-rouge">./openrefine-2.8/refine -m 7000M -i 0.0.0.0</code> will run an open-internet OpenRefine server using 7 gigs of RAM.</p>
+</blockquote>
+
+<h2 id="connecting-to-the-server">Connecting to the server</h2>
+
+<p>There are two ways to connect to the server: one is secure, one is not!</p>
+
+<h3 id="method-1-ssh-tunneling-to-connect-to-the-server-the-secure-way">Method 1: SSH tunneling to connect to the server (the secure way)</h3>
+
+<p>This method is the same way we <a href="../jupyter/">connect to Jupyter servers</a>. We build a little tunnel from our machine to the Digital Ocean server, and that way no one else on the internet can see what we’re doing.</p>
+
+<p>From <strong>your own command line</strong> (not the server), run the following command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh -i ~/.ssh/do-droplet root@SERVER_IP_ADDRESS -L 3333:localhost:3333 -t <span class="s2">"./openrefine-2.8/refine"</span>
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">-i ~/.ssh/do-droplet</code> is the location of your Digital Ocean key</li>
+  <li><code class="highlighter-rouge">root@SERVER_IP_ADDRESS</code> logs in as <code class="highlighter-rouge">root</code> as the IP address (actually type IP address in!)</li>
+  <li><code class="highlighter-rouge">-L 3333:localhost:3333</code> redirects port <code class="highlighter-rouge">7777</code> on our machine to the same port on the server</li>
+  <li><code class="highlighter-rouge">-t</code> means “we’re going to run a command once we connect”</li>
+  <li><code class="highlighter-rouge">./openrefine-2.8/refine</code> runs a Jupyter Notebook server on the remote machine on <code class="highlighter-rouge">3333</code>.</li>
+</ul>
+
+<p>Now to visit the server, just go to <a href="http://localhost:3333">http://localhost:3333</a>. And when you’re done, all you need to do is <code class="highlighter-rouge">Ctrl+C</code> in the terminal to close the connection and shut down OpenRefine.</p>
+
+<p>If you want to use more RAM than the default, change <code class="highlighter-rouge">-t "./openrefine-2.8/refine"</code> to <code class="highlighter-rouge">-t "./openrefine-2.8/refine -m 3000M"</code> (see above).</p>
+
+<blockquote>
+  <p>This method only allows access from your computer.</p>
+</blockquote>
+
+<h3 id="method-2-allowing-the-internet-to-access-openrefine">Method 2: Allowing the internet to access OpenRefine</h3>
+
+<p>Maybe you’re demonstrating OpenRefine, or sharing it with others. In that case you need to allow people from the general internet to access it.</p>
+
+<p>First, <code class="highlighter-rouge">ssh</code> to the server.</p>
+
+<p>Second, run the following command.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>./openrefine-2.8/refine -i 0.0.0.0
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">-i 0.0.0.0</code> means “show what we’re doing to the ENTIRE INTERNET.” You can access the server by visiting <code class="highlighter-rouge">http://12.34.45.78:3333</code>, but using your server’s IP address instead of <code class="highlighter-rouge">12.34.56.78</code>.</p>
+
+<blockquote>
+  <p>If you’d like to use more RAM, you’ll also add in the <code class="highlighter-rouge">-m</code> option to create something like <code class="highlighter-rouge">./openrefine-2.8/refine -i 0.0.0.0 -m 3000M</code> (see above).</p>
+</blockquote>
+
+<h2 id="securing-your-entire-internet-openrefine">Securing your “entire internet” OpenRefine</h2>
+
+<p>If you want to only show your OpenRefine to <em>some</em> of the internet, you can make a list of IP addresses that are okay to allow connections from.</p>
+
+<h3 id="step-1-find-out-your-ip-address">Step 1: Find out your IP address</h3>
+
+<p>Not your <strong>server’s</strong> IP address, your <strong>own</strong> IP address. You can just type <a href="https://www.google.com/search?q=what+is+my+ip+address">“what is my IP address?”</a> into Google and it will tell you. In this example, mine is <code class="highlighter-rouge">185.92.26.5</code>.</p>
+
+<p><img src="../images/tabula-ip.png" alt="" /></p>
+
+<p>We want to tell the server to <strong>only accept port <code class="highlighter-rouge">3333</code> connections from <code class="highlighter-rouge">185.92.26.5</code></strong>.</p>
+
+<h3 id="step-2-add-an-iptables-rule">Step 2: Add an <code class="highlighter-rouge">iptables</code> rule</h3>
+
+<p><code class="highlighter-rouge">iptables</code> is the command you use to update firewall rules on your server. If you’re currently running OpenRefine on your server, stop it by pressing <code class="highlighter-rouge">Ctrl+C</code>.</p>
+
+<p>Now we’re going to say “only accept connections from my computer’s IP (<code class="highlighter-rouge">185.92.26.5</code>) for port <code class="highlighter-rouge">3333</code>” (be sure to use your computer’s IP address, not mine!). Run the following command, replacing my IP address - <code class="highlighter-rouge">185.92.26.5</code> - with yours:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>iptables -A INPUT -p tcp -s 185.92.26.5 --dport 3333 -j ACCEPT
+iptables -A INPUT -p tcp -s 0.0.0.0/0 --dport 3333 -j DROP
+</code></pre>
+</div>
+
+<p>The first command allows connections from <code class="highlighter-rouge">185.92.26.5</code> (<code class="highlighter-rouge">ACCEPT</code>), and the second command blocks them from every other IP (<code class="highlighter-rouge">0.0.0.0/0</code>, <code class="highlighter-rouge">DROP</code>).</p>
+
+<p>If you want to allow connections from multiple IP addresses instead of just yours, you’ll just want to type in more lines before the <code class="highlighter-rouge">DROP</code> one, like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>iptables -A INPUT -p tcp -s 185.92.26.5 --dport 3333 -j ACCEPT
+iptables -A INPUT -p tcp -s 12.34.56.78 --dport 3333 -j ACCEPT
+iptables -A INPUT -p tcp -s 22.33.44.55 --dport 3333 -j ACCEPT
+iptables -A INPUT -p tcp -s 0.0.0.0/0 --dport 3333 -j DROP
+</code></pre>
+</div>
+
+<blockquote>
+  <p>If you made a mistake, just run <code class="highlighter-rouge">iptables -X</code> and then <code class="highlighter-rouge">iptables -F</code> to clear the settings and start over.</p>
+</blockquote>
+
+<h3 id="step-3-run-openrefine-again">Step 3: Run OpenRefine again</h3>
+
+<p>Now you need to run OpenRefine again with the same command as before (on the server).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>./openrefine-2.8/refine -i 0.0.0.0
+</code></pre>
+</div>
+
+<h3 id="if-you-messed-something-up">If you messed something up</h3>
+
+<p>Did you mess something up? Can you not connect any more? Undo your changes to <code class="highlighter-rouge">iptables</code> by running the following two commands on your server:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>iptables -X
+iptables -F
+</code></pre>
+</div>
+
+<h2 id="running-the-server-after-youve-disconnected">Running the server after you’ve disconnected</h2>
+
+<p>If you’d like to keep your server running after you’ve disconnected, you need to run it in the background, and make sure it doesn’t stop when you disconnect. To do this, we add two pieces to our OpenRefine command.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">nohup</code> is going to keep OpenRefine running after you disconnect</li>
+  <li><code class="highlighter-rouge">&amp;</code> is going to run OpenRefine in the background</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>nohup ./openrefine-2.8/refine -i 0.0.0.0 &amp;
+</code></pre>
+</div>
+
+<p>Now you can type <code class="highlighter-rouge">exit</code> to leave your server but still be able to access it through the web. If it isn’t working yet, be sure to wait a few minutes for OpenRefine to start before you panic!</p>
+
+<h3 id="stopping-openrefine-if-its-running-in-the-background">Stopping OpenRefine if it’s running in the background</h3>
+
+<p>Connect to the server, and run this command to stop OpenRefine</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>killall java
+</code></pre>
+</div>
+
+<p>This will tell all <code class="highlighter-rouge">java</code> programs to exit (you’re hopefully only running OpenRefine!).</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Setting up a Digital Ocean server with Python 3 and BeautifulSoup</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2019/servers/setting-up/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Setting up a Digital Ocean server with Python 3 and BeautifulSoup">
+  <meta property="twitter:title" content="Setting up a Digital Ocean server with Python 3 and BeautifulSoup">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Foundations, Lede 2019</a> &gt;  Setting up a Digital Ocean server with Python 3 and BeautifulSoup</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Setting up a Digital Ocean server with Python 3 and BeautifulSoup</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="step-one-logging-in">Step One: Logging in</h2>
+
+<p>When you <a href="../creating">created your server</a>, you gave it a <strong>public key</strong>, probably <code class="highlighter-rouge">foundations_key.pub</code>. To log onto the server, you need to match that with your private key, the <code class="highlighter-rouge">foundations_key</code> file.</p>
+
+<blockquote>
+  <p><strong>Note:</strong> If you lose your private key, you lose access to your server! That’s why we (maybe) stored it in a secret location (the <code class="highlighter-rouge">.ssh</code> directory).</p>
+</blockquote>
+
+<p>First thing you’ll need is to make sure you know <strong>where your keys are</strong>.</p>
+
+<p>Second thing you’ll need is to find the <strong>IP Address</strong> of your server. Mine is <code class="highlighter-rouge">204.48.28.110</code>.</p>
+
+<p><img src="../images/setup-pick-server.png" alt="" /></p>
+
+<p><strong>Windows</strong></p>
+
+<p>If you’re using <strong>Windows</strong>, you should be able to use <code class="highlighter-rouge">ssh</code>, just like OS X people. But instead of <code class="highlighter-rouge">~/.ssh/foundations_key</code>, you’ll use <code class="highlighter-rouge">C:\foundations_key</code> instead.</p>
+
+<p><strong>OS X</strong>
+On <strong>OS X</strong>, you will use the following command to connect to the server. It uses your key to connect to the server’s IP address using the username <code class="highlighter-rouge">root</code>. Make sure the path to your key is correct, and make sure you put in your IP address.</p>
+
+<blockquote>
+  <p><strong>Note:</strong> The key is the name of the file on your computer, <strong>NOT!!!</strong> the name you gave the key when creating the server</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh -i ~/.ssh/foundations_key root@YOUR_IP
+</code></pre>
+</div>
+
+<p>For example, your command might be <code class="highlighter-rouge">ssh -i ~/.ssh/foundations_key root@159.203.179.61</code>.</p>
+
+<blockquote>
+  <p>Is it not working? <strong>Make sure you put in your server’s IP address</strong> and did not just copy mine. Make sure you know where your key is.</p>
+</blockquote>
+
+<p>When it asks you if you’re sure you want to connect, say <strong>Yes</strong>.</p>
+
+<p><img src="../images/setup-yes.png" alt="" /></p>
+
+<h2 id="step-two-customizing-your-prompt">Step Two: Customizing your prompt</h2>
+
+<p>The worst thing is when you forget whether you’re on your server or not. The code below will make it <strong>very</strong> obvious when you are. Cut and paste it into your terminal to run it</p>
+
+<p><strong>Make sure you’re connected to your server when you run it!</strong> You can tell because it will say <code class="highlighter-rouge">root@foundations-machine</code> to the left of your prompt.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"export PS1=</span><span class="se">\"\[\0</span><span class="s2">33[40m</span><span class="se">\]\[\0</span><span class="s2">33[47m</span><span class="se">\]</span><span class="s2">server</span><span class="se">\[\0</span><span class="s2">33[0m</span><span class="se">\]</span><span class="s2"> </span><span class="se">\[\0</span><span class="s2">33[31m</span><span class="se">\]\[\e</span><span class="s2">]0;</span><span class="se">\u</span><span class="s2">@</span><span class="se">\h</span><span class="s2">: </span><span class="se">\w\a\]</span><span class="k">${</span><span class="nv">debian_chroot</span>:+<span class="p">(</span><span class="nv">$debian_chroot</span><span class="p">)</span><span class="k">}</span><span class="se">\u</span><span class="s2">@</span><span class="se">\h\[\0</span><span class="s2">33[0m</span><span class="se">\]</span><span class="s2">:</span><span class="se">\w\$</span><span class="s2"> </span><span class="se">\"</span><span class="s2">"</span> &gt; ~/.bash_profile
+<span class="nb">source</span> ~/.bash_profile
+</code></pre>
+</div>
+
+<h2 id="step-three-welcome-to-your-server">Step Three: Welcome to your server!</h2>
+
+<p>We should probably update the software on there. First you’ll update the software it knows about, then you’ll actually perform an upgrade.</p>
+
+<p><code class="highlighter-rouge">apt</code> is a package manager for Lunux (it’s what Homebrew wants to be).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt update
+apt -y upgrade
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">-y</code> means “don’t ask me if I am sure I want to upgrade, because yes I do.”</p>
+
+<p>After you run that, you’ll install <code class="highlighter-rouge">mailutils</code> by using <code class="highlighter-rouge">apt</code>. <strong>It will ask you some questions</strong> - mostly you just hit “OK” (<code class="highlighter-rouge">tab</code>, then <code class="highlighter-rouge">enter</code> or spacebar). The only thing you want to change is the kind of server you want - <strong>Local only</strong> is a good option. If you miss that, though, it’s no big deal. Install using the following command.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt install -y mailutils
+</code></pre>
+</div>
+
+<blockquote>
+  <p>When you need to click <code class="highlighter-rouge">OK</code>, push the right arrow to select it.</p>
+</blockquote>
+
+<p>We won’t be sending mail, but it’s useful to give us notifications when things break (we’ll talk about it later!.</p>
+
+<h2 id="step-three-install-python-update-pip-and-install-some-packages">Step Three: Install Python, update pip, and install some packages</h2>
+
+<p>We install Python 3 and pip using <code class="highlighter-rouge">apt</code>. Note we’re using <code class="highlighter-rouge">-y</code> here again.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt install -y python3 python3-pip
+</code></pre>
+</div>
+
+<p>To make sure Python will work, you’ll need to <strong>disconnect from your server</strong>. Otherwise you’ll get a weird error about <code class="highlighter-rouge">main</code> not being found.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">exit</span>
+</code></pre>
+</div>
+
+<p>Then reconnect with the same IP address from before. You can just push up to get the last command.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh -i ~/.ssh/foundations_key root@YOUR_IP
+</code></pre>
+</div>
+
+<p>Now that we’re back on our server, we’ll use <code class="highlighter-rouge">pip3</code> to install some packages. Notice we’re using <code class="highlighter-rouge">pip3</code> and not <code class="highlighter-rouge">pip</code>! On our server, <code class="highlighter-rouge">pip</code> is for Python 2 and <code class="highlighter-rouge">pip3</code> is for Python 3.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip3 install --upgrade pip
+pip3 install pandas requests bs4 jupyter selenium
+</code></pre>
+</div>
+
+<h2 id="step-four-test-it-out">Step Four: Test it out</h2>
+
+<p>Type <code class="highlighter-rouge">ipython</code> to open up the <strong>interactive Python</strong> prompt.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ipython
+</code></pre>
+</div>
+
+<p>Paste in the following code, hit enter a few times, and see if it displays the headlines from the BBC.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://www.bbc.com/'</span><span class="p">)</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+<span class="n">titles</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'media__link'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">titles</span><span class="p">:</span>
+  <span class="k">print</span><span class="p">(</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+</code></pre>
+</div>
+
+<p>Exit <code class="highlighter-rouge">ipython</code> by typing <code class="highlighter-rouge">exit()</code>.</p>
+
+<h2 id="get-crazy">Get crazy</h2>
+
+<p>Now you’re good to go! We can move on to <a href="../sending-files/">sending files back and forth from your server</a> or <a href="../cron/">scheduling repeating tasks</a></p>
+
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

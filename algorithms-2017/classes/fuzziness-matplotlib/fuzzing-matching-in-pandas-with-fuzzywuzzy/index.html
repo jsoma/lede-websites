@@ -1,0 +1,2192 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Fuzzing matching in pandas with fuzzywuzzy</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/algorithms-2017/classes/fuzziness-matplotlib/fuzzing-matching-in-pandas-with-fuzzywuzzy/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Fuzzing matching in pandas with fuzzywuzzy">
+  <meta property="twitter:title" content="Fuzzing matching in pandas with fuzzywuzzy">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Algorithms, Lede 2017</a> &gt;  Fuzzing matching in pandas with fuzzywuzzy</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Fuzzing matching in pandas with fuzzywuzzy</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/algorithms-2017/classes/fuzziness-matplotlib/fuzzing-matching-in-pandas-with-fuzzywuzzy.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <p>Sometimes you don’t want to use OpenRefine. Why not? I don’t know, it’s the
+<em>best</em> for cleaning up fuzzy matches. But yes, sure, sometimes maybe you don’t.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"CD_Transactions_07-23-2017.CSV"</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Result</th>
+      <th>Date</th>
+      <th>Transaction Type</th>
+      <th>Payment Type</th>
+      <th>Payment Detail</th>
+      <th>Amount</th>
+      <th>Last/Business Name</th>
+      <th>First Name</th>
+      <th>Address</th>
+      <th>City</th>
+      <th>...</th>
+      <th>--------</th>
+      <th>Report Type</th>
+      <th>Election Name</th>
+      <th>Election Type</th>
+      <th>Municipality</th>
+      <th>Office</th>
+      <th>Filer Type</th>
+      <th>Name</th>
+      <th>Report Year</th>
+      <th>Submitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>12864</td>
+      <td>$350.00</td>
+      <td>Alaska Republican Party State Account</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>School Board</td>
+      <td>Candidate</td>
+      <td>Kay E Schuster</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Credit Card</td>
+      <td>NaN</td>
+      <td>$500.00</td>
+      <td>Coffey</td>
+      <td>Dan</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>School Board</td>
+      <td>Candidate</td>
+      <td>Kay E Schuster</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>3047</td>
+      <td>$300.00</td>
+      <td>ACS Employees PAC</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>Assembly</td>
+      <td>Candidate</td>
+      <td>Pete Petersen</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Credit Card</td>
+      <td>NaN</td>
+      <td>$500.00</td>
+      <td>Holmes</td>
+      <td>Patrick</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>NaN</td>
+      <td>Group</td>
+      <td>Alaska Republican Party</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Credit Card</td>
+      <td>NaN</td>
+      <td>$500.00</td>
+      <td>Gonzales</td>
+      <td>Mark L.</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>NaN</td>
+      <td>Group</td>
+      <td>Alaska Republican Party</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 26 columns</p>
+</div>
+
+<h1 id="what-are-all-of-our-options-for-the-alaska-sea-pilot-pac-fund">What are all of our options for the “Alaska Sea Pilot PAC fund”?</h1>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'Last/Business Name'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'Alaska Sea Pilot PAC fund'</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(3, 26)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'Last/Business Name'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'ALASKA SEA PILOT PAC FUND'</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(6, 26)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'Last/Business Name'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'Alaska Sea Pilot Pac Fund'</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(6, 26)
+</code></pre>
+</div>
+
+<p>Maybe we can throw in a regex and catch some more?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'Last/Business Name'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"Sea.*Pilot"</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="bp">False</span><span class="p">)][</span><span class="s">'Last/Business Name'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Alaska Sea Pilot PAC Fund                                     46
+Alaska Sea Pilot PAC                                          17
+Alaska Sea Pilots PAC Fund                                    13
+Alaska Sea Pilot Pac Fund                                      6
+Alaska Sea Pilots                                              5
+Alaska Sea Pilot PAC fund                                      3
+Alaska Sea Pilot Pac                                           3
+Alaska Sea Pilot                                               3
+Alaska Sea Pilots Pac Fund                                     2
+Alaska Sea Pilot PAC Fund                                      2
+Alaska Sea Pilot Fund                                          2
+Alaska Sea Pilot  PAC fund                                     2
+Alaska Sea Pilot PAC                                           1
+Alaska Sea Pilots, 1621 Tongass Ave., Ketchikan, AK. 99901     1
+ Ak Sea Pilot PAC                                              1
+AlaskanSea Pilot PAC                                           1
+Alaska SeaPilot PAC                                            1
+Alaska Sea Pilots Ass'n                                        1
+AK Sea Pilot Pac Fund                                          1
+AK Sea Pilot PAC                                               1
+Alaska Sea Pilots, LLC.                                        1
+Alaska Sea Pilot                                               1
+Alaska Sea Pilot Pac                                           1
+AK Sea Pilot PAC Fund                                          1
+Name: Last/Business Name, dtype: int64
+</code></pre>
+</div>
+
+<h1 id="using-fuzzywuzzy-for-finding-fuzzy-matches">Using fuzzywuzzy for finding fuzzy matches</h1>
+
+<p>Fuzzy matches are incomplete or inexact matches. The Python package
+<a href="https://github.com/seatgeek/fuzzywuzzy">fuzzywuzzy</a> has a few functions that
+can help you, although they’re a little bit confusing! I’m going to take the
+examples from GitHub and annotate them a little, then we’ll use them.</p>
+
+<p>First, install fuzzywuzzy with</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip3 install fuzzywuzzy[speedup]
+</code></pre>
+</div>
+
+<p>Then we’ll get to importing it</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># fuzz is used to compare TWO strings</span>
+<span class="kn">from</span> <span class="nn">fuzzywuzzy</span> <span class="kn">import</span> <span class="n">fuzz</span>
+
+<span class="c"># process is used to compare a string to MULTIPLE other strings</span>
+<span class="kn">from</span> <span class="nn">fuzzywuzzy</span> <span class="kn">import</span> <span class="n">process</span></code></pre></figure>
+
+<blockquote>
+  <p><strong>MAKE SURE YOU INSTALLED USING <code class="highlighter-rouge">pip3 install fuzzywuzzy[speedup]</code> OR ELSE IT
+WILL COMPLAIN HERE AND WILL ALSO BE SLOWER</strong></p>
+</blockquote>
+
+<h3 id="fuzzratio-compares-the-entire-string-in-order"><code class="highlighter-rouge">fuzz.ratio</code> compares the entire string, in order</h3>
+
+<p>Every single thing in the string is important here!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">fuzz</span><span class="o">.</span><span class="n">ratio</span><span class="p">(</span><span class="s">"this is a test"</span><span class="p">,</span> <span class="s">"this is a fun"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>74
+</code></pre>
+</div>
+
+<h3 id="fuzzpartialratio-compares-subsections-of-the-string"><code class="highlighter-rouge">fuzz.partial_ratio</code> compares subsections of the string</h3>
+
+<p>Partial matches are fine! The exclamation mark at the end made <code class="highlighter-rouge">fuzz.ratio</code> not
+like the comparison last time, but this time it’s OK.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">fuzz</span><span class="o">.</span><span class="n">partial_ratio</span><span class="p">(</span><span class="s">"this is a test"</span><span class="p">,</span> <span class="s">"test a is this"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>57
+</code></pre>
+</div>
+
+<h3 id="fuzztokensortratio-ignores-word-order"><code class="highlighter-rouge">fuzz.token_sort_ratio</code> ignores word order</h3>
+
+<p><code class="highlighter-rouge">fuzz.token_sort_ratio</code> orders all of the words first, so “KENNEDY JOHN” and
+“JOHN KENNEDY” would be the same.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">fuzz</span><span class="o">.</span><span class="n">token_sort_ratio</span><span class="p">(</span><span class="s">"fuzzy wuzzy was a bear"</span><span class="p">,</span> <span class="s">"wuzzy fuzzy was a bear"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>100
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">fuzz</span><span class="o">.</span><span class="n">token_sort_ratio</span><span class="p">(</span><span class="s">"this is a test"</span><span class="p">,</span> <span class="s">"is this a test"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>100
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">fuzz</span><span class="o">.</span><span class="n">token_sort_ratio</span><span class="p">(</span><span class="s">"fuzzy was a bear"</span><span class="p">,</span> <span class="s">"fuzzy fuzzy was a bear"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>84
+</code></pre>
+</div>
+
+<h3 id="fuzztokensetratio-ignores-duplicate-words"><code class="highlighter-rouge">fuzz.token_set_ratio</code> ignores duplicate words</h3>
+
+<p>I don’t know why you’d ever have “JOHN KENNEDY KENNEDY” but if you use
+<code class="highlighter-rouge">fuzz.token_set_ratio</code> then it would definitely match “JOHN KENNEDY”.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">fuzz</span><span class="o">.</span><span class="n">token_set_ratio</span><span class="p">(</span><span class="s">"fuzzy was a bear"</span><span class="p">,</span> <span class="s">"fuzzy fuzzy was a bear"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>100
+</code></pre>
+</div>
+
+<h1 id="actually-using-fuzzywuzzy-on-our-dataset-featuring-processextract">Actually using fuzzywuzzy on our dataset, featuring <code class="highlighter-rouge">process.extract</code></h1>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">choices</span> <span class="o">=</span> <span class="p">[</span><span class="s">'fuzzy fuzzy was a bear'</span><span class="p">,</span> <span class="s">'is this a test'</span><span class="p">,</span> <span class="s">'THIS IS A TEST!!'</span><span class="p">]</span>
+<span class="n">process</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s">"this is a test"</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">scorer</span><span class="o">=</span><span class="n">fuzz</span><span class="o">.</span><span class="n">ratio</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[('THIS IS A TEST!!', 100),
+ ('is this a test', 86),
+ ('fuzzy fuzzy was a bear', 33)]
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">choices</span> <span class="o">=</span> <span class="p">[</span><span class="s">'fuzzy fuzzy was a bear'</span><span class="p">,</span> <span class="s">'is this a test'</span><span class="p">,</span> <span class="s">'THIS IS A TEST!!'</span><span class="p">]</span>
+<span class="n">process</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s">"this is a test"</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">scorer</span><span class="o">=</span><span class="n">fuzz</span><span class="o">.</span><span class="n">token_sort_ratio</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[('is this a test', 100),
+ ('THIS IS A TEST!!', 100),
+ ('fuzzy fuzzy was a bear', 28)]
+</code></pre>
+</div>
+
+<p>Since we already imported, let’s collect all of the business names into a list.
+We’re going to search through the list to find names that are similar to
+<strong>Alaska Sea Pilot PAC Fun</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># If we grab a column and use .unique(), it gives us every business name with no repeats</span>
+<span class="n">choices</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'Last/Business Name'</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="n">choices</span><span class="p">[:</span><span class="mi">15</span><span class="p">]</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>array(['Alaska Republican Party State Account', 'Coffey',
+       'ACS Employees PAC', 'Holmes', 'Gonzales',
+       'Anchorage Taxicab Permit Owners Association (ATPOA)', 'Abdullah',
+       'Alimi', 'Barbosa', 'Bryant', 'Chamot', 'Farmer', 'Gautam',
+       'Guevara', 'Lena'], dtype=object)
+</code></pre>
+</div>
+
+<p>Now we’ll use <code class="highlighter-rouge">process.extract</code> to find the top 15 matches</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">%%</span><span class="n">time</span>
+<span class="n">process</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s">"Alaska Sea Pilot PAC Fund"</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">scorer</span><span class="o">=</span><span class="n">fuzz</span><span class="o">.</span><span class="n">token_sort_ratio</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>CPU times: user 634 ms, sys: 5.38 ms, total: 639 ms
+Wall time: 642 ms
+
+
+
+
+
+[('Alaska Sea Pilot PAC Fund', 100),
+ ('Alaska Sea Pilot  PAC fund', 100),
+ ('ALASKA SEA PILOT PAC FUND', 100),
+ ('Alaska Sea Pilot PAC Fund ', 100),
+ ('Alaska SEA Pilot Pac Fund', 100),
+ ('Alaska SEA Pilot PAC Fund', 100),
+ ('Alaska Sea Pilot Pac Fund', 100),
+ ('Alaska Sea Pilot PAC fund', 100),
+ ('Alaska Sea Pilots PAC Fund', 98),
+ ('Alaska Sea Pilots Pac Fund', 98),
+ ('Alaska Sea Pilot Fund', 91),
+ ('AK Sea Pilot Pac Fund', 91),
+ ('ALASKA SEA PILOT FUND', 91),
+ ('AK Sea Pilot PAC Fund', 91),
+ ('Alaska Sea Pilot Pac', 89),
+ ('Alaska Sea Pilot PAC', 89),
+ ('Alaska Sea Pilot Pac ', 89),
+ ('Alaska Sea Pilot PAC ', 89),
+ ('ALASK SEA PILOT PAC', 86),
+ ('Alaska Sea Pilot', 78),
+ ('AK Sea Pilot PAC', 78),
+ (' Ak Sea Pilot PAC', 78),
+ ('Alaska Sea Pilot ', 78),
+ ('Alaska Sea Pilots, LLC.', 78),
+ ('Alaska Sea Pilots', 76),
+ ('AlaskanSea Pilot PAC', 76),
+ ('Alaska Marine Pilot PAC', 75),
+ ("Alaska Sea Pilots Ass'n", 75),
+ ('Alaska SeaPilot PAC', 73),
+ ('Alaska Senate Majority Fund', 73)]
+</code></pre>
+</div>
+
+<p>Wow, those look pretty nice! Maybe instead we should just find the ones that are
+above a certain score? You can also specify a <code class="highlighter-rouge">scorer</code> if you want to get
+particular.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Get 100 options so we're sure to have some non-matches</span>
+<span class="n">possibilities</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s">"Alaska Sea Pilot PAC Fund"</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">scorer</span><span class="o">=</span><span class="n">fuzz</span><span class="o">.</span><span class="n">token_sort_ratio</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># And let's see everyting with a score above 73</span>
+<span class="p">[</span><span class="n">possible</span> <span class="k">for</span> <span class="n">possible</span> <span class="ow">in</span> <span class="n">possibilities</span> <span class="k">if</span> <span class="n">possible</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">73</span><span class="p">]</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[('Alaska Sea Pilot PAC Fund', 100),
+ ('Alaska Sea Pilot  PAC fund', 100),
+ ('ALASKA SEA PILOT PAC FUND', 100),
+ ('Alaska Sea Pilot PAC Fund ', 100),
+ ('Alaska SEA Pilot Pac Fund', 100),
+ ('Alaska SEA Pilot PAC Fund', 100),
+ ('Alaska Sea Pilot Pac Fund', 100),
+ ('Alaska Sea Pilot PAC fund', 100),
+ ('Alaska Sea Pilots PAC Fund', 98),
+ ('Alaska Sea Pilots Pac Fund', 98),
+ ('Alaska Sea Pilot Fund', 91),
+ ('AK Sea Pilot Pac Fund', 91),
+ ('ALASKA SEA PILOT FUND', 91),
+ ('AK Sea Pilot PAC Fund', 91),
+ ('Alaska Sea Pilot Pac', 89),
+ ('Alaska Sea Pilot PAC', 89),
+ ('Alaska Sea Pilot Pac ', 89),
+ ('Alaska Sea Pilot PAC ', 89),
+ ('ALASK SEA PILOT PAC', 86),
+ ('Alaska Sea Pilot', 78),
+ ('AK Sea Pilot PAC', 78),
+ (' Ak Sea Pilot PAC', 78),
+ ('Alaska Sea Pilot ', 78),
+ ('Alaska Sea Pilots, LLC.', 78),
+ ('Alaska Sea Pilots', 76),
+ ('AlaskanSea Pilot PAC', 76),
+ ('Alaska Marine Pilot PAC', 75),
+ ("Alaska Sea Pilots Ass'n", 75)]
+</code></pre>
+</div>
+
+<p><strong>Huh, pretty neat.</strong></p>
+
+<h2 id="filtering-directly-with-fuzzywuzzy">Filtering directly with fuzzywuzzy</h2>
+
+<p>We can also use this directly with our dataframe, if we’d like to use
+<code class="highlighter-rouge">fuzzywuzzy</code> to filter instead of giving us a list. It’s going to be a lot
+slower, but that’s life, I guess.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">get_ratio</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s">'Last/Business Name'</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">fuzz</span><span class="o">.</span><span class="n">token_sort_ratio</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">"Alaska Sea Pilot PAC Fund"</span><span class="p">)</span>
+
+<span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">get_ratio</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">70</span><span class="p">]</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Result</th>
+      <th>Date</th>
+      <th>Transaction Type</th>
+      <th>Payment Type</th>
+      <th>Payment Detail</th>
+      <th>Amount</th>
+      <th>Last/Business Name</th>
+      <th>First Name</th>
+      <th>Address</th>
+      <th>City</th>
+      <th>...</th>
+      <th>--------</th>
+      <th>Report Type</th>
+      <th>Election Name</th>
+      <th>Election Type</th>
+      <th>Municipality</th>
+      <th>Office</th>
+      <th>Filer Type</th>
+      <th>Name</th>
+      <th>Report Year</th>
+      <th>Submitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>50505</th>
+      <td>50506</td>
+      <td>12/3/2015</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1278</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave, Ste 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2016 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Jonathan Kreiss-Tomkins</td>
+      <td>2016</td>
+      <td>6/13/2016</td>
+    </tr>
+    <tr>
+      <th>51557</th>
+      <td>51558</td>
+      <td>11/23/2015</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1279</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot Pac</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave. Ste. 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2016 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Bert K. Stedman</td>
+      <td>2016</td>
+      <td>6/23/2016</td>
+    </tr>
+    <tr>
+      <th>61585</th>
+      <td>61586</td>
+      <td>11/21/2015</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1090</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilots PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Avenue Ste. 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2016 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Sam S Kito III</td>
+      <td>2016</td>
+      <td>8/9/2016</td>
+    </tr>
+    <tr>
+      <th>62351</th>
+      <td>62352</td>
+      <td>11/16/2015</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1084</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2016 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Neal Winston Foster</td>
+      <td>2016</td>
+      <td>8/28/2016</td>
+    </tr>
+    <tr>
+      <th>74155</th>
+      <td>74156</td>
+      <td>11/16/2015</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1087</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2016 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Lynn Gattis</td>
+      <td>2016</td>
+      <td>10/9/2016</td>
+    </tr>
+    <tr>
+      <th>75904</th>
+      <td>75905</td>
+      <td>9/13/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1289</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>1621 Tongass Avenue</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Andrew "Andy" Josephson</td>
+      <td>2016</td>
+      <td>10/9/2016</td>
+    </tr>
+    <tr>
+      <th>77090</th>
+      <td>77091</td>
+      <td>9/13/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1285</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot</td>
+      <td>NaN</td>
+      <td>1621 Tongass Avenue, Suite 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Cathy L. Tilton</td>
+      <td>2016</td>
+      <td>10/10/2016</td>
+    </tr>
+    <tr>
+      <th>77110</th>
+      <td>77111</td>
+      <td>10/24/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1297</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave.</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Dave Talerico</td>
+      <td>2016</td>
+      <td>10/31/2016</td>
+    </tr>
+    <tr>
+      <th>77259</th>
+      <td>77260</td>
+      <td>9/15/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1288</td>
+      <td>$500.00</td>
+      <td>ALASK SEA PILOT PAC</td>
+      <td>NaN</td>
+      <td>1621 TONGASS AVE</td>
+      <td>KETCHIKAN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Gary Allan Knopp</td>
+      <td>2016</td>
+      <td>10/10/2016</td>
+    </tr>
+    <tr>
+      <th>77473</th>
+      <td>77474</td>
+      <td>9/14/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1284</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot Fund</td>
+      <td>n/a</td>
+      <td>1621 Tongass Avenue</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>cathy munoz</td>
+      <td>2016</td>
+      <td>10/10/2016</td>
+    </tr>
+    <tr>
+      <th>83512</th>
+      <td>83513</td>
+      <td>10/18/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1206</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilots PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Chris Birch</td>
+      <td>2016</td>
+      <td>11/1/2016</td>
+    </tr>
+    <tr>
+      <th>83824</th>
+      <td>83825</td>
+      <td>10/20/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1300</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot Pac</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave. Ste. 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Bert K. Stedman</td>
+      <td>2016</td>
+      <td>11/1/2016</td>
+    </tr>
+    <tr>
+      <th>89576</th>
+      <td>89577</td>
+      <td>11/21/2015</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1090</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilots PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Avenue Ste. 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2016 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Sam S Kito III</td>
+      <td>2016</td>
+      <td>8/9/2016</td>
+    </tr>
+    <tr>
+      <th>91019</th>
+      <td>91020</td>
+      <td>10/18/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1202</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilots Pac Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Donald "Donny" C. Olson</td>
+      <td>2016</td>
+      <td>11/1/2016</td>
+    </tr>
+    <tr>
+      <th>91031</th>
+      <td>91032</td>
+      <td>10/18/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1299</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot  PAC fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Mark Neuman</td>
+      <td>2016</td>
+      <td>11/1/2016</td>
+    </tr>
+    <tr>
+      <th>91556</th>
+      <td>91557</td>
+      <td>10/26/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1208</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Avenue, Suite 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Zach Fansler</td>
+      <td>2016</td>
+      <td>11/1/2016</td>
+    </tr>
+    <tr>
+      <th>92062</th>
+      <td>92063</td>
+      <td>9/13/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1286</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongrass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>David S. Wilson</td>
+      <td>2016</td>
+      <td>11/2/2016</td>
+    </tr>
+    <tr>
+      <th>92508</th>
+      <td>92509</td>
+      <td>12/21/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1212</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilots PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave Ste 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Jonathan Kreiss-Tomkins</td>
+      <td>2016</td>
+      <td>2/15/2017</td>
+    </tr>
+    <tr>
+      <th>93756</th>
+      <td>93757</td>
+      <td>9/13/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1291</td>
+      <td>$500.00</td>
+      <td>ALASKA SEA PILOT PAC FUND</td>
+      <td>NaN</td>
+      <td>1621 Tongass ave.</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>DeLena Johnson</td>
+      <td>2016</td>
+      <td>12/15/2016</td>
+    </tr>
+    <tr>
+      <th>93896</th>
+      <td>93897</td>
+      <td>9/13/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1287</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Ivy A Spohnholz</td>
+      <td>2016</td>
+      <td>12/19/2016</td>
+    </tr>
+    <tr>
+      <th>95996</th>
+      <td>95997</td>
+      <td>11/25/2015</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1277</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave.</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2016 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Gary L. Stevens</td>
+      <td>2016</td>
+      <td>2/3/2016</td>
+    </tr>
+    <tr>
+      <th>96262</th>
+      <td>96263</td>
+      <td>9/19/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1201</td>
+      <td>$1,000.00</td>
+      <td>AK Sea Pilot PAC</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Shelley Hughes</td>
+      <td>2016</td>
+      <td>10/10/2016</td>
+    </tr>
+    <tr>
+      <th>96451</th>
+      <td>96452</td>
+      <td>11/16/2015</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1280</td>
+      <td>$500.00</td>
+      <td>AK Sea Pilot Pac Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2016 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Shelley Hughes</td>
+      <td>2016</td>
+      <td>9/21/2016</td>
+    </tr>
+    <tr>
+      <th>97153</th>
+      <td>97154</td>
+      <td>9/13/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1283</td>
+      <td>$500.00</td>
+      <td>Alaska SEA Pilot Pac Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave.</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Geran Tarr</td>
+      <td>2016</td>
+      <td>10/10/2016</td>
+    </tr>
+    <tr>
+      <th>102146</th>
+      <td>102147</td>
+      <td>11/16/2015</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1087</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2016 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Lynn Gattis</td>
+      <td>2016</td>
+      <td>10/9/2016</td>
+    </tr>
+    <tr>
+      <th>103895</th>
+      <td>103896</td>
+      <td>9/13/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1289</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>1621 Tongass Avenue</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Andrew "Andy" Josephson</td>
+      <td>2016</td>
+      <td>10/9/2016</td>
+    </tr>
+    <tr>
+      <th>105081</th>
+      <td>105082</td>
+      <td>9/13/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1285</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot</td>
+      <td>NaN</td>
+      <td>1621 Tongass Avenue, Suite 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Cathy L. Tilton</td>
+      <td>2016</td>
+      <td>10/10/2016</td>
+    </tr>
+    <tr>
+      <th>105101</th>
+      <td>105102</td>
+      <td>10/24/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1297</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave.</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Dave Talerico</td>
+      <td>2016</td>
+      <td>10/31/2016</td>
+    </tr>
+    <tr>
+      <th>105250</th>
+      <td>105251</td>
+      <td>9/15/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1288</td>
+      <td>$500.00</td>
+      <td>ALASK SEA PILOT PAC</td>
+      <td>NaN</td>
+      <td>1621 TONGASS AVE</td>
+      <td>KETCHIKAN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Gary Allan Knopp</td>
+      <td>2016</td>
+      <td>10/10/2016</td>
+    </tr>
+    <tr>
+      <th>105464</th>
+      <td>105465</td>
+      <td>9/14/2016</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1284</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot Fund</td>
+      <td>n/a</td>
+      <td>1621 Tongass Avenue</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2016 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>cathy munoz</td>
+      <td>2016</td>
+      <td>10/10/2016</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>366646</th>
+      <td>366647</td>
+      <td>12/8/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1076</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilots Ass'n</td>
+      <td>NaN</td>
+      <td>1621 Tongass Avenue</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>Governor / Lt. Governor</td>
+      <td>Candidate</td>
+      <td>Walker Mallott for Alaska</td>
+      <td>2014</td>
+      <td>2/17/2015</td>
+    </tr>
+    <tr>
+      <th>371350</th>
+      <td>371351</td>
+      <td>12/18/2013</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1198</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilots PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Avenue</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2014 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Peter Andrew Micciche</td>
+      <td>2014</td>
+      <td>2/17/2015</td>
+    </tr>
+    <tr>
+      <th>371450</th>
+      <td>371451</td>
+      <td>10/3/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1324</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave.</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Peter Andrew Micciche</td>
+      <td>2014</td>
+      <td>2/17/2015</td>
+    </tr>
+    <tr>
+      <th>375262</th>
+      <td>375263</td>
+      <td>10/6/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1314</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>David Guttenberg</td>
+      <td>2014</td>
+      <td>4/13/2015</td>
+    </tr>
+    <tr>
+      <th>380165</th>
+      <td>380166</td>
+      <td>11/3/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1068</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC</td>
+      <td>PAC</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>24 Hour Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Berta Gardner</td>
+      <td>2014</td>
+      <td>5/12/2015</td>
+    </tr>
+    <tr>
+      <th>380309</th>
+      <td>380310</td>
+      <td>11/3/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1070</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>24 Hour Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Wes Keller</td>
+      <td>2014</td>
+      <td>5/19/2015</td>
+    </tr>
+    <tr>
+      <th>380817</th>
+      <td>380818</td>
+      <td>12/14/2013</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>128</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC</td>
+      <td>NaN</td>
+      <td>1621 Tongass Fund, Suite 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2014 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Bill Stoltze</td>
+      <td>2014</td>
+      <td>5/30/2015</td>
+    </tr>
+    <tr>
+      <th>382147</th>
+      <td>382148</td>
+      <td>10/9/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1304</td>
+      <td>$500.00</td>
+      <td>ALASKA SEA PILOT PAC FUND</td>
+      <td>NaN</td>
+      <td>1621 TONGASS AVE</td>
+      <td>KETCHIKAN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Candidate</td>
+      <td>Click Bishop</td>
+      <td>2014</td>
+      <td>6/14/2015</td>
+    </tr>
+    <tr>
+      <th>382399</th>
+      <td>382400</td>
+      <td>12/5/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1079</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Candidate</td>
+      <td>Gabrielle LeDoux</td>
+      <td>2014</td>
+      <td>7/11/2015</td>
+    </tr>
+    <tr>
+      <th>383646</th>
+      <td>383647</td>
+      <td>11/5/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1072</td>
+      <td>$1,000.00</td>
+      <td>AK Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave. Suite 300</td>
+      <td>Ketchican</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Adam L. Wool</td>
+      <td>2014</td>
+      <td>6/29/2015</td>
+    </tr>
+    <tr>
+      <th>384035</th>
+      <td>384036</td>
+      <td>8/7/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1301</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2014 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Bill Stoltze</td>
+      <td>2014</td>
+      <td>6/30/2015</td>
+    </tr>
+    <tr>
+      <th>384493</th>
+      <td>384494</td>
+      <td>10/6/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1307</td>
+      <td>$500.00</td>
+      <td>ALASKA SEA PILOT PAC FUND</td>
+      <td>NaN</td>
+      <td>1621 TONGASS AVENUE</td>
+      <td>KETCHIKAN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Candidate</td>
+      <td>Bryce Edgmon</td>
+      <td>2014</td>
+      <td>7/1/2015</td>
+    </tr>
+    <tr>
+      <th>384629</th>
+      <td>384630</td>
+      <td>10/4/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1318</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Geran Tarr</td>
+      <td>2014</td>
+      <td>7/1/2015</td>
+    </tr>
+    <tr>
+      <th>385218</th>
+      <td>385219</td>
+      <td>11/3/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1068</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Avenue</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Berta Gardner</td>
+      <td>2014</td>
+      <td>7/14/2015</td>
+    </tr>
+    <tr>
+      <th>385656</th>
+      <td>385657</td>
+      <td>11/7/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1075</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave, Suit 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Jonathan Kreiss-Tomkins</td>
+      <td>2014</td>
+      <td>7/18/2015</td>
+    </tr>
+    <tr>
+      <th>387266</th>
+      <td>387267</td>
+      <td>10/3/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1321</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC</td>
+      <td>NaN</td>
+      <td>1621 Tongass Avenue</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Thirty Day Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Cathy Munoz</td>
+      <td>2014</td>
+      <td>10/10/2015</td>
+    </tr>
+    <tr>
+      <th>387476</th>
+      <td>387477</td>
+      <td>10/3/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1320</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilots PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Avenue Ste. 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Benjamin P. Nageak "Bennie"</td>
+      <td>2014</td>
+      <td>10/21/2015</td>
+    </tr>
+    <tr>
+      <th>387715</th>
+      <td>387716</td>
+      <td>11/11/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1074</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Louise B. Stutes</td>
+      <td>2014</td>
+      <td>11/14/2015</td>
+    </tr>
+    <tr>
+      <th>387783</th>
+      <td>387784</td>
+      <td>10/6/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1306</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilots PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave ste 300</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Sam S Kito III</td>
+      <td>2014</td>
+      <td>12/2/2015</td>
+    </tr>
+    <tr>
+      <th>388013</th>
+      <td>388014</td>
+      <td>10/8/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1313</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilots PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Dave M. Talerico</td>
+      <td>2014</td>
+      <td>12/9/2015</td>
+    </tr>
+    <tr>
+      <th>389046</th>
+      <td>389047</td>
+      <td>12/9/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1077</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot Pac Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Daniel H. Ortiz</td>
+      <td>2014</td>
+      <td>1/22/2016</td>
+    </tr>
+    <tr>
+      <th>389085</th>
+      <td>389086</td>
+      <td>10/11/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1312</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Mark Neuman</td>
+      <td>2014</td>
+      <td>2/9/2016</td>
+    </tr>
+    <tr>
+      <th>389117</th>
+      <td>389118</td>
+      <td>11/3/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1071</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Wes Keller</td>
+      <td>2014</td>
+      <td>2/13/2016</td>
+    </tr>
+    <tr>
+      <th>389256</th>
+      <td>389257</td>
+      <td>10/6/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1302</td>
+      <td>$750.00</td>
+      <td>AlaskanSea Pilot PAC</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Seven Day Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Mia Costello</td>
+      <td>2014</td>
+      <td>2/15/2016</td>
+    </tr>
+    <tr>
+      <th>389400</th>
+      <td>389401</td>
+      <td>12/18/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1078</td>
+      <td>$250.00</td>
+      <td>Alaska Sea Pilot PAC</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Mia Costello</td>
+      <td>2014</td>
+      <td>2/15/2016</td>
+    </tr>
+    <tr>
+      <th>389470</th>
+      <td>389471</td>
+      <td>12/17/2015</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1086</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilots</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave.</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Dave M. Talerico</td>
+      <td>2014</td>
+      <td>2/15/2016</td>
+    </tr>
+    <tr>
+      <th>389473</th>
+      <td>389474</td>
+      <td>12/21/2015</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>6531</td>
+      <td>$250.00</td>
+      <td>Alaska Sea Pilots, LLC.</td>
+      <td>Richard Murphy</td>
+      <td>PO Box 920226</td>
+      <td>Dutch Harbor</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Dave M. Talerico</td>
+      <td>2014</td>
+      <td>2/15/2016</td>
+    </tr>
+    <tr>
+      <th>393750</th>
+      <td>393751</td>
+      <td>11/5/2014</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1073</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC</td>
+      <td>NaN</td>
+      <td>1621 Tongass Avenue</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year End Report</td>
+      <td>2014 - State General Election</td>
+      <td>State General</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Elizabeth (Liz) Vazquez</td>
+      <td>2014</td>
+      <td>2/15/2017</td>
+    </tr>
+    <tr>
+      <th>394209</th>
+      <td>394210</td>
+      <td>12/19/2013</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1195</td>
+      <td>$1,000.00</td>
+      <td>Alaska Sea Pilot PAC fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave.</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2014 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>Senate</td>
+      <td>Candidate</td>
+      <td>Michael J. Dunleavy</td>
+      <td>2014</td>
+      <td>2/13/2014</td>
+    </tr>
+    <tr>
+      <th>394336</th>
+      <td>394337</td>
+      <td>12/18/2013</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>1196</td>
+      <td>$500.00</td>
+      <td>Alaska Sea Pilot PAC Fund</td>
+      <td>NaN</td>
+      <td>1621 Tongass Ave</td>
+      <td>Ketchikan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Year Start Report</td>
+      <td>2014 - State Primary Election</td>
+      <td>State Primary</td>
+      <td>NaN</td>
+      <td>House</td>
+      <td>Candidate</td>
+      <td>Shelley Hughes</td>
+      <td>2014</td>
+      <td>2/16/2014</td>
+    </tr>
+  </tbody>
+</table>
+<p>128 rows × 26 columns</p>
+</div>
+
+<p>You could also do it using a lambda if you wanted</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">fuzz</span><span class="o">.</span><span class="n">token_sort_ratio</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s">'Last/Business Name'</span><span class="p">],</span> <span class="s">"Alaska Sea Pilot PAC Fund"</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">70</span><span class="p">]</span></code></pre></figure>
+
+<h2 id="we-could-technically-clean-it-like-below-but-it-seems-risky-because-it">We could technically clean it like below, but… it seems risky. Because it</h2>
+<p><em>is</em> risky!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">get_ratio</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">75</span><span class="p">,</span> <span class="s">"Last/Business Name"</span><span class="p">]</span> <span class="o">=</span> <span class="s">"Alaska Sea</span><span class="err">
+</span><span class="s">Pilot PAC Fund"</span>
+</code></pre>
+</div>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Adjusting for population with long or wide data</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2019/pandas/adjusting-for-population-with-long-or-wide-data/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Adjusting for population with long or wide data">
+  <meta property="twitter:title" content="Adjusting for population with long or wide data">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Foundations, Lede 2019</a> &gt;  Adjusting for population with long or wide data</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Adjusting for population with long or wide data</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations-2019/pandas/adjusting-for-population-with-long-or-wide-data.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span> <span class="s">'axes.spines.left'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'axes.spines.right'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'axes.spines.top'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'axes.spines.bottom'</span><span class="p">:</span> <span class="bp">False</span> <span class="p">})</span>
+
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span></code></pre></figure>
+
+<h1 id="adjusting-for-population">Adjusting for population</h1>
+
+<h2 id="the-texascalifornia-problem">The “Texas/California Problem”../</h2>
+
+<blockquote>
+  <p>“When you have states with big populations or places with a large population
+of one specific type, <strong>your data may simply be representing population and
+nothing else.</strong> So normalizing for population or understanding your data, to
+begin with, are both important steps. It’s not enough to scrape it and chart it,
+you need to step back and understand what you are looking at. Just watch out for
+big populations.”</p>
+</blockquote>
+
+<p>Let’s say we’re graphing how many <strong>central libraries</strong> are in each state. We
+pull in the data, it has the state and the number of libraries, and we graph it.</p>
+
+<h2 id="adjusting-for-population-with-long-normal-data">Adjusting for population with long (normal) data</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"libraries.csv"</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>state</th>
+      <th>libraries</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Alabama</td>
+      <td>284</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Alaska</td>
+      <td>102</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Arizona</td>
+      <td>185</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Arkansas</td>
+      <td>210</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>California</td>
+      <td>1084</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">ax</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'libraries'</span><span class="p">)</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'state'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'libraries'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">'barh'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">'#F28FBE'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">'Libraries per state'</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s">'left'</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Text(0,1,'Libraries per state')
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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" alt="png" /></p>
+
+<p>According to this map, <strong>California, New York, and Texas all have the most
+libraries.</strong> There’s something we’re forgetting, though, and it’s that <strong>CA, NY
+and TX <em>also</em> all have the most people.</strong></p>
+
+<p>More people = more libraries. We’re basically making a graph of libraries that’s
+a proxy for population!</p>
+
+<p>To fix this, we need to <strong>adjust for population</strong>, and make it a per-capita (per
+person) graph.</p>
+
+<h3 id="step-1-read-in-your-population-data">Step 1: Read in your population data</h3>
+
+<p>Make sure it has a <strong>matching column to your original data,</strong> whether it’s state
+name, country name, borough name, census code, etc.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">pop</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"../population.csv"</span><span class="p">)</span>
+<span class="n">pop</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>State or territory</th>
+      <th>Population</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>California</td>
+      <td>39250017</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Texas</td>
+      <td>27862596</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Florida</td>
+      <td>20612439</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>New York</td>
+      <td>19745289</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Illinois</td>
+      <td>12801539</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="step-2-join-the-population-data-to-your-original-data">Step 2: Join the population data to your original data</h3>
+
+<p>Using <code class="highlighter-rouge">.merge</code> and <code class="highlighter-rouge">left_on</code> + <code class="highlighter-rouge">right_on</code> (the column names they have in common)
+you can easily join your population data to your original data.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">merged</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s">'state'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s">'State or territory'</span><span class="p">)</span>
+<span class="n">merged</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>state</th>
+      <th>libraries</th>
+      <th>State or territory</th>
+      <th>Population</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Alabama</td>
+      <td>284</td>
+      <td>Alabama</td>
+      <td>4863300</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Alaska</td>
+      <td>102</td>
+      <td>Alaska</td>
+      <td>741894</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Arizona</td>
+      <td>185</td>
+      <td>Arizona</td>
+      <td>6931071</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Arkansas</td>
+      <td>210</td>
+      <td>Arkansas</td>
+      <td>2988248</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>California</td>
+      <td>1084</td>
+      <td>California</td>
+      <td>39250017</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="step-3-do-the-math">Step 3: Do the math</h3>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">merged</span><span class="p">[</span><span class="s">'libraries_per_capita'</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="p">[</span><span class="s">'libraries'</span><span class="p">]</span> <span class="o">/</span> <span class="n">merged</span><span class="p">[</span><span class="s">'Population'</span><span class="p">]</span>
+<span class="n">merged</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>state</th>
+      <th>libraries</th>
+      <th>State or territory</th>
+      <th>Population</th>
+      <th>libraries_per_capita</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Alabama</td>
+      <td>284</td>
+      <td>Alabama</td>
+      <td>4863300</td>
+      <td>0.000058</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Alaska</td>
+      <td>102</td>
+      <td>Alaska</td>
+      <td>741894</td>
+      <td>0.000137</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Arizona</td>
+      <td>185</td>
+      <td>Arizona</td>
+      <td>6931071</td>
+      <td>0.000027</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Arkansas</td>
+      <td>210</td>
+      <td>Arkansas</td>
+      <td>2988248</td>
+      <td>0.000070</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>California</td>
+      <td>1084</td>
+      <td>California</td>
+      <td>39250017</td>
+      <td>0.000028</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="step-4-adjust-the-math">Step 4: Adjust the math</h3>
+
+<p><code class="highlighter-rouge">0.000058</code> libraries per person” just doesn’t sound interesting! For smaller
+numbers, you’ll want to make it “per 100 people,” per 10,000 people,” or even
+per <em>million people</em>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">merged</span><span class="p">[</span><span class="s">'libraries_per_100k_people'</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="p">[</span><span class="s">'libraries'</span><span class="p">]</span> <span class="o">/</span> <span class="n">merged</span><span class="p">[</span><span class="s">'Population'</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100000</span>
+<span class="n">merged</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>state</th>
+      <th>libraries</th>
+      <th>State or territory</th>
+      <th>Population</th>
+      <th>libraries_per_capita</th>
+      <th>libraries_per_100k_people</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Alabama</td>
+      <td>284</td>
+      <td>Alabama</td>
+      <td>4863300</td>
+      <td>0.000058</td>
+      <td>5.839656</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Alaska</td>
+      <td>102</td>
+      <td>Alaska</td>
+      <td>741894</td>
+      <td>0.000137</td>
+      <td>13.748595</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Arizona</td>
+      <td>185</td>
+      <td>Arizona</td>
+      <td>6931071</td>
+      <td>0.000027</td>
+      <td>2.669140</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Arkansas</td>
+      <td>210</td>
+      <td>Arkansas</td>
+      <td>2988248</td>
+      <td>0.000070</td>
+      <td>7.027529</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>California</td>
+      <td>1084</td>
+      <td>California</td>
+      <td>39250017</td>
+      <td>0.000028</td>
+      <td>2.761782</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">ax</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'libraries_per_100k_people'</span><span class="p">)</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'state'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'libraries_per_100k_people'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">'barh'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">'#F28FBE'</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mf">3.5</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">"Libraries per 100,000 residents"</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s">'left'</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Text(0,1,'Libraries per 100,000 residents')
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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v/HGG9lmm234xz/+wbnnnssFF1wAwKxZsxgzZgwzZ87kkUce4Tvf+Q6rV69u0PibAycNs8+AuXPn0r1797Wv582bR9++fdl999255JJL1s6z5557cuqpp9K9e3fmzZvHt7/9bXr16kW3bt24+OKL1y7fuXNnLrjgAvbbbz/uuecehg4dujYpTZ06lcMOO4z999+fgQMHsnDhQgCuueYaunbtSo8ePTjxxBOrjXX48OGccsopHHjggey+++7ccMMNa6f9+te/pnfv3vTo0WNtPFXFXZUDDjiAnXbaaZ32Bx54gNNOOw2A4447jieeeIIedwTCAAAMcUlEQVSI4IEHHuDEE09k8803Z9ddd2W33XZbJ+m8/vrr7LvvvkyePLnKdY4aNYrBgwevs60BbrvtNvr06UPPnj05++yz1yakO++8k7333pvu3buvTWCQjRrPPfdcunXrRv/+/as8oV3dtq9PThpmn0GTJk3i3nvvZfr06dxzzz1MmTIFgDlz5vCd73yHmTNn0qlTJy6//HKmTJnC9OnTefrpp5k+ffraPtq1a8dLL71UIQGsXLmS73//+4wdO5apU6dyxhlncNFFFwFw5ZVX8vLLLzN9+nSuv/76GuObPn06Tz75JM8//zyXXnopb731Fo899hhz5sxh0qRJTJs2jalTpzJhwoQq466LBQsW0LFjRwBatmxJ27ZtWbx4cYV2gA4dOrBgwYK1r1977TWOPfZYRo0aRe/evavtv6ptPXv2bO666y6effZZpk2bRosWLbj99tt56623uOCCC3jyySeZNm0akydPZty4cQB89NFH9OrVi5kzZ3LYYYdVSEBQ87avTz6nYfYZNGDAANq1awfAMcccw8SJEzn66KPp1KkTBxxwwNr57r77bkaOHMmqVatYuHAhs2bNokePHgCccMIJ6/T72muv8eqrrzJgwAAgO3RV+nbfo0cPhgwZwtFHH83RRx+9zrJ5gwcPZosttmCLLbagX79+TJo0iYkTJ/LYY4+x777ZlerLli1jzpw57LLLLuvE3dDeeecdBg8ezH333UfXrl1rnLeqbd2yZUumTp26NtksX76cHXbYgcmTJ9O3b1+23357AIYMGcKECRM4+uij2WSTTdZu85NPPpljjjmmwnpq2vb1yUmjGXG51/LXXEq7Vr70svS6devWa9veeOMNfvOb3zB58mS2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" alt="png" /></p>
+
+<h3 id="step-5-celebrate">Step 5: Celebrate</h3>
+
+<p>Look at that, we’ve actually got a somewhat-interesting story! Instead of New
+York, California and Texas having the most, it looks like Vermont is <em>way ahead
+of everyone else.</em> Something to investigate, perhaps?</p>
+
+<h1 id="adjusting-for-population-with-wide-data-or-adjusting-for-multiple-places-over">Adjusting for population with wide data (or adjusting for multiple places over</h1>
+<p>multiple years)</p>
+
+<p>Adjusting for population with <em>wide data</em> is a little bit different. Not just
+because you’ll need to adjust for multiple places over multiple years, but
+because you need to do it across <em>multiple columns</em>.</p>
+
+<p>If you had long data you could just join on multiple columns and do simple math,
+but with wide data you gotta get a little fancy.</p>
+
+<h3 id="step-1-read-in-your-data">Step 1: Read in your data</h3>
+
+<p>This is how many ice cream shops were in Staten Island, Manhattan, and Brooklyn
+in 1850, 1900, 1950 and 2000 (not real data, sadly).</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"../borough-ice-cream.csv"</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>Staten Island</th>
+      <th>Brooklyn</th>
+      <th>Manhattan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1850</td>
+      <td>2</td>
+      <td>8</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1900</td>
+      <td>4</td>
+      <td>44</td>
+      <td>34</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1950</td>
+      <td>10</td>
+      <td>34</td>
+      <td>44</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2000</td>
+      <td>50</td>
+      <td>250</td>
+      <td>100</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">ax</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'year'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">'bar'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">"Number of ice cream shops"</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s">'left'</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Text(0,1,'Number of ice cream shops')
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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" alt="png" /></p>
+
+<p>But of course, <strong>if there are more people there should be more ice cream
+shops,</strong> so we should adjust for population. It’s kind of weird since we have
+wide data, but we can do it!</p>
+
+<h3 id="step-2-prepare-your-population-data">Step 2: Prepare your population data</h3>
+
+<p>Because we have multiple areas over multiple years, we can’t just say “../I want
+the population of Staten Island in 1850, 1900, 1950 and 2000” - we need the
+populations of <em>every borough</em> in <em>each year</em>. Our data will look like this:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">pop</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"borough-population.csv"</span><span class="p">)</span>
+<span class="n">pop</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>Staten Island</th>
+      <th>Brooklyn</th>
+      <th>Manhattan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1850</td>
+      <td>15061</td>
+      <td>138822</td>
+      <td>515547</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1900</td>
+      <td>67021</td>
+      <td>1166582</td>
+      <td>1850093</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1950</td>
+      <td>191555</td>
+      <td>2738175</td>
+      <td>1960101</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2000</td>
+      <td>443728</td>
+      <td>2465326</td>
+      <td>1537195</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>I actually had to make this data by hand! You probably will, too. <strong>Make the
+rows and columns match up with your dataframe.</strong> Notice how I have the same
+years and the same column headers.</p>
+
+<h3 id="step-3-divide-your-data">Step 3: Divide your data.</h3>
+
+<p>Just like we did before, we divide. But this time we need to divide each cell by
+the same cell in the other dataframe!</p>
+
+<p>To make this work best, we’re going to <strong>change the index of the dataframes</strong>.
+When we do our math, it’s going to do it to <strong>every single cell</strong>, and we don’t
+want to divide the years, so we keep them safe in the index.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Ice cream shops</span>
+<span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s">'year'</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Staten Island</th>
+      <th>Brooklyn</th>
+      <th>Manhattan</th>
+    </tr>
+    <tr>
+      <th>year</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1850</th>
+      <td>2</td>
+      <td>8</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>1900</th>
+      <td>4</td>
+      <td>44</td>
+      <td>34</td>
+    </tr>
+    <tr>
+      <th>1950</th>
+      <td>10</td>
+      <td>34</td>
+      <td>44</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>50</td>
+      <td>250</td>
+      <td>100</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Population</span>
+<span class="n">pop</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s">'year'</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">pop</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Staten Island</th>
+      <th>Brooklyn</th>
+      <th>Manhattan</th>
+    </tr>
+    <tr>
+      <th>year</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1850</th>
+      <td>15061</td>
+      <td>138822</td>
+      <td>515547</td>
+    </tr>
+    <tr>
+      <th>1900</th>
+      <td>67021</td>
+      <td>1166582</td>
+      <td>1850093</td>
+    </tr>
+    <tr>
+      <th>1950</th>
+      <td>191555</td>
+      <td>2738175</td>
+      <td>1960101</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>443728</td>
+      <td>2465326</td>
+      <td>1537195</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Once we’ve made sure they match, we’ll do <code class="highlighter-rouge">df.div</code> to divide a dataframe by
+another dataframe. This divides <strong>each cell by the matching cell in the other
+dataframe</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">per_capita</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="n">per_capita</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Staten Island</th>
+      <th>Brooklyn</th>
+      <th>Manhattan</th>
+    </tr>
+    <tr>
+      <th>year</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1850</th>
+      <td>0.000133</td>
+      <td>0.000058</td>
+      <td>0.000019</td>
+    </tr>
+    <tr>
+      <th>1900</th>
+      <td>0.000060</td>
+      <td>0.000038</td>
+      <td>0.000018</td>
+    </tr>
+    <tr>
+      <th>1950</th>
+      <td>0.000052</td>
+      <td>0.000012</td>
+      <td>0.000022</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>0.000113</td>
+      <td>0.000101</td>
+      <td>0.000065</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Looking pretty good! Let’s multiply by 100000 to make it per 100000 people.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">per_capita</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100000</span>
+<span class="n">per_capita</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Staten Island</th>
+      <th>Brooklyn</th>
+      <th>Manhattan</th>
+    </tr>
+    <tr>
+      <th>year</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1850</th>
+      <td>13.279331</td>
+      <td>5.762775</td>
+      <td>1.939687</td>
+    </tr>
+    <tr>
+      <th>1900</th>
+      <td>5.968279</td>
+      <td>3.771702</td>
+      <td>1.837745</td>
+    </tr>
+    <tr>
+      <th>1950</th>
+      <td>5.220433</td>
+      <td>1.241703</td>
+      <td>2.244782</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>11.268164</td>
+      <td>10.140647</td>
+      <td>6.505356</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">per_capita</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">'bar'</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x115b1e160&gt;
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXQAAAEZCAYAAACHCd7XAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADl0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uIDIuMi4yLCBodHRwOi8vbWF0cGxvdGxpYi5vcmcvhp/UCwAAG9xJREFUeJzt3X90VNXd7/H3NwEafokUKQ8aLFhERFMgIlERBa2KYlERrnDlkehT86iPovb2KrZ2YSuuei3XotXnSlo1oIi4UEHxJ1SgoqKEEH4IKP6IlRYVqSA/TAH53j9mEhMgkJk5ZJidz2utLDP7nJnz9Qx8ZrPPPnvM3RERkcyXle4CREQkGgp0EZFAKNBFRAKhQBcRCYQCXUQkEAp0EZFAKNBFRAKhQBcRCYQCXUQkEE0a+Hi6LVVEJHFWn53UQxcRCYQCXUQkEAp0EZFAKNBFRALR0BdFJTA7d+5k3bp1VFZWprsUAXJycsjNzaVp06bpLkXSwBp4PXTNcgnMxx9/TOvWrWnXrh1m9boQLweJu7Nx40a2bNlCly5d0l2OREuzXOTgq6ysVJgfIsyMdu3a6V9LjZgCXVKmMD906L1o3BToIiKByPiLop3HvpDU8yruHhxxJQLJvx91qc/7dNddd/HEE0+QnZ1NVlYWkyZNoqCggIkTJ1JUVESLFi32+/z67lcf8+fPZ8KECcyePXuf2ysqKrjwwgtZuXLlQT+WND7qoUtGe+utt5g9ezZlZWUsX76cuXPn0qlTJyAW1Nu3bz/ga9R3P5FDnQJdMtr69es54ogj+N73vgfAEUccwZFHHsn999/PP/7xDwYOHMjAgQMBuPbaa+nTpw8nnHAC48aNA9jnfq+++iqnnnoq+fn5DB8+nK1btwLQuXNnxo0bR35+Pnl5eaxZs2a/tS1YsIBevXrRq1cvevfuzZYtW2ptr6iooH///uTn55Ofn8+bb74JxHreAwYMYNiwYXTv3p3LL7+cqtloL7/8Mt27dyc/P59nnnkmorMooVCgS0Y799xz+fTTT+nWrRvXXXcdCxYsAGDMmDEceeSRzJs3j3nz5gGxoZnS0lKWL1/OggULWL58+V77ffnll4wfP565c+dSVlZGnz59uPfee6uPd8QRR1BWVsa1117LhAkT9lvbhAkTePDBBykvL+f111+nefPmtbb/4Ac/YM6cOZSVlTF9+nTGjBlTvW3p0qVMnDiRVatW8dFHH/HGG29QWVnJ1VdfzfPPP8+SJUv47LPPojqNEggFumS0Vq1asWTJEoqLi2nfvj2XXXYZJSUl+9z3qaeeIj8/n969e/Puu++yatWqvfZZtGgRq1atol+/fvTq1YvJkyfzySefVG8fOnQoACeddBIVFRX7ra1fv378/Oc/5/7772fTpk00aVL7ktXOnTu5+uqrycvLY/jw4bXq6du3L7m5uWRlZdGrVy8qKipYs2YNXbp04dhjj8XMGDVqVD3PkjQWGX9RVCQ7O5sBAwYwYMAA8vLymDx5MoWFhbX2+fjjj5kwYQKLFy+mbdu2FBYW7nO+trtzzjnnMG3atH0eq2poJzs7m127du23rrFjxzJ48GBefPFF+vXrxyuvvEJOTk719j/84Q906NCBZcuWsXv37lrbqo5T32OJgHrokuHee+891q5dW/24vLycH/7whwC0bt26etz666+/pmXLlrRp04bPP/+cl156qfo5Nfc75ZRTeOONN/jggw8A2LZtG++//35StX344Yfk5eVx6623cvLJJ+815r5582Y6duxIVlYWjz32GN9+++1+X6979+5UVFTw4YcfAtT5oSONl3roEqmGng66detWbrjhhuohja5du1JcXAxAUVERgwYNqh4j7927N927d6dTp07069ev+jX23K+kpISRI0fyr3/9C4Dx48fTrVu3hGubOHEi8+bNIysrixNOOIHzzz+f9evXV2+/7rrruPTSS5kyZQqDBg2iZcuW+329nJwciouLGTx4MC1atKB///57XWiVxi3j13LRPPT0Wr16Nccff3y6y5Aa9J4ESWu5iIg0Jgp0EZFAKNBFRAKhQBcRCYQCXUQkEAp0EZFAaB66ROuONhG/3uYD7pKdnU1eXh7uTnZ2Ng888ACnnXZayoeua6lbLVsrhyoFumS85s2bU15eDsArr7zCbbfdVr1IV5Vdu3bttZaKSGgOOORiZo+Y2RdmtrJG2+/NbI2ZLTezZ83s8INbpkj9fP3117Rt2xaI9aT79+/PkCFD6NGjBwD33nsvJ554IieeeCITJ06sfl5d7VU++ugjevfuzeLFi6vbdu/ezbHHHsuGDRuqH3ft2pUNGzZQWFjImDFjOO200zjmmGOYMWPGwfzfFgHq10MvAR4AptRo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" alt="png" /></p>
+
+<p>While our original chart had Brooklyn as loving ice cream the most, it looks
+like Staten Island wins if we look at things per-capita!</p>
+
+<h3 id="step-4-getting-our-old-data-back">Step 4: Getting our old data back</h3>
+
+<p>Remember how we set the index to be the year?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Staten Island</th>
+      <th>Brooklyn</th>
+      <th>Manhattan</th>
+    </tr>
+    <tr>
+      <th>year</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1850</th>
+      <td>5</td>
+      <td>8</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>1900</th>
+      <td>4</td>
+      <td>44</td>
+      <td>34</td>
+    </tr>
+    <tr>
+      <th>1950</th>
+      <td>10</td>
+      <td>34</td>
+      <td>44</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>15</td>
+      <td>250</td>
+      <td>100</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>If we want the year back as a normal column, we just do a
+<code class="highlighter-rouge">.reset_index(inplace=True)</code></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>Staten Island</th>
+      <th>Brooklyn</th>
+      <th>Manhattan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1850</td>
+      <td>5</td>
+      <td>8</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1900</td>
+      <td>4</td>
+      <td>44</td>
+      <td>34</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1950</td>
+      <td>10</td>
+      <td>34</td>
+      <td>44</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2000</td>
+      <td>15</td>
+      <td>250</td>
+      <td>100</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

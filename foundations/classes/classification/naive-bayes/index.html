@@ -1,0 +1,2806 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Naive Bayes</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/classification/naive-bayes/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Naive Bayes">
+  <meta property="twitter:title" content="Naive Bayes">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt;  Naive Bayes</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Naive Bayes</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations/classes/classification/naive-bayes.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="algorithms-rules-of-play">Algorithms: Rules of Play</h1>
+
+<ol>
+  <li>Name of the algorithm</li>
+  <li>What it’s used for (classification, clustering, maybe other things?)</li>
+  <li>Why is it better/worse than other classification/clustering/etc algorithms</li>
+  <li>How to get our data into a format that is good for that algorithm</li>
+  <li>REALISTIC data sets</li>
+  <li>What the output means technically</li>
+  <li>What the output means in like real life language and practically speaking</li>
+  <li>What kind of datasets you use this algorithm for</li>
+  <li>Examples of when it was used in journalism OR maybe could have been used</li>
+  <li>Examples of when it was used period</li>
+  <li>Pitfalls</li>
+  <li>Maybe maybe maybe a little bit of math</li>
+  <li>How to ground them for a less technical audience and to help engage them in
+what the algorithm is doing</li>
+</ol>
+
+<h1 id="naive-bayes">Naive Bayes</h1>
+
+<p>Download and extract <code class="highlighter-rouge">recipes.csv.zip</code> from <code class="highlighter-rouge">#algorithms</code> and start a new
+Jupyter Notebook!!!!</p>
+
+<p><strong>Classification algorithm</strong> - spam filter</p>
+
+<p>The more spammy words that are in an email, the more like it is to be spam</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"../recipes.csv"</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cuisine</th>
+      <th>id</th>
+      <th>ingredient_list</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>greek</td>
+      <td>10259</td>
+      <td>romaine lettuce, black olives, grape tomatoes,...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>southern_us</td>
+      <td>25693</td>
+      <td>plain flour, ground pepper, salt, tomatoes, gr...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>filipino</td>
+      <td>20130</td>
+      <td>eggs, pepper, salt, mayonaise, cooking oil, gr...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>indian</td>
+      <td>22213</td>
+      <td>water, vegetable oil, wheat, salt</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>indian</td>
+      <td>13162</td>
+      <td>black pepper, shallots, cornflour, cayenne pep...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="question-one-what-are-we-doing-and-why-are-we-using-naive-bayes">QUESTION ONE: What are we doing and why are we using Naive Bayes?</h1>
+
+<p>We have a bunch of recipes in categories. Maybe someone sends us new recipes,
+what category do the new recipes belong in?</p>
+
+<p>We’re going to train a classifier to recognize italian food, so that if someone
+sends us new recipes, we know if it’s italian because we love italian food and
+we only want to eat italian food.</p>
+
+<p>RULE IS: For classification algorithms, YOU MUST HAVE CATEGORIES ON YOUR
+ORIGINAL DATASET.</p>
+
+<p><strong>For clustering</strong></p>
+
+<ol>
+  <li>You’ll get a lot of documents</li>
+  <li>You feed it to an algorithm, tell it create <code class="highlighter-rouge">x</code> number of categories</li>
+  <li>The machine gives you back categories whether they make sense or not</li>
+</ol>
+
+<p><strong>For classification (which we are doing now)</strong></p>
+
+<ol>
+  <li>You’ll get a lot of documents</li>
+  <li>You’ll classify some of them into categories that you know and love</li>
+  <li>You’ll ask the algorithm what categories a new bunch of unlabeled documents
+end up in</li>
+</ol>
+
+<p>All mean the same thing: CATEGORY = CLASS = LABEL</p>
+
+<p>The reason why you use machine learning is to not do things manually. So if you
+can do things manually, do it. Otherwise just try different algorithms until one
+works well (but you might need to know some upsides or downsides of each to
+interpret that).</p>
+
+<h2 id="how-does-naive-bayes-work">How does Naive Bayes work?</h2>
+
+<p>NAIVE BAYES WORKS WITH TEXT (kind of)</p>
+
+<p><strong>Bayes Theorem (kind of)</strong></p>
+
+<ul>
+  <li>If you see a word that is normally in a spam email, there’s a higher chance
+it’s spam</li>
+  <li>If you see a word that is normally in a non-spam email, there’s a higher
+chance it’s not spam</li>
+</ul>
+
+<p><strong>Naive:</strong> every word/ingredient/etc is independent of any other word</p>
+
+<p>FOR US: If you see ingredients that are normally in italian food, it’s probably
+italian</p>
+
+<p>Secret trick: you can’t just use text, you have to convert into numbers</p>
+
+<h2 id="types-of-naive-bayes">Types of Naive Bayes</h2>
+
+<p>Naive Bayes works on words, and SOMETIMES your text is long and SOMETIMES your
+text is short.</p>
+
+<p><strong>Multinominal Naive Bayes - (multiple numbers)</strong>: You count the words. You care
+about whether a word appears once or twice or three times or ten times. <em>This is
+better for long passages</em></p>
+
+<p><strong>Bernoulli Naive Bayes - True/False Bayes:</strong> You only care if the word shows up
+(<code class="highlighter-rouge">True</code>) or it doesn’t show up (<code class="highlighter-rouge">False</code>) - <em>this is better for short passages</em></p>
+
+<h1 id="step-one-lets-convert-our-text-data-into-numerical-data">STEP ONE: Let’s convert our text data into numerical data</h1>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cuisine</th>
+      <th>id</th>
+      <th>ingredient_list</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>greek</td>
+      <td>10259</td>
+      <td>romaine lettuce, black olives, grape tomatoes,...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>southern_us</td>
+      <td>25693</td>
+      <td>plain flour, ground pepper, salt, tomatoes, gr...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>filipino</td>
+      <td>20130</td>
+      <td>eggs, pepper, salt, mayonaise, cooking oil, gr...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>indian</td>
+      <td>22213</td>
+      <td>water, vegetable oil, wheat, salt</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>indian</td>
+      <td>13162</td>
+      <td>black pepper, shallots, cornflour, cayenne pep...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p><strong>Our problem:</strong> Everything is text - cuisine is text, ingredient list is text,
+id is a number but it doesn’t matter</p>
+
+<p><strong>Two things to convert into numbers:</strong></p>
+
+<ul>
+  <li>Our labels (a.k.a. the categories everything belongs in)</li>
+  <li>Our features</li>
+</ul>
+
+<h2 id="converting-our-labels-into-numbers">Converting our labels into numbers</h2>
+
+<p>We have two labels</p>
+
+<ul>
+  <li>italian = <code class="highlighter-rouge">1</code></li>
+  <li>not italian = <code class="highlighter-rouge">0</code></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cuisine</th>
+      <th>id</th>
+      <th>ingredient_list</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>greek</td>
+      <td>10259</td>
+      <td>romaine lettuce, black olives, grape tomatoes,...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>southern_us</td>
+      <td>25693</td>
+      <td>plain flour, ground pepper, salt, tomatoes, gr...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>filipino</td>
+      <td>20130</td>
+      <td>eggs, pepper, salt, mayonaise, cooking oil, gr...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>indian</td>
+      <td>22213</td>
+      <td>water, vegetable oil, wheat, salt</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>indian</td>
+      <td>13162</td>
+      <td>black pepper, shallots, cornflour, cayenne pep...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">make_label</span><span class="p">(</span><span class="n">cuisine</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">cuisine</span> <span class="o">==</span> <span class="s">"italian"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'label'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'cuisine'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">make_label</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cuisine</th>
+      <th>id</th>
+      <th>ingredient_list</th>
+      <th>label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>greek</td>
+      <td>10259</td>
+      <td>romaine lettuce, black olives, grape tomatoes,...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>southern_us</td>
+      <td>25693</td>
+      <td>plain flour, ground pepper, salt, tomatoes, gr...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>filipino</td>
+      <td>20130</td>
+      <td>eggs, pepper, salt, mayonaise, cooking oil, gr...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>indian</td>
+      <td>22213</td>
+      <td>water, vegetable oil, wheat, salt</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>indian</td>
+      <td>13162</td>
+      <td>black pepper, shallots, cornflour, cayenne pep...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>jamaican</td>
+      <td>6602</td>
+      <td>plain flour, sugar, butter, eggs, fresh ginger...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>spanish</td>
+      <td>42779</td>
+      <td>olive oil, salt, medium shrimp, pepper, garlic...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>italian</td>
+      <td>3735</td>
+      <td>sugar, pistachio nuts, white almond bark, flou...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>mexican</td>
+      <td>16903</td>
+      <td>olive oil, purple onion, fresh pineapple, pork...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>italian</td>
+      <td>12734</td>
+      <td>chopped tomatoes, fresh basil, garlic, extra-v...</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="converting-our-features-into-numbers">Converting our features into numbers</h2>
+
+<p><strong>Feature selection:</strong> The process of selecting the features that matter, in
+this case - what ingredients do we want to look at?</p>
+
+<p>Our feature is going to be: whether it has spaghetti or not</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'has_spaghetti'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"spaghetti"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'has_curry_powder'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"curry powder"</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cuisine</th>
+      <th>id</th>
+      <th>ingredient_list</th>
+      <th>label</th>
+      <th>has_spaghetti</th>
+      <th>has_curry_powder</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>greek</td>
+      <td>10259</td>
+      <td>romaine lettuce, black olives, grape tomatoes,...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>southern_us</td>
+      <td>25693</td>
+      <td>plain flour, ground pepper, salt, tomatoes, gr...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>filipino</td>
+      <td>20130</td>
+      <td>eggs, pepper, salt, mayonaise, cooking oil, gr...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>indian</td>
+      <td>22213</td>
+      <td>water, vegetable oil, wheat, salt</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>indian</td>
+      <td>13162</td>
+      <td>black pepper, shallots, cornflour, cayenne pep...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>jamaican</td>
+      <td>6602</td>
+      <td>plain flour, sugar, butter, eggs, fresh ginger...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>spanish</td>
+      <td>42779</td>
+      <td>olive oil, salt, medium shrimp, pepper, garlic...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>italian</td>
+      <td>3735</td>
+      <td>sugar, pistachio nuts, white almond bark, flou...</td>
+      <td>1</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>mexican</td>
+      <td>16903</td>
+      <td>olive oil, purple onion, fresh pineapple, pork...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>italian</td>
+      <td>12734</td>
+      <td>chopped tomatoes, fresh basil, garlic, extra-v...</td>
+      <td>1</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="lets-run-our-tests">Let’s run our tests</h2>
+
+<p>Let’s feed our labels and our features to a machine that likes to learn and then
+see how well it learns!!!!</p>
+
+<h3 id="looking-at-our-labels">Looking at our labels</h3>
+
+<p>We stored it in <code class="highlighter-rouge">label</code>, and if it’s <code class="highlighter-rouge">0</code> it’s not italian, if it’s <code class="highlighter-rouge">1</code> it is
+Italian</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'label'</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0    0
+1    0
+2    0
+3    0
+4    0
+Name: label, dtype: int64
+</code></pre>
+</div>
+
+<h3 id="look-at-our-features">Look at our features</h3>
+
+<p>We have two features <code class="highlighter-rouge">has_spaghetti</code> and <code class="highlighter-rouge">has_curry_powder</code>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[[</span><span class="s">'has_spaghetti'</span><span class="p">,</span> <span class="s">'has_curry_powder'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>has_spaghetti</th>
+      <th>has_curry_powder</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="now-lets-finally-do-this">Now let’s finally do this</h3>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># We need to split into training and testing data</span>
+<span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Splitting into...</span>
+<span class="c"># X = are all our features</span>
+<span class="c"># y = are all our labels</span>
+<span class="c"># X_train are our features to train on (80%)</span>
+<span class="c"># y_train are our labels to train on (80%)</span>
+<span class="c"># X_test are our features to test on (20%)</span>
+<span class="c"># y_train are our labels to test on (20%)</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">[[</span><span class="s">'has_spaghetti'</span><span class="p">,</span> <span class="s">'has_curry_powder'</span><span class="p">]],</span> <span class="c"># the first is our FEATURES</span>
+    <span class="n">df</span><span class="p">[</span><span class="s">'label'</span><span class="p">],</span> <span class="c"># the second parameter is the LABEL (this is 0/1, not italian/italian)</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span> <span class="c"># 80% training, 20% testing</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Oh hey, it's just our features from the dataframe</span>
+<span class="n">X_train</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>has_spaghetti</th>
+      <th>has_curry_powder</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>18816</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>30480</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>19110</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>29312</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>23782</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>7907</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2456</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>27221</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5228</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>37623</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>18641</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>9029</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5549</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>21559</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>12168</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4836</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3560</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>21578</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>33579</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5965</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>32581</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5274</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1544</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>10885</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>22168</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>29798</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>31228</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4636</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>38889</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39444</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>19956</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>14863</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>8335</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>21372</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>8720</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>11752</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>10551</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>37474</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>7905</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5923</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>14526</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>673</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>30444</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>15322</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5476</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>37545</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>32634</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>36936</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>18970</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5622</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>10731</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>37097</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5822</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>35856</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>7579</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>27918</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>8601</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5245</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39665</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>13013</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+<p>31819 rows × 2 columns</p>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># X is always the features, whether it's for training or for testing</span>
+<span class="n">X_test</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>has_spaghetti</th>
+      <th>has_curry_powder</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>23827</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>24607</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>16829</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>6473</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>23662</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>19742</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>37244</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>19552</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>6361</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>6786</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>27241</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>9034</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>34423</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>33399</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>19641</th>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>15389</th>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>11627</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>25811</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>22079</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5254</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>22499</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>18948</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>13672</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>31390</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>26623</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>36470</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>14916</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>22337</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>27339</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>38540</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>3409</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>38281</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>12014</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>10908</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4647</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>22629</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>32925</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>20743</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>25604</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>34821</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>38273</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>24241</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>28217</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>25094</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>9433</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3755</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>12877</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>37839</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>30193</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5866</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>22191</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>29451</th>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>29878</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>26103</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>9126</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>32127</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>34047</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3324</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>31076</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>104</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+<p>7955 rows × 2 columns</p>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>31819
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nb">len</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>7955
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># We're testing on ~8000 and training on ~32000</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># y_train is our labels that we are training one</span>
+<span class="n">y_train</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>18816    0
+30480    0
+19110    0
+29312    1
+23782    0
+7907     0
+2456     0
+27221    0
+5228     0
+37623    0
+18641    0
+9029     0
+5549     0
+21559    0
+12168    0
+4836     0
+3560     0
+21578    0
+33579    0
+5965     0
+32581    0
+5274     1
+1544     1
+10885    0
+22168    0
+29798    1
+31228    0
+4636     1
+38889    0
+39444    0
+        ..
+19956    0
+14863    1
+8335     0
+21372    1
+8720     0
+11752    0
+10551    1
+37474    1
+7905     1
+5923     1
+14526    1
+673      0
+30444    0
+15322    0
+5476     0
+37545    1
+32634    0
+36936    0
+18970    0
+5622     0
+10731    0
+37097    0
+5822     0
+35856    0
+7579     0
+27918    1
+8601     0
+5245     0
+39665    0
+13013    0
+Name: label, dtype: int64
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># And y_test is the labels we're testing on</span>
+<span class="n">y_test</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>23827    0
+24607    0
+16829    1
+6473     0
+23662    0
+19742    0
+37244    0
+19552    1
+6361     0
+6786     0
+27241    0
+9034     1
+34423    1
+33399    0
+19641    0
+15389    0
+11627    0
+25811    0
+22079    1
+5254     0
+22499    0
+18948    1
+13672    1
+31390    0
+26623    1
+36470    0
+14916    1
+22337    0
+27339    0
+38540    0
+        ..
+3409     1
+38281    0
+12014    1
+10908    0
+4647     0
+22629    0
+32925    0
+20743    0
+25604    1
+34821    0
+38273    1
+24241    1
+28217    0
+25094    0
+9433     0
+3755     1
+12877    0
+37839    0
+30193    0
+5866     0
+22191    0
+29451    0
+29878    0
+26103    0
+9126     0
+32127    0
+34047    0
+3324     0
+31076    0
+104      0
+Name: label, dtype: int64
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="s">"Length of training labels:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Length of testing labels:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Length of training features:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Length of testing features:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Length of training labels: 31819
+Length of testing labels: 7955
+Length of training features: 31819
+Length of testing features: 7955
+</code></pre>
+</div>
+
+<p>Basically all that happened was <code class="highlighter-rouge">train_test_split</code> took us from having a nice
+dataframe where everything was together and split it into two groups of two -
+separated our labels vs. our features, and our training data vs our testing
+data.</p>
+
+<h1 id="back-to-actually-doing-our-fitting-etc">Back to actually doing our fitting etc</h1>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Splitting into...</span>
+<span class="c"># X = are all our features</span>
+<span class="c"># y = are all our labels</span>
+<span class="c"># X_train are our features to train on (80%)</span>
+<span class="c"># y_train are our labels to train on (80%)</span>
+<span class="c"># X_test are our features to test on (20%)</span>
+<span class="c"># y_train are our labels to test on (20%)</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">[[</span><span class="s">'has_spaghetti'</span><span class="p">,</span> <span class="s">'has_curry_powder'</span><span class="p">]],</span> <span class="c"># the first is our FEATURES</span>
+    <span class="n">df</span><span class="p">[</span><span class="s">'label'</span><span class="p">],</span> <span class="c"># the second parameter is the LABEL (this is 0/1, not italian/italian)</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span> <span class="c"># 80% training, 20% testing</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Import naive_bayes to get access to ALL kinds of naive bayes classifiers</span>
+<span class="c"># But REMEMBER we're using Bernoulli because it's for true/false which is fine</span>
+<span class="c"># for small passages</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">naive_bayes</span>
+
+<span class="c"># Create a Bernoulli Naive Bayes classifier</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">naive_bayes</span><span class="o">.</span><span class="n">BernoulliNB</span><span class="p">()</span>
+
+<span class="c"># Feed the classifier two things:</span>
+<span class="c">#   * our training features (X_train)</span>
+<span class="c">#   * our training labels (y_train)</span>
+<span class="c"># To help it study for the exam later when we test it</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>BernoulliNB(alpha=1.0, binarize=0.0, class_prior=None, fit_prior=True)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># This looks ugly but in theory it's what every recipe is</span>
+<span class="c"># All those zeroes = not italian</span>
+<span class="c"># We know the first three aren't italian and the last three aren't italian</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>array([0, 0, 0, ..., 0, 0, 0])
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Naive Bayes can't overfit, really</span>
+<span class="c"># It can't "study too hard" it can't "memorize the questions"</span>
+<span class="c"># (a decision tree can)</span>
+<span class="c"># So if we give it the training data back it will get some wrong</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.81083629278104274
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.80905091137649277
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'cuisine'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>italian         7838
+mexican         6438
+southern_us     4320
+indian          3003
+chinese         2673
+french          2646
+cajun_creole    1546
+thai            1539
+japanese        1423
+greek           1175
+spanish          989
+korean           830
+vietnamese       825
+moroccan         821
+british          804
+filipino         755
+irish            667
+jamaican         526
+russian          489
+brazilian        467
+Name: cuisine, dtype: int64
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'has_spaghetti'</span><span class="p">]</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0        False
+1        False
+2        False
+3        False
+4        False
+5        False
+6        False
+7        False
+8        False
+9        False
+10       False
+11       False
+12       False
+13       False
+14       False
+15       False
+16       False
+17       False
+18       False
+19       False
+20       False
+21       False
+22       False
+23       False
+24       False
+25       False
+26       False
+27        True
+28       False
+29       False
+         ...  
+39744    False
+39745    False
+39746    False
+39747    False
+39748    False
+39749    False
+39750    False
+39751    False
+39752    False
+39753    False
+39754    False
+39755    False
+39756    False
+39757    False
+39758    False
+39759    False
+39760    False
+39761    False
+39762    False
+39763    False
+39764    False
+39765    False
+39766    False
+39767     True
+39768    False
+39769    False
+39770    False
+39771    False
+39772    False
+39773    False
+Name: has_spaghetti, dtype: bool
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#df[['has_spaghetti', 'has_curry_powder']]</span>
+<span class="n">df</span><span class="p">[[</span><span class="s">'has_spaghetti'</span><span class="p">]]</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>has_spaghetti</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>39744</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39745</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39746</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39747</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39748</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39749</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39750</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39751</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39752</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39753</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39754</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39755</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39756</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39757</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39758</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39759</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39760</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39761</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39762</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39763</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39764</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39765</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39766</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39767</th>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>39768</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39769</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39770</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39771</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39772</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>39773</th>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+<p>39774 rows × 1 columns</p>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cuisine</th>
+      <th>id</th>
+      <th>ingredient_list</th>
+      <th>label</th>
+      <th>has_spaghetti</th>
+      <th>has_curry_powder</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>greek</td>
+      <td>10259</td>
+      <td>romaine lettuce, black olives, grape tomatoes,...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>southern_us</td>
+      <td>25693</td>
+      <td>plain flour, ground pepper, salt, tomatoes, gr...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>filipino</td>
+      <td>20130</td>
+      <td>eggs, pepper, salt, mayonaise, cooking oil, gr...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>indian</td>
+      <td>22213</td>
+      <td>water, vegetable oil, wheat, salt</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>indian</td>
+      <td>13162</td>
+      <td>black pepper, shallots, cornflour, cayenne pep...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="wow-we-did-a-really-great-job-lets-try-another-cuisine">Wow, we did a really great job! Let’s try another cuisine</h1>
+
+<h2 id="step-1-preparing-our-data">Step 1: Preparing our data</h2>
+
+<h3 id="creating-labels-that-scikit-learn-can-use">Creating labels that scikit-learn can use</h3>
+
+<p>Our cuisine is , so we’ll do <code class="highlighter-rouge">0</code> and <code class="highlighter-rouge">1</code> as to whether it’s that cuisine or not</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">make_label</span><span class="p">(</span><span class="n">cuisine</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">cuisine</span> <span class="o">==</span> <span class="s">"brazilian"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s">'is_brazilian'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'cuisine'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">make_label</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cuisine</th>
+      <th>id</th>
+      <th>ingredient_list</th>
+      <th>label</th>
+      <th>has_spaghetti</th>
+      <th>has_curry_powder</th>
+      <th>is_brazilian</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>greek</td>
+      <td>10259</td>
+      <td>romaine lettuce, black olives, grape tomatoes,...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>southern_us</td>
+      <td>25693</td>
+      <td>plain flour, ground pepper, salt, tomatoes, gr...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="creating-features-that-scikit-learn-can-use">Creating features that scikit-learn can use</h3>
+
+<p>It’s Bernoulli Naive Bayes, so it’s <code class="highlighter-rouge">True</code> and <code class="highlighter-rouge">False</code></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'has_water'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">'water'</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'has_salt'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">'salt'</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cuisine</th>
+      <th>id</th>
+      <th>ingredient_list</th>
+      <th>label</th>
+      <th>has_spaghetti</th>
+      <th>has_curry_powder</th>
+      <th>is_brazilian</th>
+      <th>has_water</th>
+      <th>has_salt</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>greek</td>
+      <td>10259</td>
+      <td>romaine lettuce, black olives, grape tomatoes,...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>southern_us</td>
+      <td>25693</td>
+      <td>plain flour, ground pepper, salt, tomatoes, gr...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="step-2-create-the-testtrain-split">Step 2: Create the test/train split</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">[[</span><span class="s">'has_water'</span><span class="p">,</span> <span class="s">'has_salt'</span><span class="p">]],</span> <span class="c"># the first is our FEATURES</span>
+    <span class="n">df</span><span class="p">[</span><span class="s">'is_brazilian'</span><span class="p">],</span> <span class="c"># the second parameter is the LABEL (this is 0/1, not italian/italian)</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span> <span class="c"># 80% training, 20% testing</span></code></pre></figure>
+
+<h2 id="step-3-create-classifier-train-and-test">Step 3: Create classifier, train and test</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">naive_bayes</span>
+
+<span class="c"># Create a Bernoulli Naive Bayes classifier</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">naive_bayes</span><span class="o">.</span><span class="n">BernoulliNB</span><span class="p">()</span>
+
+<span class="c"># Fit with our training data</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>BernoulliNB(alpha=1.0, binarize=0.0, class_prior=None, fit_prior=True)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.98821458876771739
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.9884349465744815
+</code></pre>
+</div>
+
+<h1 id="dummy-classifier-to-see-worst-possible-performance">Dummy Classifier to see worst possible performance</h1>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.dummy</span> <span class="kn">import</span> <span class="n">DummyClassifier</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dummy_clf</span> <span class="o">=</span> <span class="n">DummyClassifier</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s">'most_frequent'</span><span class="p">)</span>
+
+<span class="c"># Fit with our training data</span>
+<span class="n">dummy_clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>DummyClassifier(constant=None, random_state=None, strategy='most_frequent')
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dummy_clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.98821458876771739
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dummy_clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.9884349465744815
+</code></pre>
+</div>
+
+<h1 id="we-just-got-destroyed-by-math-lets-actually-understand-naive-bayes">We just got destroyed by math: let’s actually understand Naive Bayes</h1>
+
+<p>Naive Bayes gives you back a probability for each possible label - so, % chance
+that it’s brazilian vs. the % chance that it is not brazilian. We’ll use this to
+see what went wrong.</p>
+
+<p><strong>Math stuff</strong></p>
+
+<p>Naive Bayes is all about calculating the probability of “B given A”, a.k.a., the
+chance of B being true if A is true.</p>
+
+<ul>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>**Bayes<code class="highlighter-rouge"> Theorem:** </code>P(B</td>
+          <td>A) = P(A and B)/P(A)`</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li><code class="highlighter-rouge">P(A)</code> means “what is the probability of A being true?”</li>
+  <li><code class="highlighter-rouge">P(B|A)</code> means “if A is true, what is the probability of B being true?”</li>
+  <li><code class="highlighter-rouge">P(A and B)</code> means “what is the probability of both A and B being true?”</li>
+</ul>
+
+<h2 id="example-we-have-a-recipe-and-it-has-water-in-it-is-it-brazilian">Example: We have a recipe and it has water in it. Is it brazilian?</h2>
+
+<p><strong>Hypothesis one: the recipe is brazilian</strong></p>
+
+<ul>
+  <li><code class="highlighter-rouge">P(B|A)</code> would be “if it contains water, what is the chance that it is
+brazilian cuisine?”</li>
+  <li><code class="highlighter-rouge">P(A and B)</code> would be “what is the chance that it contains both water and is
+brazilian?”</li>
+  <li><code class="highlighter-rouge">P(A)</code> would be “what is the chance that this contains water?”</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># P(B|A) = P(A and B)/P(A)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># P(A and B)</span>
+<span class="c"># Probability that a recipe has water and is brazilian</span>
+
+<span class="c"># How many recipes have water AND are brazilian?</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s">'has_water'</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'cuisine'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'brazilian'</span><span class="p">)])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>109
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># P(A)</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'has_water'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>39774
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># P(B|A)</span>
+<span class="c"># The chance that a recipe is brazilian if it has water in it</span>
+<span class="mi">109</span><span class="o">/</span><span class="mi">39774</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.0027404837330919697
+</code></pre>
+</div>
+
+<p><strong>Hypothesis two: the recipe is NOT brazilian</strong></p>
+
+<ul>
+  <li><code class="highlighter-rouge">P(B|A)</code> would be “if it contains water, what is the chance that it is NOT
+brazilian cuisine?”</li>
+  <li><code class="highlighter-rouge">P(A and B)</code> would be “what is the chance that it contains both water and is
+NOT brazilian?”</li>
+  <li><code class="highlighter-rouge">P(A)</code> would be “what is the chance that this contains water?”</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># P(A and B)</span>
+<span class="c"># Probability that a recipe has water and is NOT brazilian</span>
+
+<span class="c"># How many recipes have water AND are NOT brazilian?</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s">'has_water'</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'cuisine'</span><span class="p">]</span> <span class="o">!=</span> <span class="s">'brazilian'</span><span class="p">)])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>9385
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># P(A)</span>
+<span class="c"># How many recipes have water?</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'has_water'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>39774
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># P(B|A)</span>
+<span class="c"># The chance that a recipe is NOT brazilian if it has water in it</span>
+<span class="mi">9385</span><span class="o">/</span><span class="mi">39774</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.2359581636244783
+</code></pre>
+</div>
+
+<h2 id="what-this-boils-down-to">What this boils down to</h2>
+
+<p>No matter what, pretty much no recipe is ever brazilian. Does it have water in
+it? Does it not have water in it? Doesn’t really matter, it’s probably not
+brazilian.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'cuisine'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'brazilian'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>467
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>39774
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Only a little bit over 1% of our recipes are brazilian</span>
+<span class="c"># so even though it ALWAYS say it "not brazilian", it's usually right</span>
+<span class="mi">467</span><span class="o">/</span><span class="mi">39774</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.011741338562880274
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="mi">1</span> <span class="o">-</span> <span class="mi">467</span><span class="o">/</span><span class="mi">39774</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.9882586614371197
+</code></pre>
+</div>
+
+<h1 id="lets-fix-up-our-labels">Let’s fix up our labels</h1>
+
+<p>Before we had this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>def make_label(cuisine):
+    if cuisine == "brazilian":
+        return 1
+    else:
+        return 0
+</code></pre>
+</div>
+
+<p>which does not scale well. If we wanted to add in more different cuisines, we’d
+need to keep adding in else ifs again and again and again until our fingers fell
+off. And we’d probably misspell something. And if we’re anything, it’s LAZY.</p>
+
+<h2 id="labelencoder-to-the-rescue-converts-categories-into-numeric-labels">LabelEncoder to the rescue: Converts categories into numeric labels</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
+
+<span class="n">le</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">LabelEncoder</span><span class="p">()</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># LabelEncoder has two parts: FIT and TRANSFORM</span>
+<span class="c"># FIT learns all of the possible labels</span>
+<span class="c"># TRANSFORM takes a list of categories and converts them into numbers</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Teach the label encoder all of the possible labels</span>
+<span class="c"># It doesn't care about duplicates </span>
+<span class="n">le</span><span class="o">.</span><span class="n">fit</span><span class="p">([</span><span class="s">'orange'</span><span class="p">,</span> <span class="s">'red'</span><span class="p">,</span> <span class="s">'red'</span><span class="p">,</span> <span class="s">'red'</span><span class="p">,</span> <span class="s">'yellow'</span><span class="p">,</span> <span class="s">'blue'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>LabelEncoder()
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Get the labels out as numbers</span>
+<span class="n">le</span><span class="o">.</span><span class="n">transform</span><span class="p">([</span><span class="s">'orange'</span><span class="p">,</span> <span class="s">'blue'</span><span class="p">,</span> <span class="s">'yellow'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>array([1, 0, 3])
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Send the label encoder each and every cuisine</span>
+<span class="n">le</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'cuisine'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>LabelEncoder()
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">le</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'cuisine'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>array([ 6, 16,  4, ...,  8,  3, 13])
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'cuisine_label'</span><span class="p">]</span> <span class="o">=</span> <span class="n">le</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'cuisine'</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cuisine</th>
+      <th>id</th>
+      <th>ingredient_list</th>
+      <th>label</th>
+      <th>has_spaghetti</th>
+      <th>has_curry_powder</th>
+      <th>is_brazilian</th>
+      <th>has_water</th>
+      <th>has_salt</th>
+      <th>cuisine_label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>greek</td>
+      <td>10259</td>
+      <td>romaine lettuce, black olives, grape tomatoes,...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>southern_us</td>
+      <td>25693</td>
+      <td>plain flour, ground pepper, salt, tomatoes, gr...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>False</td>
+      <td>True</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>filipino</td>
+      <td>20130</td>
+      <td>eggs, pepper, salt, mayonaise, cooking oil, gr...</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>False</td>
+      <td>True</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="lets-train-and-test-with-our-new-labels">Let’s train and test with our new labels</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">[[</span><span class="s">'has_water'</span><span class="p">,</span> <span class="s">'has_salt'</span><span class="p">]],</span> <span class="c"># the first is our FEATURES</span>
+    <span class="n">df</span><span class="p">[</span><span class="s">'cuisine_label'</span><span class="p">],</span> <span class="c"># the second parameter is the LABEL (0-16, southern us, brazilian, anything really)</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span> <span class="c"># 80% training, 20% testing</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">naive_bayes</span>
+
+<span class="c"># Create a Bernoulli Naive Bayes classifier</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">naive_bayes</span><span class="o">.</span><span class="n">BernoulliNB</span><span class="p">()</span>
+
+<span class="c"># Learn how related every cuisine is to water and salt</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>BernoulliNB(alpha=1.0, binarize=0.0, class_prior=None, fit_prior=True)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.19840346962506678
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.20251414204902576
+</code></pre>
+</div>
+
+<h1 id="lets-add-some-more-features-to-see-if-we-can-do-a-better-job">Let’s add some more features to see if we can do a better job</h1>
+
+<p>Right now I’m only looking at water and salt which doesn’t tell you much, maybe
+you’re looking at tortillas or cumin or soy sauce which tells you a little bit
+more.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'has_miso'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"miso"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'has_soy_sauce'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"soy sauce"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'has_cilantro'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"cilantro"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'has_black_olives'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"black olives"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'has_tortillas'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"tortillas"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'has_turmeric'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"turmeric"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'has_pistachios'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"pistachios"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'has_lemongrass'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"lemongrass"</span><span class="p">)</span></code></pre></figure>
+
+<p>Our new feature set is!!! <code class="highlighter-rouge">df[['has_spaghetti', 'has_miso', 'has_soy_sauce',
+'has_cilantro','has_black_olives','has_tortillas','has_turmeric',
+'has_pistachios','has_lemongrass']]</code></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">[[</span><span class="s">'has_spaghetti'</span><span class="p">,</span> <span class="s">'has_miso'</span><span class="p">,</span> <span class="s">'has_soy_sauce'</span><span class="p">,</span> <span class="s">'has_cilantro'</span><span class="p">,</span><span class="s">'has_black_olives'</span><span class="p">,</span><span class="s">'has_tortillas'</span><span class="p">,</span><span class="s">'has_turmeric'</span><span class="p">,</span> <span class="s">'has_pistachios'</span><span class="p">,</span><span class="s">'has_lemongrass'</span><span class="p">]],</span> <span class="c"># the first is our FEATURES</span>
+    <span class="n">df</span><span class="p">[</span><span class="s">'cuisine_label'</span><span class="p">],</span> <span class="c"># the second parameter is the LABEL (0-16, southern us, brazilian, anything really)</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span> <span class="c"># 80% training, 20% testing</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">naive_bayes</span>
+
+<span class="c"># Create a Bernoulli Naive Bayes classifier</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">naive_bayes</span><span class="o">.</span><span class="n">BernoulliNB</span><span class="p">()</span>
+
+<span class="c"># Learn how related every cuisine is to water and salt</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>BernoulliNB(alpha=1.0, binarize=0.0, class_prior=None, fit_prior=True)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.37232471165027187
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0.36379635449402892
+</code></pre>
+</div>
+
+<h1 id="this-is-taking-forever-please-let-there-be-an-automatic-way-to-pick-out-all">This is taking forever, please let there be an automatic way to pick out all</h1>
+<p>of the words</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
+
+<span class="c"># STEP ONE: .fit to learn all of the words</span>
+<span class="c"># STEP TWO: .transform to turn a sentence into numbers</span>
+
+<span class="c">#vectorizer = CountVectorizer()</span>
+<span class="c"># So now 'olive' and 'oil' and 'olive oil' instead of just 'olive' and 'oil'</span>
+<span class="c"># Only pick the top 3000 most frequent ngrams</span>
+<span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">max_features</span><span class="o">=</span><span class="mi">3000</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># We have some sentences</span>
+<span class="c"># We're going to feed it to the vectorizer</span>
+<span class="c"># and it's going to learn all of the words</span>
+<span class="n">sentences</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">"cats are cool"</span><span class="p">,</span>
+    <span class="s">"dogs are cool"</span>
+<span class="p">]</span>
+<span class="n">vectorizer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>CountVectorizer(analyzer='word', binary=False, decode_error='strict',
+        dtype=&lt;class 'numpy.int64'&gt;, encoding='utf-8', input='content',
+        lowercase=True, max_df=1.0, max_features=3000, min_df=1,
+        ngram_range=(1, 2), preprocessor=None, stop_words=None,
+        strip_accents=None, token_pattern='(?u)\\b\\w\\w+\\b',
+        tokenizer=None, vocabulary=None)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># We're going to take some sentences and feed it to the vectorizer</span>
+<span class="c"># and its' going to convert it into numbers</span>
+<span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;2x7 sparse matrix of type '&lt;class 'numpy.int64'&gt;'
+	with 10 stored elements in Compressed Sparse Row format&gt;
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># But it looks bad to look at so I'll use .toarray()</span>
+<span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>array([[1, 1, 1, 1, 1, 0, 0],
+       [1, 1, 0, 0, 1, 1, 1]])
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># In our case, our text is the list of ingredients. We can get it through</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0    romaine lettuce, black olives, grape tomatoes,...
+1    plain flour, ground pepper, salt, tomatoes, gr...
+2    eggs, pepper, salt, mayonaise, cooking oil, gr...
+3                    water, vegetable oil, wheat, salt
+4    black pepper, shallots, cornflour, cayenne pep...
+Name: ingredient_list, dtype: object
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Dear vectorizer, please learn all of these words</span>
+<span class="n">vectorizer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>CountVectorizer(analyzer='word', binary=False, decode_error='strict',
+        dtype=&lt;class 'numpy.int64'&gt;, encoding='utf-8', input='content',
+        lowercase=True, max_df=1.0, max_features=3000, min_df=1,
+        ngram_range=(1, 2), preprocessor=None, stop_words=None,
+        strip_accents=None, token_pattern='(?u)\\b\\w\\w+\\b',
+        tokenizer=None, vocabulary=None)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Dear vectorizer, please convert ingredient_list into features</span>
+<span class="c"># That we can do machine learning on</span>
+
+<span class="n">every_single_word_features</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">])</span>
+<span class="n">every_single_word_features</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;39774x3000 sparse matrix of type '&lt;class 'numpy.int64'&gt;'
+	with 1243216 stored elements in Compressed Sparse Row format&gt;
+</code></pre>
+</div>
+
+<h1 id="now-lets-try-with-our-new-complete-labels-and-our-new-complete-features-that">Now let’s try with our new complete labels and our new complete features that</h1>
+<p>includes every single word</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">every_single_word_features</span><span class="p">,</span>
+    <span class="n">df</span><span class="p">[</span><span class="s">'cuisine_label'</span><span class="p">],</span> <span class="c"># the second parameter is the LABEL (0-16, southern us, brazilian, anything really)</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span> <span class="c"># 80% training, 20% testing</span></code></pre></figure>
+
+<h1 id="this-is-naive-bayes-with-every-word-as-a-feature-pushed-through-the">This is Naive Bayes with every word as a feature pushed through the</h1>
+<p>CountVectorizer</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="s">"This is Naive Bayes"</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">naive_bayes</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">naive_bayes</span><span class="o">.</span><span class="n">BernoulliNB</span><span class="p">()</span>
+<span class="o">%</span><span class="n">time</span> <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c"># How does it do on the training data?</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Training score: (stuff it already knows)"</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
+
+<span class="c"># How does it do on the testing data?</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Testing score: (stuff it hasn't seen before):"</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>This is Naive Bayes
+CPU times: user 55.8 ms, sys: 17.2 ms, total: 73 ms
+Wall time: 109 ms
+Training score: (stuff it already knows) 0.714384487256
+Testing score: (stuff it hasn't seen before): 0.680578252671
+</code></pre>
+</div>
+
+<h1 id="but-maybe-its-just-chance-lets-try-the-dummy-classifier">But maybe it’s just chance? Let’s try the Dummy Classifier</h1>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.dummy</span> <span class="kn">import</span> <span class="n">DummyClassifier</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"This is the Dummy Classifier"</span><span class="p">)</span>
+
+<span class="n">dummy_clf</span> <span class="o">=</span> <span class="n">DummyClassifier</span><span class="p">()</span>
+<span class="o">%</span><span class="n">time</span> <span class="n">dummy_clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c"># How does it do on the training data?</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Training score: (stuff it already knows)"</span><span class="p">,</span> <span class="n">dummy_clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
+
+<span class="c"># How does it do on the testing data?</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Testing score: (stuff it hasn't seen before):"</span><span class="p">,</span> <span class="n">dummy_clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>This is the Dummy Classifier
+CPU times: user 2.58 ms, sys: 397 µs, total: 2.98 ms
+Wall time: 2.41 ms
+Training score: (stuff it already knows) 0.100254564883
+Testing score: (stuff it hasn't seen before): 0.0999371464488
+</code></pre>
+</div>
+
+<h1 id="this-is-a-decision-tree-with-every-single-feature-from-the-countvectorizer">This is a Decision Tree with every single feature from the CountVectorizer</h1>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="s">"This is a Decision Tree"</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">tree</span>
+<span class="n">tree_clf</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">DecisionTreeClassifier</span><span class="p">()</span>
+
+<span class="o">%</span><span class="n">time</span> <span class="n">tree_clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c"># How does it do on the training data?</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Training score: (stuff it already knows)"</span><span class="p">,</span> <span class="n">tree_clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
+
+<span class="c"># How does it do on the testing data?</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Testing score: (stuff it hasn't seen before):"</span><span class="p">,</span> <span class="n">tree_clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>This is a Decision Tree
+CPU times: user 15.4 s, sys: 340 ms, total: 15.8 s
+Wall time: 19.7 s
+Training score: (stuff it already knows) 0.999780005657
+Testing score: (stuff it hasn't seen before): 0.638592080453
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"This is a Random Forest"</span><span class="p">)</span>
+
+<span class="n">tree_clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">()</span>
+
+<span class="o">%</span><span class="n">time</span> <span class="n">tree_clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c"># How does it do on the training data?</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Training score: (stuff it already knows)"</span><span class="p">,</span> <span class="n">tree_clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
+
+<span class="c"># How does it do on the testing data?</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Testing score: (stuff it hasn't seen before):"</span><span class="p">,</span> <span class="n">tree_clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>This is a Random Forest
+CPU times: user 10 s, sys: 288 ms, total: 10.3 s
+Wall time: 13.6 s
+Training score: (stuff it already knows) 0.992645903391
+Testing score: (stuff it hasn't seen before): 0.706096794469
+</code></pre>
+</div>
+
+<h1 id="how-do-you-do-this-in-the-real-world-with-new-data">How do you do this in the real world with new data?</h1>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">every_single_word_features</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'ingredient_list'</span><span class="p">])</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Import the Naive bayes thing</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">naive_bayes</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">naive_bayes</span><span class="o">.</span><span class="n">BernoulliNB</span><span class="p">()</span>
+
+<span class="c"># Give the classifier EVERYTHING we know, not holding back anything</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">every_single_word_features</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s">'cuisine_label'</span><span class="p">])</span>
+
+<span class="c"># We have some new stuff we have not categorized</span>
+<span class="n">incoming_recipes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">"spaghetti tomato sauce garlic onion water"</span><span class="p">,</span>
+    <span class="s">"soy sauce ginger sugar butter"</span><span class="p">,</span>
+    <span class="s">"green papaya thai chilies palm sugar"</span><span class="p">,</span>
+    <span class="s">"butter oil salt black pepper water milk bubblegumpie"</span>
+<span class="p">]</span>
+
+<span class="n">features_for_new_recipes</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">incoming_recipes</span><span class="p">)</span>
+<span class="n">features_for_new_recipes</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;4x3000 sparse matrix of type '&lt;class 'numpy.int64'&gt;'
+	with 35 stored elements in Compressed Sparse Row format&gt;
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">predictions</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">features_for_new_recipes</span><span class="p">)</span>
+<span class="n">predictions</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>array([ 4, 11,  4, 16])
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># The predictions are all categories that the labelencoder decided on</span>
+<span class="c"># Let's convert those numeric ones back into real fun cuisine words</span>
+<span class="n">le</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>array(['filipino', 'japanese', 'filipino', 'southern_us'], dtype=object)
+</code></pre>
+</div>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

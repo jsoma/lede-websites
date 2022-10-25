@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Mechanical Turk for repetitive human tasks</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/algorithms-2017/cloud-services/mechanical-turk/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Mechanical Turk for repetitive human tasks">
+  <meta property="twitter:title" content="Mechanical Turk for repetitive human tasks">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Algorithms, Lede 2017</a> &gt;  Mechanical Turk for repetitive human tasks</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Mechanical Turk for repetitive human tasks</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>Computers are good at repetitive, monotonous tasks - they don’t get bored, and they do the exact same job every single time. This is great for things like converting PDFs to text.</p>
+
+<p>But… what if the PDF just isn’t good enough? What if <code class="highlighter-rouge">pdf2txt</code> can’t find any text and <code class="highlighter-rouge">tesseract</code> output is just absolutely terrible?</p>
+
+<p>If you had an intern you’d use them. Otherwise you can use Amazon’s <a href="https://www.mturk.com">Mechanical Turk</a>.</p>
+
+<h2 id="the-story-behind-the-mechanical-turk">The story behind the Mechanical Turk</h2>
+
+<p>I’ll tell you this in class.</p>
+
+<h2 id="step-one-sign-up">Step One: Sign Up</h2>
+
+<p>Visit the <a href="https://www.mturk.com/mturk/welcome">Mechanical Turk homepage</a> and click <strong>Get Started</strong> on the right-hand side (it’s for <em>requesters</em> instead of workers). Then click the <strong>Create an Account</strong> button up top.</p>
+
+<p>…Not everyone can do it, though. There is a list of <a href="https://requester.mturk.com/help/faq#can_requesters_outside_us_use_mturk">supported countries</a> which sadly doesn’t include Greece! Can you use your US address? No idea!</p>
+
+<p><img src="../images/mturk-signup-1.png" alt="" /></p>
+
+<p><img src="../images/mturk-signup-1.png" alt="" /></p>
+
+<h2 id="step-two-preparing-your-data">Step Two: Preparing your data</h2>
+
+<p>Most of the tasks you’ll do involve <strong>processing some data</strong> - looking at a bunch of URLs, or images, or something like that. If they’re images, you need to upload them somewhere and put them in a list.</p>
+
+<p>For example, if I’m asking people to copy text out of images, you should upload the images (probably <a href="../s3/">to S3</a>?) and then make a CSV file with a list of all of the iamges. Life will be easier if you call the column <code class="highlighter-rouge">image_url</code> because that’s what Amazon assumes the default is.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>image_url</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>http://www.example.com/path/to/image-1.png</td>
+    </tr>
+    <tr>
+      <td>http://www.example.com/path/to/image-2.png</td>
+    </tr>
+    <tr>
+      <td>http://www.example.com/path/to/image-3.png</td>
+    </tr>
+    <tr>
+      <td>http://www.example.com/path/to/image-4.png</td>
+    </tr>
+    <tr>
+      <td>http://www.example.com/path/to/image-5.png</td>
+    </tr>
+    <tr>
+      <td>http://www.example.com/path/to/image-6.png</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="step-three-designing-the-hit">Step Three: Designing the HIT</h2>
+
+<p>Tasks on Mechanical Turk are called HITs - Human Intelligence Tasks. They luckily have a lot of templates you can use! You can pick from the left-hand side of the <a href="https://requester.mturk.com/create/projects/new">project creation page</a>.</p>
+
+<p><img src="../images/mturk-create.png" alt="" /></p>
+
+<blockquote>
+  <p><strong>Note:</strong> Read through the documentation, but generally the idea is to be <strong>very specific about what you want</strong>.</p>
+</blockquote>
+
+<p>Let’s start on the <strong>Design Layout</strong> page first, even though it’s step 2. When you’re creating a request, it’s pretty much a bunch of HTML with variables in it. Notice in the <strong>image transcription template</strong> you see the broken image?</p>
+
+<p><img src="../images/mturk-custom-1.png" alt="" /></p>
+
+<p>That’s because the <strong>image is actually a variable</strong>. If you click <strong>View Source</strong> you’ll see it <code class="highlighter-rouge">src=${image_url}</code>. This takes the <code class="highlighter-rouge">image_url</code> column from a CSV and puts it into the form.</p>
+
+<p>For example, if I wanted to add a link to the image that would open in a new window, I could use the following code.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;p&gt;&lt;a href="${image_url}" target="_blank"&gt;View full-size image&lt;/a&gt;&lt;/p&gt;
+</code></pre>
+</div>
+
+<p><img src="../images/mturk-custom-2.png" alt="" /></p>
+
+<h2 id="step-four-setting-payment">Step Four: Setting payment</h2>
+
+<p>Go ahead and fill out the properties tab, but the most important is <strong>how much should you pay?</strong> Basically, (read this for tips)[http://turkernation.com/showthread.php?21352-The-Myth-of-Low-Cost-High-Quality-on-Amazon-s-Mechanical-Turk] and don’t be an asshole. The idea is basically 1) don’t expect slave labor, and 2) don’t expect people to do a good job for a nickel an hour.</p>
+
+<blockquote>
+  <p><strong>From the writeup:</strong> If you dig down into these studies and articles, you’ll find the secret: sure, if you pay $1 the work will get done, but it will be completed by scammers using “bots” (automated answering systems), people who don’t necessarily understand the instructions (as English is not their strongest language), or those who don’t care about the quality of the work they complete. That’s fine for simple work that doesn’t require mastery of the English language, but every HIT is posted with the requirement that the answers provided actually offer what is being asked.</p>
+</blockquote>
+
+<ol>
+  <li>Figure out a target hourly wage</li>
+  <li>See how long it takes you to do a reasonably complex one</li>
+  <li>Do the math and come up with a per-HIT wage</li>
+</ol>
+
+<p><img src="../images/mturk-properties.png" alt="" /></p>
+
+<h2 id="step-five-targeting-workers">Step Five: Targeting workers</h2>
+
+<p>Now that you have your pay set, you can also add <strong>qualifications</strong>. “Masters” are supposedly skilled workers, but you might also want to add some more bits in - maybe 99% approval and over 1000 tasks?</p>
+
+<p><img src="../images/mturk-qualifications.png" alt="" /></p>
+
+<h2 id="step-six-finishing-up-your-project-template">Step Six: Finishing up your project template</h2>
+
+<p>Now click <strong>Preview and Finish</strong> tab. If you’d like to see all of the variables you’re using on the page, you can click <strong>Download sample</strong> to get a sample CSV file. Otherwise scroll down to the <strong>Finish</strong> button and click it.</p>
+
+<h2 id="step-seven-publishing">Step Seven: Publishing</h2>
+
+<p>Click <strong>Publish Batch</strong> and upload a CSV file.</p>
+
+<p><img src="../images/mturk-upload-1.png" alt="" /></p>
+
+<p><img src="../images/mturk-upload-1.png" alt="" /></p>
+
+<p>Once it’s uploaded you’ll have the ability to preview the HIT. Get excited! Scroll down, click <strong>Next</strong> and then you’ll be on a page that provides you with some estimated billing details. You’ll probably be shocked, but remember: <strong>we aren’t here for slave labor</strong>, this is definitely probably maybe worth it.</p>
+
+<p><img src="../images/mturk-publish-1.png" alt="" /></p>
+
+<p><img src="../images/mturk-publish-2.png" alt="" /></p>
+
+<h2 id="step-eight-accepting-and-confirming">Step Eight: Accepting and confirming</h2>
+
+<p>Once it’s all done you’ll want to confirm that the work is real, either by looking at it or having it done multiple times and comparing with <a href="http://jonathansoma.com/lede/algorithms-2017/classes/cloud-services/diff/">some flavor of diff</a>. Accept/approve and go away happy!</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

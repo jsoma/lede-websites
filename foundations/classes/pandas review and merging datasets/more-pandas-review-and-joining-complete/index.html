@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>More Pandas - Review and Joining (complete)</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/pandas%20review%20and%20merging%20datasets/more-pandas-review-and-joining-complete/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="More Pandas - Review and Joining (complete)">
+  <meta property="twitter:title" content="More Pandas - Review and Joining (complete)">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt;  More Pandas - Review and Joining (complete)</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">More Pandas - Review and Joining (complete)</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations/classes/pandas%20review%20and%20merging%20datasets/more-pandas-review-and-joining-complete.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="the-setup">The setup</h1>
+
+<p>A lot of times when you’re using pandas you’re also going to use matplotlib, and
+when you’re using matplotlib you’re also going to be making inline graphics. So
+why not do it all at once?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Let's do all of our setup</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span></code></pre></figure>
+
+<h1 id="the-import">The import</h1>
+
+<p>Always name your initial dataframe <code class="highlighter-rouge">df</code>. Always always always. Why? Because
+everyone else does, and because</p>
+
+<ul>
+  <li>when you slice it and dice it into different pieces (only really rich people,
+only cats, only flights to Finland, etc)</li>
+  <li>you can give each of those names, while knowing <code class="highlighter-rouge">df</code> is your original
+dataframe.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s">"rich_people.xlsx"</span><span class="p">)</span></code></pre></figure>
+
+<h1 id="the-examining">The examining</h1>
+
+<p>Your best friends for a quick peek are are</p>
+
+<ul>
+  <li><code class="highlighter-rouge">df.head()</code> to see the first ten</li>
+  <li><code class="highlighter-rouge">df.columns</code> to see the column names</li>
+  <li><code class="highlighter-rouge">df.info()</code> to see more detailed info about each column</li>
+  <li><code class="highlighter-rouge">df.describe()</code> to see summary statistics about each numeric column</li>
+</ul>
+
+<p>Once you do these few steps, you should be able to draw up a list of ten or so
+questions to ask your data.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>name</th>
+      <th>rank</th>
+      <th>citizenship</th>
+      <th>countrycode</th>
+      <th>networthusbillion</th>
+      <th>selfmade</th>
+      <th>typeofwealth</th>
+      <th>gender</th>
+      <th>age</th>
+      <th>...</th>
+      <th>relationshiptocompany</th>
+      <th>foundingdate</th>
+      <th>gdpcurrentus</th>
+      <th>sourceofwealth</th>
+      <th>notes</th>
+      <th>notes2</th>
+      <th>source</th>
+      <th>source_2</th>
+      <th>source_3</th>
+      <th>source_4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2001</td>
+      <td>A Jerrold Perenchio</td>
+      <td>151</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td>3.0</td>
+      <td>self-made</td>
+      <td>executive</td>
+      <td>male</td>
+      <td>70.0</td>
+      <td>...</td>
+      <td>former chairman and CEO</td>
+      <td>1955.0</td>
+      <td>1.062180e+13</td>
+      <td>NaN</td>
+      <td>represented Marlon Brando and Elizabeth Taylor</td>
+      <td>NaN</td>
+      <td>http://en.wikipedia.org/wiki/Jerry_Perenchio</td>
+      <td>http://www.forbes.com/profile/a-jerrold-perenc...</td>
+      <td>COLUMN ONE; A Hollywood Player Who Owns the Ga...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2014</td>
+      <td>A. Jerrold Perenchio</td>
+      <td>663</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td>2.6</td>
+      <td>self-made</td>
+      <td>executive</td>
+      <td>male</td>
+      <td>83.0</td>
+      <td>...</td>
+      <td>former chairman and CEO</td>
+      <td>1955.0</td>
+      <td>NaN</td>
+      <td>television, Univision</td>
+      <td>represented Marlon Brando and Elizabeth Taylor</td>
+      <td>NaN</td>
+      <td>http://en.wikipedia.org/wiki/Jerry_Perenchio</td>
+      <td>http://www.forbes.com/profile/a-jerrold-perenc...</td>
+      <td>COLUMN ONE; A Hollywood Player Who Owns the Ga...</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>2 rows × 30 columns</p>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">columns</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Index(['year', 'name', 'rank', 'citizenship', 'countrycode',
+       'networthusbillion', 'selfmade', 'typeofwealth', 'gender', 'age',
+       'industry', 'IndustryAggregates', 'region', 'north',
+       'politicalconnection', 'founder', 'generationofinheritance', 'sector',
+       'company', 'companytype', 'relationshiptocompany', 'foundingdate',
+       'gdpcurrentus', 'sourceofwealth', 'notes', 'notes2', 'source',
+       'source_2', 'source_3', 'source_4'],
+      dtype='object')
+</code></pre>
+</div>
+
+<h1 id="slicing-your-data">Slicing your data</h1>
+
+<p>I made a <em>terrible mistake</em> on Monday about how I taught sub-selects (the things
+that are basically SQL <code class="highlighter-rouge">WHERE</code> statements), and it’s all because of how I named
+my variables.</p>
+
+<p>We’re going to take a sample of the data to work with so it looks a little
+cleaner - only take a few columns of the first 8. It’s a complicated line, don’t
+sweat it. Just think about the result for now.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">sample</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'year'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2014</span><span class="p">][[</span><span class="s">'name'</span><span class="p">,</span> <span class="s">'countrycode'</span><span class="p">,</span> <span class="s">'selfmade'</span><span class="p">,</span> <span class="s">'rank'</span><span class="p">,</span> <span class="s">'networthusbillion'</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'rank'</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">sample</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>countrycode</th>
+      <th>selfmade</th>
+      <th>rank</th>
+      <th>networthusbillion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>284</th>
+      <td>Bill Gates</td>
+      <td>USA</td>
+      <td>self-made</td>
+      <td>1</td>
+      <td>76.0</td>
+    </tr>
+    <tr>
+      <th>348</th>
+      <td>Carlos Slim Helu</td>
+      <td>MEX</td>
+      <td>self-made</td>
+      <td>2</td>
+      <td>72.0</td>
+    </tr>
+    <tr>
+      <th>124</th>
+      <td>Amancio Ortega</td>
+      <td>ESP</td>
+      <td>self-made</td>
+      <td>3</td>
+      <td>64.0</td>
+    </tr>
+    <tr>
+      <th>2491</th>
+      <td>Warren Buffett</td>
+      <td>USA</td>
+      <td>self-made</td>
+      <td>4</td>
+      <td>58.2</td>
+    </tr>
+    <tr>
+      <th>1377</th>
+      <td>Larry Ellison</td>
+      <td>USA</td>
+      <td>self-made</td>
+      <td>5</td>
+      <td>48.0</td>
+    </tr>
+    <tr>
+      <th>509</th>
+      <td>David Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>Charles Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>2185</th>
+      <td>Sheldon Adelson</td>
+      <td>USA</td>
+      <td>self-made</td>
+      <td>8</td>
+      <td>38.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">'ggplot'</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'networthusbillion'</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x10945b8d0&gt;
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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
+SpLjOKqpqVFOTo4effRRVVdXuy5nV1eXcnNzdeDAAZ07d04PPPCAwuGw63L+uyNHjugrX/mKJPf9
+3mfPnq1169Zpy5Ytmj59uh566CE99NBD95TTtaWQ7RwXvTgvlUppz549CofDmjFjxh3L3ZA1JydH
+L730kq5cuaIXXnjhlndf3TSVOW9eQ1qwYMGw2W5yw89y+/btys/P1+XLl1VTU3Pre8NumOqcQ0ND
+Onv2rDZu3KiysjK9+uqram5uvmO9qc55UzqdVltbm5544olhl091zosXL+rPf/6zDhw4IJ/Ppz17
+9ujw4cN3rDeanK4thdG+PM8t/H6/enp67Ne8vLypjiRJGhwc1O7du1VVVaXKykpJ7s0qST6fT0uX
+LtWHH37oqpynT59WW1ubTpw4oWvXrqm/v1+/+tWvXJXxpvz8fEnSnDlzVFlZqVgs5rqcgUBABQUF
+Kiu7/nLLL3/5y2pubnZdzptOnjypBx54QHPmzJHkvr9DH374ob7whS9o9uzZkqQvfelL+sc//nFP
+OV17TaG8vFydnZ26dOmS0um0/va3v6miomKqY1m3n7ddtmyZWltbJUmtra2uydrQ0KDS0lKtXbvW
+jrkt6+XLl+0pmWvXrum9997T5z73OVflfPzxx9XQ0KD6+np973vf0xe/+EV997vfdVVGSbp69apS
+qZSk6zPEd999V/Pnz3ddTr/fr4KCAnV0dEi6fr6+tLTUdTlvevvtt/Xwww/bz27LWVJSog8++EDX
+rl2TMWZcP09XP9F88uRJ/fa3v7Uvz3PLLal1dXU6deqUent7lZeXp1AopMrKStXW1qq7u1uFhYWK
+RCJ3XIyebKdPn9bzzz+v+fPny3EcOY6jDRs2qLy83FVZ//nPf2r//v22aB955BF9/etfV19fn6ty
+3nTq1Cm98cYb9pZUN2Xs6urSzp075TiOBgcH9cgjj2j9+vWuyylJH330kX79618rnU7rvvvu05Yt
+WzQ0NOS6nFevXtWWLVtUX1+vmTNnSpIrf55/+tOf1NraqpycHC1YsECbN29WKpUac05XlwIAYHK5
+9vQRAGDyUQoAAItSAABYlAIAwKIUAAAWpQAAsCgFAIBFKQAArP8BGP04o0+EOqoAAAAASUVORK5C
+YII=" alt="png" /></p>
+
+<p>Who is from the USA? There <strong>two different things we can do</strong>. This was a big
+point of confusion in class</p>
+
+<ol>
+  <li>We can <strong>list whether someone is from the USA or not.</strong></li>
+  <li>Or, we can use that list to <strong>select only the people from the USA.</strong></li>
+</ol>
+
+<p>Let’s look at them both, then see how they’re used.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">sample</span><span class="p">[</span><span class="s">'countrycode'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'USA'</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>284      True
+348     False
+124     False
+2491     True
+1377     True
+509      True
+381      True
+2185     True
+Name: countrycode, dtype: bool
+</code></pre>
+</div>
+
+<p>This just gave us a list of <code class="highlighter-rouge">True</code> and <code class="highlighter-rouge">False</code> values.</p>
+
+<ul>
+  <li>First person? Definitely from the USA.</li>
+  <li>Next row? Not from the USA.</li>
+  <li>Third person? Not from the USA.</li>
+  <li>Fourth? Yes, they’re from the USA.</li>
+</ul>
+
+<p>On the other hand, we can also use similar syntax to get a list of every person
+from the USA.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">sample</span><span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="s">'countrycode'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'USA'</span><span class="p">]</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>countrycode</th>
+      <th>selfmade</th>
+      <th>rank</th>
+      <th>networthusbillion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>284</th>
+      <td>Bill Gates</td>
+      <td>USA</td>
+      <td>self-made</td>
+      <td>1</td>
+      <td>76.0</td>
+    </tr>
+    <tr>
+      <th>2491</th>
+      <td>Warren Buffett</td>
+      <td>USA</td>
+      <td>self-made</td>
+      <td>4</td>
+      <td>58.2</td>
+    </tr>
+    <tr>
+      <th>1377</th>
+      <td>Larry Ellison</td>
+      <td>USA</td>
+      <td>self-made</td>
+      <td>5</td>
+      <td>48.0</td>
+    </tr>
+    <tr>
+      <th>509</th>
+      <td>David Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>Charles Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>2185</th>
+      <td>Sheldon Adelson</td>
+      <td>USA</td>
+      <td>self-made</td>
+      <td>8</td>
+      <td>38.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>That one was a two-step process,</p>
+
+<ol>
+  <li>we got a list of <code class="highlighter-rouge">True</code>/<code class="highlighter-rouge">False</code> values (are they from the USA?), then</li>
+  <li><strong>fed that <code class="highlighter-rouge">True</code>/<code class="highlighter-rouge">False</code> list back into the dataframe.</strong></li>
+</ol>
+
+<p>For every row that’s <code class="highlighter-rouge">True</code>, it let us keep the row. If it was <code class="highlighter-rouge">False</code>, it
+doesn’t let us keep the row.</p>
+
+<h2 id="when-to-use-what">When to use what</h2>
+
+<p>Let’s say we wanted to select every single row that is from USA, has inherited
+wealth, and is in the top 10 wealthiest people in the world. If we wanted to do
+it all on one line, we could!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">sample</span><span class="p">[(</span><span class="n">sample</span><span class="p">[</span><span class="s">'countrycode'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'USA'</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s">'selfmade'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'inherited'</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s">'rank'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)]</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>countrycode</th>
+      <th>selfmade</th>
+      <th>rank</th>
+      <th>networthusbillion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>509</th>
+      <td>David Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>Charles Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>That looks <em>super confusing</em>. In it we have three separate things we’re testing
+for (a.k.a. getting True/False back)</p>
+
+<ul>
+  <li><code class="highlighter-rouge">sample['countrycode'] == 'USA'</code></li>
+  <li><code class="highlighter-rouge">sample['selfmade'] == 'inherited'</code></li>
+  <li><code class="highlighter-rouge">sample['rank'] &lt; 10</code></li>
+</ul>
+
+<p>And we’re jamming them all into <code class="highlighter-rouge">sample[blah blah]</code> to get back a dataframe for
+which all of those are true. It works, but it’s ugly.</p>
+
+<p>Again, let’s remind ourselves what a piece like that looks like, it’s <strong>just a
+list of True and False values</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">sample</span><span class="p">[</span><span class="s">'countrycode'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'USA'</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>284      True
+348     False
+124     False
+2491     True
+1377     True
+509      True
+381      True
+2185     True
+Name: countrycode, dtype: bool
+</code></pre>
+</div>
+
+<p>If we felt like the code we had before was a little too complicated, we could
+break it down into manageable, well-named pieces like this:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">is_american</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s">'countrycode'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'USA'</span>
+<span class="n">is_inherited</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s">'selfmade'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'inherited'</span>
+<span class="n">is_top_ten</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s">'rank'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">10</span>
+
+<span class="n">sample</span><span class="p">[</span><span class="n">is_american</span> <span class="o">&amp;</span> <span class="n">is_inherited</span> <span class="o">&amp;</span> <span class="n">is_top_ten</span><span class="p">]</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>countrycode</th>
+      <th>selfmade</th>
+      <th>rank</th>
+      <th>networthusbillion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>509</th>
+      <td>David Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>Charles Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Let’s look at each individual piece.</p>
+
+<p><code class="highlighter-rouge">is_american</code>, which is the same thing as <code class="highlighter-rouge">sample['countrycode'] == 'USA'</code>, is
+<strong>not</strong> a list of people. It is <strong>not</strong> a dataframe. It is a <strong>list of true and
+false values</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">is_american</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>284      True
+348     False
+124     False
+2491     True
+1377     True
+509      True
+381      True
+2185     True
+Name: countrycode, dtype: bool
+</code></pre>
+</div>
+
+<p>It’s the same thing with <code class="highlighter-rouge">is_inherited</code> and <code class="highlighter-rouge">is_top_ten</code>. It’s just a shortcut
+for me, so I don’t have to type out <code class="highlighter-rouge">sample['selfmade'] == 'inherited'</code>. We can
+combine them all using <code class="highlighter-rouge">&amp;</code> to get a list of <code class="highlighter-rouge">True</code>/<code class="highlighter-rouge">False</code> values in which every
+one of those conditions is true</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">is_american</span> <span class="o">&amp;</span> <span class="n">is_inherited</span> <span class="o">&amp;</span> <span class="n">is_top_ten</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>284     False
+348     False
+124     False
+2491    False
+1377    False
+509      True
+381      True
+2185    False
+dtype: bool
+</code></pre>
+</div>
+
+<p>Which we can then feed into the dataframe</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">sample</span><span class="p">[</span><span class="n">is_american</span> <span class="o">&amp;</span> <span class="n">is_inherited</span> <span class="o">&amp;</span> <span class="n">is_top_ten</span><span class="p">]</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>countrycode</th>
+      <th>selfmade</th>
+      <th>rank</th>
+      <th>networthusbillion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>509</th>
+      <td>David Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>Charles Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>So what I’m saying is, these two things are the same:</p>
+
+<h3 id="method-one-breaking-into-separate-readable-things">Method One: Breaking into separate readable things</h3>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">is_american</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s">'countrycode'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'USA'</span>
+<span class="n">is_inherited</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s">'selfmade'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'inherited'</span>
+<span class="n">is_top_ten</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s">'rank'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">10</span>
+
+<span class="n">kochs</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="n">is_american</span> <span class="o">&amp;</span> <span class="n">is_inherited</span> <span class="o">&amp;</span> <span class="n">is_top_ten</span><span class="p">]</span>
+<span class="n">kochs</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>countrycode</th>
+      <th>selfmade</th>
+      <th>rank</th>
+      <th>networthusbillion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>509</th>
+      <td>David Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>Charles Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="method-two-doing-it-all-at-once">Method Two: Doing it all at once</h3>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">kochs</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[(</span><span class="n">sample</span><span class="p">[</span><span class="s">'countrycode'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'USA'</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s">'selfmade'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'inherited'</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s">'rank'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)]</span>
+<span class="n">kochs</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>countrycode</th>
+      <th>selfmade</th>
+      <th>rank</th>
+      <th>networthusbillion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>509</th>
+      <td>David Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>Charles Koch</td>
+      <td>USA</td>
+      <td>inherited</td>
+      <td>6</td>
+      <td>40.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="make-sure-you-know-the-difference-between-these-two">Make sure you know the difference between these two</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">df['countrycode'] == 'USA'</code></li>
+  <li><code class="highlighter-rouge">df[df['countrycode'] == 'USA']</code></li>
+</ul>
+
+<h1 id="joining-data">Joining data</h1>
+
+<p>Now, let’s say we wanted to join a bunch of data together. We have a lot of
+countries here, right? And we’d like to know how much of their wealth is
+concentrated in these rich people.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>name</th>
+      <th>rank</th>
+      <th>citizenship</th>
+      <th>countrycode</th>
+      <th>networthusbillion</th>
+      <th>selfmade</th>
+      <th>typeofwealth</th>
+      <th>gender</th>
+      <th>age</th>
+      <th>...</th>
+      <th>relationshiptocompany</th>
+      <th>foundingdate</th>
+      <th>gdpcurrentus</th>
+      <th>sourceofwealth</th>
+      <th>notes</th>
+      <th>notes2</th>
+      <th>source</th>
+      <th>source_2</th>
+      <th>source_3</th>
+      <th>source_4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2001</td>
+      <td>A Jerrold Perenchio</td>
+      <td>151</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td>3.0</td>
+      <td>self-made</td>
+      <td>executive</td>
+      <td>male</td>
+      <td>70.0</td>
+      <td>...</td>
+      <td>former chairman and CEO</td>
+      <td>1955.0</td>
+      <td>1.062180e+13</td>
+      <td>NaN</td>
+      <td>represented Marlon Brando and Elizabeth Taylor</td>
+      <td>NaN</td>
+      <td>http://en.wikipedia.org/wiki/Jerry_Perenchio</td>
+      <td>http://www.forbes.com/profile/a-jerrold-perenc...</td>
+      <td>COLUMN ONE; A Hollywood Player Who Owns the Ga...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2014</td>
+      <td>A. Jerrold Perenchio</td>
+      <td>663</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td>2.6</td>
+      <td>self-made</td>
+      <td>executive</td>
+      <td>male</td>
+      <td>83.0</td>
+      <td>...</td>
+      <td>former chairman and CEO</td>
+      <td>1955.0</td>
+      <td>NaN</td>
+      <td>television, Univision</td>
+      <td>represented Marlon Brando and Elizabeth Taylor</td>
+      <td>NaN</td>
+      <td>http://en.wikipedia.org/wiki/Jerry_Perenchio</td>
+      <td>http://www.forbes.com/profile/a-jerrold-perenc...</td>
+      <td>COLUMN ONE; A Hollywood Player Who Owns the Ga...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2001</td>
+      <td>Abdul Al Rahman  Al Jeraisy</td>
+      <td>336</td>
+      <td>Saudi Arabia</td>
+      <td>SAU</td>
+      <td>1.5</td>
+      <td>self-made</td>
+      <td>founder non-finance</td>
+      <td>male</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>founder</td>
+      <td>1956.0</td>
+      <td>1.830120e+11</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>http://www.jeraisy.com.sa/index.php/pages/rend...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2001</td>
+      <td>Abdul Aziz Al Ghurair</td>
+      <td>251</td>
+      <td>United Arab Emirates</td>
+      <td>ARE</td>
+      <td>1.9</td>
+      <td>inherited</td>
+      <td>inherited</td>
+      <td>male</td>
+      <td>47.0</td>
+      <td>...</td>
+      <td>relation</td>
+      <td>1960.0</td>
+      <td>1.030000e+11</td>
+      <td>NaN</td>
+      <td>inherited from father</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1996</td>
+      <td>Abdul Aziz Al-Sulaiman</td>
+      <td>404</td>
+      <td>Saudi Arabia</td>
+      <td>SAU</td>
+      <td>1.0</td>
+      <td>self-made</td>
+      <td>self-made finance</td>
+      <td>male</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>founder</td>
+      <td>1968.0</td>
+      <td>1.577430e+11</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>http://www.arabianbusiness.com/arabian-busines...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 30 columns</p>
+</div>
+
+<h2 id="what-do-we-combine-it-with">What do we combine it with?</h2>
+
+<p>I’m going to get my GDP data from <a href="http://statisticstimes.com/economy/world-gdp-ranking.php">this web
+site</a>, because… I
+googled GDP 2014 and it came up.</p>
+
+<p>We could manually say okay, so A. Jerrold Perenchio     has 2.6 billion dollars,
+and USA’s GDP was 17.418 trillion (17418 billion), so he’s at about 0.015% of
+the GDP. <strong>But we are lazy, so we want the computer to do it.</strong> In order to do
+that, though, we need to <strong>merge that information into our existing dataset.</strong></p>
+
+<p>I’m also too lazy to look up the GDP for every country, so I’m just going to
+pick the top ten.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'countrycode'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>USA    903
+DEU    160
+CHN    153
+RUS    119
+JPN     96
+BRA     81
+HKG     77
+FRA     72
+GBR     65
+IND     63
+Name: countrycode, dtype: int64
+</code></pre>
+</div>
+
+<p>I’m also too lazy to find a csv that has the data I need, so <strong>I’m going to make
+a dataframe out of a dictionary</strong>. It’s pretty easy.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Make a list of dictionaries</span>
+<span class="n">country_gdp</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="s">'country'</span><span class="p">:</span> <span class="s">'USA'</span><span class="p">,</span> <span class="s">'gdp'</span><span class="p">:</span> <span class="mf">17.418</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'country'</span><span class="p">:</span> <span class="s">'DEU'</span><span class="p">,</span> <span class="s">'gdp'</span><span class="p">:</span> <span class="mf">3.859</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'country'</span><span class="p">:</span> <span class="s">'CHN'</span><span class="p">,</span> <span class="s">'gdp'</span><span class="p">:</span> <span class="mf">10.380</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'country'</span><span class="p">:</span> <span class="s">'RUS'</span><span class="p">,</span> <span class="s">'gdp'</span><span class="p">:</span> <span class="mf">1.857</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'country'</span><span class="p">:</span> <span class="s">'JPN'</span><span class="p">,</span> <span class="s">'gdp'</span><span class="p">:</span> <span class="mf">4.616</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'country'</span><span class="p">:</span> <span class="s">'BRA'</span><span class="p">,</span> <span class="s">'gdp'</span><span class="p">:</span> <span class="mf">2.353</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'country'</span><span class="p">:</span> <span class="s">'HKG'</span><span class="p">,</span> <span class="s">'gdp'</span><span class="p">:</span> <span class="mf">0.289</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'country'</span><span class="p">:</span> <span class="s">'FRA'</span><span class="p">,</span> <span class="s">'gdp'</span><span class="p">:</span> <span class="mf">2.846</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'country'</span><span class="p">:</span> <span class="s">'GBR'</span><span class="p">,</span> <span class="s">'gdp'</span><span class="p">:</span> <span class="mf">2.945</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'country'</span><span class="p">:</span> <span class="s">'IND'</span><span class="p">,</span> <span class="s">'gdp'</span><span class="p">:</span> <span class="mf">2.049</span> <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="c"># Convert it into a DataFrame</span>
+<span class="n">gdp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">country_gdp</span><span class="p">)</span>
+<span class="n">gdp_df</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>country</th>
+      <th>gdp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>USA</td>
+      <td>17.418</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>DEU</td>
+      <td>3.859</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>CHN</td>
+      <td>10.380</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>RUS</td>
+      <td>1.857</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>JPN</td>
+      <td>4.616</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>BRA</td>
+      <td>2.353</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>HKG</td>
+      <td>0.289</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>FRA</td>
+      <td>2.846</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>GBR</td>
+      <td>2.945</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>IND</td>
+      <td>2.049</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>I could have read it in from a csv, but since I didn’t have a csv I might as
+well just type it out. I also want it in <em>billions</em>, not in <em>trillions</em>, so
+let’s add a column real quick</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">gdp_df</span><span class="p">[</span><span class="s">'gdp_billions'</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdp_df</span><span class="p">[</span><span class="s">'gdp'</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1000</span>
+<span class="n">gdp_df</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>country</th>
+      <th>gdp</th>
+      <th>gdp_billions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>USA</td>
+      <td>17.418</td>
+      <td>17418.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>DEU</td>
+      <td>3.859</td>
+      <td>3859.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>CHN</td>
+      <td>10.380</td>
+      <td>10380.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>RUS</td>
+      <td>1.857</td>
+      <td>1857.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>JPN</td>
+      <td>4.616</td>
+      <td>4616.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>BRA</td>
+      <td>2.353</td>
+      <td>2353.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>HKG</td>
+      <td>0.289</td>
+      <td>289.0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>FRA</td>
+      <td>2.846</td>
+      <td>2846.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>GBR</td>
+      <td>2.945</td>
+      <td>2945.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>IND</td>
+      <td>2.049</td>
+      <td>2049.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="step-one-finding-a-join-key">STEP ONE: Finding a join key</h3>
+
+<p>My favorite resource for joining data with <code class="highlighter-rouge">pandas</code> is <a href="http://pandas.pydata.org/pandas-
+docs/stable/comparison_with_sql.html#compare-with-sql-join">this
+page</a>. It compares
+everything to SQL JOINs, which <em>I</em> understand. You could also check out <a href="http://pandas.pydata.org/pandas-docs/stable/merging.html#database-style-
+dataframe-joining-merging">this
+page</a> which I find kind of confusing.</p>
+
+<p>So what we need to do is <strong>match up a column between our two dataframes.</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>name</th>
+      <th>rank</th>
+      <th>citizenship</th>
+      <th>countrycode</th>
+      <th>networthusbillion</th>
+      <th>selfmade</th>
+      <th>typeofwealth</th>
+      <th>gender</th>
+      <th>age</th>
+      <th>...</th>
+      <th>relationshiptocompany</th>
+      <th>foundingdate</th>
+      <th>gdpcurrentus</th>
+      <th>sourceofwealth</th>
+      <th>notes</th>
+      <th>notes2</th>
+      <th>source</th>
+      <th>source_2</th>
+      <th>source_3</th>
+      <th>source_4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2001</td>
+      <td>A Jerrold Perenchio</td>
+      <td>151</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td>3.0</td>
+      <td>self-made</td>
+      <td>executive</td>
+      <td>male</td>
+      <td>70.0</td>
+      <td>...</td>
+      <td>former chairman and CEO</td>
+      <td>1955.0</td>
+      <td>1.062180e+13</td>
+      <td>NaN</td>
+      <td>represented Marlon Brando and Elizabeth Taylor</td>
+      <td>NaN</td>
+      <td>http://en.wikipedia.org/wiki/Jerry_Perenchio</td>
+      <td>http://www.forbes.com/profile/a-jerrold-perenc...</td>
+      <td>COLUMN ONE; A Hollywood Player Who Owns the Ga...</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>1 rows × 30 columns</p>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">gdp_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>country</th>
+      <th>gdp</th>
+      <th>gdp_billions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>USA</td>
+      <td>17.418</td>
+      <td>17418.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>It looks like we’re going to be matching up <strong><code class="highlighter-rouge">countrycode</code></strong> from <code class="highlighter-rouge">df</code> with
+<strong><code class="highlighter-rouge">country</code></strong> from <code class="highlighter-rouge">gdp_df</code>.</p>
+
+<h3 id="step-two-doing-the-merge">STEP TWO: Doing the merge</h3>
+
+<p>You merge using <strong><code class="highlighter-rouge">.merge</code></strong>, and then give two parameters:</p>
+
+<ul>
+  <li><strong><code class="highlighter-rouge">left_on</code></strong>, the first dataframe’s column name to merge on</li>
+  <li><strong><code class="highlighter-rouge">right_on</code></strong>, the second dataframe’s column name to merge on</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Since we're only working with 2014's GDP, let's make a variable</span>
+<span class="c"># that's only 2014 scores</span>
+<span class="n">recent</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'year'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2014</span><span class="p">]</span>
+<span class="n">recent</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>name</th>
+      <th>rank</th>
+      <th>citizenship</th>
+      <th>countrycode</th>
+      <th>networthusbillion</th>
+      <th>selfmade</th>
+      <th>typeofwealth</th>
+      <th>gender</th>
+      <th>age</th>
+      <th>...</th>
+      <th>relationshiptocompany</th>
+      <th>foundingdate</th>
+      <th>gdpcurrentus</th>
+      <th>sourceofwealth</th>
+      <th>notes</th>
+      <th>notes2</th>
+      <th>source</th>
+      <th>source_2</th>
+      <th>source_3</th>
+      <th>source_4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>2014</td>
+      <td>A. Jerrold Perenchio</td>
+      <td>663</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td>2.6</td>
+      <td>self-made</td>
+      <td>executive</td>
+      <td>male</td>
+      <td>83.0</td>
+      <td>...</td>
+      <td>former chairman and CEO</td>
+      <td>1955.0</td>
+      <td>NaN</td>
+      <td>television, Univision</td>
+      <td>represented Marlon Brando and Elizabeth Taylor</td>
+      <td>NaN</td>
+      <td>http://en.wikipedia.org/wiki/Jerry_Perenchio</td>
+      <td>http://www.forbes.com/profile/a-jerrold-perenc...</td>
+      <td>COLUMN ONE; A Hollywood Player Who Owns the Ga...</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>1 rows × 30 columns</p>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Let's do the merge</span>
+<span class="n">people_with_gdp</span> <span class="o">=</span> <span class="n">recent</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">gdp_df</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s">'countrycode'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s">'country'</span><span class="p">)</span>
+
+<span class="c"># Look at the top 10</span>
+<span class="n">people_with_gdp</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'rank'</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>name</th>
+      <th>rank</th>
+      <th>citizenship</th>
+      <th>countrycode</th>
+      <th>networthusbillion</th>
+      <th>selfmade</th>
+      <th>typeofwealth</th>
+      <th>gender</th>
+      <th>age</th>
+      <th>...</th>
+      <th>sourceofwealth</th>
+      <th>notes</th>
+      <th>notes2</th>
+      <th>source</th>
+      <th>source_2</th>
+      <th>source_3</th>
+      <th>source_4</th>
+      <th>country</th>
+      <th>gdp</th>
+      <th>gdp_billions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>33</th>
+      <td>2014</td>
+      <td>Bill Gates</td>
+      <td>1</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td>76.0</td>
+      <td>self-made</td>
+      <td>founder non-finance</td>
+      <td>male</td>
+      <td>58.0</td>
+      <td>...</td>
+      <td>Microsoft</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>http://www.forbes.com/profile/bill-gates/</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>USA</td>
+      <td>17.418</td>
+      <td>17418.0</td>
+    </tr>
+    <tr>
+      <th>484</th>
+      <td>2014</td>
+      <td>Warren Buffett</td>
+      <td>4</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td>58.2</td>
+      <td>self-made</td>
+      <td>founder non-finance</td>
+      <td>male</td>
+      <td>83.0</td>
+      <td>...</td>
+      <td>Berkshire Hathaway</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>http://www.forbes.com/lists/2009/10/billionair...</td>
+      <td>http://www.forbes.com/companies/berkshire-hath...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>USA</td>
+      <td>17.418</td>
+      <td>17418.0</td>
+    </tr>
+    <tr>
+      <th>280</th>
+      <td>2014</td>
+      <td>Larry Ellison</td>
+      <td>5</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td>48.0</td>
+      <td>self-made</td>
+      <td>founder non-finance</td>
+      <td>male</td>
+      <td>69.0</td>
+      <td>...</td>
+      <td>Oracle</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>http://www.forbes.com/profile/larry-ellison/</td>
+      <td>http://www.businessinsider.com/how-larry-ellis...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>USA</td>
+      <td>17.418</td>
+      <td>17418.0</td>
+    </tr>
+    <tr>
+      <th>57</th>
+      <td>2014</td>
+      <td>Charles Koch</td>
+      <td>6</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td>40.0</td>
+      <td>inherited</td>
+      <td>inherited</td>
+      <td>male</td>
+      <td>78.0</td>
+      <td>...</td>
+      <td>diversified</td>
+      <td>inherited from father</td>
+      <td>NaN</td>
+      <td>http://www.kochind.com/About_Koch/History_Time...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>USA</td>
+      <td>17.418</td>
+      <td>17418.0</td>
+    </tr>
+    <tr>
+      <th>93</th>
+      <td>2014</td>
+      <td>David Koch</td>
+      <td>6</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td>40.0</td>
+      <td>inherited</td>
+      <td>inherited</td>
+      <td>male</td>
+      <td>73.0</td>
+      <td>...</td>
+      <td>diversified</td>
+      <td>inherited from father</td>
+      <td>NaN</td>
+      <td>http://www.kochind.com/About_Koch/History_Time...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>USA</td>
+      <td>17.418</td>
+      <td>17418.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 33 columns</p>
+</div>
+
+<p>Hmmm see how rank skips through 1, 4, 5, 6, 6? This is because <strong>we only kept
+rows we have matches for</strong>. The second wealthiest person is from Mexico, but
+since we didn’t have GDP from Mexico it left. You can see if we just do a simple
+<code class="highlighter-rouge">.count()</code></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nb">len</span><span class="p">(</span><span class="n">recent</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>1653
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nb">len</span><span class="p">(</span><span class="n">people_with_gdp</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>1130
+</code></pre>
+</div>
+
+<p>We lost like 500 people! Maybe even if we don’t have the GDP of their country we
+want to keep them?</p>
+
+<h3 id="types-of-joins">Types of joins</h3>
+
+<p>Let’s just look at our data real quick before I explain the two major types of
+joins.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># How many rows in our 2014 dataframe?</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"We start with"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">recent</span><span class="p">))</span>
+<span class="n">recent</span><span class="p">[[</span><span class="s">'rank'</span><span class="p">,</span><span class="s">'name'</span><span class="p">,</span> <span class="s">'countrycode'</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'rank'</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>We start with 1653
+</code></pre>
+</div>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>rank</th>
+      <th>name</th>
+      <th>countrycode</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>284</th>
+      <td>1</td>
+      <td>Bill Gates</td>
+      <td>USA</td>
+    </tr>
+    <tr>
+      <th>348</th>
+      <td>2</td>
+      <td>Carlos Slim Helu</td>
+      <td>MEX</td>
+    </tr>
+    <tr>
+      <th>124</th>
+      <td>3</td>
+      <td>Amancio Ortega</td>
+      <td>ESP</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="inner-joins">Inner joins</h3>
+
+<p>The default kind of join is an <strong>inner</strong> join. It requires you to have a match
+on the left hand side AND the right hand side.</p>
+
+<p><strong>If you’re in the original dataframe and you don’t have a match in the joining
+dataframe, you disappear.</strong> Watch how Carlos “Slim” Helu and Amancio Ortega both
+disappear.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Inner join must have a match in both tables</span>
+<span class="n">inner_join_df</span> <span class="o">=</span> <span class="n">recent</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">gdp_df</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s">'countrycode'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s">'country'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"We now have"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inner_join_df</span><span class="p">))</span>
+<span class="n">inner_join_df</span><span class="p">[[</span><span class="s">'rank'</span><span class="p">,</span><span class="s">'name'</span><span class="p">,</span> <span class="s">'countrycode'</span><span class="p">,</span> <span class="s">'gdp_billions'</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'rank'</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>We now have 1130
+</code></pre>
+</div>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>rank</th>
+      <th>name</th>
+      <th>countrycode</th>
+      <th>gdp_billions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>33</th>
+      <td>1</td>
+      <td>Bill Gates</td>
+      <td>USA</td>
+      <td>17418.0</td>
+    </tr>
+    <tr>
+      <th>484</th>
+      <td>4</td>
+      <td>Warren Buffett</td>
+      <td>USA</td>
+      <td>17418.0</td>
+    </tr>
+    <tr>
+      <th>280</th>
+      <td>5</td>
+      <td>Larry Ellison</td>
+      <td>USA</td>
+      <td>17418.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="left-join">Left join</h3>
+
+<p>The other major kind of join is a <strong>left join</strong>. The “left” dataframe (the one
+you type first), gets to keep its rows, even if there aren’t any matches in the
+joining dataframe.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Do a left join, we keep everyone even if they don't have a match in the gdp table</span>
+<span class="n">left_join_df</span> <span class="o">=</span> <span class="n">recent</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">gdp_df</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s">'countrycode'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s">'country'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">'left'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"We now have"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">left_join_df</span><span class="p">))</span>
+<span class="n">left_join_df</span><span class="p">[[</span><span class="s">'rank'</span><span class="p">,</span> <span class="s">'name'</span><span class="p">,</span><span class="s">'countrycode'</span><span class="p">,</span> <span class="s">'gdp_billions'</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'rank'</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>We now have 1653
+</code></pre>
+</div>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>rank</th>
+      <th>name</th>
+      <th>countrycode</th>
+      <th>gdp_billions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>184</th>
+      <td>1</td>
+      <td>Bill Gates</td>
+      <td>USA</td>
+      <td>17418.0</td>
+    </tr>
+    <tr>
+      <th>226</th>
+      <td>2</td>
+      <td>Carlos Slim Helu</td>
+      <td>MEX</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>3</td>
+      <td>Amancio Ortega</td>
+      <td>ESP</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="a-pretty-join-picture">A pretty join picture</h3>
+
+<p>Did you see this image already? Well, now you have.</p>
+
+<p><img src="http://i.imgur.com/7Ssc4l.jpg" alt="" /></p>
+
+<h1 id="functions">Functions</h1>
+
+<p>We should have a whole class dedicated to functions, but just in case I’m going
+to put it down in here!</p>
+
+<p><strong>A function is a reuseable chunk of code</strong>. You know how we write <code class="highlighter-rouge">len</code>
+whenever we want the length of a list? We can make our own things like that!</p>
+
+<h2 id="a-simple-function">A simple function</h2>
+
+<p>Let’s say my job is to take two numbers, add them together, and multiply by two.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># 3 and 4</span>
+<span class="k">print</span><span class="p">((</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c"># 4 and 6</span>
+<span class="k">print</span><span class="p">((</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">6</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c"># 100 and 40</span>
+<span class="k">print</span><span class="p">((</span><span class="mi">100</span> <span class="o">+</span> <span class="mi">40</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>14
+20
+280
+</code></pre>
+</div>
+
+<p>I’m clearly prettty good at my job, but I get tired of writing the same thing
+over and over again, and <strong>what if I accidentally make a typo?</strong> It would be a
+lot easier if there was a function like <code class="highlighter-rouge">len</code> that, instead of giving me the
+length of a list, could take two numbers and print out the answer.</p>
+
+<p>So, let’s make that.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="n">added</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+    <span class="k">return</span> <span class="n">added</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">calc</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">calc</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">calc</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>14
+20
+280
+</code></pre>
+</div>
+
+<p>I can even use it down here, save it to a variable, whatever</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">result</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"The calculated result is"</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>The calculated result is 820
+</code></pre>
+</div>
+
+<h2 id="parts-of-a-function">Parts of a function</h2>
+
+<p>Our function looks like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="n">added</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+    <span class="k">return</span> <span class="n">added</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>It’s a function called <code class="highlighter-rouge">calc</code> that takes two parameters - we call them <code class="highlighter-rouge">a</code> and
+<code class="highlighter-rouge">b</code> - and then sends back a calculated result.</p>
+
+<ul>
+  <li><strong><code class="highlighter-rouge">def</code></strong> means “I’m going to define a function now</li>
+  <li><strong><code class="highlighter-rouge">calc</code></strong> is the function’s name</li>
+  <li><strong><code class="highlighter-rouge">(a, b)</code></strong> are the parameters it takes - when I use <code class="highlighter-rouge">calc</code>, what can I send
+it?</li>
+  <li><strong><code class="highlighter-rouge">return</code></strong> lets the function know that I’m finished and ready to send
+something back.</li>
+</ul>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Examples of using scales</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/data-studio/d3/examples-of-scales/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Examples of using scales">
+  <meta property="twitter:title" content="Examples of using scales">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Data Studio, Lede 2016</a> &gt;  Examples of using scales</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Examples of using scales</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>You use scales for a lot of things! Instead of calling them “quantize scales” and expecting you to know what they do, here are some use cases.</p>
+
+<h1 id="barcirclepath-colors">Bar/circle/path colors</h1>
+
+<h2 id="have-colors-stand-for-different-categories">Have colors stand for different categories</h2>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// I picked some specific colors, but you could just</span>
+<span class="c1">// use .category() and use the defaults</span>
+<span class="kd">var</span> <span class="nx">colorScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">category10</span><span class="p">()</span>
+	<span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="s1">'#66c2a5'</span><span class="p">,</span> <span class="s1">'#fc8d62'</span><span class="p">,</span> <span class="s1">'#8da0cb'</span><span class="p">,</span> <span class="s1">'#e78ac3'</span><span class="p">,</span> <span class="s1">'#a6d854'</span><span class="p">,</span> <span class="s1">'#ffd92f'</span><span class="p">]);</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".dot"</span><span class="p">)</span>
+	<span class="c1">// ..blah blah more code..</span>
+	<span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">"fill"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">colorScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">Continent</span><span class="p">);</span> <span class="p">});</span></code></pre></figure>
+
+<h2 id="set-an-even-change-of-color">Set an even change of color</h2>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// With inputs of 0 through 100</span>
+<span class="c1">// 0 will be beige, 100 will be red</span>
+<span class="c1">// and in-between numbers will be in-between colors</span>
+<span class="kd">var</span> <span class="nx">colorScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="s1">'beige'</span><span class="p">,</span> <span class="s1">'red'</span><span class="p">]);</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// d.frequency, which is between 0-100, is used to </span>
+<span class="c1">// get the color out</span>
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".bar"</span><span class="p">)</span>
+	<span class="c1">// ..blah blah more code..</span>
+	<span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">"fill"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">colorScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">frequency</span><span class="p">);</span> <span class="p">});</span></code></pre></figure>
+
+<h2 id="have-several-different-buckets-of-specific-colors-numeric">Have several different buckets of specific colors (numeric)</h2>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// You can also try .quantile() instead of .quantize()</span>
+<span class="c1">// it's equal count instead of equal range</span>
+<span class="kd">var</span> <span class="nx">colorScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">quantize</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="s1">'#fef0d9'</span><span class="p">,</span> <span class="s1">'#fdcc8a'</span><span class="p">,</span> <span class="s1">'#fc8d59'</span><span class="p">,</span> <span class="s1">'#d7301f'</span><span class="p">]);</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// d.frequency, which is between 0-100, is used to </span>
+<span class="c1">// get the color out</span>
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".bar"</span><span class="p">)</span>
+	<span class="c1">// ..blah blah more code..</span>
+	<span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">"fill"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">colorScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">frequency</span><span class="p">);</span> <span class="p">});</span></code></pre></figure>
+
+<hr />
+
+<h1 id="bar-widthheights">Bar width/heights</h1>
+
+<h2 id="set-the-width-of-a-bar-on-a-bar-graph">Set the width of a bar on a bar graph</h2>
+
+<p>The smallest bar of <code class="highlighter-rouge">0</code> is going to have a <code class="highlighter-rouge">0</code> width, and the longest bar of <code class="highlighter-rouge">100</code> is going to be as wide as the page. Not too complicated!</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Creating it</span>
+<span class="kd">var</span> <span class="nx">x_width</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">]);</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Using it</span>
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".bar"</span><span class="p">)</span>
+	<span class="c1">// ..blah blah more code..</span>
+	<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">x_width</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">frequency</span><span class="p">);</span> <span class="p">});</span></code></pre></figure>
+
+<h2 id="set-the-height-of-a-bar-on-a-bar-graph">Set the height of a bar on a bar graph</h2>
+
+<p>Because of how positioning SVG recangles works, the direct measurement for horizontal bars isn’t how long they are, but <em>where they end</em>. A bar length of <code class="highlighter-rouge">0</code> gets a <code class="highlighter-rouge">y</code> offset of <code class="highlighter-rouge">height</code> - a.k.a. all the way at the bottom of the page.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Creating it</span>
+<span class="kd">var</span> <span class="nx">y_offset</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="nx">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">]);</span></code></pre></figure>
+
+<p>For a y bar you need to set both the <code class="highlighter-rouge">y</code> as well as the <code class="highlighter-rouge">height</code> using the scale.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Using it</span>
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".bar"</span><span class="p">)</span>
+	<span class="c1">// ..blah blah more code..</span>
+	<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"y"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">y_offset</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">frequency</span><span class="p">);</span> <span class="p">})</span>
+	<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">height</span> <span class="o">-</span> <span class="nx">y_offset</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">frequency</span><span class="p">);</span> <span class="p">});</span></code></pre></figure>
+
+<hr />
+
+<h1 id="bar-positioning">Bar positioning</h1>
+
+<h2 id="position-a-bar-on-the-x-axis-on-a-bar-graph">Position a bar on the x-axis on a bar graph</h2>
+
+<blockquote>
+  <p>It’s the same for the y-axis, although the <code class="highlighter-rouge">rangeRoundBands</code> go from <code class="highlighter-rouge">height</code> to <code class="highlighter-rouge">0</code> instead of <code class="highlighter-rouge">0</code> to <code class="highlighter-rouge">height</code>.</p>
+</blockquote>
+
+<p>This scale is for when you have a <strong>categorical variable</strong> - a company or a letter or a name that gets evenly spaced out on a bar graph.</p>
+
+<p>Positioning like this x-axis might not seem like it would use a scale, but it does! The example below aims to evenly space bars across the page (from <code class="highlighter-rouge">0</code> to <code class="highlighter-rouge">width</code>) and give them a spacing of 10% (<code class="highlighter-rouge">0.1</code>).</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Creating your scale</span>
+<span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">ordinal</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">rangeRoundBands</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">],</span> <span class="p">.</span><span class="mi">1</span><span class="p">);</span></code></pre></figure>
+
+<p>The only problem is it doesn’t know how many bars you’re going to have! Once you have your data, you’ll need to set the domain of the scale, <strong>giving it the x axis</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Once you have the data, set the domain</span>
+<span class="nx">x</span><span class="p">.</span><span class="nx">domain</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">letter</span><span class="p">;</span> <span class="p">}));</span></code></pre></figure>
+
+<p>Then you can finally use it to both position your bars and set their <code class="highlighter-rouge">width</code> (or <code class="highlighter-rouge">height</code>, if you’re going down the y axis)</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".bar"</span><span class="p">)</span>
+	<span class="c1">// ..blah blah more code..</span>
+  	<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">x</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">letter</span><span class="p">);</span> <span class="p">})</span>
+  	<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="nx">x</span><span class="p">.</span><span class="nx">rangeBand</span><span class="p">())</span></code></pre></figure>
+
+<hr />
+
+<h1 id="circle-positioning">Circle positioning</h1>
+
+<h2 id="circle-positioning-if-you-know-your-range">Circle positioning if you know your range</h2>
+
+<p><strong>We position on the x axis below</strong>, but it’s the same for the y axis, although you use <code class="highlighter-rouge">.range([height, 0])</code> instead of <code class="highlighter-rouge">.range([0, height])</code>.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Create my scale, 0 will be on the far left, 100 will be on the far right</span>
+<span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
+	<span class="p">.</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+    <span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">]);</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="err">#</span> <span class="nx">Using</span> <span class="nx">my</span> <span class="nx">scale</span> <span class="nx">to</span> <span class="nx">position</span> <span class="nx">via</span> <span class="nx">cx</span>
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".dot"</span><span class="p">)</span>
+	<span class="c1">// ...lah blah more code...</span>
+  	<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"cx"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">x</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">sepalWidth</span><span class="p">);</span> <span class="p">})</span></code></pre></figure>
+
+<h2 id="circle-positioning-with-0-max-range">Circle positioning with 0-max range</h2>
+
+<p>This is a two-step scale - first you set up the scale without the domain, then you add it in once you see your data.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Create my scale, make it range from the far left to the far right - `0` to `width`.</span>
+<span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">]);</span></code></pre></figure>
+
+<p>Now you need to read in your data, and use that data to set the domain. We’ll use <code class="highlighter-rouge">d3.max</code> to get the maximum value of the domain.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Get the largest sepal width</span>
+<span class="kd">var</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">sepalWidth</span> <span class="p">});</span>
+<span class="c1">// Set the domain of my x scale</span>
+<span class="nx">x</span><span class="p">.</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">max</span><span class="p">]);</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Using my scale to position via cx</span>
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".dot"</span><span class="p">)</span>
+	<span class="c1">// ...lah blah more code...</span>
+  	<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"cx"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">x</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">sepalWidth</span><span class="p">);</span> <span class="p">})</span></code></pre></figure>
+
+<h2 id="circle-positioning-with-min-max-range">Circle positioning with min-max range</h2>
+
+<p>This is also a two-step scale - first you set up the scale without the domain, then you add it in once you see your data.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Create my scale, make it range from the far left to the far right - `0` to `width`.</span>
+<span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">]);</span></code></pre></figure>
+
+<p>Now you need to read in your data, and use that data to set the domain. We’ll use <code class="highlighter-rouge">d3.max</code> to get the maximum value of the domain.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Get the range of sepal widths</span>
+<span class="kd">var</span> <span class="nx">xRange</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">extent</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">sepalWidth</span> <span class="p">});</span>
+<span class="c1">// Set the domain of my x scale</span>
+<span class="nx">x</span><span class="p">.</span><span class="nx">domain</span><span class="p">(</span><span class="nx">xRange</span><span class="p">);</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Using my scale to position via cx</span>
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".dot"</span><span class="p">)</span>
+	<span class="c1">// ...lah blah more code...</span>
+  	<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"cx"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">x</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">sepalWidth</span><span class="p">);</span> <span class="p">})</span></code></pre></figure>
+
+<hr />
+
+<h1 id="circle-sizing">Circle sizing</h1>
+
+<p>Circles use the <code class="highlighter-rouge">d3.scale.sqrt()</code> scale type, because it’s how you grow area instead of simply radius.</p>
+
+<h2 id="circle-sizing-if-you-know-your-range">Circle sizing if you know your range</h2>
+
+<p>I have values between 0 and 100 and want to have a circle with a radius between 0 and 300 pixels.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">radiusScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+    <span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">]);</span></code></pre></figure>
+
+<p>And then later on we use it</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Using my scale to set the radius</span>
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".dot"</span><span class="p">)</span>
+	<span class="c1">// ...lah blah more code...</span>
+  	<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"r"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">radiusScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">frequency</span><span class="p">);</span> <span class="p">})</span></code></pre></figure>
+
+<h2 id="circle-sizing-from-0-to-max">Circle sizing from 0 to max</h2>
+
+<p>I don’t know what my values are until I read them in, so if I want to set my maximum data point to be 300 pixels, I need to have a two-step process to set up my scale.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">radiusScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">]);</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// After I've read in my data I can get the maximum</span>
+<span class="kd">var</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">frequency</span> <span class="p">});</span>
+<span class="c1">// Now it will know the inputs are between 0 and the max value</span>
+<span class="nx">radiusScale</span><span class="p">.</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">max</span><span class="p">]);</span></code></pre></figure>
+
+<p>And then eventually we use our scale</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Using my scale to set the radius</span>
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".dot"</span><span class="p">)</span>
+	<span class="c1">// ...lah blah more code...</span>
+  	<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"r"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">radiusScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">frequency</span><span class="p">);</span> <span class="p">})</span></code></pre></figure>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

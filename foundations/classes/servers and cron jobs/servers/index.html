@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Servers</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/servers%20and%20cron%20jobs/servers/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Servers">
+  <meta property="twitter:title" content="Servers">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt;  Servers</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Servers</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="to-create-a-new-server">To create a new server</h2>
+
+<ol>
+  <li>Open up digital ocean</li>
+  <li>Create Droplet</li>
+  <li>Ubuntu 14.04.4 x64</li>
+  <li>$5/mo</li>
+  <li>New York is fine</li>
+  <li>New SSH Key</li>
+  <li>Paste in our SSH <strong>public</strong> key, naming it <code class="highlighter-rouge">do-droplet</code> (key-creating details below)</li>
+  <li>Make sure you’re only creating one</li>
+  <li>You can give it a unique hostname if you’d like. Maybe <code class="highlighter-rouge">cronmachine</code>?</li>
+  <li>Click <strong>Create</strong> and wait maybe 60 seconds for it to start up.</li>
+</ol>
+
+<h2 id="how-to-create-an-ssh-key">How to create an SSH key</h2>
+
+<p>We’re changing <a href="https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/">these GitHub directions</a> a little bit. Run the following to start the <code class="highlighter-rouge">ssh-keygen</code> ssh key generator.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh-keygen -t rsa -b 4096 -C "YOUR_EMAIL@EXAMPLE.COM"
+</code></pre>
+</div>
+
+<p>It will say to you:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Enter a file in which to save the key (/Users/YOUR_USERNAME/.ssh/id_rsa):
+</code></pre>
+</div>
+
+<p>WE DON’T WANT TO USE THIS. We want to make a new one, but in the same .ssh directory. We’re going to call it <code class="highlighter-rouge">do-droplet</code>. We can accomplish that by entering this as the filename:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>~/.ssh/do-droplet
+</code></pre>
+</div>
+
+<p><strong>Don’t type anything when it asks you for a passphrase</strong>, just hit enter twice. It will create two files for you, your public and private keys.</p>
+
+<p>Take a look at your private key with <code class="highlighter-rouge">cat</code>. <strong>Never give this away!</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cat ~/.ssh/do-droplet
+</code></pre>
+</div>
+
+<p>Now take a look at your public key, also with <code class="highlighter-rouge">cat</code>. <strong>This is the one we’ll paste.</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cat ~/.ssh/do-droplet.pub
+</code></pre>
+</div>
+
+<p>The next two commands will come in handy later, but <strong>don’t run them yet.</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/do-droplet
+</code></pre>
+</div>
+
+<h2 id="connecting-to-our-server">Connecting to our server</h2>
+
+<p>Open up the page for your droplet, and make a note of your <strong>IP Address</strong>. DO refers to it as IPv4. My IP is <code class="highlighter-rouge">107.170.91.48</code>.</p>
+
+<p>Now we need to connect to our server using <code class="highlighter-rouge">ssh</code>. We’ll be connecting as <code class="highlighter-rouge">root</code>, the A+ best killer cool user.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh root@YOUR_IP
+</code></pre>
+</div>
+
+<p>There will be a question. The answer is <strong>yes</strong>. It will ask you for a password. <strong>You don’t have a password!</strong></p>
+
+<p>Instead of passwords, we’re using public and private keys. <code class="highlighter-rouge">Ctrl+C</code> to quit logging in, and let’s try to log in again using our key (our identity).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh -i ~/.ssh/do-droplet root@107.170.91.48
+</code></pre>
+</div>
+
+<p><strong>Success!</strong></p>
+
+<h2 id="running-things-on-our-server">Running things on our server</h2>
+
+<p>Note the error-y message about packages needing updates</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pwd
+
+ls
+
+curl http://www.nytimes.com
+
+curl http://www.nytimes.com &gt; nyt.txt
+
+ls
+
+cat nyt.txt
+
+python --version
+
+python3 --version
+</code></pre>
+</div>
+
+<p>Let’s update those packages.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt-get update
+apt-get upgrade
+</code></pre>
+</div>
+
+<p>Let’s also install a few other packages</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install mailutils
+</code></pre>
+</div>
+
+<p>When you get a pink screen asking you about mail setup, pick ….internet.</p>
+
+<h2 id="our-scraperpy-file">Our <code class="highlighter-rouge">scraper.py</code> file</h2>
+
+<p>Save this file on your local machine:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import time
+
+response = requests.get("http://www.nytimes.com"../)
+doc = BeautifulSoup(response.text, 'html.parser')
+
+stories = doc.find_all("article", { 'class': 'story' })
+
+all_stories = []
+# Grab their headlines and bylines
+for story in stories:
+    # Grab all of the h2's inside of the story
+    headline = story.find('h2', {'class': 'story-heading'})
+    # If a headline exists, then process the rest!
+    if headline:
+        # They're COVERED in whitespace
+        headline_text = headline.text.strip()
+        # Make a dictionary with the headline
+        this_story = { 'headline': headline_text }
+        byline = story.find('p', {'class': 'byline'})
+        # Not all of them have a byline
+        if byline:
+            byline_text = byline.text.strip()
+            this_story['byline'] = byline_text
+        all_stories.append(this_story)
+
+all_stories
+
+stories_df = pd.DataFrame(all_stories)
+stories_df.to_csv("nyt-data.csv")
+
+datestring = time.strftime("%Y-%m-%d-%H-%M")
+
+filename = "nyt-data-" + datestring + ".csv"
+stories_df.to_csv(filename, index=False)
+</code></pre>
+</div>
+
+<h2 id="crontab-on-our-server">Crontab on our server</h2>
+
+<p>Now we want to run crontab.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>crontab -e
+</code></pre>
+</div>
+
+<p>It asks us what editor we want, how nice. Hit enter, nano is default. Enter this somewhere:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>*/2 * * * * curl http://www.nytimes.com &gt; ~/nyt-`date +"\%s"`.txt
+</code></pre>
+</div>
+
+<p>There’s a <code class="highlighter-rouge">\</code> before the <code class="highlighter-rouge">%</code> which wasn’t there before! It’s because cron is slightly different on Ubuntu vs. OS X and it uses a percent symbol as a new line. We need to <em>escape</em> it to say hey, really, we want to use a percent symbol here, not a newline.</p>
+
+<p>Save/exit.</p>
+
+<p>How would we know if we had an error? Let’s wait a few minutes. If you’re getting antsy about when it will be a divisible-by-two minute type <code class="highlighter-rouge">date</code>.</p>
+
+<h2 id="checking-your-mail-and-silencing-curl">Checking your mail and silencing <code class="highlighter-rouge">curl</code></h2>
+
+<p>Eventually the machine says <code class="highlighter-rouge">You have new mail.</code> Check it with… <code class="highlighter-rouge">mail</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mail
+</code></pre>
+</div>
+
+<p>You’re selecting the most recent message, hit enter. Oh, look, the output of <code class="highlighter-rouge">curl</code>, how sweet.</p>
+
+<p>Exit with <code class="highlighter-rouge">x</code>.</p>
+
+<p>Whenever you run a command, the output gets mailed to you. We… don’t really want this. The simplest way for now is to make curl silent by using the <code class="highlighter-rouge">--silent</code> flag.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>crontab -e
+</code></pre>
+</div>
+
+<p>Then change your line to have <code class="highlighter-rouge">--silent</code> with curl.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>*/2 * * * * curl --silent http://www.nytimes.com &gt; ~/nyt-`date +"\%s"`.txt
+</code></pre>
+</div>
+
+<p>Now you won’t be hassled any more. =</p>
+
+<p>This mail is also how you’ll know if you have an error in your code.</p>
+
+<h2 id="transferring-files">Transferring files</h2>
+
+<p>Now we want to take our <code class="highlighter-rouge">scraper.py</code> and transfer it from our local machine to our server. We’ll be copying it, which is usually <code class="highlighter-rouge">cp</code>, but because we’re doing it over ssh it’s <code class="highlighter-rouge">scp</code>.</p>
+
+<p>Let’s copy it from our local machine. From <strong>your machine</strong>, run:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>scp -i ~/.ssh/do-droplet scraper.py root@YOUR_IP:~/
+</code></pre>
+</div>
+
+<p>This will send a file from your local machine to your remote machine, while logging in with your identity file (private key).</p>
+
+<h2 id="setting-up-python">Setting up Python</h2>
+
+<p>Back on your machine, try to run your script using <code class="highlighter-rouge">python3</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>python3 scraper.py
+</code></pre>
+</div>
+
+<p>In return, you get a joyous error message!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Traceback (most recent call last):
+  File "scraper.py", line 6, in &lt;module&gt;
+    import requests
+ImportError: No module named 'requests'
+</code></pre>
+</div>
+
+<p>Okay, well then we’ll install it…</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip3 install requests
+</code></pre>
+</div>
+
+<p>But then, another error!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>The program 'pip3' is currently not installed. You can install it by typing:
+apt-get install python3-pip
+</code></pre>
+</div>
+
+<p><strong>DO NOT INSTALL PIP WITH THAT.</strong> It will install a bad, old version. We can get the new, cool version with</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -O https://bootstrap.pypa.io/get-pip.py
+python3 get-pip.py
+</code></pre>
+</div>
+
+<p>Run <code class="highlighter-rouge">pip --version</code> to see if it talks about Python 3. That’s what we’re hoping.</p>
+
+<p><strong>Before we spend forever running into errors, there are a lot more <em>dependencies</em> that need to be isntalled.</strong> Dependencies are pieces of code that other code… depends on, and it isn’t always Python code. Use the commands below to install a whole bushel of dependencies. Some are probably already installed with <code class="highlighter-rouge">python3-pip</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install build-essential
+apt-get install python3-dev
+apt-get install python3-numpy
+apt-get install python3-scipy
+apt-get install libatlas-dev
+apt-get install ipython3
+apt-get install python3-pandas
+apt-get install libxml2-dev libxslt1-dev
+apt-get install python3-matplotlib
+</code></pre>
+</div>
+
+<p>So now let’s install requests</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip3 install requests
+</code></pre>
+</div>
+
+<p>Now we’ll run the app again…</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>python3 scraper.py
+</code></pre>
+</div>
+
+<p>But then another error…</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Traceback (most recent call last):
+  File "scraper.py", line 7, in &lt;module&gt;
+    from bs4 import BeautifulSoup
+ImportError: No module named 'bs4'
+</code></pre>
+</div>
+
+<p>This is where virtual environments get <strong>magic</strong>. Skip down below to create a <code class="highlighter-rouge">requirements.txt</code> file, then come back up here.</p>
+
+<p>Once you have a <code class="highlighter-rouge">requirements.txt</code> on your server, you can just tell <code class="highlighter-rouge">pip</code> to install everything in that list.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip3 install -r requirements.txt
+</code></pre>
+</div>
+
+<p>If you need to install packages for <code class="highlighter-rouge">postgres</code> or something, you might want to search and see what’s available using <code class="highlighter-rouge">apt-cache search</code></p>
+
+<p>apt-cache search psql
+  apt-cache search postgres</p>
+
+<h2 id="other-commands">Other commands</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>scp -i ~/.ssh/do-droplet root@107.170.60.133:~/*.csv  .
+</code></pre>
+</div>
+
+<h2 id="creating-a-requirementstxt-file">Creating a requirements.txt file</h2>
+
+<p>In the virtual environment that you can run <code class="highlighter-rouge">scraper.py</code> in, run the following command</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip freeze -l
+</code></pre>
+</div>
+
+<p>This lists everything in your virtual environment, as well as their version numbers. Save them to a file with the following command</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip freeze -l &gt; requirements.txt
+</code></pre>
+</div>
+
+<p>You can <code class="highlighter-rouge">cat</code> the file if you’d like. Now <code class="highlighter-rouge">scp</code> it to your server with</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>scp -i ~/.ssh/do-droplet requirements.txt root@YOUR_IP:~/
+</code></pre>
+</div>
+
+<p>Now you can return to your server up above.</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

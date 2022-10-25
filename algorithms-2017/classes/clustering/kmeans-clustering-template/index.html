@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>KMeans clustering template</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/algorithms-2017/classes/clustering/kmeans-clustering-template/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="KMeans clustering template">
+  <meta property="twitter:title" content="KMeans clustering template">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Algorithms, Lede 2017</a> &gt;  KMeans clustering template</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">KMeans clustering template</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/algorithms-2017/classes/clustering/kmeans-clustering-template.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="kmeans-clustering-any-documents">KMeans clustering ANY documents</h1>
+
+<h2 id="read-in-your-files-if-theyre-all-separate">Read in your files if they’re all separate</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="n">filenames</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">"fanfiction-harry-potter/*.txt"</span><span class="p">)</span>
+
+<span class="c"># Maybe use open(filename, encoding='latin-1').read()</span>
+<span class="c"># if you're running into trouble</span>
+<span class="n">contents</span> <span class="o">=</span> <span class="p">[</span><span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">'latin-1'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">]</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s">'text'</span><span class="p">:</span> <span class="n">contents</span><span class="p">,</span>
+    <span class="s">'filenames'</span><span class="p">:</span> <span class="n">filenames</span>
+<span class="p">})</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>filenames</th>
+      <th>text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>fanfiction-harry-potter/10001898.txt</td>
+      <td>Prologue: The MissionDisclaimer: All character...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>fanfiction-harry-potter/10004131.txt</td>
+      <td>BlackDisclaimer: I do not own Harry PotterAuth...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>fanfiction-harry-potter/10004927.txt</td>
+      <td>Chapter 1"I'm pregnant.""""Mum please say some...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>fanfiction-harry-potter/10007980.txt</td>
+      <td>Author's Note: Hey, just so you know, this is ...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>fanfiction-harry-potter/10010343.txt</td>
+      <td>Disclaimer: I do not own Harry Potter and frie...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="or-read-in-your-csv-with-the-text-column-if-not">Or read in your CSV with the text column if not</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># import pandas as pd</span>
+<span class="c"># df = pd.read_csv("WHAT IS THE FILE???")</span></code></pre></figure>
+
+<h2 id="vectorize-your-documents">Vectorize your documents</h2>
+
+<p>What are the options when creating a <code class="highlighter-rouge">TfidfVectorizer</code>?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">TfidfVectorizer</span><span class="err">?</span></code></pre></figure>
+
+<p>Let’s think about:</p>
+
+<ul>
+  <li><strong>ngram_range</strong>: Do we just want single words? Or more? <code class="highlighter-rouge">(1,2)</code> is one- and
+two-word phrases, etc.</li>
+  <li><strong>max_features</strong>: Can it make things faster? <code class="highlighter-rouge">1</code> and up</li>
+  <li><strong>max_df</strong>: Should we ignore words that show up too often? <code class="highlighter-rouge">0.0</code>-<code class="highlighter-rouge">1.0</code> for
+percent, OR an integer for absolute document counts</li>
+  <li><strong>min_df</strong>: Should we ignore words that show up too little? <code class="highlighter-rouge">0.0</code>-<code class="highlighter-rouge">1.0</code> for
+percent, OR an integer for absolute document counts</li>
+  <li><strong>vocabulary</strong>: Only care about certain words</li>
+</ul>
+
+<p>Also… how many documents do we have?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">shape</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>(1874, 2)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">%%</span><span class="n">time</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+<span class="kn">from</span> <span class="nn">textblob</span> <span class="kn">import</span> <span class="n">TextBlob</span>
+
+
+<span class="k">def</span> <span class="nf">textblob_tokenizer</span><span class="p">(</span><span class="n">str_input</span><span class="p">):</span>
+    <span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="n">str_input</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">words</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">words</span>
+
+<span class="c"># CUSTOM STOPWORDS</span>
+<span class="c"># FIRST, create a list of custom stopwords</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction</span> <span class="kn">import</span> <span class="n">stop_words</span>
+<span class="n">custom_stopwords</span> <span class="o">=</span> <span class="p">[</span><span class="s">'just'</span><span class="p">,</span> <span class="s">'said'</span><span class="p">,</span> <span class="s">'love'</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">stop_words</span><span class="o">.</span><span class="n">ENGLISH_STOP_WORDS</span><span class="p">)</span>
+
+<span class="c"># CUSTOM STOPWORDS</span>
+<span class="c"># THEN, instead of stop_words='english'</span>
+<span class="c"># add your custom stopwords into the vectorizer</span>
+<span class="n">vec</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">stop_words</span><span class="o">=</span><span class="n">custom_stopwords</span><span class="p">,</span>
+                      <span class="n">max_df</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="c"># If you're in &gt;90%, ignore</span>
+                      <span class="n">min_df</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="c"># If you're only in 15%, ignore</span>
+                      <span class="n">max_features</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>
+                      <span class="n">use_idf</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># Fit from the 'text' column of our dataframe</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'text'</span><span class="p">])</span>
+
+<span class="c"># Then turn it into a new dataframe</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">vec</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">())</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>CPU times: user 4.2 s, sys: 85.9 ms, total: 4.28 s
+Wall time: 4.4 s
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">results</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>able</th>
+      <th>actually</th>
+      <th>albus</th>
+      <th>arm</th>
+      <th>arms</th>
+      <th>ask</th>
+      <th>asked</th>
+      <th>away</th>
+      <th>bad</th>
+      <th>bed</th>
+      <th>...</th>
+      <th>won</th>
+      <th>words</th>
+      <th>work</th>
+      <th>world</th>
+      <th>wouldn</th>
+      <th>yeah</th>
+      <th>year</th>
+      <th>years</th>
+      <th>yes</th>
+      <th>young</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.058290</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.026641</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.021998</td>
+      <td>0.161977</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.007969</td>
+      <td>0.015810</td>
+      <td>0.021035</td>
+      <td>0.000000</td>
+      <td>0.015247</td>
+      <td>0.008246</td>
+      <td>0.034870</td>
+      <td>0.054080</td>
+      <td>0.000000</td>
+      <td>0.014964</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.068611</td>
+      <td>0.007508</td>
+      <td>0.000000</td>
+      <td>0.021064</td>
+      <td>0.000000</td>
+      <td>0.028493</td>
+      <td>0.036743</td>
+      <td>0.032899</td>
+      <td>0.088822</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.000000</td>
+      <td>0.030736</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.029091</td>
+      <td>...</td>
+      <td>0.123930</td>
+      <td>0.000000</td>
+      <td>0.029191</td>
+      <td>0.000000</td>
+      <td>0.027299</td>
+      <td>0.000000</td>
+      <td>0.044313</td>
+      <td>0.000000</td>
+      <td>0.025583</td>
+      <td>0.094186</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.009575</td>
+      <td>0.000000</td>
+      <td>0.012638</td>
+      <td>0.019594</td>
+      <td>0.009161</td>
+      <td>0.039633</td>
+      <td>0.034917</td>
+      <td>0.006498</td>
+      <td>0.009812</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.009161</td>
+      <td>0.009022</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.043148</td>
+      <td>0.102715</td>
+      <td>0.066227</td>
+      <td>0.039532</td>
+      <td>0.058217</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.023051</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.047170</td>
+      <td>0.022052</td>
+      <td>0.000000</td>
+      <td>0.050434</td>
+      <td>0.078219</td>
+      <td>0.023620</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.022052</td>
+      <td>0.000000</td>
+      <td>0.060497</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.049454</td>
+      <td>0.053143</td>
+      <td>0.038067</td>
+      <td>0.256938</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 250 columns</p>
+</div>
+
+<blockquote>
+  <p>…Try it without the TextBlob tokenizer</p>
+</blockquote>
+
+<h2 id="cluster-your-documents">Cluster your documents</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">%%</span><span class="n">time</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+
+<span class="c"># How many clusters?</span>
+<span class="n">number_of_clusters</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">km</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">number_of_clusters</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"Fitting"</span><span class="p">,</span> <span class="n">number_of_clusters</span><span class="p">,</span> <span class="s">"clusters usinga "</span><span class="p">,</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s">"matrix"</span><span class="p">)</span>
+
+<span class="c"># Let's fit it!</span>
+<span class="n">km</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+<span class="n">km</span><span class="o">.</span><span class="n">fit</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Fitting 2 clusters usinga  (1874, 250) matrix
+CPU times: user 18.5 s, sys: 148 ms, total: 18.7 s
+Wall time: 19.3 s
+</code></pre>
+</div>
+
+<h2 id="see-what-they-look-like">See what they look like</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="s">"Top terms per cluster:"</span><span class="p">)</span>
+<span class="n">order_centroids</span> <span class="o">=</span> <span class="n">km</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">terms</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_of_clusters</span><span class="p">):</span>
+    <span class="n">top_ten_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">terms</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">order_centroids</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="mi">5</span><span class="p">]]</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Cluster {}: {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">top_ten_words</span><span class="p">)))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Top terms per cluster:
+Cluster 0: james lily said just like
+Cluster 1: harry hermione ron draco said
+</code></pre>
+</div>
+
+<h2 id="push-the-category-back-to-the-original-dataframe">Push the category back to the original dataframe</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'category'</span><span class="p">]</span> <span class="o">=</span> <span class="n">km</span><span class="o">.</span><span class="n">labels_</span>
+<span class="n">df</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>filenames</th>
+      <th>text</th>
+      <th>category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>fanfiction-harry-potter/10001898.txt</td>
+      <td>Prologue: The MissionDisclaimer: All character...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>fanfiction-harry-potter/10004131.txt</td>
+      <td>BlackDisclaimer: I do not own Harry PotterAuth...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>fanfiction-harry-potter/10004927.txt</td>
+      <td>Chapter 1"I'm pregnant.""""Mum please say some...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>fanfiction-harry-potter/10007980.txt</td>
+      <td>Author's Note: Hey, just so you know, this is ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>fanfiction-harry-potter/10010343.txt</td>
+      <td>Disclaimer: I do not own Harry Potter and frie...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>fanfiction-harry-potter/10017757.txt</td>
+      <td>Disclaimer: I don't own any character in the H...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>fanfiction-harry-potter/10018490.txt</td>
+      <td>DISCLAIMER: I don't own Harry Potter and its c...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>fanfiction-harry-potter/10018889.txt</td>
+      <td>Katherine Rose-TylerChapter One: the Introduct...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>fanfiction-harry-potter/10019142.txt</td>
+      <td>I am no longer that shy little boy anymore.I w...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>fanfiction-harry-potter/10019987.txt</td>
+      <td>Happy New year! *throws confetti*I've really b...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>fanfiction-harry-potter/10021604.txt</td>
+      <td>2014"It's ridiculous." The red-headed boy shoo...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>fanfiction-harry-potter/10023278.txt</td>
+      <td>Disclaimer: Did you really think I was J.K. Ro...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>fanfiction-harry-potter/10023376.txt</td>
+      <td>This is my first story on fanfic and I'm nervo...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>fanfiction-harry-potter/10026221.txt</td>
+      <td>DISCLAIMER: I don't own anything here that loo...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>fanfiction-harry-potter/10035136.txt</td>
+      <td>A/N: So, this is my second ongoing story, and ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>fanfiction-harry-potter/10036003.txt</td>
+      <td>Disclaimer: I do not own Harry Potter. Enjoy t...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>fanfiction-harry-potter/10037071.txt</td>
+      <td>For my friend, constant cheerleader and talent...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>fanfiction-harry-potter/10038079.txt</td>
+      <td>Disclaimer: Harry Potter's not mineA/N:Another...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>fanfiction-harry-potter/10038493.txt</td>
+      <td>Lily Potter was quite happy. Her favourite bro...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>fanfiction-harry-potter/10041730.txt</td>
+      <td>A/N: This story follows all of canon besides f...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>fanfiction-harry-potter/10043489.txt</td>
+      <td>It's 8th year at Hogwarts. Voldemort is dead. ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>fanfiction-harry-potter/10043782.txt</td>
+      <td>Hey everybody this is my first fic and will en...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>fanfiction-harry-potter/10045762.txt</td>
+      <td>Prologue: The Puzzle That Wasn't Meant To Be S...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>fanfiction-harry-potter/10049288.txt</td>
+      <td>Prologue REWRITTENA/N: This is a rewritten ver...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>fanfiction-harry-potter/10050162.txt</td>
+      <td>I stood at the top of the Astronomy Tower thin...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>fanfiction-harry-potter/10051779.txt</td>
+      <td>Title: Twin Dragon Heartstring Cores.Author: L...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>fanfiction-harry-potter/10052973.txt</td>
+      <td>Chapter 1Walking down the corridor to potions,...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>fanfiction-harry-potter/10053360.txt</td>
+      <td>These characters belong to J.K. Rowling, not m...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>fanfiction-harry-potter/10055985.txt</td>
+      <td>A/N: Everyone needs their own version of a Sly...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>fanfiction-harry-potter/10060250.txt</td>
+      <td>June 20th, 1992This was it. Dumbledore was sur...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1844</th>
+      <td>fanfiction-harry-potter/9920715.txt</td>
+      <td>Summary: Gryffindor isn't what Slytherin sees ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1845</th>
+      <td>fanfiction-harry-potter/9925672.txt</td>
+      <td>Okay. Lumox. The title will be explained much ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1846</th>
+      <td>fanfiction-harry-potter/9930431.txt</td>
+      <td>Normal Pov(A/N: Story takes place in Harry Pot...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1847</th>
+      <td>fanfiction-harry-potter/9933106.txt</td>
+      <td>(A/N: Rated M for mature content and language....</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1848</th>
+      <td>fanfiction-harry-potter/9933135.txt</td>
+      <td>Hey you guys, I'm back!I wasn't planning on wr...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1849</th>
+      <td>fanfiction-harry-potter/9940060.txt</td>
+      <td>Truly, Madly, Deeply, Crazily In Love#Chapter ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1850</th>
+      <td>fanfiction-harry-potter/9942637.txt</td>
+      <td>She took a deep breath as she lay in her hospi...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1851</th>
+      <td>fanfiction-harry-potter/9944070.txt</td>
+      <td>Chapter 1Beta Read by optimisticrealist72Thoug...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1852</th>
+      <td>fanfiction-harry-potter/9944110.txt</td>
+      <td>"Now begin", Dumbledore's voice boomed over th...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1853</th>
+      <td>fanfiction-harry-potter/9944611.txt</td>
+      <td>Hermione's POVShe grabbed another handful of r...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1854</th>
+      <td>fanfiction-harry-potter/9944886.txt</td>
+      <td>I thought it would be fun to make one of these...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1855</th>
+      <td>fanfiction-harry-potter/9944944.txt</td>
+      <td>Harry`s POVHarry Potter, boy who lived, chosen...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1856</th>
+      <td>fanfiction-harry-potter/9945192.txt</td>
+      <td>Okay, so I've been wanting to write a George/H...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1857</th>
+      <td>fanfiction-harry-potter/9946564.txt</td>
+      <td>A/N: Adopted from unwrittenlegacy. This will h...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1858</th>
+      <td>fanfiction-harry-potter/9953756.txt</td>
+      <td>. . . Sorry . . . Introduction . . . Not the F...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1859</th>
+      <td>fanfiction-harry-potter/9954472.txt</td>
+      <td>"Why are we doing this again," Sirius asks gro...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1860</th>
+      <td>fanfiction-harry-potter/9957949.txt</td>
+      <td>I do not own any of the characters. You may ho...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1861</th>
+      <td>fanfiction-harry-potter/9964545.txt</td>
+      <td>Harry Potter, the Boy-Who-Lived, had always be...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1862</th>
+      <td>fanfiction-harry-potter/9966340.txt</td>
+      <td>Original Title: Dipping into the Dark SideOrig...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1863</th>
+      <td>fanfiction-harry-potter/9969981.txt</td>
+      <td>A/N: So I woke up the other day with this idea...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1864</th>
+      <td>fanfiction-harry-potter/9973627.txt</td>
+      <td>Author's Notes: In my own, happy little world,...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1865</th>
+      <td>fanfiction-harry-potter/9975438.txt</td>
+      <td>Title: Fighting For TomorrowRating: TSummary: ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1866</th>
+      <td>fanfiction-harry-potter/9978757.txt</td>
+      <td>Bella Luna, beautiful moon. She wondered if he...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1867</th>
+      <td>fanfiction-harry-potter/9981541.txt</td>
+      <td>Authors note: Welcome to all the lovely reader...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1868</th>
+      <td>fanfiction-harry-potter/9981980.txt</td>
+      <td>AUTHOR'S NOTEHi everybody! This is my first fa...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1869</th>
+      <td>fanfiction-harry-potter/9984427.txt</td>
+      <td>I do not own Harry Potter and I only write for...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1870</th>
+      <td>fanfiction-harry-potter/9985697.txt</td>
+      <td>Hi everybody!Im so happy you clicked on this s...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1871</th>
+      <td>fanfiction-harry-potter/9988645.txt</td>
+      <td>I fell in love with this pairing and never loo...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1872</th>
+      <td>fanfiction-harry-potter/9992917.txt</td>
+      <td>Prologue: A Surrey StartEaster Saturday was pl...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1873</th>
+      <td>fanfiction-harry-potter/9993970.txt</td>
+      <td>"Okay, who's going first?" someone shouted ove...</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>1874 rows × 3 columns</p>
+</div>
+
+<h2 id="be-pleased">Be pleased</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">category</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>filenames</th>
+      <th>text</th>
+      <th>category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3</th>
+      <td>fanfiction-harry-potter/10007980.txt</td>
+      <td>Author's Note: Hey, just so you know, this is ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>fanfiction-harry-potter/10021604.txt</td>
+      <td>2014"It's ridiculous." The red-headed boy shoo...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>fanfiction-harry-potter/10041730.txt</td>
+      <td>A/N: This story follows all of canon besides f...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>fanfiction-harry-potter/10043489.txt</td>
+      <td>It's 8th year at Hogwarts. Voldemort is dead. ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>fanfiction-harry-potter/10045762.txt</td>
+      <td>Prologue: The Puzzle That Wasn't Meant To Be S...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>fanfiction-harry-potter/10050162.txt</td>
+      <td>I stood at the top of the Astronomy Tower thin...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>fanfiction-harry-potter/10051779.txt</td>
+      <td>Title: Twin Dragon Heartstring Cores.Author: L...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>fanfiction-harry-potter/10052973.txt</td>
+      <td>Chapter 1Walking down the corridor to potions,...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>fanfiction-harry-potter/10061747.txt</td>
+      <td>The air whistles and blows through chestnut lo...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>fanfiction-harry-potter/10061794.txt</td>
+      <td>Yay! Okay, now to clear this up. Story takes p...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>fanfiction-harry-potter/10070079.txt</td>
+      <td>Disclaimer: JK Rowling owns Harry Potter, and ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>fanfiction-harry-potter/10073299.txt</td>
+      <td>Harry Potter And The Unexpected Second LifeAut...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>fanfiction-harry-potter/10084022.txt</td>
+      <td>Ginny sat and thought, she didn't do much else...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>fanfiction-harry-potter/10086764.txt</td>
+      <td>A/N: This is the second story I've ever writte...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>fanfiction-harry-potter/10090975.txt</td>
+      <td>Sunlight poured through her eyelids, a dull re...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>fanfiction-harry-potter/10092644.txt</td>
+      <td>It's over. The War. The death. The hurt. Every...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>51</th>
+      <td>fanfiction-harry-potter/10097915.txt</td>
+      <td>Me: Hello everyone, how are you guys doing? It...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>53</th>
+      <td>fanfiction-harry-potter/10098087.txt</td>
+      <td>Heyy! I've decided to write a Harry/Ginny fic,...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>58</th>
+      <td>fanfiction-harry-potter/10107723.txt</td>
+      <td>LLL- Hi guyeseses. New Harry Potter story insp...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>59</th>
+      <td>fanfiction-harry-potter/10108027.txt</td>
+      <td>Author's notes: Ta-dahhhh! After many years of...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>60</th>
+      <td>fanfiction-harry-potter/10114060.txt</td>
+      <td>Author's Note: I was suddenly hit with a HP/LV...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>61</th>
+      <td>fanfiction-harry-potter/10114197.txt</td>
+      <td>A/N Ok, so this is my first FanFic. I think I ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>62</th>
+      <td>fanfiction-harry-potter/10114274.txt</td>
+      <td>Disclaimer: Harry Potter and all characters b...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>67</th>
+      <td>fanfiction-harry-potter/10124094.txt</td>
+      <td>PrologueThe nightmares were back.At first, it ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>fanfiction-harry-potter/10127234.txt</td>
+      <td>I do not own Harry Potter only the idea of thi...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>fanfiction-harry-potter/10127513.txt</td>
+      <td>Hey, this is the final multi chapter part to t...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>fanfiction-harry-potter/10134610.txt</td>
+      <td>AN: Not JK Rowling wish I was but I'm notI was...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>fanfiction-harry-potter/10135379.txt</td>
+      <td>SWITCHA/N: Okay, so this is a new idea that at...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>fanfiction-harry-potter/10138430.txt</td>
+      <td>Harry Dursley - Something's Wrong.Lets get the...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>85</th>
+      <td>fanfiction-harry-potter/10142612.txt</td>
+      <td>A/N this is a Harry Potter fan fic based on th...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1805</th>
+      <td>fanfiction-harry-potter/9797364.txt</td>
+      <td>It was happening again. Night after night, she...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1806</th>
+      <td>fanfiction-harry-potter/9798300.txt</td>
+      <td>Alright, this is a rewrite of my fic 'I Can't ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1813</th>
+      <td>fanfiction-harry-potter/9831689.txt</td>
+      <td>A/N: New story time! Yay!There are no propheci...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1814</th>
+      <td>fanfiction-harry-potter/9833380.txt</td>
+      <td>Sticky SituationA/N: Hollla! New story for y'a...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1815</th>
+      <td>fanfiction-harry-potter/9835824.txt</td>
+      <td>Warning this fic:- contains no slash/yaoi what...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1818</th>
+      <td>fanfiction-harry-potter/9839017.txt</td>
+      <td>Summary: Harry was left at the mercies of the ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1820</th>
+      <td>fanfiction-harry-potter/9844547.txt</td>
+      <td>A/N: So this is my first story I've ever poste...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1821</th>
+      <td>fanfiction-harry-potter/9850472.txt</td>
+      <td>CHAPTER 1- MAKE NEW FRIENDS BUT KEEP THE OLD.A...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1825</th>
+      <td>fanfiction-harry-potter/9861833.txt</td>
+      <td>Title: BodyswitchDisclaimer: This story is bas...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1826</th>
+      <td>fanfiction-harry-potter/9863146.txt</td>
+      <td>Disclaimer: Harry Potter is owned by JK Rowlin...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1828</th>
+      <td>fanfiction-harry-potter/9873356.txt</td>
+      <td>A/N: A few months ago, I read an article on Mu...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1832</th>
+      <td>fanfiction-harry-potter/9880268.txt</td>
+      <td>Chapter one: Potions Masters ApprenticeIt was ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1836</th>
+      <td>fanfiction-harry-potter/9886437.txt</td>
+      <td>Author's note: To anyone out there in fanfic w...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1837</th>
+      <td>fanfiction-harry-potter/9887402.txt</td>
+      <td>Chapter One: Goin' Back To Hogwarts"Are you su...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1838</th>
+      <td>fanfiction-harry-potter/9887587.txt</td>
+      <td>Disclaimer: J.K. Rowling owns em.His FamilyCha...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1842</th>
+      <td>fanfiction-harry-potter/9912956.txt</td>
+      <td>All things here belong to the beautiful mind o...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1846</th>
+      <td>fanfiction-harry-potter/9930431.txt</td>
+      <td>Normal Pov(A/N: Story takes place in Harry Pot...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1847</th>
+      <td>fanfiction-harry-potter/9933106.txt</td>
+      <td>(A/N: Rated M for mature content and language....</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1848</th>
+      <td>fanfiction-harry-potter/9933135.txt</td>
+      <td>Hey you guys, I'm back!I wasn't planning on wr...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1851</th>
+      <td>fanfiction-harry-potter/9944070.txt</td>
+      <td>Chapter 1Beta Read by optimisticrealist72Thoug...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1852</th>
+      <td>fanfiction-harry-potter/9944110.txt</td>
+      <td>"Now begin", Dumbledore's voice boomed over th...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1853</th>
+      <td>fanfiction-harry-potter/9944611.txt</td>
+      <td>Hermione's POVShe grabbed another handful of r...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1855</th>
+      <td>fanfiction-harry-potter/9944944.txt</td>
+      <td>Harry`s POVHarry Potter, boy who lived, chosen...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1857</th>
+      <td>fanfiction-harry-potter/9946564.txt</td>
+      <td>A/N: Adopted from unwrittenlegacy. This will h...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1860</th>
+      <td>fanfiction-harry-potter/9957949.txt</td>
+      <td>I do not own any of the characters. You may ho...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1861</th>
+      <td>fanfiction-harry-potter/9964545.txt</td>
+      <td>Harry Potter, the Boy-Who-Lived, had always be...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1864</th>
+      <td>fanfiction-harry-potter/9973627.txt</td>
+      <td>Author's Notes: In my own, happy little world,...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1865</th>
+      <td>fanfiction-harry-potter/9975438.txt</td>
+      <td>Title: Fighting For TomorrowRating: TSummary: ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1867</th>
+      <td>fanfiction-harry-potter/9981541.txt</td>
+      <td>Authors note: Welcome to all the lovely reader...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1869</th>
+      <td>fanfiction-harry-potter/9984427.txt</td>
+      <td>I do not own Harry Potter and I only write for...</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>723 rows × 3 columns</p>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># bella</span>
+<span class="c"># edward</span>
+<span class="c"># just</span>
+<span class="c"># said</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.feature_extraction</span> <span class="kn">import</span> <span class="n">stop_words</span>
+<span class="p">[</span><span class="s">'said'</span><span class="p">,</span> <span class="s">'thee'</span><span class="p">,</span> <span class="s">'ye'</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">stop_words</span><span class="o">.</span><span class="n">ENGLISH_STOP_WORDS</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>['said',
+ 'thee',
+ 'ye',
+ 'after',
+ 'mostly',
+ 'my',
+ 'whereafter',
+ 'been',
+ 'sincere',
+ 'see',
+ 'con',
+ 'and',
+ 'elsewhere',
+ 'every',
+ 'however',
+ 'others',
+ 'couldnt',
+ 'made',
+ 'over',
+ 'such',
+ 'since',
+ 'became',
+ 'any',
+ 'else',
+ 'below',
+ 'these',
+ 'without',
+ 'against',
+ 'amoungst',
+ 'still',
+ 'whole',
+ 'we',
+ 'all',
+ 'or',
+ 'full',
+ 'am',
+ 'have',
+ 'together',
+ 'across',
+ 'into',
+ 'hence',
+ 'sometimes',
+ 'thereafter',
+ 'must',
+ 'first',
+ 'moreover',
+ 'only',
+ 'alone',
+ 'than',
+ 'empty',
+ 'they',
+ 'yourselves',
+ 'myself',
+ 'few',
+ 'out',
+ 'cry',
+ 'ten',
+ 'done',
+ 'throughout',
+ 'twenty',
+ 'were',
+ 'whither',
+ 'also',
+ 'much',
+ 'here',
+ 'except',
+ 'sometime',
+ 'everything',
+ 'move',
+ 'as',
+ 'this',
+ 'un',
+ 'fire',
+ 'him',
+ 'an',
+ 'nevertheless',
+ 'latter',
+ 'take',
+ 'us',
+ 'etc',
+ 'along',
+ 'some',
+ 'off',
+ 'beside',
+ 'get',
+ 'whence',
+ 'anyone',
+ 'seemed',
+ 'towards',
+ 'further',
+ 'thus',
+ 'back',
+ 'interest',
+ 'never',
+ 'he',
+ 'ltd',
+ 'part',
+ 'yours',
+ 'no',
+ 'seem',
+ 'perhaps',
+ 'should',
+ 'whenever',
+ 'neither',
+ 'under',
+ 'behind',
+ 'therein',
+ 'already',
+ 'do',
+ 'itself',
+ 'nobody',
+ 'hundred',
+ 'her',
+ 'your',
+ 'beyond',
+ 'is',
+ 'who',
+ 'would',
+ 'fill',
+ 'it',
+ 'may',
+ 'their',
+ 'fifteen',
+ 'himself',
+ 'those',
+ 'give',
+ 'hereafter',
+ 'them',
+ 'was',
+ 'enough',
+ 'front',
+ 'mill',
+ 'due',
+ 'most',
+ 'of',
+ 'show',
+ 'please',
+ 'nothing',
+ 'top',
+ 'third',
+ 'sixty',
+ 'go',
+ 'twelve',
+ 'anywhere',
+ 'other',
+ 'so',
+ 'herein',
+ 'indeed',
+ 'none',
+ 'side',
+ 'because',
+ 'bottom',
+ 'thick',
+ 'thin',
+ 'put',
+ 'the',
+ 'not',
+ 'from',
+ 'per',
+ 'seems',
+ 'three',
+ 'somewhere',
+ 'again',
+ 'thru',
+ 'within',
+ 'whereupon',
+ 'once',
+ 'bill',
+ 'whereby',
+ 'beforehand',
+ 'around',
+ 'although',
+ 'if',
+ 'often',
+ 'upon',
+ 'nor',
+ 'many',
+ 'to',
+ 'she',
+ 'up',
+ 'least',
+ 'hers',
+ 'that',
+ 'while',
+ 're',
+ 'you',
+ 'hereby',
+ 'ever',
+ 'same',
+ 'whom',
+ 'anyway',
+ 'yourself',
+ 'whatever',
+ 'becoming',
+ 'down',
+ 'eight',
+ 'can',
+ 'his',
+ 'one',
+ 'about',
+ 'former',
+ 'four',
+ 'ourselves',
+ 'hasnt',
+ 'via',
+ 'which',
+ 'be',
+ 'co',
+ 'thence',
+ 'either',
+ 'where',
+ 'serious',
+ 'always',
+ 'too',
+ 'toward',
+ 'becomes',
+ 'someone',
+ 'call',
+ 'themselves',
+ 'what',
+ 'even',
+ 'everyone',
+ 'keep',
+ 'name',
+ 'thereupon',
+ 'wherein',
+ 'formerly',
+ 'through',
+ 'somehow',
+ 'afterwards',
+ 'almost',
+ 'eleven',
+ 'two',
+ 'yet',
+ 'could',
+ 'on',
+ 'has',
+ 'i',
+ 'whether',
+ 'meanwhile',
+ 'nowhere',
+ 'found',
+ 'but',
+ 'describe',
+ 'wherever',
+ 'fifty',
+ 'amount',
+ 'now',
+ 'rather',
+ 'might',
+ 'very',
+ 'mine',
+ 'by',
+ 'forty',
+ 'whose',
+ 'less',
+ 'noone',
+ 'own',
+ 'before',
+ 'being',
+ 'detail',
+ 'de',
+ 'between',
+ 'me',
+ 'are',
+ 'onto',
+ 'something',
+ 'among',
+ 'namely',
+ 'though',
+ 'thereby',
+ 'in',
+ 'latterly',
+ 'there',
+ 'seeming',
+ 'hereupon',
+ 'why',
+ 'until',
+ 'above',
+ 'next',
+ 'had',
+ 'then',
+ 'whoever',
+ 'nine',
+ 'six',
+ 'well',
+ 'both',
+ 'during',
+ 'ours',
+ 'ie',
+ 'several',
+ 'find',
+ 'amongst',
+ 'become',
+ 'a',
+ 'eg',
+ 'at',
+ 'otherwise',
+ 'each',
+ 'whereas',
+ 'inc',
+ 'five',
+ 'anyhow',
+ 'how',
+ 'anything',
+ 'herself',
+ 'its',
+ 'our',
+ 'therefore',
+ 'cannot',
+ 'when',
+ 'cant',
+ 'last',
+ 'with',
+ 'system',
+ 'everywhere',
+ 'another',
+ 'will',
+ 'more',
+ 'for',
+ 'besides']
+</code></pre>
+</div>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

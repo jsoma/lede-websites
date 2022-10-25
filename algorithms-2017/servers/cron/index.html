@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Using cron jobs for repeating tasks</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/algorithms-2017/servers/cron/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Using cron jobs for repeating tasks">
+  <meta property="twitter:title" content="Using cron jobs for repeating tasks">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Algorithms, Lede 2017</a> &gt;  Using cron jobs for repeating tasks</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Using cron jobs for repeating tasks</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>If you wanted to run some code every hour - to scrape a web site, for example! - it would get rather boring rather quickly if you had to do it yourself. And besides how boring it would be, you’d never be able to sleep more than 45 minutes at a time!</p>
+
+<p>If you want to do tasks on a regular schedule, <strong>cron jobs</strong> are your solution.</p>
+
+<blockquote>
+  <p>We don’t talk about doing this on Windows, because if you’re doing something regularly you presumably want it running when you’re asleep, or when your computer is off. That means a server, and servers mean Linux!</p>
+</blockquote>
+
+<h2 id="updating-our-cron-jobs">Updating our cron jobs</h2>
+
+<p>The program <code class="highlighter-rouge">cron</code> eats up a specially-formatted file that tells the server what to run and how often to run it. It’s not the most easy thing to use, so we’re going to have <code class="highlighter-rouge">crontab</code> help us out.</p>
+
+<p>Run <code class="highlighter-rouge">crontab -e</code> to open up the <code class="highlighter-rouge">cron</code> editor.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>crontab -e
+</code></pre>
+</div>
+
+<p>If it asks you what editor you want, thank it for the politeness and hit enter: <code class="highlighter-rouge">nano</code> is default. It’s kind of a weird editor, but at least it lists the commands on the screen.</p>
+
+<p>Once you’re in the editor, type (or paste) this in there:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>*/2 * * * * curl http://www.nytimes.com &gt; ~/nyt-`date +"\%s"`.txt
+</code></pre>
+</div>
+
+<p>Once you’re done, hit <code class="highlighter-rouge">Ctrl+X</code> to exit, and on your way out press <code class="highlighter-rouge">Y</code> to save changes and hit <code class="highlighter-rouge">Enter</code> to keep the same filename.</p>
+
+<p>The * * * * pattern is explained to you in the crontab editor, I think! It’s how oten the task gets run.</p>
+
+<p>How would we know if we had an error? Let’s wait a few minutes. If you’re getting antsy about when our task will run, type <code class="highlighter-rouge">date</code>. We’re looking for a divisible-by-two minute.</p>
+
+<p>Hit enter if you get bored.</p>
+
+<h2 id="checking-your-mail-and-silencing-curl">Checking your mail and silencing <code class="highlighter-rouge">curl</code></h2>
+
+<p>Eventually the machine says <code class="highlighter-rouge">You have new mail.</code> Check it with… <code class="highlighter-rouge">mail</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mail
+</code></pre>
+</div>
+
+<p>You’re selecting the most recent message, hit enter. Oh, look, the output of <code class="highlighter-rouge">curl</code>, how sweet.</p>
+
+<p>Exit with <code class="highlighter-rouge">x</code>.</p>
+
+<p>Whenever you run a command, the output gets mailed to you. We… don’t really want this. The simplest way for now is to make curl silent by using the <code class="highlighter-rouge">--silent</code> flag.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>crontab -e
+</code></pre>
+</div>
+
+<p>Then change your line to have <code class="highlighter-rouge">--silent</code> with curl.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">*</span>/2 <span class="k">*</span> <span class="k">*</span> <span class="k">*</span> <span class="k">*</span> curl --silent http://www.nytimes.com &gt; ~/nyt-<span class="sb">`</span>date +<span class="s2">"</span><span class="se">\%</span><span class="s2">s"</span><span class="sb">`</span>.txt
+</code></pre>
+</div>
+
+<p>Now you won’t be hassled any more.</p>
+
+<p>This mail is also how you’ll know if you have an error in your code!</p>
+
+<h2 id="scraping-repeatedly">Scraping repeatedly</h2>
+
+<p>What we’ve done so far is pretty boring - we’ve just saved a file. What we <em>really</em> want is to run <em>Python scripts!</em></p>
+
+<p>Let’s use this file to scrape some headlines from the New York Times. Create it on your own computer, and save it as <code class="highlighter-rouge">scraper.py</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"http://www.nytimes.com"</span><span class="o">../</span><span class="p">)</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'html.parser'</span><span class="p">)</span>
+
+<span class="n">stories</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">"article"</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story'</span> <span class="p">})</span>
+
+<span class="n">all_stories</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c"># Grab their headlines and bylines</span>
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">stories</span><span class="p">:</span>
+    <span class="c"># Grab all of the h2's inside of the story</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'h2'</span><span class="p">,</span> <span class="p">{</span><span class="s">'class'</span><span class="p">:</span> <span class="s">'story-heading'</span><span class="p">})</span>
+    <span class="c"># If a headline exists, then process the rest!</span>
+    <span class="k">if</span> <span class="n">headline</span><span class="p">:</span>
+        <span class="c"># They're COVERED in whitespace</span>
+        <span class="n">headline_text</span> <span class="o">=</span> <span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="c"># Make a dictionary with the headline</span>
+        <span class="n">this_story</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'headline'</span><span class="p">:</span> <span class="n">headline_text</span> <span class="p">}</span>
+        <span class="n">byline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'p'</span><span class="p">,</span> <span class="p">{</span><span class="s">'class'</span><span class="p">:</span> <span class="s">'byline'</span><span class="p">})</span>
+        <span class="c"># Not all of them have a byline</span>
+        <span class="k">if</span> <span class="n">byline</span><span class="p">:</span>
+            <span class="n">byline_text</span> <span class="o">=</span> <span class="n">byline</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">this_story</span><span class="p">[</span><span class="s">'byline'</span><span class="p">]</span> <span class="o">=</span> <span class="n">byline_text</span>
+        <span class="n">all_stories</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">this_story</span><span class="p">)</span>
+
+<span class="n">all_stories</span>
+
+<span class="n">stories_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_stories</span><span class="p">)</span>
+<span class="n">stories_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">"nyt-data.csv"</span><span class="p">)</span>
+
+<span class="n">datestring</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="s">Y-</span><span class="si">%</span><span class="s">m-</span><span class="si">%</span><span class="s">d-</span><span class="si">%</span><span class="s">H-</span><span class="si">%</span><span class="s">M"</span><span class="p">)</span>
+
+<span class="n">filename</span> <span class="o">=</span> <span class="s">"nyt-data-"</span> <span class="o">+</span> <span class="n">datestring</span> <span class="o">+</span> <span class="s">".csv"</span>
+<span class="n">stories_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Once it’s saved, you need to <a href="/lede/algorithms-2017/servers/sending-files/">send it to your server</a>. We’ll use <code class="highlighter-rouge">scp</code> for that.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>scp -i ~/.ssh/algorithms_key scraper.py root@YOUR_IP:~/
+</code></pre>
+</div>
+
+<h3 id="testing-out-the-script">Testing out the script</h3>
+
+<p>Now that the script is on our server, we can try to run it with <code class="highlighter-rouge">python3 scraper.py</code>. If you need to install more packages (requests, etc), install them!</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

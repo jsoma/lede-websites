@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Homework Solution</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/03/homework/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Homework Solution">
+  <meta property="twitter:title" content="Homework Solution">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt;  Homework Solution</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Homework Solution</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>This will look much nicer if you put it into Atom, save it as a <code class="highlighter-rouge">.py</code> file, and disable soft wrap (<code class="highlighter-rouge">View</code> &gt; <code class="highlighter-rouge">Toggle Soft Wrap</code>).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>########
+#
+# Homework 3
+#
+# MAKE SURE YOU ARE RUNNING THIS WITH PYTHON 3!
+# Python 2 will give a "Non-ASCII character" error
+#
+# Either use workon/mkvirtualenv to create an
+# environment or use the python3 command
+#
+########
+
+########
+#
+# Here is a programmer!
+#
+########
+
+programmer = {
+  'name': 'Christine',
+  'fish': 100,
+  'languages': ['C++', 'Ruby', 'Java', 'Python' ]
+}
+
+# 1. What kind of data structure (a.k.a. type) is programmer? Print it.
+
+print(type(programmer))
+
+# 2. What keys does programmer have? Print it.
+
+print(programmer.keys())
+
+# 3. Print the programmer's name.
+
+print(programmer['name'])
+
+# 4. If the programmer has more than 30 fish, print "The programmer owns a lot of fish." If the programmer has 0 fish, say "the programmer has no fish." If the programmer has between 1 and 30 fish, print "the programmer has a few fish."
+
+if programmer['fish'] &gt; 30:
+  print("The programmer owns a lot of fish")
+if programmer['fish'] == 0:
+  print("The programmer has no fish")
+if programmer['fish'] &gt;= 1 and programmer['fish'] &lt; 30:
+  print("The programmer has a few fish")
+
+# NOTE: You could also do this with elif, depending on how you parse the sentence.
+
+# 5. Print the sentence, "{programmer's name} knows {number of languages} languages")
+
+number_of_languages = len(programmer['languages'])
+print(programmer['name'], "knows", number_of_languages, "languages")
+
+# 6. Use a loop to print each language the programmer knows
+
+for language in programmer['languages']:
+  print(language)
+
+########
+#
+# Here is a bunch of workers!
+#
+########
+
+company = {
+  'name': 'ACME Product Production Program',
+  'coders': [
+    { 'name': 'Lady Macbeth', 'languages': ['C++', 'Ruby', 'Java', 'Python' ] },
+    { 'name': 'Lothario', 'languages': ['C++'] },
+    { 'name': 'Ophelia', 'languages': [ 'Ruby', 'Erlang', 'Python' ] },
+    { 'name': 'Mercutio', 'languages': ['ASM', 'Python' ] }
+  ],
+  'managers': [
+    { 'name': 'Alpha' },
+    { 'name': 'Beta' },
+    { 'name': 'Gamma' },
+    { 'name': 'Delta' }
+  ]
+}
+
+# 7. What type is the company variable? What are its keys?
+
+print(type(company))
+
+# 8. What data structure (a.k.a. type) is the 'coders' part of company?
+
+print(type(company['coders']))
+
+# 9. How many coders does the company have?
+
+print(len(company['coders']))
+
+# 10. Print the name of each manager.
+
+for manager in company['managers']:
+  print(manager['name'])
+
+# 11. Print the number of languages each coder knows.
+
+for coder in company['coders']:
+  number_of_languages = len(coder['languages'])
+  print(number_of_languages)
+
+########
+#
+# Search results from Spotify for an artist named "Kendrick"
+# https://api.spotify.com/v1/search?query=kendrick&amp;limit=20&amp;type=artist
+#
+########
+
+artist_search_result = {'artists': {'offset': 0, 'next': 'https://api.spotify.com/v1/search?query=kendrick&amp;offset=20&amp;limit=20&amp;type=artist', 'limit': 20, 'href': 'https://api.spotify.com/v1/search?query=kendrick&amp;offset=0&amp;limit=20&amp;type=artist', 'previous': None, 'items': [{'images': [{'height': 1000, 'url': 'https://i.scdn.co/image/b1947120c60a8f2886c98faf52a61895821c7cf0', 'width': 1000}, {'height': 640, 'url': 'https://i.scdn.co/image/c50721f32900d561d44f38006208ab69717fe1f9', 'width': 640}, {'height': 200, 'url': 'https://i.scdn.co/image/762628b9c2bf991e6f9325522dab32c0cf7c06a2', 'width': 200}, {'height': 64, 'url': 'https://i.scdn.co/image/876101e8b1a981d5d6f9257f0f6ddd15087bdfd5', 'width': 64}], 'genres': ['alternative hip hop'], 'href': 'https://api.spotify.com/v1/artists/2YZyLoL8N0Wb9xBt1NhZWg', 'external_urls': {'spotify': 'https://open.spotify.com/artist/2YZyLoL8N0Wb9xBt1NhZWg'}, 'popularity': 84, 'type': 'artist', 'followers': {'href': None, 'total': 2454724}, 'name': 'Kendrick Lamar', 'uri': 'spotify:artist:2YZyLoL8N0Wb9xBt1NhZWg', 'id': '2YZyLoL8N0Wb9xBt1NhZWg'}, {'images': [{'height': 640, 'url': 'https://i.scdn.co/image/b6e825eb7039bb792a65b484b3d56064fb629ec8', 'width': 640}, {'height': 300, 'url': 'https://i.scdn.co/image/1229558513a6881b2635c4b2954f8bd709415ae5', 'width': 300}, {'height': 64, 'url': 'https://i.scdn.co/image/1301ae674a679c1865b2ffc0702be296d86224fc', 'width': 64}], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/6xfqnpe2HnLVUaYXs2F8YS', 'external_urls': {'spotify': 'https://open.spotify.com/artist/6xfqnpe2HnLVUaYXs2F8YS'}, 'popularity': 57, 'type': 'artist', 'followers': {'href': None, 'total': 84080}, 'name': 'Anna Kendrick', 'uri': 'spotify:artist:6xfqnpe2HnLVUaYXs2F8YS', 'id': '6xfqnpe2HnLVUaYXs2F8YS'}, {'images': [], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/1iApxRdcW8Uok4htrDrvdY', 'external_urls': {'spotify': 'https://open.spotify.com/artist/1iApxRdcW8Uok4htrDrvdY'}, 'popularity': 45, 'type': 'artist', 'followers': {'href': None, 'total': 1764}, 'name': 'Tech N9ne feat. Kendrick Lamar, ¡Mayday!, Kendall Morgan', 'uri': 'spotify:artist:1iApxRdcW8Uok4htrDrvdY', 'id': '1iApxRdcW8Uok4htrDrvdY'}, {'images': [{'height': 640, 'url': 'https://i.scdn.co/image/3130aee8b99f3fd47e32c704f146eeafc2ad01fc', 'width': 640}, {'height': 300, 'url': 'https://i.scdn.co/image/4547ade74391dcd3b3ca38afe820e5f44a5bddc7', 'width': 300}, {'height': 64, 'url': 'https://i.scdn.co/image/5ae90745618ea45fe0e0e832feebecaab3dc2d14', 'width': 64}], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/1cjrBtunBfOLbXQ0OK1yEY', 'external_urls': {'spotify': 'https://open.spotify.com/artist/1cjrBtunBfOLbXQ0OK1yEY'}, 'popularity': 41, 'type': 'artist', 'followers': {'href': None, 'total': 7}, 'name': 'Edgar Kendricks', 'uri': 'spotify:artist:1cjrBtunBfOLbXQ0OK1yEY', 'id': '1cjrBtunBfOLbXQ0OK1yEY'}, {'images': [{'height': 1280, 'url': 'https://i.scdn.co/image/664f1a004773bd74a4ff5104818e4f383ef95a5e', 'width': 676}, {'height': 1212, 'url': 'https://i.scdn.co/image/d5eff2f40af987b8794a43b6df78a47f41e4dc8f', 'width': 640}, {'height': 379, 'url': 'https://i.scdn.co/image/04eacbd2e9a333aff1deb625512fef76cd60c754', 'width': 200}, {'height': 121, 'url': 'https://i.scdn.co/image/745fd75c3bb492e40f93835e233f3e80d4ab513a', 'width': 64}], 'genres': ['motown'], 'href': 'https://api.spotify.com/v1/artists/2Uuon75BhnuuxdKLYn4wHn', 'external_urls': {'spotify': 'https://open.spotify.com/artist/2Uuon75BhnuuxdKLYn4wHn'}, 'popularity': 39, 'type': 'artist', 'followers': {'href': None, 'total': 5310}, 'name': 'Eddie Kendricks', 'uri': 'spotify:artist:2Uuon75BhnuuxdKLYn4wHn', 'id': '2Uuon75BhnuuxdKLYn4wHn'}, {'images': [{'height': 640, 'url': 'https://i.scdn.co/image/14bfe97f0b355da905a49255991be8d72c96d49c', 'width': 640}, {'height': 300, 'url': 'https://i.scdn.co/image/6c8c92a391746de3ac3f630180c74c7e363d0c97', 'width': 300}, {'height': 64, 'url': 'https://i.scdn.co/image/d17dc6566044566cee5ad0b529df6320a0dcb065', 'width': 64}], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/2cKOuZYoNGwJ91GSVhUV9g', 'external_urls': {'spotify': 'https://open.spotify.com/artist/2cKOuZYoNGwJ91GSVhUV9g'}, 'popularity': 29, 'type': 'artist', 'followers': {'href': None, 'total': 81}, 'name': 'Kendrick', 'uri': 'spotify:artist:2cKOuZYoNGwJ91GSVhUV9g', 'id': '2cKOuZYoNGwJ91GSVhUV9g'}, {'images': [{'height': 635, 'url': 'https://i.scdn.co/image/70292a01a38948fa70e00b175e8d60ee33a40bc3', 'width': 950}, {'height': 428, 'url': 'https://i.scdn.co/image/b9537b37f129c1be5e8f3ba4efe3cac5b25f7636', 'width': 640}, {'height': 134, 'url': 'https://i.scdn.co/image/e73e70c68dc9d40799fa1a7865c7c2b56a56ae32', 'width': 200}, {'height': 43, 'url': 'https://i.scdn.co/image/3dccb1ab6811e5d59dd71ef664621e7f0aacd0b2', 'width': 64}], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/3xidVCWg60r8Wdm6g9VCux', 'external_urls': {'spotify': 'https://open.spotify.com/artist/3xidVCWg60r8Wdm6g9VCux'}, 'popularity': 36, 'type': 'artist', 'followers': {'href': None, 'total': 1031}, 'name': 'Kendrick Scott', 'uri': 'spotify:artist:3xidVCWg60r8Wdm6g9VCux', 'id': '3xidVCWg60r8Wdm6g9VCux'}, {'images': [], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/7Bin9s9lePTNx57vB5rHW8', 'external_urls': {'spotify': 'https://open.spotify.com/artist/7Bin9s9lePTNx57vB5rHW8'}, 'popularity': 24, 'type': 'artist', 'followers': {'href': None, 'total': 1}, 'name': 'Kendrick Small', 'uri': 'spotify:artist:7Bin9s9lePTNx57vB5rHW8', 'id': '7Bin9s9lePTNx57vB5rHW8'}, {'images': [{'height': 290, 'url': 'https://i.scdn.co/image/af863b35263ff14eb78218f371bef8a0e76f1de5', 'width': 1000}, {'height': 186, 'url': 'https://i.scdn.co/image/7f86627d478319b749db28e5029e8ef08f330759', 'width': 640}, {'height': 58, 'url': 'https://i.scdn.co/image/7f751ccee89a1f1b84d1a0cd1d37437c41bde338', 'width': 200}, {'height': 19, 'url': 'https://i.scdn.co/image/510ff1b14b3ae7688012ed56a4d201e2a6333e8e', 'width': 64}], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/1srLlKy0yVmQorLl9PhXbS', 'external_urls': {'spotify': 'https://open.spotify.com/artist/1srLlKy0yVmQorLl9PhXbS'}, 'popularity': 30, 'type': 'artist', 'followers': {'href': None, 'total': 3222}, 'name': 'Graham Kendrick', 'uri': 'spotify:artist:1srLlKy0yVmQorLl9PhXbS', 'id': '1srLlKy0yVmQorLl9PhXbS'}, {'images': [{'height': 640, 'url': 'https://i.scdn.co/image/801f01bc6446f7b97d656ee3a86702c642633c4f', 'width': 640}, {'height': 300, 'url': 'https://i.scdn.co/image/ec3937428234fca86329588823b68b0e81aa2251', 'width': 300}, {'height': 64, 'url': 'https://i.scdn.co/image/567b432948b028ed45d637d972c0058f2bf1bb91', 'width': 64}], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/5DOCFpRL15EQCkZDU3RcP8', 'external_urls': {'spotify': 'https://open.spotify.com/artist/5DOCFpRL15EQCkZDU3RcP8'}, 'popularity': 23, 'type': 'artist', 'followers': {'href': None, 'total': 69}, 'name': 'Temps &amp; Eddie Kendricks', 'uri': 'spotify:artist:5DOCFpRL15EQCkZDU3RcP8', 'id': '5DOCFpRL15EQCkZDU3RcP8'}, {'images': [{'height': 667, 'url': 'https://i.scdn.co/image/555a8e287d0b50921f43773779ccc99f4eb14bd8', 'width': 1000}, {'height': 427, 'url': 'https://i.scdn.co/image/3cf168aefd1633f40f7021e44d2106d4a3c34f8c', 'width': 640}, {'height': 133, 'url': 'https://i.scdn.co/image/9d51baf1e5d9bd05e7e20117f6f0bbac4ede8ad2', 'width': 200}, {'height': 43, 'url': 'https://i.scdn.co/image/030909e0a8dc938af89c7a030e0b204fbd46f11d', 'width': 64}], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/0IyuDlCVbMa3TAoVaDKEeL', 'external_urls': {'spotify': 'https://open.spotify.com/artist/0IyuDlCVbMa3TAoVaDKEeL'}, 'popularity': 19, 'type': 'artist', 'followers': {'href': None, 'total': 1471}, 'name': 'Kendrick Scott Oracle', 'uri': 'spotify:artist:0IyuDlCVbMa3TAoVaDKEeL', 'id': '0IyuDlCVbMa3TAoVaDKEeL'}, {'images': [], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/6FnUiliI9F1f2V9THnXxpu', 'external_urls': {'spotify': 'https://open.spotify.com/artist/6FnUiliI9F1f2V9THnXxpu'}, 'popularity': 10, 'type': 'artist', 'followers': {'href': None, 'total': 93}, 'name': 'Solange feat. Kendrick Lamar', 'uri': 'spotify:artist:6FnUiliI9F1f2V9THnXxpu', 'id': '6FnUiliI9F1f2V9THnXxpu'}, {'images': [{'height': 640, 'url': 'https://i.scdn.co/image/0724aac29dcf4876b54f01a2813365b92343ed5a', 'width': 640}, {'height': 300, 'url': 'https://i.scdn.co/image/c6e8964165d08bc9cb2fc05d68439930db61c890', 'width': 300}, {'height': 64, 'url': 'https://i.scdn.co/image/d26bc9756a0c7679f095c9e0e8e13dc9b39febde', 'width': 64}], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/7by6up72jjsUGwmmMitGr1', 'external_urls': {'spotify': 'https://open.spotify.com/artist/7by6up72jjsUGwmmMitGr1'}, 'popularity': 9, 'type': 'artist', 'followers': {'href': None, 'total': 32}, 'name': 'The Kendricks', 'uri': 'spotify:artist:7by6up72jjsUGwmmMitGr1', 'id': '7by6up72jjsUGwmmMitGr1'}, {'images': [], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/1WscexgNxCyVt7Bx5pmsUg', 'external_urls': {'spotify': 'https://open.spotify.com/artist/1WscexgNxCyVt7Bx5pmsUg'}, 'popularity': 11, 'type': 'artist', 'followers': {'href': None, 'total': 39}, 'name': 'Richard Kendrick', 'uri': 'spotify:artist:1WscexgNxCyVt7Bx5pmsUg', 'id': '1WscexgNxCyVt7Bx5pmsUg'}, {'images': [{'height': 640, 'url': 'https://i.scdn.co/image/12a0f2aa81ccde7f63fb02417f44c8de99df1087', 'width': 640}, {'height': 300, 'url': 'https://i.scdn.co/image/5a75162ef05c05e950b42d863ca7a811386a97b0', 'width': 300}, {'height': 64, 'url': 'https://i.scdn.co/image/64f475b3531667c58f1ef02f1774ec7697b1ac81', 'width': 64}], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/4UnJ85AumWoUuGnOpLEnl7', 'external_urls': {'spotify': 'https://open.spotify.com/artist/4UnJ85AumWoUuGnOpLEnl7'}, 'popularity': 10, 'type': 'artist', 'followers': {'href': None, 'total': 58}, 'name': 'Darnell Kendricks', 'uri': 'spotify:artist:4UnJ85AumWoUuGnOpLEnl7', 'id': '4UnJ85AumWoUuGnOpLEnl7'}, {'images': [], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/7kj1cdDalpyc3rURdJx8b9', 'external_urls': {'spotify': 'https://open.spotify.com/artist/7kj1cdDalpyc3rURdJx8b9'}, 'popularity': 7, 'type': 'artist', 'followers': {'href': None, 'total': 54}, 'name': 'Eddie Kendrick', 'uri': 'spotify:artist:7kj1cdDalpyc3rURdJx8b9', 'id': '7kj1cdDalpyc3rURdJx8b9'}, {'images': [], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/2cUIfFEsQgmPlYt75T2Lvy', 'external_urls': {'spotify': 'https://open.spotify.com/artist/2cUIfFEsQgmPlYt75T2Lvy'}, 'popularity': 9, 'type': 'artist', 'followers': {'href': None, 'total': 14}, 'name': 'Alex Kendrick', 'uri': 'spotify:artist:2cUIfFEsQgmPlYt75T2Lvy', 'id': '2cUIfFEsQgmPlYt75T2Lvy'}, {'images': [], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/3M8jTGG0AItu4XYotTlC6M', 'external_urls': {'spotify': 'https://open.spotify.com/artist/3M8jTGG0AItu4XYotTlC6M'}, 'popularity': 5, 'type': 'artist', 'followers': {'href': None, 'total': 451}, 'name': 'Kendrick Lamar &amp; Jay Rock', 'uri': 'spotify:artist:3M8jTGG0AItu4XYotTlC6M', 'id': '3M8jTGG0AItu4XYotTlC6M'}, {'images': [{'height': 600, 'url': 'https://i.scdn.co/image/b388ac8f9a6fef30800af948440f81020bec6ea6', 'width': 411}, {'height': 292, 'url': 'https://i.scdn.co/image/9ede141bfd29ffac1984c61331191e39b7d92e12', 'width': 200}, {'height': 93, 'url': 'https://i.scdn.co/image/eff9add3f6d333717bd051d75721e518596c2719', 'width': 64}], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/46uaPpO9BqSSlLvSXFwyJs', 'external_urls': {'spotify': 'https://open.spotify.com/artist/46uaPpO9BqSSlLvSXFwyJs'}, 'popularity': 5, 'type': 'artist', 'followers': {'href': None, 'total': 66}, 'name': 'Charlotte Kendrick', 'uri': 'spotify:artist:46uaPpO9BqSSlLvSXFwyJs', 'id': '46uaPpO9BqSSlLvSXFwyJs'}, {'images': [], 'genres': [], 'href': 'https://api.spotify.com/v1/artists/63rMSwRscrbMp9u0MhfDzK', 'external_urls': {'spotify': 'https://open.spotify.com/artist/63rMSwRscrbMp9u0MhfDzK'}, 'popularity': 5, 'type': 'artist', 'followers': {'href': None, 'total': 1}, 'name': 'Will Kendrick', 'uri': 'spotify:artist:63rMSwRscrbMp9u0MhfDzK', 'id': '63rMSwRscrbMp9u0MhfDzK'}], 'total': 160}}
+
+# 12. What is the data type of the search result? Print it.
+
+print(type(artist_search_result))
+
+# 13. What are all of the keys that the search result has?
+
+print(artist_search_result.keys())
+
+# 14. Take a look at 'artists' - what keys does it have?
+
+print(artist_search_result['artists'].keys())
+
+# 15. Using len() with something-or-other would show me how many results I CURRENTLY have, but I want to know the TOTAL number of results Spotify has for my search result. From looking at the names of the keys under 'artists', how many total results are there?
+
+print(artist_search_result['artists']['total'])
+
+# 16. How popular is Kendrick Lamar vs. Anna Kendrick? Use a for loop to list the names and popularity of every artist.
+
+artists = artist_search_result['artists']['items']
+for artist in artists:
+  print(artist['name'], artist['popularity'])
+# Kendrick Lamar is more popular than Anna Kendrick
+
+########
+#
+# Search results from Spotify for a playlist including the term "90s"
+# https://api.spotify.com/v1/search?query=90s&amp;limit=20&amp;type=playlist
+#
+########
+
+playlist_search_result = {'playlists': {'offset': 0, 'next': 'https://api.spotify.com/v1/search?query=90s&amp;offset=20&amp;limit=20&amp;type=playlist', 'limit': 20, 'href': 'https://api.spotify.com/v1/search?query=90s&amp;offset=0&amp;limit=20&amp;type=playlist', 'previous': None, 'items': [{'public': None, 'snapshot_id': 'X2zFSzFviruyjSFdaByIuiT9se/LKmkQFWbqY+NzH+TQ1Sj4rH0Q/0WxQlKrNvKw', 'id': '5TcHWbnN6SIhvPY1MXMDrb', 'tracks': {'href': 'https://api.spotify.com/v1/users/sam85uk/playlists/5TcHWbnN6SIhvPY1MXMDrb/tracks', 'total': 937}, 'external_urls': {'spotify': 'http://open.spotify.com/user/sam85uk/playlist/5TcHWbnN6SIhvPY1MXMDrb'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/sam85uk'}, 'type': 'user', 'uri': 'spotify:user:sam85uk', 'href': 'https://api.spotify.com/v1/users/sam85uk', 'id': 'sam85uk'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/08d18e9d8c7d49cbb1eb609998fff55741cf54f61ebd9af955a76278cbfc1959ed78ab4a604123186abcdf6587a26b505a0816d7b3ff9fba4be070344bc3fa03ea66c557fa889ee9684ddc8b2ed94a5e', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/08d18e9d8c7d49cbb1eb609998fff55741cf54f61ebd9af955a76278cbfc1959ed78ab4a604123186abcdf6587a26b505a0816d7b3ff9fba4be070344bc3fa03ea66c557fa889ee9684ddc8b2ed94a5e', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/08d18e9d8c7d49cbb1eb609998fff55741cf54f61ebd9af955a76278cbfc1959ed78ab4a604123186abcdf6587a26b505a0816d7b3ff9fba4be070344bc3fa03ea66c557fa889ee9684ddc8b2ed94a5e', 'width': 60}], 'uri': 'spotify:user:sam85uk:playlist:5TcHWbnN6SIhvPY1MXMDrb', 'name': '90s', 'href': 'https://api.spotify.com/v1/users/sam85uk/playlists/5TcHWbnN6SIhvPY1MXMDrb'}, {'public': None, 'snapshot_id': 'vs/L+N+xSmk4giRCCNAsNK4hljW++tS/RHSq0HJbYqWCXo65jGmGpT9ssHu5GgEh', 'id': '6OugflVBHYjm6HIjCObsz4', 'tracks': {'href': 'https://api.spotify.com/v1/users/1220462882/playlists/6OugflVBHYjm6HIjCObsz4/tracks', 'total': 924}, 'external_urls': {'spotify': 'http://open.spotify.com/user/1220462882/playlist/6OugflVBHYjm6HIjCObsz4'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/1220462882'}, 'type': 'user', 'uri': 'spotify:user:1220462882', 'href': 'https://api.spotify.com/v1/users/1220462882', 'id': '1220462882'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/81987cf55db3b188d996f89b41a724b9d82311c37fb148a7b28456487198e98997eb7a7462ca8c8c214a89248160db7677ea145da83b29bf01c189fb85c86129145f848525b858bc3557161db5654ded', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/81987cf55db3b188d996f89b41a724b9d82311c37fb148a7b28456487198e98997eb7a7462ca8c8c214a89248160db7677ea145da83b29bf01c189fb85c86129145f848525b858bc3557161db5654ded', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/81987cf55db3b188d996f89b41a724b9d82311c37fb148a7b28456487198e98997eb7a7462ca8c8c214a89248160db7677ea145da83b29bf01c189fb85c86129145f848525b858bc3557161db5654ded', 'width': 60}], 'uri': 'spotify:user:1220462882:playlist:6OugflVBHYjm6HIjCObsz4', 'name': '90s country', 'href': 'https://api.spotify.com/v1/users/1220462882/playlists/6OugflVBHYjm6HIjCObsz4'}, {'public': None, 'snapshot_id': 'ZMcQcP9SEc7jKFwoEO97LcQzLn0iBMcC2NjnFKEcbpKLXkbc7f6n1yjdXitIg32A', 'id': '5e1bpazQUEHijFhcJobkAp', 'tracks': {'href': 'https://api.spotify.com/v1/users/luccyyy/playlists/5e1bpazQUEHijFhcJobkAp/tracks', 'total': 164}, 'external_urls': {'spotify': 'http://open.spotify.com/user/luccyyy/playlist/5e1bpazQUEHijFhcJobkAp'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/luccyyy'}, 'type': 'user', 'uri': 'spotify:user:luccyyy', 'href': 'https://api.spotify.com/v1/users/luccyyy', 'id': 'luccyyy'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/7cc30bbf3935c30f795c99b19c1f7ad8f0427cff5ed7a60280fe4adabb6404581d36c8eac93ea0f90d69e33e5e05c63fe4a9d3146771ec7e6f052dceec4f7a63269a7997b385763abc036f483ac46212', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/7cc30bbf3935c30f795c99b19c1f7ad8f0427cff5ed7a60280fe4adabb6404581d36c8eac93ea0f90d69e33e5e05c63fe4a9d3146771ec7e6f052dceec4f7a63269a7997b385763abc036f483ac46212', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/7cc30bbf3935c30f795c99b19c1f7ad8f0427cff5ed7a60280fe4adabb6404581d36c8eac93ea0f90d69e33e5e05c63fe4a9d3146771ec7e6f052dceec4f7a63269a7997b385763abc036f483ac46212', 'width': 60}], 'uri': 'spotify:user:luccyyy:playlist:5e1bpazQUEHijFhcJobkAp', 'name': "'90s Rock", 'href': 'https://api.spotify.com/v1/users/luccyyy/playlists/5e1bpazQUEHijFhcJobkAp'}, {'public': None, 'snapshot_id': '5JWrVBSsfjaBGPt2OGlZ8ZJgkI9xB39TC5ISrrK/yYuFvgzOIji3eeHWfCenGpbI', 'id': '5v6cPhjJxSgNn6Aluh0lqV', 'tracks': {'href': 'https://api.spotify.com/v1/users/crockstarltd/playlists/5v6cPhjJxSgNn6Aluh0lqV/tracks', 'total': 137}, 'external_urls': {'spotify': 'http://open.spotify.com/user/crockstarltd/playlist/5v6cPhjJxSgNn6Aluh0lqV'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/crockstarltd'}, 'type': 'user', 'uri': 'spotify:user:crockstarltd', 'href': 'https://api.spotify.com/v1/users/crockstarltd', 'id': 'crockstarltd'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/d8f6b63b7df6e7cccf92044d706a377e9803d9d73d35d425a1f8b25cada6937470e7e258d7835dacae29a6ee0fc15e797f94e7f30588cdcfaf7febb0e15a74a0c972959dbb9d597acf98868cb95b0664', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/d8f6b63b7df6e7cccf92044d706a377e9803d9d73d35d425a1f8b25cada6937470e7e258d7835dacae29a6ee0fc15e797f94e7f30588cdcfaf7febb0e15a74a0c972959dbb9d597acf98868cb95b0664', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/d8f6b63b7df6e7cccf92044d706a377e9803d9d73d35d425a1f8b25cada6937470e7e258d7835dacae29a6ee0fc15e797f94e7f30588cdcfaf7febb0e15a74a0c972959dbb9d597acf98868cb95b0664', 'width': 60}], 'uri': 'spotify:user:crockstarltd:playlist:5v6cPhjJxSgNn6Aluh0lqV', 'name': '90s alternative', 'href': 'https://api.spotify.com/v1/users/crockstarltd/playlists/5v6cPhjJxSgNn6Aluh0lqV'}, {'public': None, 'snapshot_id': 'NNzGf/01IMRYYmlNZhEehdkG8FONeb5xdyiUoVUVUsk5hovm++HAO4+UYckAlz7F', 'id': '3wneNouatgyKcqjPJtBP2L', 'tracks': {'href': 'https://api.spotify.com/v1/users/macaulaymeudt92309/playlists/3wneNouatgyKcqjPJtBP2L/tracks', 'total': 815}, 'external_urls': {'spotify': 'http://open.spotify.com/user/macaulaymeudt92309/playlist/3wneNouatgyKcqjPJtBP2L'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/macaulaymeudt92309'}, 'type': 'user', 'uri': 'spotify:user:macaulaymeudt92309', 'href': 'https://api.spotify.com/v1/users/macaulaymeudt92309', 'id': 'macaulaymeudt92309'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/4a589f44ef1c9988ef3441b8b40fa1ea66b7b7300acfcd6f1b85b23a79fc4d678a9368f27c110d0238a9cb53d4ebe717af8921e8d86cbfacdb88b9ea0db70a83d7a6f026c20efd426fa3dea6f369d385', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/4a589f44ef1c9988ef3441b8b40fa1ea66b7b7300acfcd6f1b85b23a79fc4d678a9368f27c110d0238a9cb53d4ebe717af8921e8d86cbfacdb88b9ea0db70a83d7a6f026c20efd426fa3dea6f369d385', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/4a589f44ef1c9988ef3441b8b40fa1ea66b7b7300acfcd6f1b85b23a79fc4d678a9368f27c110d0238a9cb53d4ebe717af8921e8d86cbfacdb88b9ea0db70a83d7a6f026c20efd426fa3dea6f369d385', 'width': 60}], 'uri': 'spotify:user:macaulaymeudt92309:playlist:3wneNouatgyKcqjPJtBP2L', 'name': "'90s Hits ", 'href': 'https://api.spotify.com/v1/users/macaulaymeudt92309/playlists/3wneNouatgyKcqjPJtBP2L'}, {'public': None, 'snapshot_id': 'iACKRBrA4eZtFBpk0oCrYEJvBNaSOr2utdXOi2mwuGXMmMv/utD0w/hyLhEkHxDI', 'id': '29jIRPHN6igNaKMwsMQudX', 'tracks': {'href': 'https://api.spotify.com/v1/users/12445745/playlists/29jIRPHN6igNaKMwsMQudX/tracks', 'total': 185}, 'external_urls': {'spotify': 'http://open.spotify.com/user/12445745/playlist/29jIRPHN6igNaKMwsMQudX'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/12445745'}, 'type': 'user', 'uri': 'spotify:user:12445745', 'href': 'https://api.spotify.com/v1/users/12445745', 'id': '12445745'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/0cd7ff9cc859ff202ed95892ed85747591aea1e54a33a0da119619c814576f290b8a0a56a4683df0976c2e58bf940880b7a083e3cd343068975e63b47433313c5921731df38907118b14b7101c15dec7', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/0cd7ff9cc859ff202ed95892ed85747591aea1e54a33a0da119619c814576f290b8a0a56a4683df0976c2e58bf940880b7a083e3cd343068975e63b47433313c5921731df38907118b14b7101c15dec7', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/0cd7ff9cc859ff202ed95892ed85747591aea1e54a33a0da119619c814576f290b8a0a56a4683df0976c2e58bf940880b7a083e3cd343068975e63b47433313c5921731df38907118b14b7101c15dec7', 'width': 60}], 'uri': 'spotify:user:12445745:playlist:29jIRPHN6igNaKMwsMQudX', 'name': '90s RnB', 'href': 'https://api.spotify.com/v1/users/12445745/playlists/29jIRPHN6igNaKMwsMQudX'}, {'public': None, 'snapshot_id': 'MiF9QytElWJwgY1nXZlaw8HJMF/mPV+UYdk35yEs93gqHPpFW8YAxZs90asJ3yBd', 'id': '3QmFUqc1Io68CVD2NL2iLM', 'tracks': {'href': 'https://api.spotify.com/v1/users/1297361113/playlists/3QmFUqc1Io68CVD2NL2iLM/tracks', 'total': 281}, 'external_urls': {'spotify': 'http://open.spotify.com/user/1297361113/playlist/3QmFUqc1Io68CVD2NL2iLM'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/1297361113'}, 'type': 'user', 'uri': 'spotify:user:1297361113', 'href': 'https://api.spotify.com/v1/users/1297361113', 'id': '1297361113'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/28961f2d68c3477b4c86d2fee6e00178f32851eb676a05f833234b5273fd35b908a4cc57105fd744d6b045d91a974b3f77b5724a93c0f5c5188e616bdcab2d136873cfbdb5feac7539897d6774bf83d3', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/28961f2d68c3477b4c86d2fee6e00178f32851eb676a05f833234b5273fd35b908a4cc57105fd744d6b045d91a974b3f77b5724a93c0f5c5188e616bdcab2d136873cfbdb5feac7539897d6774bf83d3', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/28961f2d68c3477b4c86d2fee6e00178f32851eb676a05f833234b5273fd35b908a4cc57105fd744d6b045d91a974b3f77b5724a93c0f5c5188e616bdcab2d136873cfbdb5feac7539897d6774bf83d3', 'width': 60}], 'uri': 'spotify:user:1297361113:playlist:3QmFUqc1Io68CVD2NL2iLM', 'name': 'ROCK 90S INGLES', 'href': 'https://api.spotify.com/v1/users/1297361113/playlists/3QmFUqc1Io68CVD2NL2iLM'}, {'public': None, 'snapshot_id': 'n6rtZGQ+Y7BG/Y+w7awcPmbn2Tus4ahRSOzDF67JzqtTqYjSMV8x58WQUUySFRls', 'id': '5772HGqmp2E99GQo5tfmcJ', 'tracks': {'href': 'https://api.spotify.com/v1/users/19jconnell79/playlists/5772HGqmp2E99GQo5tfmcJ/tracks', 'total': 211}, 'external_urls': {'spotify': 'http://open.spotify.com/user/19jconnell79/playlist/5772HGqmp2E99GQo5tfmcJ'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/19jconnell79'}, 'type': 'user', 'uri': 'spotify:user:19jconnell79', 'href': 'https://api.spotify.com/v1/users/19jconnell79', 'id': '19jconnell79'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/21ffd457485a3a428e38d3b00b399cbd917a0535f36a53eb6401ff8f827518170143df42f4e7e82282cbb8cfabbd840774f1d865415d293227982b2730b5feda36f583b4772709babe690eee17fc99ec', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/21ffd457485a3a428e38d3b00b399cbd917a0535f36a53eb6401ff8f827518170143df42f4e7e82282cbb8cfabbd840774f1d865415d293227982b2730b5feda36f583b4772709babe690eee17fc99ec', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/21ffd457485a3a428e38d3b00b399cbd917a0535f36a53eb6401ff8f827518170143df42f4e7e82282cbb8cfabbd840774f1d865415d293227982b2730b5feda36f583b4772709babe690eee17fc99ec', 'width': 60}], 'uri': 'spotify:user:19jconnell79:playlist:5772HGqmp2E99GQo5tfmcJ', 'name': '90s rap/hip hop', 'href': 'https://api.spotify.com/v1/users/19jconnell79/playlists/5772HGqmp2E99GQo5tfmcJ'}, {'public': None, 'snapshot_id': 'SXYTRsNxGol+X5UGoW5s8NxYHyPD9aRb4l+WyIIFDXvBqF0BHVnoghcUzvM4qELA', 'id': '6PtCrShmNnLSP1Vr4PAyVm', 'tracks': {'href': 'https://api.spotify.com/v1/users/spotifyaustralia/playlists/6PtCrShmNnLSP1Vr4PAyVm/tracks', 'total': 50}, 'external_urls': {'spotify': 'http://open.spotify.com/user/spotifyaustralia/playlist/6PtCrShmNnLSP1Vr4PAyVm'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/spotifyaustralia'}, 'type': 'user', 'uri': 'spotify:user:spotifyaustralia', 'href': 'https://api.spotify.com/v1/users/spotifyaustralia', 'id': 'spotifyaustralia'}, 'collaborative': False, 'images': [{'height': None, 'url': 'https://u.scdn.co/images/pl/default/2bb39ac6d272a86f9fb377d26249c942b6138a97', 'width': None}], 'uri': 'spotify:user:spotifyaustralia:playlist:6PtCrShmNnLSP1Vr4PAyVm', 'name': '#ThrowbackThursday', 'href': 'https://api.spotify.com/v1/users/spotifyaustralia/playlists/6PtCrShmNnLSP1Vr4PAyVm'}, {'public': None, 'snapshot_id': 'uUQscWhcfXEt0hICBieJ3bq5hST6l4P+cAEFMDNlZPhRmU7CxbXNg75BMxph1fxD', 'id': '5TvJd5fV2RMgv87mdd516L', 'tracks': {'href': 'https://api.spotify.com/v1/users/jordancstone/playlists/5TvJd5fV2RMgv87mdd516L/tracks', 'total': 310}, 'external_urls': {'spotify': 'http://open.spotify.com/user/jordancstone/playlist/5TvJd5fV2RMgv87mdd516L'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/jordancstone'}, 'type': 'user', 'uri': 'spotify:user:jordancstone', 'href': 'https://api.spotify.com/v1/users/jordancstone', 'id': 'jordancstone'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/46363292538df1e91a597dd30584a4ca41cb6bd9bf3b966b83f90362e502ca3fa0a1a7919759ac9650eef0041184673da90f5a2818f302e810cb1dac75638ccc8f57667af2d620defa755f6ffdd795fb', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/46363292538df1e91a597dd30584a4ca41cb6bd9bf3b966b83f90362e502ca3fa0a1a7919759ac9650eef0041184673da90f5a2818f302e810cb1dac75638ccc8f57667af2d620defa755f6ffdd795fb', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/46363292538df1e91a597dd30584a4ca41cb6bd9bf3b966b83f90362e502ca3fa0a1a7919759ac9650eef0041184673da90f5a2818f302e810cb1dac75638ccc8f57667af2d620defa755f6ffdd795fb', 'width': 60}], 'uri': 'spotify:user:jordancstone:playlist:5TvJd5fV2RMgv87mdd516L', 'name': '90s ROCK (300 tracks)', 'href': 'https://api.spotify.com/v1/users/jordancstone/playlists/5TvJd5fV2RMgv87mdd516L'}, {'public': None, 'snapshot_id': 'CUhnTrVMGslFOFW2i9ncLzbo39Qu/vNIAuRdXEea1NP3SPMlu9PHd2PnrYX3BYHR', 'id': '35iftafjBbC2wWKIgelOf6', 'tracks': {'href': 'https://api.spotify.com/v1/users/spotify_uk_/playlists/35iftafjBbC2wWKIgelOf6/tracks', 'total': 70}, 'external_urls': {'spotify': 'http://open.spotify.com/user/spotify_uk_/playlist/35iftafjBbC2wWKIgelOf6'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/spotify_uk_'}, 'type': 'user', 'uri': 'spotify:user:spotify_uk_', 'href': 'https://api.spotify.com/v1/users/spotify_uk_', 'id': 'spotify_uk_'}, 'collaborative': False, 'images': [{'height': None, 'url': 'https://u.scdn.co/images/pl/default/f6148a7d6511c45c3099dfbaa9a0c7af4c1de77b', 'width': None}], 'uri': 'spotify:user:spotify_uk_:playlist:35iftafjBbC2wWKIgelOf6', 'name': '90s R&amp;B Anthems', 'href': 'https://api.spotify.com/v1/users/spotify_uk_/playlists/35iftafjBbC2wWKIgelOf6'}, {'public': None, 'snapshot_id': 'EIuQGXw7ea1XtV0NeUT/RhLnudL0cW2ORvZl9fBh+pJHIgR1gsm8eH0N4Oy/QeLP', 'id': '5yGuoOwRQF3o8NVRRlvCj7', 'tracks': {'href': 'https://api.spotify.com/v1/users/truckasaurus1/playlists/5yGuoOwRQF3o8NVRRlvCj7/tracks', 'total': 98}, 'external_urls': {'spotify': 'http://open.spotify.com/user/truckasaurus1/playlist/5yGuoOwRQF3o8NVRRlvCj7'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/truckasaurus1'}, 'type': 'user', 'uri': 'spotify:user:truckasaurus1', 'href': 'https://api.spotify.com/v1/users/truckasaurus1', 'id': 'truckasaurus1'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/9c37cfe8125864774ccb36f076cba3fcfcaa2db30477a78fbbb6623f43dffcd56eb12d7a5562bec1d62bff10f0ef84fd3cf34a73172e52de6816871daab64767f8c06174e7842db40be0a9b8ab1f519e', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/9c37cfe8125864774ccb36f076cba3fcfcaa2db30477a78fbbb6623f43dffcd56eb12d7a5562bec1d62bff10f0ef84fd3cf34a73172e52de6816871daab64767f8c06174e7842db40be0a9b8ab1f519e', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/9c37cfe8125864774ccb36f076cba3fcfcaa2db30477a78fbbb6623f43dffcd56eb12d7a5562bec1d62bff10f0ef84fd3cf34a73172e52de6816871daab64767f8c06174e7842db40be0a9b8ab1f519e', 'width': 60}], 'uri': 'spotify:user:truckasaurus1:playlist:5yGuoOwRQF3o8NVRRlvCj7', 'name': '90s Hiphop / Gangsta Rap', 'href': 'https://api.spotify.com/v1/users/truckasaurus1/playlists/5yGuoOwRQF3o8NVRRlvCj7'}, {'public': None, 'snapshot_id': 'lSl+DalM6hI5UJfkejtCwkcTyKjlQbDOhTrvI9niH7m+zX+hR5jswQegrji0+DjU', 'id': '6jpj4xWiZe6891Ba3TADOO', 'tracks': {'href': 'https://api.spotify.com/v1/users/jec904/playlists/6jpj4xWiZe6891Ba3TADOO/tracks', 'total': 219}, 'external_urls': {'spotify': 'http://open.spotify.com/user/jec904/playlist/6jpj4xWiZe6891Ba3TADOO'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/jec904'}, 'type': 'user', 'uri': 'spotify:user:jec904', 'href': 'https://api.spotify.com/v1/users/jec904', 'id': 'jec904'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/5fc4b1d3fa12a473b72599a2d950ad5696b206329589ba01e4797b8d98859e79e7f70147f83e86d93b3bba0931af7fdff4a5a197ae9ccd50cc2b4dfacc178aa97cc7e64e9672a8eef88b631484d02c84', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/5fc4b1d3fa12a473b72599a2d950ad5696b206329589ba01e4797b8d98859e79e7f70147f83e86d93b3bba0931af7fdff4a5a197ae9ccd50cc2b4dfacc178aa97cc7e64e9672a8eef88b631484d02c84', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/5fc4b1d3fa12a473b72599a2d950ad5696b206329589ba01e4797b8d98859e79e7f70147f83e86d93b3bba0931af7fdff4a5a197ae9ccd50cc2b4dfacc178aa97cc7e64e9672a8eef88b631484d02c84', 'width': 60}], 'uri': 'spotify:user:jec904:playlist:6jpj4xWiZe6891Ba3TADOO', 'name': '90s Country', 'href': 'https://api.spotify.com/v1/users/jec904/playlists/6jpj4xWiZe6891Ba3TADOO'}, {'public': None, 'snapshot_id': 'NAzpFjabibSDSRIlNQM4LtPGVLyP14W+PtFemfOZ3WIDa1t+tkBeZIE3ubESfD8z', 'id': '0QEvLnkCV2hQx8AVs9VSCq', 'tracks': {'href': 'https://api.spotify.com/v1/users/12145536328/playlists/0QEvLnkCV2hQx8AVs9VSCq/tracks', 'total': 70}, 'external_urls': {'spotify': 'http://open.spotify.com/user/12145536328/playlist/0QEvLnkCV2hQx8AVs9VSCq'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/12145536328'}, 'type': 'user', 'uri': 'spotify:user:12145536328', 'href': 'https://api.spotify.com/v1/users/12145536328', 'id': '12145536328'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/29f1d179c8ab0184f21bf015002de2214754e9d24cfe43a6693027f8b2188806e62c1831fd2cd68b4087e6a8c34321039140c1e13d69614bb1c8f20091142eab23c3273fa73e490f2d04464c69423f75', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/29f1d179c8ab0184f21bf015002de2214754e9d24cfe43a6693027f8b2188806e62c1831fd2cd68b4087e6a8c34321039140c1e13d69614bb1c8f20091142eab23c3273fa73e490f2d04464c69423f75', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/29f1d179c8ab0184f21bf015002de2214754e9d24cfe43a6693027f8b2188806e62c1831fd2cd68b4087e6a8c34321039140c1e13d69614bb1c8f20091142eab23c3273fa73e490f2d04464c69423f75', 'width': 60}], 'uri': 'spotify:user:12145536328:playlist:0QEvLnkCV2hQx8AVs9VSCq', 'name': 'Boybands 90s', 'href': 'https://api.spotify.com/v1/users/12145536328/playlists/0QEvLnkCV2hQx8AVs9VSCq'}, {'public': None, 'snapshot_id': 'xFuRVW3gHlQ2duHjA8Y+n+5dEsl5aewbp0tveVWMXXpWImllg5+tXPpuoNSh+c2Q', 'id': '3XctgNePp5NFKiaIYB8z2F', 'tracks': {'href': 'https://api.spotify.com/v1/users/gunnerwaddell/playlists/3XctgNePp5NFKiaIYB8z2F/tracks', 'total': 119}, 'external_urls': {'spotify': 'http://open.spotify.com/user/gunnerwaddell/playlist/3XctgNePp5NFKiaIYB8z2F'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/gunnerwaddell'}, 'type': 'user', 'uri': 'spotify:user:gunnerwaddell', 'href': 'https://api.spotify.com/v1/users/gunnerwaddell', 'id': 'gunnerwaddell'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/f0264d0abd5d237a49f797cfe1752a69d28a9d1e0b0e75514b3dca50bd0175290bdf10c77adaaeb620f6ec66d8b8bad42954ddaf3798af90b9b8b434a45505776adb49c1f554ea3d272513621bd6284f', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/f0264d0abd5d237a49f797cfe1752a69d28a9d1e0b0e75514b3dca50bd0175290bdf10c77adaaeb620f6ec66d8b8bad42954ddaf3798af90b9b8b434a45505776adb49c1f554ea3d272513621bd6284f', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/f0264d0abd5d237a49f797cfe1752a69d28a9d1e0b0e75514b3dca50bd0175290bdf10c77adaaeb620f6ec66d8b8bad42954ddaf3798af90b9b8b434a45505776adb49c1f554ea3d272513621bd6284f', 'width': 60}], 'uri': 'spotify:user:gunnerwaddell:playlist:3XctgNePp5NFKiaIYB8z2F', 'name': '90s early 2000 country', 'href': 'https://api.spotify.com/v1/users/gunnerwaddell/playlists/3XctgNePp5NFKiaIYB8z2F'}, {'public': None, 'snapshot_id': 'aSYk2sFcfUQitS99gpCYw+eohvnlA+o8kNcfMHDb7eB4+bvyV1hLAW7M+lMNSaYv', 'id': '7zK2WjuX5otv9au92VXsKc', 'tracks': {'href': 'https://api.spotify.com/v1/users/1220108378/playlists/7zK2WjuX5otv9au92VXsKc/tracks', 'total': 662}, 'external_urls': {'spotify': 'http://open.spotify.com/user/1220108378/playlist/7zK2WjuX5otv9au92VXsKc'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/1220108378'}, 'type': 'user', 'uri': 'spotify:user:1220108378', 'href': 'https://api.spotify.com/v1/users/1220108378', 'id': '1220108378'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/53e089d368f4ffe69ac66ef7acd03cf273db9f234bc738a988570b3ad00ff8f756632b8ad90fc58813f894c1300cbdda027ff948ee963640c5126d2968eeccd1b4822115c647069e0de419b86545fbb1', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/53e089d368f4ffe69ac66ef7acd03cf273db9f234bc738a988570b3ad00ff8f756632b8ad90fc58813f894c1300cbdda027ff948ee963640c5126d2968eeccd1b4822115c647069e0de419b86545fbb1', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/53e089d368f4ffe69ac66ef7acd03cf273db9f234bc738a988570b3ad00ff8f756632b8ad90fc58813f894c1300cbdda027ff948ee963640c5126d2968eeccd1b4822115c647069e0de419b86545fbb1', 'width': 60}], 'uri': 'spotify:user:1220108378:playlist:7zK2WjuX5otv9au92VXsKc', 'name': 'Ultimate 90s Playlist', 'href': 'https://api.spotify.com/v1/users/1220108378/playlists/7zK2WjuX5otv9au92VXsKc'}, {'public': None, 'snapshot_id': 'bSeyYo2va/u8/fZWTX9PJ7pfdEzUhv605BWH56JACU1w3PNSztzJFfQji4fJ7pVR', 'id': '6k8WK2AGWnwD37I9kh2zvq', 'tracks': {'href': 'https://api.spotify.com/v1/users/stephaniegeorgopulos/playlists/6k8WK2AGWnwD37I9kh2zvq/tracks', 'total': 209}, 'external_urls': {'spotify': 'http://open.spotify.com/user/stephaniegeorgopulos/playlist/6k8WK2AGWnwD37I9kh2zvq'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/stephaniegeorgopulos'}, 'type': 'user', 'uri': 'spotify:user:stephaniegeorgopulos', 'href': 'https://api.spotify.com/v1/users/stephaniegeorgopulos', 'id': 'stephaniegeorgopulos'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/9032d34a555405e96cf941b46f2f2a4b7aa75a33804bbef29d9f13121c0b58777c7efff77c2011229a63bb59f7044e1fa98e63093726844d26d20dd2fb49306a2f7b5d603361e1e45750711413d52484', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/9032d34a555405e96cf941b46f2f2a4b7aa75a33804bbef29d9f13121c0b58777c7efff77c2011229a63bb59f7044e1fa98e63093726844d26d20dd2fb49306a2f7b5d603361e1e45750711413d52484', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/9032d34a555405e96cf941b46f2f2a4b7aa75a33804bbef29d9f13121c0b58777c7efff77c2011229a63bb59f7044e1fa98e63093726844d26d20dd2fb49306a2f7b5d603361e1e45750711413d52484', 'width': 60}], 'uri': 'spotify:user:stephaniegeorgopulos:playlist:6k8WK2AGWnwD37I9kh2zvq', 'name': '90s R&amp;B', 'href': 'https://api.spotify.com/v1/users/stephaniegeorgopulos/playlists/6k8WK2AGWnwD37I9kh2zvq'}, {'public': None, 'snapshot_id': '+vMVeKIqmjtjzAoZGwbi0v8AZLbPFrqUgmAqBYblyJQyi8p3l43TNdqqPSwNKPPd', 'id': '5DygagPVN6KmHre6MJNAJ4', 'tracks': {'href': 'https://api.spotify.com/v1/users/bigju85/playlists/5DygagPVN6KmHre6MJNAJ4/tracks', 'total': 822}, 'external_urls': {'spotify': 'http://open.spotify.com/user/bigju85/playlist/5DygagPVN6KmHre6MJNAJ4'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/bigju85'}, 'type': 'user', 'uri': 'spotify:user:bigju85', 'href': 'https://api.spotify.com/v1/users/bigju85', 'id': 'bigju85'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/467e12151d2e11c6813fa7804ee8d96ebd1d7ac5708eab87ad4662c94a67d17547766902d49c2d927681dea378e04e46d2f22cc9b722700436f685eca15e922378d2dca9c7d683665e472643b860a41f', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/467e12151d2e11c6813fa7804ee8d96ebd1d7ac5708eab87ad4662c94a67d17547766902d49c2d927681dea378e04e46d2f22cc9b722700436f685eca15e922378d2dca9c7d683665e472643b860a41f', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/467e12151d2e11c6813fa7804ee8d96ebd1d7ac5708eab87ad4662c94a67d17547766902d49c2d927681dea378e04e46d2f22cc9b722700436f685eca15e922378d2dca9c7d683665e472643b860a41f', 'width': 60}], 'uri': 'spotify:user:bigju85:playlist:5DygagPVN6KmHre6MJNAJ4', 'name': '90s Rap', 'href': 'https://api.spotify.com/v1/users/bigju85/playlists/5DygagPVN6KmHre6MJNAJ4'}, {'public': None, 'snapshot_id': 'b5YyIRMEU/0WE+OYt2CGO7uoRjSRccLWKzcJzc04gE35qSICKr+KDxO1mZE+v+/H', 'id': '6ZblzG0k7kzs0Ex7EdFWY6', 'tracks': {'href': 'https://api.spotify.com/v1/users/1232709737/playlists/6ZblzG0k7kzs0Ex7EdFWY6/tracks', 'total': 136}, 'external_urls': {'spotify': 'http://open.spotify.com/user/1232709737/playlist/6ZblzG0k7kzs0Ex7EdFWY6'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/1232709737'}, 'type': 'user', 'uri': 'spotify:user:1232709737', 'href': 'https://api.spotify.com/v1/users/1232709737', 'id': '1232709737'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/4bc3fa03ea66c557fa889ee9684ddc8b2ed94a5e3a1ec3bdc44d89ed93bf99d12138139469731b143a5443882440686191df60791974c312a14eeeb1443f7f3365178fb5a4050a516ab3221388daaf64', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/4bc3fa03ea66c557fa889ee9684ddc8b2ed94a5e3a1ec3bdc44d89ed93bf99d12138139469731b143a5443882440686191df60791974c312a14eeeb1443f7f3365178fb5a4050a516ab3221388daaf64', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/4bc3fa03ea66c557fa889ee9684ddc8b2ed94a5e3a1ec3bdc44d89ed93bf99d12138139469731b143a5443882440686191df60791974c312a14eeeb1443f7f3365178fb5a4050a516ab3221388daaf64', 'width': 60}], 'uri': 'spotify:user:1232709737:playlist:6ZblzG0k7kzs0Ex7EdFWY6', 'name': '90s PARTY', 'href': 'https://api.spotify.com/v1/users/1232709737/playlists/6ZblzG0k7kzs0Ex7EdFWY6'}, {'public': None, 'snapshot_id': 'sqjT9Ws60MZTay5r3UzHelKm9qD/mgeZ9kYFyFw9Og4nX4mVvgz3WhA+Red3MfTF', 'id': '5t30PswiZDYfZAIrTwGr2V', 'tracks': {'href': 'https://api.spotify.com/v1/users/12143691853/playlists/5t30PswiZDYfZAIrTwGr2V/tracks', 'total': 88}, 'external_urls': {'spotify': 'http://open.spotify.com/user/12143691853/playlist/5t30PswiZDYfZAIrTwGr2V'}, 'type': 'playlist', 'owner': {'external_urls': {'spotify': 'http://open.spotify.com/user/12143691853'}, 'type': 'user', 'uri': 'spotify:user:12143691853', 'href': 'https://api.spotify.com/v1/users/12143691853', 'id': '12143691853'}, 'collaborative': False, 'images': [{'height': 640, 'url': 'https://mosaic.scdn.co/640/eb646ba4b6c6db5fcc180d091512bdcf497ed3f063e47b9e1420e2effd4d4537c464c27e6e598f2ed1fec99e6c187e2f67bc28d5367d5db9664b1835f7c286b445154de89205dcfd05e3db6647555d87', 'width': 640}, {'height': 300, 'url': 'https://mosaic.scdn.co/300/eb646ba4b6c6db5fcc180d091512bdcf497ed3f063e47b9e1420e2effd4d4537c464c27e6e598f2ed1fec99e6c187e2f67bc28d5367d5db9664b1835f7c286b445154de89205dcfd05e3db6647555d87', 'width': 300}, {'height': 60, 'url': 'https://mosaic.scdn.co/60/eb646ba4b6c6db5fcc180d091512bdcf497ed3f063e47b9e1420e2effd4d4537c464c27e6e598f2ed1fec99e6c187e2f67bc28d5367d5db9664b1835f7c286b445154de89205dcfd05e3db6647555d87', 'width': 60}], 'uri': 'spotify:user:12143691853:playlist:5t30PswiZDYfZAIrTwGr2V', 'name': 'lovesongs 80s to 90s', 'href': 'https://api.spotify.com/v1/users/12143691853/playlists/5t30PswiZDYfZAIrTwGr2V'}], 'total': 2538}}
+
+# 17. What is the data type of the search result? Print it.
+
+print(type(playlist_search_result))
+
+# 18. What are all of the keys that the search result has?
+
+print(playlist_search_result.keys())
+
+# 19. Take a look at 'playlists' - what keys does it have?
+
+print(playlist_search_result['playlists'].keys())
+
+# 20. Save the list of playlists into a variable called 'playlists'
+
+playlists =  playlist_search_result['playlists']['items']
+
+# 21. Print the title of every playlist
+
+for playlist in playlists:
+  print(playlist['name'])
+
+# 22. Loop through every playlist, printing its keys
+
+for playlist in playlists:
+  print(playlist.keys())
+
+# 23. What is the data type of a playlist's 'tracks'?
+
+for playlist in playlists:
+  print(type(playlist['tracks']))
+
+# 24. Print the name and number of tracks for every playlist
+
+print("------ Name and number of tracks for each playlist")
+
+for playlist in playlists:
+  print(playlist['name'], playlist['tracks']['total'])
+
+# 25. We like curation! Loop through the playlists again, but only display those with fewer than 200 tracks.
+
+print("------ Only those withe fewer than 200 tracks")
+
+for playlist in playlists:
+  if playlist['tracks']['total'] &lt; 200:
+    print(playlist['name'], playlist['tracks']['total'])
+</code></pre>
+</div>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

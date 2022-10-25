@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Sqlite and pandas</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/algorithms-2017/classes/sqlite/sqlite-and-pandas/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Sqlite and pandas">
+  <meta property="twitter:title" content="Sqlite and pandas">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Algorithms, Lede 2017</a> &gt;  Sqlite and pandas</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Sqlite and pandas</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/algorithms-2017/classes/sqlite/sqlite-and-pandas.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="open-up-a-new-notebook">Open up a NEW NOTEBOOK</h1>
+
+<p>Have it be in the same directory as <code class="highlighter-rouge">CD_Transactions_07-23-2017.CSV</code></p>
+
+<h1 id="open-up-a-shell">Open up a SHELL</h1>
+
+<p><code class="highlighter-rouge">cd</code> to the same directory as <code class="highlighter-rouge">CD_Transactions_07-23-2017.CSV</code>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">ls</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>03-classwork.zip                indiv_header_file.csv
+CD_Transactions_07-23-2017.CSV  links.txt
+Sqlite and pandas.ipynb
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">%%</span><span class="n">time</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"CD_Transactions_07-23-2017.CSV"</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>CPU times: user 3.17 s, sys: 278 ms, total: 3.45 s
+Wall time: 3.51 s
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># .import CD_Transactions_07-23-2017.CSV contribs</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">ls</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>03-classwork.zip                alaska.db
+CD_Transactions_07-23-2017.CSV  indiv_header_file.csv
+Sqlite and pandas.ipynb         links.txt
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sqlite3</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Connect to our database</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">"alaska.db"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">%%</span><span class="n">time</span>
+<span class="c"># Make our query, get the results from the database</span>
+<span class="c"># give it the QUERY and give it the CONNECTION</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="s">"SELECT * FROM contribs"</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>CPU times: user 6.42 s, sys: 1.08 s, total: 7.5 s
+Wall time: 8.68 s
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Result</th>
+      <th>Date</th>
+      <th>Transaction Type</th>
+      <th>Payment Type</th>
+      <th>Payment Detail</th>
+      <th>Amount</th>
+      <th>Last/Business Name</th>
+      <th>First Name</th>
+      <th>Address</th>
+      <th>City</th>
+      <th>...</th>
+      <th>--------</th>
+      <th>Report Type</th>
+      <th>Election Name</th>
+      <th>Election Type</th>
+      <th>Municipality</th>
+      <th>Office</th>
+      <th>Filer Type</th>
+      <th>Name</th>
+      <th>Report Year</th>
+      <th>Submitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>12864</td>
+      <td>$350.00</td>
+      <td>Alaska Republican Party State Account</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>...</td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>School Board</td>
+      <td>Candidate</td>
+      <td>Kay E Schuster</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Credit Card</td>
+      <td></td>
+      <td>$500.00</td>
+      <td>Coffey</td>
+      <td>Dan</td>
+      <td></td>
+      <td></td>
+      <td>...</td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>School Board</td>
+      <td>Candidate</td>
+      <td>Kay E Schuster</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>3047</td>
+      <td>$300.00</td>
+      <td>ACS Employees PAC</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>...</td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>Assembly</td>
+      <td>Candidate</td>
+      <td>Pete Petersen</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Credit Card</td>
+      <td></td>
+      <td>$500.00</td>
+      <td>Holmes</td>
+      <td>Patrick</td>
+      <td></td>
+      <td></td>
+      <td>...</td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td></td>
+      <td>Group</td>
+      <td>Alaska Republican Party</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Credit Card</td>
+      <td></td>
+      <td>$500.00</td>
+      <td>Gonzales</td>
+      <td>Mark L.</td>
+      <td></td>
+      <td></td>
+      <td>...</td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td></td>
+      <td>Group</td>
+      <td>Alaska Republican Party</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 26 columns</p>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">%%</span><span class="n">time</span>
+<span class="c"># df[df.Office == 'School Board'].head()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="s">"SELECT * FROM contribs WHERE Office = 'School Board'"</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>CPU times: user 45.2 ms, sys: 7.88 ms, total: 53.1 ms
+Wall time: 69.8 ms
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="s">"SELECT * FROM contribs"</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Result</th>
+      <th>Date</th>
+      <th>Transaction Type</th>
+      <th>Payment Type</th>
+      <th>Payment Detail</th>
+      <th>Amount</th>
+      <th>Last/Business Name</th>
+      <th>First Name</th>
+      <th>Address</th>
+      <th>City</th>
+      <th>...</th>
+      <th>--------</th>
+      <th>Report Type</th>
+      <th>Election Name</th>
+      <th>Election Type</th>
+      <th>Municipality</th>
+      <th>Office</th>
+      <th>Filer Type</th>
+      <th>Name</th>
+      <th>Report Year</th>
+      <th>Submitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>12864</td>
+      <td>$350.00</td>
+      <td>Alaska Republican Party State Account</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>...</td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>School Board</td>
+      <td>Candidate</td>
+      <td>Kay E Schuster</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Credit Card</td>
+      <td></td>
+      <td>$500.00</td>
+      <td>Coffey</td>
+      <td>Dan</td>
+      <td></td>
+      <td></td>
+      <td>...</td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>School Board</td>
+      <td>Candidate</td>
+      <td>Kay E Schuster</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>3047</td>
+      <td>$300.00</td>
+      <td>ACS Employees PAC</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>...</td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>Assembly</td>
+      <td>Candidate</td>
+      <td>Pete Petersen</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Credit Card</td>
+      <td></td>
+      <td>$500.00</td>
+      <td>Holmes</td>
+      <td>Patrick</td>
+      <td></td>
+      <td></td>
+      <td>...</td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td></td>
+      <td>Group</td>
+      <td>Alaska Republican Party</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Credit Card</td>
+      <td></td>
+      <td>$500.00</td>
+      <td>Gonzales</td>
+      <td>Mark L.</td>
+      <td></td>
+      <td></td>
+      <td>...</td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td></td>
+      <td>Group</td>
+      <td>Alaska Republican Party</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 26 columns</p>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">"../just-alaska.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s">"display.max_columns"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Result</th>
+      <th>Date</th>
+      <th>Transaction Type</th>
+      <th>Payment Type</th>
+      <th>Payment Detail</th>
+      <th>Amount</th>
+      <th>Last/Business Name</th>
+      <th>First Name</th>
+      <th>Address</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Zip</th>
+      <th>Country</th>
+      <th>Occupation</th>
+      <th>Employer</th>
+      <th>Purpose of Expenditure</th>
+      <th>--------</th>
+      <th>Report Type</th>
+      <th>Election Name</th>
+      <th>Election Type</th>
+      <th>Municipality</th>
+      <th>Office</th>
+      <th>Filer Type</th>
+      <th>Name</th>
+      <th>Report Year</th>
+      <th>Submitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>12864</td>
+      <td>$350.00</td>
+      <td>Alaska Republican Party State Account</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Alaska</td>
+      <td></td>
+      <td>USA</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td></td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>School Board</td>
+      <td>Candidate</td>
+      <td>Kay E Schuster</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Credit Card</td>
+      <td></td>
+      <td>$500.00</td>
+      <td>Coffey</td>
+      <td>Dan</td>
+      <td></td>
+      <td></td>
+      <td>Alaska</td>
+      <td></td>
+      <td>USA</td>
+      <td>Attorney</td>
+      <td>Self-Employed</td>
+      <td></td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>School Board</td>
+      <td>Candidate</td>
+      <td>Kay E Schuster</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Check</td>
+      <td>3047</td>
+      <td>$300.00</td>
+      <td>ACS Employees PAC</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Alaska</td>
+      <td></td>
+      <td>USA</td>
+      <td>PAC</td>
+      <td>PAC</td>
+      <td></td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td>Assembly</td>
+      <td>Candidate</td>
+      <td>Pete Petersen</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Credit Card</td>
+      <td></td>
+      <td>$500.00</td>
+      <td>Holmes</td>
+      <td>Patrick</td>
+      <td></td>
+      <td></td>
+      <td>Alaska</td>
+      <td></td>
+      <td>USA</td>
+      <td>Associate Manager</td>
+      <td>Juneau 1 LLC</td>
+      <td>Individual Contribution</td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td></td>
+      <td>Group</td>
+      <td>Alaska Republican Party</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>4/3/2017</td>
+      <td>Income</td>
+      <td>Credit Card</td>
+      <td></td>
+      <td>$500.00</td>
+      <td>Gonzales</td>
+      <td>Mark L.</td>
+      <td></td>
+      <td></td>
+      <td>Alaska</td>
+      <td></td>
+      <td>USA</td>
+      <td>Executive</td>
+      <td>Alcohol Detection Services of Alaska</td>
+      <td>Individual Contribution</td>
+      <td></td>
+      <td>24 Hour Report</td>
+      <td>2017 - Anchorage Municipal Election</td>
+      <td>Anchorage Municipal</td>
+      <td>Anchorage, Municipality of</td>
+      <td></td>
+      <td>Group</td>
+      <td>Alaska Republican Party</td>
+      <td>2017</td>
+      <td>4/3/2017</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'First Name'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>                   24751
+J                   7229
+Michael             4881
+D                   4514
+John                4296
+R                   4170
+Robert              4127
+C                   3892
+M                   3876
+James               3722
+David               3443
+S                   3222
+A                   2804
+B                   2793
+T                   2615
+William             2222
+K                   2182
+Richard             2114
+MICHAEL             2082
+JAMES               1986
+Brian               1845
+Daniel              1839
+JOHN                1779
+L                   1728
+G                   1672
+Mark                1665
+Eric                1641
+ROBERT              1607
+Scott               1588
+Thomas              1568
+                   ...  
+Cassamdra              1
+AERIALE                1
+Mildred P.             1
+MYLA                   1
+Woolsey                1
+CAROL ANN              1
+SHAWNAH                1
+M R                    1
+Kelin                  1
+LEA  B                 1
+META                   1
+Oran                   1
+ETHAN                  1
+Caherine               1
+Zuzanna                1
+Darrelle               1
+Debe                   1
+ROBERTO                1
+Ilaura                 1
+MARNI                  1
+ Jake                  1
+Hugh (Bud)             1
+ Ervon                 1
+Saraya                 1
+ Boko                  1
+JOYLLE                 1
+EUNSUK                 1
+Chappel                1
+CATHARINE              1
+Gabriel                1
+Name: First Name, Length: 15813, dtype: int64
+</code></pre>
+</div>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

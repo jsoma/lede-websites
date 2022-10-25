@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Scraping supplement - Selenium</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2019/classes/selenium/scraping-supplement/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Scraping supplement - Selenium">
+  <meta property="twitter:title" content="Scraping supplement - Selenium">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2019</a> &gt;  Scraping supplement - Selenium</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Scraping supplement - Selenium</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <blockquote>
+  <p>You should work through a notebook as you read this page. You can find the notebook <a href="http://jonathansoma.com/lede/static/selenium-supplement.ipynb">here</a>. We’re using Selenium for the code, but the same concepts can also apply to BeautifulSoup.</p>
+</blockquote>
+
+<p>Normally when you’re scraping stuff from the Internet, you use classes to pick the parts you want.</p>
+
+<blockquote>
+  <p>This section is <strong>Part 1</strong> in the notebook.</p>
+</blockquote>
+
+<p>For example, let’s say we have a simple page about a book.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;h1 class="title"&gt;How to Scrape Things&lt;/h1&gt;
+&lt;h3 class="subhead"&gt;Some Supplemental Materials&lt;/h3&gt;
+&lt;p class="byline"&gt;By Jonathan Soma&lt;/p&gt;
+</code></pre>
+</div>
+
+<p>If we wanted to select the title, we’d just ask for it.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">'title'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Problem solved! But we don’t want the <em>tag</em>, we want the <em>text</em>. So let’s add a <code class="highlighter-rouge">.text</code> onto the end of it and print it.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">'title'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>If we want the rest of it - the subhead and the byline - we just use the same classes that they have in the HTML.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">'title'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">'subhead'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">'byline'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="downgrading-to-tag-names">Downgrading to tag names</h2>
+
+<blockquote>
+  <p>This section is <strong>Part 2</strong> in the notebook.</p>
+</blockquote>
+
+<p>Sometimes people don’t use classes, but it isn’t a big deal. For the previous example, maybe the page looks like this instead:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;h1&gt;How to Scrape Things&lt;/h1&gt;
+&lt;h3&gt;Some Supplemental Materials&lt;/h3&gt;
+&lt;p&gt;By Jonathan Soma&lt;/p&gt;
+</code></pre>
+</div>
+
+<p>Luckily we can also select items on the page by their <strong>tag name</strong>, like <code class="highlighter-rouge">h1</code> or <code class="highlighter-rouge">h3</code> or <code class="highlighter-rouge">p</code>. No classes? No problem!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_tag_name</span><span class="p">(</span><span class="s">'h1'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_tag_name</span><span class="p">(</span><span class="s">'h3'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_tag_name</span><span class="p">(</span><span class="s">'p'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="multiples-of-the-same-tag">Multiples of the same tag</h2>
+
+<blockquote>
+  <p>This section is <strong>Part 3</strong> in the notebook.</p>
+</blockquote>
+
+<p>It starts to get more complicated when we have <strong>multiples of the same tag</strong> on the same page. Before it was easy - <code class="highlighter-rouge">h1</code> was the title, <code class="highlighter-rouge">h3</code> was the subhead, and <code class="highlighter-rouge">p</code> was the byline.</p>
+
+<p><strong>But what if they all use the same tag?</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;p&gt;How to Scrape Things&lt;/p&gt;
+&lt;p&gt;Some Supplemental Materials&lt;/p&gt;
+&lt;p&gt;By Jonathan Soma&lt;/p&gt;
+</code></pre>
+</div>
+
+<p>This is a little more complicated, but think about how you would explain it to me with words - “the title is the <em>first</em> paragraph. The subhead is the <em>second</em> paragraph. The byline is the <em>third</em> (or <em>last</em>) paragraph.” <strong>We can do the same thing with Python.</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Find all of the paragraphs on the page</span>
+<span class="n">paragraphs</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'p'</span><span class="p">)</span>
+<span class="c"># Print out the first one, the second one, the third one</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"The title is"</span><span class="p">,</span> <span class="n">paragraphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Subhead is"</span><span class="p">,</span> <span class="n">paragraphs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Byline is"</span><span class="p">,</span> <span class="n">paragraphs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>We don’t usually have a lot of paragraphs in a row, though, usually it’s <strong>table cells</strong>, the <code class="highlighter-rouge">td</code> tag. For example, a row in a table looks like this.</p>
+
+<h2 id="moving-toward-tables">Moving toward tables</h2>
+
+<blockquote>
+  <p>This section is <strong>Part 4</strong> in the notebook. I had to cheat a little and add a <code class="highlighter-rouge">&lt;table&gt;</code> in the sample page, otherwise Chrome would ignore the row and cells.</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;tr&gt;
+  &lt;td&gt;How to Scrape Things&lt;/td&gt;
+  &lt;td&gt;Some Supplemental Materials&lt;/td&gt;
+  &lt;td&gt;By Jonathan Soma&lt;/td&gt;
+&lt;/tr&gt;
+</code></pre>
+</div>
+
+<p>You would say the same thing as before - “the title is the <em>first</em> table cell. The subhead is the <em>second</em> table cell. The byline is the <em>third</em> (or <em>last</em>) table cell.” The code is the same, too!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Find all of the tds on the page</span>
+<span class="n">cells</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'td'</span><span class="p">)</span>
+<span class="c"># Print out the first one, the second one, the third one</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"The title is"</span><span class="p">,</span> <span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Subhead is"</span><span class="p">,</span> <span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Byline is"</span><span class="p">,</span> <span class="n">cells</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="storing-in-a-dictionary">Storing in a dictionary</h2>
+
+<blockquote>
+  <p>This section is <strong>Part 5</strong> in the notebook.</p>
+</blockquote>
+
+<p>Printing out data isn’t very useful, usually we’re more interested in <strong>saving it</strong>. We do that with a pandas dataframe.</p>
+
+<p>When we make our own pandas dataframe, we build it from a <strong>list of dictionaries</strong>. But to make a list of dictionaries, we first need a single dictionary, right? Let’s use the same HTML…</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;tr&gt;
+  &lt;td&gt;How to Scrape Things&lt;/td&gt;
+  &lt;td&gt;Some Supplemental Materials&lt;/td&gt;
+  &lt;td&gt;By Jonathan Soma&lt;/td&gt;
+&lt;/tr&gt;
+</code></pre>
+</div>
+
+<p>…and change our Python to create a dictionary instead of printing it out…</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Find all of the tds on the page</span>
+<span class="n">cells</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'td'</span><span class="p">)</span>
+
+<span class="c"># Start with an empty dictionary</span>
+<span class="n">book</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c"># Add the keys one by one</span>
+<span class="n">book</span><span class="p">[</span><span class="s">'title'</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+<span class="n">book</span><span class="p">[</span><span class="s">'subhead'</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+<span class="n">book</span><span class="p">[</span><span class="s">'byline'</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+
+<span class="c"># Print it out</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Book looks like"</span><span class="p">,</span> <span class="n">book</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="working-with-tables">Working with tables</h2>
+
+<blockquote>
+  <p>This section is <strong>Part 6</strong> in the notebook.</p>
+</blockquote>
+
+<p>When we have a table in HTML, usually we want to go through each of the rows.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;tr&gt;
+  Row of stuff
+&lt;/tr&gt;
+&lt;tr&gt;
+  Row of stuff
+&lt;/tr&gt;
+&lt;tr&gt;
+  Row of stuff
+&lt;/tr&gt;
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">rows</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'tr'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">"Our row looks like"</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>But each one of those rows always has stuff inside, right? It looks more like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;tr&gt;
+  &lt;td&gt;How to Scrape Things&lt;/td&gt;
+  &lt;td&gt;Some Supplemental Materials&lt;/td&gt;
+  &lt;td&gt;By Jonathan Soma&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td&gt;How to Scrape Many Things&lt;/td&gt;
+  &lt;td&gt;But, Is It Even Possible?&lt;/td&gt;
+  &lt;td&gt;By Sonathan Joma&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td&gt;The End of Scraping&lt;/td&gt;
+  &lt;td&gt;Let's All Use CSV Files&lt;/td&gt;
+  &lt;td&gt;By Amos Nathanos&lt;/td&gt;
+&lt;/tr&gt;
+</code></pre>
+</div>
+
+<p>We want to separate the titles and the subheads and the bylines instead of just using <code class="highlighter-rouge">row.text</code>. First, let’s talk about the <strong>wrong way</strong> to do this.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Find all of the tds on the page</span>
+<span class="n">cells</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'td'</span><span class="p">)</span>
+<span class="c"># Print out the first one, the second one, the third one</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"The title is"</span><span class="p">,</span> <span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Subhead is"</span><span class="p">,</span> <span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Byline is"</span><span class="p">,</span> <span class="n">cells</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>This is going to get <strong>all of the <code class="highlighter-rouge">td</code> elements on the page</strong>.  You won’t know if they’re in the first row, or the second row, or the third row.</p>
+
+<p>What we need to do instead is loop through each row (like we did before), and then ask for the <code class="highlighter-rouge">td</code> elements <em>inside of that row</em>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">rows</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'tr'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+  <span class="c"># Find all of the tds inside of THAT ONE ROW</span>
+  <span class="n">cells</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'td'</span><span class="p">)</span>
+  <span class="c"># Print out the first one, the second one, the third one</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">"The title is"</span><span class="p">,</span> <span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">"Subhead is"</span><span class="p">,</span> <span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">"Byline is"</span><span class="p">,</span> <span class="n">cells</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Before we were asking for the <code class="highlighter-rouge">td</code> elements on the <strong>whole page</strong>, now we are asking for the <code class="highlighter-rouge">td</code> elements inside of <strong>each row</strong>. That’s why we changed from <code class="highlighter-rouge">driver.find_elements</code> to <code class="highlighter-rouge">row.find_elements</code>.</p>
+
+<p>When we loop through the rows and use <code class="highlighter-rouge">row.find_elements</code> instead of <code class="highlighter-rouge">driver.find_elements</code>, Selenium only sees what is inside of <strong>that row</strong>, so it looks like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;td&gt;The End of Scraping&lt;/td&gt;
+&lt;td&gt;Let's All Use CSV Files&lt;/td&gt;
+&lt;td&gt;By Amos Nathanos&lt;/td&gt;
+</code></pre>
+</div>
+
+<p>Just like the simple scraping from before!</p>
+
+<blockquote>
+  <p><code class="highlighter-rouge">driver.find_elements</code> looks on the entire page, while <code class="highlighter-rouge">something.find_elements</code> looks inside of that element</p>
+</blockquote>
+
+<h2 id="changing-it-to-a-real-table">Changing it to a real table</h2>
+
+<blockquote>
+  <p>This section is <strong>Part 7</strong> in the notebook.</p>
+</blockquote>
+
+<p>What happens when this turns into a real table, with a <code class="highlighter-rouge">&lt;table&gt;</code> tag surrounding it?</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;table id="booklist"&gt;
+  &lt;tr&gt;
+    &lt;td&gt;How to Scrape Things&lt;/td&gt;
+    &lt;td&gt;Some Supplemental Materials&lt;/td&gt;
+    &lt;td&gt;By Jonathan Soma&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;How to Scrape Many Things&lt;/td&gt;
+    &lt;td&gt;But, Is It Even Possible?&lt;/td&gt;
+    &lt;td&gt;By Sonathan Joma&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;The End of Scraping&lt;/td&gt;
+    &lt;td&gt;Let's All Use CSV Files&lt;/td&gt;
+    &lt;td&gt;By Amos Nathanos&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre>
+</div>
+
+<p>Well, exactly nothing. You still want to loop through each row, and then you still want to get the cells inside. Exact same code as before!</p>
+
+<p>If we wanted to get a little crazier, though, or if there were multiple tables on the page, we could grab the table by its <code class="highlighter-rouge">id</code>, then pick out only the <code class="highlighter-rouge">tr</code> elements inside of it.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">table</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'booklist'</span><span class="p">)</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'tr'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+  <span class="c"># Find all of the tds inside of THAT ONE ROW</span>
+  <span class="n">cells</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'td'</span><span class="p">)</span>
+  <span class="c"># Print out the first one, the second one, the third one</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">"../The title is"</span><span class="p">,</span> <span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">"Subhead is"</span><span class="p">,</span> <span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">"Byline is"</span><span class="p">,</span> <span class="n">cells</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>You don’t <em>have</em> to do that in this situation, though, since it’s the only table on the page.</p>
+
+<h2 id="changing-it-to-a-dictionary">Changing it to a dictionary</h2>
+
+<blockquote>
+  <p>This section is <strong>Part 8</strong> in the notebook.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Note:</strong> We selected the table first last time, but it’s unnecessary. We’re going back to the original version because it’s simpler.</p>
+</blockquote>
+
+<p>Now instead of printing, we’ll save it to a dictionary. It’s just a small change, same as we did before.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">rows</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'tr'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+  <span class="n">cells</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'td'</span><span class="p">)</span>
+
+  <span class="n">book</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="n">book</span><span class="p">[</span><span class="s">'title'</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+  <span class="n">book</span><span class="p">[</span><span class="s">'subhead'</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+  <span class="n">book</span><span class="p">[</span><span class="s">'byline'</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">"Our book looks like"</span><span class="p">,</span> <span class="n">book</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>We build a new book each time we go through the loop, but what happens when we’re done? We don’t use it for anything! We throw it away! So sad, so sad.</p>
+
+<p>Let’s change our code so that every time we make a new <code class="highlighter-rouge">book</code>, we save it into a list.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">rows</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'tr'</span><span class="p">)</span>
+
+<span class="n">books</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+  <span class="n">cells</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'td'</span><span class="p">)</span>
+
+  <span class="n">book</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="n">book</span><span class="p">[</span><span class="s">'title'</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+  <span class="n">book</span><span class="p">[</span><span class="s">'subhead'</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+  <span class="n">book</span><span class="p">[</span><span class="s">'byline'</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">"Our book looks like"</span><span class="p">)</span>
+  <span class="n">books</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"Done! Our list looks like"</span><span class="p">,</span> <span class="n">books</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="creating-a-dataframe-and-saving">Creating a dataframe and saving</h2>
+
+<blockquote>
+  <p>This section is <strong>Part 9</strong> in the notebook.</p>
+</blockquote>
+
+<p>Now that we have a list of dictionaries, it’s easy to move it to a dataframe.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">books</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>Pandas takes the keys and turns them into columns, and each element in our list becomes a row in our dataframe. From there, it’s a quick jump to saving it as a csv.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Use index=False to prevent the 'extra' number column</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">"output.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>And then we’re all set!</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

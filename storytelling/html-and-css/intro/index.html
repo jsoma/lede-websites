@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Introduction</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/storytelling/html-and-css/intro/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Introduction">
+  <meta property="twitter:title" content="Introduction">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Storytelling with Data, Lede 2016</a> &gt;  Introduction</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Introduction</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="what-is-html">What is HTML?</h2>
+
+<p>HTML - <strong>Hypertext Markup Language</strong> - describes all of the content on a page. It goes inside of an <code class="highlighter-rouge">.html</code> file.</p>
+
+<p><strong>index.html</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>This is a #1 header<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;h2&gt;</span>This is a #2 header<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;p&gt;</span>This is a paragraph<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>This is another paragraph<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"image-holder"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"an-image.png"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"caption"</span><span class="nt">&gt;</span>Here is an image<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<p>See? A few headers, a couple paragraphs, and an image. HTML is easy.</p>
+
+<p>The only interesting parts are <code class="highlighter-rouge">id</code> and <code class="highlighter-rouge">class</code>, which allows you to describe different kinds of content.</p>
+
+<p>If you look at the example, the <code class="highlighter-rouge">div</code> has an <code class="highlighter-rouge">id</code> of <code class="highlighter-rouge">image-holder</code>, which is basically a name that is unique to that element.</p>
+
+<p>You can do the same thing and assign classes, except they don’t need to be unique.</p>
+
+<hr />
+
+<h2 id="what-is-css">What is CSS?</h2>
+
+<p>CSS - <strong>Cascading Style Sheets</strong> - take the boring plain HTML content and spice it up with colors, fonts and particular sizes.</p>
+
+<p>In order to specify these colors, fonts, etc, you need to put your CSS into your web page! It can go in three different places</p>
+
+<ol>
+  <li>In a <code class="highlighter-rouge">lt;style&amp;gt;</code> tag in the HTML page</li>
+  <li>In a separate <code class="highlighter-rouge">.css</code> file, linked to by a <code class="highlighter-rouge">&amp;lt;link&amp;gt;</code> tag in the HTML page</li>
+  <li>Attached to a specific element (<code class="highlighter-rouge">h1</code>, <code class="highlighter-rouge">p</code>, etc)</li>
+</ol>
+
+<p>(If you don’t like my description maybe <a href="http://www.w3schools.com/css/css_howto.asp">try this one</a>)</p>
+
+<hr />
+
+<h3 id="in-a-style-tag">1. In a <code class="highlighter-rouge">style</code> tag</h3>
+
+<p>The second-worst way you can include your styles in a page is just put them <em>right into the page</em>.</p>
+
+<p><strong>index.html</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;style&gt;</span>
+<span class="nt">h1</span> <span class="p">{</span>
+	<span class="nl">color</span><span class="p">:</span> <span class="no">red</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">p</span> <span class="p">{</span>
+	<span class="nl">background</span><span class="p">:</span> <span class="no">blue</span><span class="p">;</span>
+	<span class="nl">font-family</span><span class="p">:</span> <span class="n">Helvetica</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c">/* 
+	Take the element with an id of 'image-holder'
+	and give it 30 pixels of padding
+*/</span>
+<span class="nf">#image-holder</span> <span class="p">{</span>
+	<span class="nl">padding</span><span class="p">:</span> <span class="m">30px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c">/* 
+	Take the element with a class of 'caption'
+	and make the font smaller
+*/</span>
+<span class="nc">.caption</span> <span class="p">{</span>
+	<span class="nl">font-size</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">&lt;/style&gt;</span>
+<span class="nt">&lt;h1&gt;</span>This is a #1 header<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;h2&gt;</span>This is a #2 header<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;p&gt;</span>This is a paragraph<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>This is another paragraph<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"image-holder"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"an-image.png"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"caption"</span><span class="nt">&gt;</span>Here is an image<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h3 id="in-a-separate-css-file">2. In a separate <code class="highlighter-rouge">.css</code> file</h3>
+
+<p>Otherwise, you can take all of the content that’s inside of the <code class="highlighter-rouge">&amp;lt;style&amp;gt;</code> tag and put it into a separate file (do NOT include the <code class="highlighter-rouge">style</code> tags!). Then you just link to it like this:</p>
+
+<p><strong>my-stylesheet.css</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">h1</span> <span class="p">{</span>
+	<span class="nl">color</span><span class="p">:</span> <span class="no">red</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">p</span> <span class="p">{</span>
+	<span class="nl">background</span><span class="p">:</span> <span class="no">blue</span><span class="p">;</span>
+	<span class="nl">font-family</span><span class="p">:</span> <span class="n">Helvetica</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c">/* 
+	Take the element with an id of 'image-holder'
+	and give it 30 pixels of padding
+*/</span>
+<span class="nf">#image-holder</span> <span class="p">{</span>
+	<span class="nl">padding</span><span class="p">:</span> <span class="m">30px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c">/* 
+	Take the element with a class of 'caption'
+	and make the font smaller
+*/</span>
+<span class="nc">.caption</span> <span class="p">{</span>
+	<span class="nl">font-size</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>index.html</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"your-stylesheet.css"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;h1&gt;</span>This is a #1 header<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;h2&gt;</span>This is a #2 header<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;p&gt;</span>This is a paragraph<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>This is another paragraph<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"image-holder"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"an-image.png"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"caption"</span><span class="nt">&gt;</span>Here is an image<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h3 id="with-each-element-aka-inline">3. With each element, a.k.a “inline”</h3>
+
+<p>Never do this.</p>
+
+<p><strong>index.html</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;h1</span> <span class="na">style=</span><span class="s">"color: red"</span><span class="nt">&gt;</span>This is a #1 header<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;h2&gt;</span>This is a #2 header<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;p</span> <span class="na">style=</span><span class="s">"font-family: Helvetica;"</span><span class="nt">&gt;</span>This is a paragraph<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;p</span> <span class="na">style=</span><span class="s">"font-family: Helvetica;"</span><span class="nt">&gt;</span>This is another paragraph<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"image-holder"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"an-image.png"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;p</span> <span class="na">style=</span><span class="s">"font-size: 10px;"</span> <span class="na">class=</span><span class="s">"caption"</span><span class="nt">&gt;</span>Here is an image<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<p>My eyes bled just typing that. It isn’t reusable, it isn’t maintainable, it’s easy to have typos, and it’s just plain garbage. Don’t do it.</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Setting up Cmder as your perfect Windows shell</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2019/terminal/setting-up-cmdr-as-windows-shell/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Setting up Cmder as your perfect Windows shell">
+  <meta property="twitter:title" content="Setting up Cmder as your perfect Windows shell">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Foundations, Lede 2019</a> &gt;  Setting up Cmder as your perfect Windows shell</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Setting up Cmder as your perfect Windows shell</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>Command Prompt is pretty bad on Windows, but by installing Cmder we can make it a little less painful. Let’s download Cmder and set everything up.</p>
+
+<h2 id="downloading-cmder">Downloading Cmder</h2>
+
+<p>First, visit <a href="https://cmder.net/">the Cmder homepage</a> at <a href="https://cmder.net">https://cmder.net/</a>.</p>
+
+<p><img src="../images/cmdr-dl-1.png" alt="" /></p>
+
+<p>Scroll down a bit to find the download button. You want to download the <strong>full version</strong>, not the mini version.</p>
+
+<p><img src="../images/cmdr-dl-2.png" alt="" /></p>
+
+<p>It’s a little big, so it might take a minute to download.</p>
+
+<h2 id="unzipping-cmder">Unzipping Cmder</h2>
+
+<p>When you download <code class="highlighter-rouge">.zip</code> files on Windows, Windows tries hard to protect you from that file doing anything bad. We know this is a good file, so we need to <strong>unblock it</strong>.</p>
+
+<p>Right-click <code class="highlighter-rouge">Cmder.zip</code>, then select <code class="highlighter-rouge">Properties</code> from the menu.</p>
+
+<p><img src="../images/cmdr-00-properties.png" alt="" /></p>
+
+<p>Check the box next to <strong>Unblock</strong> and then click <strong>Apply</strong>.</p>
+
+<p><img src="../images/cmdr-01-unblock.png" alt="" /></p>
+
+<p>Now we can extract the files inside of the zip. Right-click <code class="highlighter-rouge">Cmder.zip</code> again, then select <strong>Extract All…</strong>.</p>
+
+<p><img src="../images/cmdr-03-extract-all.png" alt="" /></p>
+
+<p>When the extract menu comes up, check the box that says <strong>Show extracted files when complete</strong>. This saves us from having to double-click the folder it makes (I’m lazy!)</p>
+
+<p><img src="../images/cmdr-04-extract-options.png" alt="" /></p>
+
+<p>When extraction is complete, you can run the <code class="highlighter-rouge">Cmder</code> file by double-clicking it.</p>
+
+<p><img src="../images/cmdr-05-run.png" alt="" /></p>
+
+<p>…but we aren’t ready yet!!! We need to make sure when we open up a new shell it always puts us in the same place.</p>
+
+<h2 id="setting-cmder-settings">Setting Cmder settings</h2>
+
+<p>Click the top-left corner of the Cmr window, and select <strong>Settings</strong>.</p>
+
+<p><img src="../images/cmdr-07-open-settings.png" alt="" /></p>
+
+<p>Now jump through a few steps:</p>
+
+<ul>
+  <li>On the left-hand side, look under <strong>Startup</strong> and click <strong>Tasks</strong></li>
+  <li>Select <code class="highlighter-rouge"><span class="p">{</span><span class="err">cmd::Cmder</span><span class="p">}</span></code> on the left hand side</li>
+  <li>Check the box for <strong>Default task for new console</strong></li>
+  <li>Click <strong>Startup dir…</strong></li>
+</ul>
+
+<p><img src="../images/cmdr-09-set-settings.png" alt="" /></p>
+
+<p>We’re going to find our “home directory,” which is the directory with our name on it. Mine is in <code class="highlighter-rouge">C:\Users\soma\</code>, yours is probably somewhere similar. After you’ve clicked it, select <strong>OK</strong> and then <strong>Save settings</strong>.</p>
+
+<p><img src="../images/cmdr-11-browse-home-dir.png" alt="" /></p>
+
+<p><strong>Now close Cmder, and open it again.</strong></p>
+
+<p>If everything went well, you’ll see your home directory listed. See how mine is <code class="highlighter-rouge">C:\Users\soma</code>? And if you type <code class="highlighter-rouge">ls</code> and press enter, you’ll see a list of files and folders, including <code class="highlighter-rouge">Downloads</code> and <code class="highlighter-rouge">Documents</code>. If it doesn’t work, make sure you closed Cmder and opened it again.</p>
+
+<p><img src="../images/cmdr-13-test-configuration.png" alt="" /></p>
+
+<h2 id="moving-cmder-around">Moving Cmder around</h2>
+
+<p>Keeping Cmder in our Downloads folder seems kind of weird, so let’s move it somewhere more convenient. I’m moving it to the Desktop, but you can put it anywhere you think is good (or even leave it in Downloads, if you’re REALLY lazy and you promise not to delete it).</p>
+
+<blockquote>
+  <p>Make sure you are using the <code class="highlighter-rouge">cmder</code> directory. Do <strong>not</strong> move the <code class="highlighter-rouge">Cmder</code> application or <code class="highlighter-rouge">cmder.zip</code>.</p>
+</blockquote>
+
+<p><img src="../images/cmdr-15-drag-to-desktop.png" alt="" /></p>
+
+<h2 id="international-text-in-cmder">International text in Cmder</h2>
+
+<p>Now we’re going to change one last setting - <strong>enable default UTF-8</strong>. This means characters from around the world will be displayed correctly!</p>
+
+<p>To see these characters displayed incorrectly, run the following command in the terminal:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl https://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-demo.txt
+</code></pre>
+</div>
+
+<p><img src="../images/cmdr-17-utf8-bad.png" alt="" /></p>
+
+<p>Oof, ouch, yowch. That looks terrible!</p>
+
+<p>If you <a href="https://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-demo.txt">open it in a browser</a>, though, it looks okay. Weird, right? That’s because your browser is speaking UTF-8 (international text) but by default, <strong>Windows only uses the text for your country</strong>. For example:</p>
+
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/ISO/IEC_8859-1">Latin-1</a> for USA and Western Europe</li>
+  <li><a href="https://en.wikipedia.org/wiki/Code_page_932_(Microsoft_Windows)">MS932</a> for Japan</li>
+  <li><a href="https://en.wikipedia.org/wiki/GB_18030">GB 18030</a> for Chinese</li>
+</ul>
+
+<p>To fix this, we need to convince our computer to use UTF-8 in the terminal. Techincally, this is called “changing the default code page.”</p>
+
+<p>To change the default code page, open up <strong>Settings</strong> again by clicking on the top left-hand corner of the Cmder window, but this time go to <strong>Startup &gt; Environment</strong>. Add a new line that says <code class="highlighter-rouge">chcp utf-8</code> and save your settings.</p>
+
+<blockquote>
+  <p>The <code class="highlighter-rouge">chcp</code> means <strong>ch</strong>ange <strong>c</strong>ode <strong>p</strong>age</p>
+</blockquote>
+
+<p><img src="../images/cmdr-18-utf8.png" alt="" /></p>
+
+<p>After you’ve saved the settings, close your Cmder window and open a new one. Try to run this code again.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl https://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-demo.txt
+</code></pre>
+</div>
+
+<p>It should be nice and beautiful! If not, are you sure you closed your terminal and opened a new one?</p>
+
+<p><img src="../images/cmdr-19-utf8-good.png" alt="" /></p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

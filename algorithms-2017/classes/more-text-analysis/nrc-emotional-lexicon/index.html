@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>NRC Emotional Lexicon</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/algorithms-2017/classes/more-text-analysis/nrc-emotional-lexicon/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="NRC Emotional Lexicon">
+  <meta property="twitter:title" content="NRC Emotional Lexicon">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Algorithms, Lede 2017</a> &gt;  NRC Emotional Lexicon</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">NRC Emotional Lexicon</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/algorithms-2017/classes/more-text-analysis/nrc-emotional-lexicon.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="nrc-emotional-lexicon">NRC Emotional Lexicon</h1>
+
+<p>This is the <a href="http://saifmohammad.com/WebPages/NRC-
+Emotion-Lexicon.htm">NRC Emotional Lexicon</a>: “The NRC Emotion Lexicon is a list of English words and
+their associations with eight basic emotions (anger, fear, anticipation, trust,
+surprise, sadness, joy, and disgust) and two sentiments (negative and positive).
+The annotations were manually done by crowdsourcing.”</p>
+
+<p>I don’t trust it, but everyone uses it.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">filepath</span> <span class="o">=</span> <span class="s">"NRC-Emotion-Lexicon-v0.92/NRC-emotion-lexicon-wordlevel-alphabetized-v0.92.txt"</span>
+<span class="n">emolex_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span>  <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s">"word"</span><span class="p">,</span> <span class="s">"emotion"</span><span class="p">,</span> <span class="s">"association"</span><span class="p">],</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">)</span>
+<span class="n">emolex_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>word</th>
+      <th>emotion</th>
+      <th>association</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>aback</td>
+      <td>anger</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>aback</td>
+      <td>anticipation</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>aback</td>
+      <td>disgust</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>aback</td>
+      <td>fear</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>aback</td>
+      <td>joy</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>aback</td>
+      <td>negative</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>aback</td>
+      <td>positive</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>aback</td>
+      <td>sadness</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>aback</td>
+      <td>surprise</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>aback</td>
+      <td>trust</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>abacus</td>
+      <td>anger</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>abacus</td>
+      <td>anticipation</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Seems kind of simple. A column for a word, a column for an emotion, and whether
+it’t associated or not. You see “aback aback aback aback” because there’s a row
+for every word-emotion pair.</p>
+
+<h2 id="what-emotions-are-covered">What emotions are covered?</h2>
+
+<p>Let’s look at the ‘emotion’ column. What can we talk about?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">emolex_df</span><span class="o">.</span><span class="n">emotion</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>array(['anger', 'anticipation', 'disgust', 'fear', 'joy', 'negative',
+       'positive', 'sadness', 'surprise', 'trust'], dtype=object)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">emolex_df</span><span class="o">.</span><span class="n">emotion</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>fear            14182
+anger           14182
+trust           14182
+anticipation    14182
+sadness         14182
+disgust         14182
+surprise        14182
+joy             14182
+positive        14182
+negative        14182
+Name: emotion, dtype: int64
+</code></pre>
+</div>
+
+<h2 id="how-many-words-does-each-emotion-have">How many words does each emotion have?</h2>
+
+<p>Each emotion doesn’t have 14182 words associated with it, unfortunately! <code class="highlighter-rouge">1</code>
+means “is associated” and <code class="highlighter-rouge">0</code> means “is not associated.”</p>
+
+<p>We’re only going to care about “is associated.”</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">emolex_df</span><span class="p">[</span><span class="n">emolex_df</span><span class="o">.</span><span class="n">association</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">emotion</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>negative        3324
+positive        2312
+fear            1476
+anger           1247
+trust           1231
+sadness         1191
+disgust         1058
+anticipation     839
+joy              689
+surprise         534
+Name: emotion, dtype: int64
+</code></pre>
+</div>
+
+<p>In theory things could be <em>kind of</em> angry or <em>kind of</em> joyous, but it doesn’t
+work like that. If you want to spend a few hundred dollars on Mechnical Turk,
+though, <em>your own personal version can.</em></p>
+
+<h2 id="what-if-i-just-want-the-angry-words">What if I just want the angry words?</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">emolex_df</span><span class="p">[(</span><span class="n">emolex_df</span><span class="o">.</span><span class="n">association</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">emolex_df</span><span class="o">.</span><span class="n">emotion</span> <span class="o">==</span> <span class="s">'anger'</span><span class="p">)]</span><span class="o">.</span><span class="n">word</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>30          abandoned
+40        abandonment
+170             abhor
+180         abhorrent
+270           abolish
+300       abomination
+630             abuse
+1120         accursed
+1130       accusation
+1150          accused
+1160          accuser
+1170         accusing
+1470       actionable
+1650            adder
+2390        adversary
+2400          adverse
+2410        adversity
+2500         advocacy
+2840          affront
+2920        aftermath
+3030       aggravated
+3040      aggravating
+3050      aggravation
+3080       aggression
+3090       aggressive
+3100        aggressor
+3140         agitated
+3150        agitation
+3190            agony
+3570       alcoholism
+             ...     
+138470        warlike
+138530           warp
+138600        warrior
+138680         wasted
+138690       wasteful
+139330          wench
+139550           whip
+139950        willful
+140020          wimpy
+140030          wince
+140220       wireless
+140290          witch
+140300     witchcraft
+140610            wop
+140640          words
+140870      worthless
+140900          wound
+140920      wrangling
+140960          wrath
+140970          wreak
+140990          wreck
+141000        wrecked
+141060         wretch
+141090          wring
+141210     wrongdoing
+141220       wrongful
+141230        wrongly
+141470           yell
+141500           yelp
+141640          youth
+Name: word, Length: 1247, dtype: object
+</code></pre>
+</div>
+
+<h2 id="reshaping">Reshaping</h2>
+
+<p>You can also reshape the data in order to look at it a slightly different way</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">emolex_words</span> <span class="o">=</span> <span class="n">emolex_df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s">'word'</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s">'emotion'</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s">'association'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">emolex_words</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>emotion</th>
+      <th>word</th>
+      <th>anger</th>
+      <th>anticipation</th>
+      <th>disgust</th>
+      <th>fear</th>
+      <th>joy</th>
+      <th>negative</th>
+      <th>positive</th>
+      <th>sadness</th>
+      <th>surprise</th>
+      <th>trust</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>aback</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>abacus</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>abandon</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>abandoned</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>abandonment</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>You can now pull out individual words…</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># If you didn't reset_index you could do this more easily</span>
+<span class="c"># by doing emolex_words.loc['charitable']</span>
+<span class="n">emolex_words</span><span class="p">[</span><span class="n">emolex_words</span><span class="o">.</span><span class="n">word</span> <span class="o">==</span> <span class="s">'charitable'</span><span class="p">]</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>emotion</th>
+      <th>word</th>
+      <th>anger</th>
+      <th>anticipation</th>
+      <th>disgust</th>
+      <th>fear</th>
+      <th>joy</th>
+      <th>negative</th>
+      <th>positive</th>
+      <th>sadness</th>
+      <th>surprise</th>
+      <th>trust</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2001</th>
+      <td>charitable</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>…or individual emotions….</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">emolex_words</span><span class="p">[</span><span class="n">emolex_words</span><span class="o">.</span><span class="n">anger</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>emotion</th>
+      <th>word</th>
+      <th>anger</th>
+      <th>anticipation</th>
+      <th>disgust</th>
+      <th>fear</th>
+      <th>joy</th>
+      <th>negative</th>
+      <th>positive</th>
+      <th>sadness</th>
+      <th>surprise</th>
+      <th>trust</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3</th>
+      <td>abandoned</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>abandonment</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>abhor</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>abhorrent</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>abolish</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>…or multiple emotions!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">emolex_words</span><span class="p">[(</span><span class="n">emolex_words</span><span class="o">.</span><span class="n">joy</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">emolex_words</span><span class="o">.</span><span class="n">negative</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>emotion</th>
+      <th>word</th>
+      <th>anger</th>
+      <th>anticipation</th>
+      <th>disgust</th>
+      <th>fear</th>
+      <th>joy</th>
+      <th>negative</th>
+      <th>positive</th>
+      <th>sadness</th>
+      <th>surprise</th>
+      <th>trust</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>61</th>
+      <td>abundance</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1018</th>
+      <td>balm</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1382</th>
+      <td>boisterous</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1916</th>
+      <td>celebrity</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2004</th>
+      <td>charmed</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>The useful part is going to be just getting words for a <strong>single emotion.</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Angry words</span>
+<span class="n">emolex_words</span><span class="p">[</span><span class="n">emolex_words</span><span class="o">.</span><span class="n">anger</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">word</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>3          abandoned
+4        abandonment
+17             abhor
+18         abhorrent
+27           abolish
+30       abomination
+63             abuse
+112         accursed
+113       accusation
+115          accused
+116          accuser
+117         accusing
+147       actionable
+165            adder
+239        adversary
+240          adverse
+241        adversity
+250         advocacy
+284          affront
+292        aftermath
+303       aggravated
+304      aggravating
+305      aggravation
+308       aggression
+309       aggressive
+310        aggressor
+314         agitated
+315        agitation
+319            agony
+357       alcoholism
+            ...     
+13847        warlike
+13853           warp
+13860        warrior
+13868         wasted
+13869       wasteful
+13933          wench
+13955           whip
+13995        willful
+14002          wimpy
+14003          wince
+14022       wireless
+14029          witch
+14030     witchcraft
+14061            wop
+14064          words
+14087      worthless
+14090          wound
+14092      wrangling
+14096          wrath
+14097          wreak
+14099          wreck
+14100        wrecked
+14106         wretch
+14109          wring
+14121     wrongdoing
+14122       wrongful
+14123        wrongly
+14147           yell
+14150           yelp
+14164          youth
+Name: word, Length: 1247, dtype: object
+</code></pre>
+</div>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

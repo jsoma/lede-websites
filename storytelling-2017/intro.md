@@ -1,0 +1,1 @@
+These notes are for **Storytelling with Data**, a Fall 2017 course for the [Lede Program](http://ledeprogram.com) at [Columbia University Graduate School of Journalism](http://journalism.columbia.edu).

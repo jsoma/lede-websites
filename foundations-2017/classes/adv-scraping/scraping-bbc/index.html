@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Scraping - BBC</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2017/classes/adv-scraping/scraping-bbc/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Scraping - BBC">
+  <meta property="twitter:title" content="Scraping - BBC">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2017</a> &gt;  Scraping - BBC</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Scraping - BBC</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations-2017/classes/adv-scraping/scraping-bbc.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="scraping-httpwwwbbccouknews">Scraping: http://www.bbc.co.uk/news</h1>
+
+<p>Let’s try to scrape the frontpage of BBC News. We’re looking for</p>
+
+<ul>
+  <li>Headlines</li>
+  <li>Summary</li>
+  <li>Article link</li>
+</ul>
+
+<h2 id="getting-started">Getting started</h2>
+
+<p>We’ll start by <strong>importing the necessary libraries</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span></code></pre></figure>
+
+<p>And then move into <strong>downloading the page</strong> and <strong>importing it into
+BeautifulSoup</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://www.bbc.co.uk/news'</span><span class="p">)</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'html.parser'</span><span class="p">)</span></code></pre></figure>
+
+<p>A lot of people call the analyzed page variable <code class="highlighter-rouge">soup</code> but for once in my life I
+actually go against the popular thing - I like to call it <code class="highlighter-rouge">doc</code>, since it helps
+me remember that it’s the <em>entire document</em>.</p>
+
+<h2 id="attempt-one-grabbing-the-tags-directly">ATTEMPT ONE: Grabbing the tags directly</h2>
+
+<p>If we look at the page, we try to use the little arrow-selecty-thing to pick up
+the headlines and <strong>disaster strikes</strong>. We can’t touch it! Apparently it’s the
+ENTIRE BLOCK or something crazy like that?</p>
+
+<p>But luckily we understand HTML, so we can click around on the right-hand
+Elements page. We navigate to the <code class="highlighter-rouge">h3</code> tag, which we know is the headline based
+on the tag name and the content.</p>
+
+<p>Hm, what if we just grab all of the <code class="highlighter-rouge">h3</code> tags?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">headlines</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'h3'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">headline</span> <span class="ow">in</span> <span class="n">headlines</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>US 'will not repeat' GCHQ wiretap claims
+George Osborne to edit London newspaper
+'Huge advance' in fighting biggest killer
+Sturgeon up for referendum date talks
+No punishment for man who raped girl, 12
+Dunham hits back after weight criticism
+US warns N Korea of military option
+US warns N Korea of military option
+Guinness for royals on St Patrick's Day
+Mother jailed for hiding baby's death
+Man dies charging iPhone in bath
+Hungary puts migrants in containers
+Love Actually cast reunites for Comic Relief
+Sizing John wins Cheltenham Gold Cup
+Miliband's joke steals Osborne's limelight
+BBC News Channel
+BBC Radio 4 - PM
+Jam? Meet the Michael Jackson traffic cop
+Bake Off line-up: A winning recipe?
+Weekly quiz: In which soap did Ed Sheeran appear?
+What's the etiquette on vaping?
+Tall driver told to 'grow up' by judge
+The mystery of the murder in the Lucky Holiday Hotel
+Britain’s bungled effort to clean up its first big oil spill
+Sweden's Got Talent: The pop star with sleep paralysis
+George Osborne: From history buff to austerity editor
+Reality Check: Is education spending at a record level?
+When will a second referendum take place?
+Defining moment for US and Germany
+
+Live
+Sportsday - Sizing John wins the Cheltenham Gold Cup
+
+
+Sport
+Leicester face Atletico in last eight
+
+
+Sport
+Jeremy Guscott's Six Nations hot steppers
+
+
+Sport
+Man Utd drawn against Anderlecht
+
+
+Classic hits
+</code></pre>
+</div>
+
+<p>SO EASY, right? Kind of? Mostly it worked? …except it doesn’t have the link,
+nor does it have the summary.</p>
+
+<p>Okay, so we could also get all of the <code class="highlighter-rouge">a</code> tags, but there are probably a lot of
+garbage <code class="highlighter-rouge">a</code> tags - footer content and stuff. Maybe the article <code class="highlighter-rouge">a</code> tags have a
+special class? If we take a look, we see <code class="highlighter-rouge">class="gs-c-promo-heading nw-o-link-
+split__anchor gs-o-faux-block-link__overlay-link gel-pica-bold"</code>. This isn’t
+just one class, it’s <strong>many classes</strong>.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">gs-c-promo-heading</code></li>
+  <li><code class="highlighter-rouge">nw-o-link-split__anchor</code></li>
+  <li><code class="highlighter-rouge">gs-o-faux-block-link__overlay-link</code></li>
+  <li><code class="highlighter-rouge">gel-pica-bold</code></li>
+</ul>
+
+<p>This is where guesswork comes ib. I think <code class="highlighter-rouge">gs-c-promo-heading</code> seems reasonable!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">links</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'gs-c-promo-heading'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>US 'will not repeat' GCHQ wiretap claims
+George Osborne to edit London newspaper
+'Huge advance' in fighting biggest killer
+Sturgeon up for referendum date talks
+No punishment for man who raped girl, 12
+Dunham hits back after weight criticism
+US warns N Korea of military option
+US warns N Korea of military option
+VideoGuinness for royals on St Patrick's Day
+Mother jailed for hiding baby's death
+Man dies charging iPhone in bath
+VideoHungary puts migrants in containers
+VideoLove Actually cast reunites for Comic Relief
+Sizing John wins Cheltenham Gold Cup
+Miliband's joke steals Osborne's limelight
+VideoBBC News Channel
+AudioBBC Radio 4 - PM
+VideoJam? Meet the Michael Jackson traffic cop
+Bake Off line-up: A winning recipe?
+Weekly quiz: In which soap did Ed Sheeran appear?
+What's the etiquette on vaping?
+Tall driver told to 'grow up' by judge
+The mystery of the murder in the Lucky Holiday Hotel
+Britain’s bungled effort to clean up its first big oil spill
+Sweden's Got Talent: The pop star with sleep paralysis
+George Osborne: From history buff to austerity editor
+Reality Check: Is education spending at a record level?
+When will a second referendum take place?
+Defining moment for US and Germany
+</code></pre>
+</div>
+
+<p>That looks pretty good, too! It’s getting the <code class="highlighter-rouge">h3</code> text because the <code class="highlighter-rouge">h3</code> is
+inside of the <code class="highlighter-rouge">a</code> tag, but it doesn’t have the <em>actual link</em>, the URL. If we
+look at the <code class="highlighter-rouge">a</code> tag…</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;a class="gs-c-promo-heading nw-o-link-split__anchor gs-o-faux-block- link__overlay-link gel-pica-bold" href="/news/world-middle-east-39302560"&gt;
+</code></pre>
+</div>
+
+<p>…the URL is hiding in the <code class="highlighter-rouge">href</code> attribute. Once we have the link, it’s
+actually easy to get an attribute, you just use <code class="highlighter-rouge">['href']</code></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">links</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'gs-c-promo-heading'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">link</span><span class="p">[</span><span class="s">'href'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>US 'will not repeat' GCHQ wiretap claims
+/news/uk-39300191
+George Osborne to edit London newspaper
+/news/uk-39304944
+'Huge advance' in fighting biggest killer
+/news/health-39305640
+Sturgeon up for referendum date talks
+/news/uk-scotland-scotland-politics-39299305
+No punishment for man who raped girl, 12
+/news/uk-scotland-edinburgh-east-fife-39305042
+Dunham hits back after weight criticism
+/news/entertainment-arts-39303458
+US warns N Korea of military option
+/news/world-asia-39297031
+US warns N Korea of military option
+/news/world-asia-39297031
+VideoGuinness for royals on St Patrick's Day
+/news/uk-39308969
+Mother jailed for hiding baby's death
+/news/uk-england-london-39305951
+Man dies charging iPhone in bath
+/news/uk-39307418
+VideoHungary puts migrants in containers
+/news/world-europe-39301003
+VideoLove Actually cast reunites for Comic Relief
+/news/entertainment-arts-39301010
+Sizing John wins Cheltenham Gold Cup
+/sport/horse-racing/39307278
+Miliband's joke steals Osborne's limelight
+/news/blogs-trending-39302846
+VideoBBC News Channel
+/news/10318089
+AudioBBC Radio 4 - PM
+http://www.bbc.co.uk/iplayer/console/bbc_radio_four
+VideoJam? Meet the Michael Jackson traffic cop
+/news/world-africa-39290410
+Bake Off line-up: A winning recipe?
+/news/entertainment-arts-39301921
+Weekly quiz: In which soap did Ed Sheeran appear?
+/news/magazine-39295274
+What's the etiquette on vaping?
+/news/uk-39301430
+Tall driver told to 'grow up' by judge
+/news/uk-england-tyne-39303893
+The mystery of the murder in the Lucky Holiday Hotel
+/news/magazine-39297987
+Britain’s bungled effort to clean up its first big oil spill
+/news/uk-england-39223308
+Sweden's Got Talent: The pop star with sleep paralysis
+/news/entertainment-arts-39293139
+George Osborne: From history buff to austerity editor
+/news/entertainment-arts-39304904
+Reality Check: Is education spending at a record level?
+/news/education-39302746
+When will a second referendum take place?
+/news/uk-scotland-scotland-politics-39306159
+Defining moment for US and Germany
+/news/world-europe-39254553
+</code></pre>
+</div>
+
+<p>Cool, ‘eh? But now we have one final problem: <strong>we don’t have the summaries</strong>.
+So well, we can just use the Inspector to pick one out…</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;p class="gs-c-promo-summary gel-long-primer gs-u-mt nw-c-promo- summary"&gt;Trade and Nato are high on the agenda as the much-anticipated Washington talks begin.&lt;/p&gt;
+</code></pre>
+</div>
+
+<p>Once again, we have a selection of options. <code class="highlighter-rouge">gs-c-promo-summary</code> seems
+promising.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">summaries</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'p'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'gs-c-promo-summary'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">summary</span> <span class="ow">in</span> <span class="n">summaries</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">summary</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Allegations that Donald Trump was wiretapped are "nonsense", the UK's intelligence agency says.
+Former chancellor faces calls to stand down as MP after being named as editor of London Evening Standard.
+The innovative new injection cuts cholesterol to lowest levels ever seen in medicine.
+Nicola Sturgeon wants talks with Theresa May about a referendum date that suits both sides.
+A man who admitted raping a 12-year-old girl in Edinburgh is given an absolute discharge.
+Actress Lena Dunham, star and creator of Girls, says her recent weight loss "isn't a triumph".
+America's top diplomat says the US could strike if Pyongyang's weapons threat rises.
+America's top diplomat says the US could strike if Pyongyang's weapons threat rises.
+The Duke and Duchess of Cambridge drank Guinness at a St Patrick's Day lunch with the Irish Guards.
+Victoria Gayle pleaded guilty to preventing the lawful and decent burial of her baby son.
+A coroner and safety experts have since issued warnings about using electrical appliances in the bathroom.
+Camps for asylum seekers are being built out of shipping containers, despite international criticism.
+Film-maker Richard Curtis has brought the original stars of Love Actually back together in a special sequel for Comic Relief.
+Irish challenger Sizing John wins the Cheltenham Gold Cup for jockey Robbie Power and trainer Jessica Harrington.
+The latest breaking and developing stories 
+An evening look at the day's events
+</code></pre>
+</div>
+
+<p>Great, but <strong>now we’re stuck:</strong> we don’t have a way of combining the headlines
+and links to the summaries, and even if we did (cough<code class="highlighter-rouge">zip</code>cough), we couldn’t be
+sure that they’d match up.</p>
+
+<p>What the heck do we do now?</p>
+
+<h2 id="attempt-two-parent-elements">ATTEMPT TWO: Parent elements</h2>
+
+<p>When you’re just grabbing one element - a link and the text inside, or a list of
+headlines - you are only interested in the element you’re looking at. Sometimes,
+though, <strong>you need to scrape multiple elements at the same time.</strong> When this
+happens, you need to look at what they all have in common.</p>
+
+<p>If we look at a summary, a link and a title, we might find something like the
+following. <strong>It’s a trainwreck, but it’s what we want.</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    &lt;div class="gs-c-promo nw-c-promo gs-o-faux-block-link gs-u-pb gs-u- pb+@m gs-c-promo--inline gs-c-promo--stacked@m nw-u-w-auto gs-c-promo--flex" data-entityid="container-top-stories#3"&gt;
+            &lt;div class="gs-c-promo-image gs-u-display-none gs-u-display- inline-block@xs gel-1/2@xs gel-1/1@m"&gt;
+                    &lt;div class="gs-o-media-island"&gt;
+                            &lt;div class="gs-o-responsive-image gs-o- responsive-image--16by9"&gt;&lt;img alt="Yemeni police gather round bodies of Somali refugees (17/03/17)" class="qa-lazyload-image lazyautosizes lazyloaded" data- sizes="auto" data-srcset="https://ichef.bbci.co.uk/live- experience/cps/240/cpsprodpb/14F5A/production/_95205858_hi038526789.jpg 240w, https://ichef.bbci.co.uk/live- experience/cps/320/cpsprodpb/14F5A/production/_95205858_hi038526789.jpg 320w, https://ichef.bbci.co.uk/live- experience/cps/480/cpsprodpb/14F5A/production/_95205858_hi038526789.jpg 480w, https://ichef.bbci.co.uk/live- experience/cps/624/cpsprodpb/14F5A/production/_95205858_hi038526789.jpg 624w, https://ichef.bbci.co.uk/live- experience/cps/800/cpsprodpb/14F5A/production/_95205858_hi038526789.jpg 800w" data-widths="[240,320,480,624,800]" sizes="177px" src="data:image/gif;base64,R0l GODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" srcset="https://ichef.bbci.co.uk/live- experience/cps/240/cpsprodpb/14F5A/production/_95205858_hi038526789.jpg 240w, https://ichef.bbci.co.uk/live- experience/cps/320/cpsprodpb/14F5A/production/_95205858_hi038526789.jpg 320w, https://ichef.bbci.co.uk/live- experience/cps/480/cpsprodpb/14F5A/production/_95205858_hi038526789.jpg 480w, https://ichef.bbci.co.uk/live- experience/cps/624/cpsprodpb/14F5A/production/_95205858_hi038526789.jpg 624w, https://ichef.bbci.co.uk/live- experience/cps/800/cpsprodpb/14F5A/production/_95205858_hi038526789.jpg 800w"&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="gs-c-promo-body gel-1/2@xs gel-1/1@m gs-u-mt@m"&gt;
+                    &lt;div&gt;
+                            &lt;a class="gs-c-promo-heading nw-o-link- split__anchor gs-o-faux-block-link__overlay-link gel-pica-bold" href="/news/world-middle-east-39302560"&gt;
+                            &lt;h3 class="gs-c-promo-heading__title gel-pica- bold nw-o-link-split__text"&gt;Attack on Yemen migrant boat kills 42&lt;/h3&gt;&lt;/a&gt;
+                            &lt;p class="gs-c-promo-summary gel-long-primer gs- u-mt nw-c-promo-summary"&gt;It is unclear who was behind a helicopter attack which killed 42 refugees and injured 80.&lt;/p&gt;
+                    &lt;/div&gt;
+                    &lt;ul class="gs-o-list-inline gs-o-list-inline--divided gel-brevier gs-u-mt-"&gt;
+                            &lt;li&gt;&lt;span class="gs-c-timestamp gs-o-bullet gs- o-bullet- nw-c-timestamp"&gt;&lt;span class="gs-o-bullet__icon gel-icon"&gt;&lt;svg viewbox="0 0 32 32"&gt;
+                            &lt;polygon points="17,15.4 17,6 15,6 15,16.6 23.8,21.7 24.8,19.9"&gt;&lt;/polygon&gt;
+                            &lt;path d="M16,4c6.6,0,12,5.4,12,12c0,6.6-5.4,12-12,12S4,22.6,4,16C4,9.4,9.4,4,16,4 M16,0C7.2,0,0,7.2,0,16c0,8.8,7.2,16,16,16 s16-7.2,16-16C32,7.2,24.8,0,16,0L16,0z"&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/span&gt;&lt;time class="gs-o- bullet__text date qa-status-date relative-time" data-datetime="1h" data- seconds="1489768430" data-timestamp-inserted="true" datetime="2017-03-17T16:33:50.000Z"&gt;48 minutes ago&lt;/time&gt;&lt;/span&gt;&lt;/li&gt;
+                            &lt;li&gt;
+                                    &lt;a aria-label="From Middle East" class="gs-c-section-link gs-c-section-link--truncate nw-c-section-link nw-o-link nw-o-link--no-visited-state" href="/news/world/middle_east"&gt;&lt;span aria- hidden="true"&gt;Middle East&lt;/span&gt;&lt;/a&gt;
+                            &lt;/li&gt;
+                    &lt;/ul&gt;
+            &lt;/div&gt;
+    &lt;/div&gt;
+</code></pre>
+</div>
+
+<p>The very top part is the <strong>parent element</strong>, all of the other elements are
+inside of it. In order to scrape them all together, we need to grab each parent
+(each <em>story</em>) and then grab the parts inside of it (the headline, links, image,
+etc).</p>
+
+<p>The part’s class is <code class="highlighter-rouge">class="gs-c-promo nw-c-promo gs-o-faux-block-link gs-u-pb
+gs-u-pb+@m gs-c-promo--inline gs-c-promo--stacked@m nw-u-w-auto gs-c-promo--
+flex" data-entityid="container-top-stories#3"</code>, which would be terrifying except
+that we’ve struck onto a theme and suspect <code class="highlighter-rouge">gs-c-promo</code> might be what we’re
+looking for.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">stories</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'gs-c-promo'</span> <span class="p">})</span>
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">stories</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">story</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>US 'will not repeat' GCHQ wiretap claimsAllegations that Donald Trump was wiretapped are "nonsense", the UK's intelligence agency says.18m19 minutes agoUKRelated contentVideoSpicer cites Fox News claimsVideoWiretap saga in two minutesDid Obama wiretap Trump Tower?
+George Osborne to edit London newspaperFormer chancellor faces calls to stand down as MP after being named as editor of London Evening Standard.13m13 minutes agoUK Politics Comments
+'Huge advance' in fighting biggest killerThe innovative new injection cuts cholesterol to lowest levels ever seen in medicine.4h4 hours agoHealth
+Sturgeon up for referendum date talksNicola Sturgeon wants talks with Theresa May about a referendum date that suits both sides.3h3 hours agoScotland politics Comments
+No punishment for man who raped girl, 12A man who admitted raping a 12-year-old girl in Edinburgh is given an absolute discharge.4h4 hours agoEdinburgh, Fife &amp; East Scotland
+Dunham hits back after weight criticismActress Lena Dunham, star and creator of Girls, says her recent weight loss "isn't a triumph".4h4 hours agoEntertainment &amp; Arts
+US warns N Korea of military optionAmerica's top diplomat says the US could strike if Pyongyang's weapons threat rises.1m2 minutes agoAsia Comments
+US warns N Korea of military optionAmerica's top diplomat says the US could strike if Pyongyang's weapons threat rises.1m2 minutes agoAsia Comments
+VideoVideoGuinness for royals on St Patrick's DayThe Duke and Duchess of Cambridge drank Guinness at a St Patrick's Day lunch with the Irish Guards.2h2 hours agoUK
+Mother jailed for hiding baby's deathVictoria Gayle pleaded guilty to preventing the lawful and decent burial of her baby son.1han hour agoLondon
+Man dies charging iPhone in bathA coroner and safety experts have since issued warnings about using electrical appliances in the bathroom.1h43 minutes agoUK
+VideoVideoHungary puts migrants in containersCamps for asylum seekers are being built out of shipping containers, despite international criticism.10h10 hours agoEurope
+VideoVideoLove Actually cast reunites for Comic ReliefFilm-maker Richard Curtis has brought the original stars of Love Actually back together in a special sequel for Comic Relief.6h6 hours agoEntertainment &amp; Arts
+Sizing John wins Cheltenham Gold CupIrish challenger Sizing John wins the Cheltenham Gold Cup for jockey Robbie Power and trainer Jessica Harrington.1ma minute agoBBC Sport
+Miliband's joke steals Osborne's limelight
+VideoWatch LiveVideoBBC News ChannelThe latest breaking and developing stories 
+AudioListen LiveAudioBBC Radio 4 - PMAn evening look at the day's events
+VideoVideoJam? Meet the Michael Jackson traffic cop
+Bake Off line-up: A winning recipe?
+Weekly quiz: In which soap did Ed Sheeran appear?
+What's the etiquette on vaping?
+Tall driver told to 'grow up' by judge
+The mystery of the murder in the Lucky Holiday Hotel
+Britain’s bungled effort to clean up its first big oil spill
+Sweden's Got Talent: The pop star with sleep paralysis
+George Osborne: From history buff to austerity editor
+Reality Check: Is education spending at a record level?
+When will a second referendum take place?
+Defining moment for US and Germany
+</code></pre>
+</div>
+
+<p>So… kind of?</p>
+
+<p>We apparently can’t use <code class="highlighter-rouge">.text</code> because it’s going to get take <em>all</em> of the text
+inside, it’s going to take the headline <em>and</em> the summary. What we need to do
+instead is</p>
+
+<ul>
+  <li>STEP ONE: Use the doc to get the story</li>
+  <li>STEP TWO: Use the story to get the headline</li>
+  <li>STEP THREE: Use the story to get the link</li>
+  <li>STEP FOUR: Use the story to get the summary</li>
+</ul>
+
+<h3 id="step-one-use-the-doc-to-get-the-story">STEP ONE: Use the doc to get the story</h3>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">stories</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'gs-c-promo'</span> <span class="p">})</span>
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">stories</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"This is a story"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+This is a story
+</code></pre>
+</div>
+
+<h2 id="step-two-use-the-story-to-get-the-headline">STEP TWO: Use the story to get the headline</h2>
+
+<p>Now we can do the same thing to find the link, and then use <code class="highlighter-rouge">['href']</code> to grab
+the link URL.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">stories</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'gs-c-promo'</span> <span class="p">})</span>
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">stories</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"THIS IS A STORY"</span><span class="p">)</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'h3'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">link</span><span class="p">[</span><span class="s">'href'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>THIS IS A STORY
+US 'will not repeat' GCHQ wiretap claims
+/news/uk-39300191
+THIS IS A STORY
+George Osborne to edit London newspaper
+/news/uk-39304944
+THIS IS A STORY
+'Huge advance' in fighting biggest killer
+/news/health-39305640
+THIS IS A STORY
+Sturgeon up for referendum date talks
+/news/uk-scotland-scotland-politics-39299305
+THIS IS A STORY
+No punishment for man who raped girl, 12
+/news/uk-scotland-edinburgh-east-fife-39305042
+THIS IS A STORY
+Dunham hits back after weight criticism
+/news/entertainment-arts-39303458
+THIS IS A STORY
+US warns N Korea of military option
+/news/world-asia-39297031
+THIS IS A STORY
+US warns N Korea of military option
+/news/world-asia-39297031
+THIS IS A STORY
+Guinness for royals on St Patrick's Day
+/news/uk-39308969
+THIS IS A STORY
+Mother jailed for hiding baby's death
+/news/uk-england-london-39305951
+THIS IS A STORY
+Man dies charging iPhone in bath
+/news/uk-39307418
+THIS IS A STORY
+Hungary puts migrants in containers
+/news/world-europe-39301003
+THIS IS A STORY
+Love Actually cast reunites for Comic Relief
+/news/entertainment-arts-39301010
+THIS IS A STORY
+Sizing John wins Cheltenham Gold Cup
+/sport/horse-racing/39307278
+THIS IS A STORY
+Miliband's joke steals Osborne's limelight
+/news/blogs-trending-39302846
+THIS IS A STORY
+BBC News Channel
+/news/10318089
+THIS IS A STORY
+BBC Radio 4 - PM
+http://www.bbc.co.uk/iplayer/console/bbc_radio_four
+THIS IS A STORY
+Jam? Meet the Michael Jackson traffic cop
+/news/world-africa-39290410
+THIS IS A STORY
+Bake Off line-up: A winning recipe?
+/news/entertainment-arts-39301921
+THIS IS A STORY
+Weekly quiz: In which soap did Ed Sheeran appear?
+/news/magazine-39295274
+THIS IS A STORY
+What's the etiquette on vaping?
+/news/uk-39301430
+THIS IS A STORY
+Tall driver told to 'grow up' by judge
+/news/uk-england-tyne-39303893
+THIS IS A STORY
+The mystery of the murder in the Lucky Holiday Hotel
+/news/magazine-39297987
+THIS IS A STORY
+Britain’s bungled effort to clean up its first big oil spill
+/news/uk-england-39223308
+THIS IS A STORY
+Sweden's Got Talent: The pop star with sleep paralysis
+/news/entertainment-arts-39293139
+THIS IS A STORY
+George Osborne: From history buff to austerity editor
+/news/entertainment-arts-39304904
+THIS IS A STORY
+Reality Check: Is education spending at a record level?
+/news/education-39302746
+THIS IS A STORY
+When will a second referendum take place?
+/news/uk-scotland-scotland-politics-39306159
+THIS IS A STORY
+Defining moment for US and Germany
+/news/world-europe-39254553
+</code></pre>
+</div>
+
+<h2 id="step-four-use-the-story-to-get-the-summary">STEP FOUR: Use the story to get the summary</h2>
+
+<p>Same thing again! This time we’re looking for a <code class="highlighter-rouge">p</code>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">stories</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'gs-c-promo'</span> <span class="p">})</span>
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">stories</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"THIS IS A STORY"</span><span class="p">)</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'h3'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">link</span><span class="p">[</span><span class="s">'href'</span><span class="p">])</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'p'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">summary</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>THIS IS A STORY
+US 'will not repeat' GCHQ wiretap claims
+/news/uk-39300191
+Allegations that Donald Trump was wiretapped are "nonsense", the UK's intelligence agency says.
+THIS IS A STORY
+George Osborne to edit London newspaper
+/news/uk-39304944
+Former chancellor faces calls to stand down as MP after being named as editor of London Evening Standard.
+THIS IS A STORY
+'Huge advance' in fighting biggest killer
+/news/health-39305640
+The innovative new injection cuts cholesterol to lowest levels ever seen in medicine.
+THIS IS A STORY
+Sturgeon up for referendum date talks
+/news/uk-scotland-scotland-politics-39299305
+Nicola Sturgeon wants talks with Theresa May about a referendum date that suits both sides.
+THIS IS A STORY
+No punishment for man who raped girl, 12
+/news/uk-scotland-edinburgh-east-fife-39305042
+A man who admitted raping a 12-year-old girl in Edinburgh is given an absolute discharge.
+THIS IS A STORY
+Dunham hits back after weight criticism
+/news/entertainment-arts-39303458
+Actress Lena Dunham, star and creator of Girls, says her recent weight loss "isn't a triumph".
+THIS IS A STORY
+US warns N Korea of military option
+/news/world-asia-39297031
+America's top diplomat says the US could strike if Pyongyang's weapons threat rises.
+THIS IS A STORY
+US warns N Korea of military option
+/news/world-asia-39297031
+America's top diplomat says the US could strike if Pyongyang's weapons threat rises.
+THIS IS A STORY
+Guinness for royals on St Patrick's Day
+/news/uk-39308969
+The Duke and Duchess of Cambridge drank Guinness at a St Patrick's Day lunch with the Irish Guards.
+THIS IS A STORY
+Mother jailed for hiding baby's death
+/news/uk-england-london-39305951
+Victoria Gayle pleaded guilty to preventing the lawful and decent burial of her baby son.
+THIS IS A STORY
+Man dies charging iPhone in bath
+/news/uk-39307418
+A coroner and safety experts have since issued warnings about using electrical appliances in the bathroom.
+THIS IS A STORY
+Hungary puts migrants in containers
+/news/world-europe-39301003
+Camps for asylum seekers are being built out of shipping containers, despite international criticism.
+THIS IS A STORY
+Love Actually cast reunites for Comic Relief
+/news/entertainment-arts-39301010
+Film-maker Richard Curtis has brought the original stars of Love Actually back together in a special sequel for Comic Relief.
+THIS IS A STORY
+Sizing John wins Cheltenham Gold Cup
+/sport/horse-racing/39307278
+Irish challenger Sizing John wins the Cheltenham Gold Cup for jockey Robbie Power and trainer Jessica Harrington.
+THIS IS A STORY
+Miliband's joke steals Osborne's limelight
+/news/blogs-trending-39302846
+
+
+
+---------------------------------------------------------------------------
+
+AttributeError                            Traceback (most recent call last)
+
+&lt;ipython-input-20-e55795264040&gt; in &lt;module&gt;()
+      7     print(link['href'])
+      8     summary = story.find('p')
+----&gt; 9     print(summary.text)
+
+
+AttributeError: 'NoneType' object has no attribute 'text'
+</code></pre>
+</div>
+
+<h3 id="missing-elements">Missing elements</h3>
+
+<p>Oh god, an error! If you weren’t paying attention, the error is</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+&lt;ipython-input-20-e55795264040&gt; in &lt;module&gt;()
+      7     print(link['href'])
+      8     summary = story.find('p')
+----&gt; 9     print(summary.text)
+
+AttributeError: 'NoneType' object has no attribute 'text'
+</code></pre>
+</div>
+
+<p>Since it showed up after we added in the <code class="highlighter-rouge">summary</code> part, I’m going to assume
+this is an issue because <strong>not every story has a summary</strong>. How do we get around
+it!!!</p>
+
+<p>Well, just <em>ask if it has a summary</em>. If it does, you can use it. If it doesn’t,
+ignore it. <strong>It’s just a simple <code class="highlighter-rouge">if</code> statement</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">stories</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'gs-c-promo'</span> <span class="p">})</span>
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">stories</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"THIS IS A STORY"</span><span class="p">)</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'h3'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">link</span><span class="p">[</span><span class="s">'href'</span><span class="p">])</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'p'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">summary</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">summary</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>THIS IS A STORY
+US 'will not repeat' GCHQ wiretap claims
+/news/uk-39300191
+Allegations that Donald Trump was wiretapped are "nonsense", the UK's intelligence agency says.
+THIS IS A STORY
+George Osborne to edit London newspaper
+/news/uk-39304944
+Former chancellor faces calls to stand down as MP after being named as editor of London Evening Standard.
+THIS IS A STORY
+'Huge advance' in fighting biggest killer
+/news/health-39305640
+The innovative new injection cuts cholesterol to lowest levels ever seen in medicine.
+THIS IS A STORY
+Sturgeon up for referendum date talks
+/news/uk-scotland-scotland-politics-39299305
+Nicola Sturgeon wants talks with Theresa May about a referendum date that suits both sides.
+THIS IS A STORY
+No punishment for man who raped girl, 12
+/news/uk-scotland-edinburgh-east-fife-39305042
+A man who admitted raping a 12-year-old girl in Edinburgh is given an absolute discharge.
+THIS IS A STORY
+Dunham hits back after weight criticism
+/news/entertainment-arts-39303458
+Actress Lena Dunham, star and creator of Girls, says her recent weight loss "isn't a triumph".
+THIS IS A STORY
+US warns N Korea of military option
+/news/world-asia-39297031
+America's top diplomat says the US could strike if Pyongyang's weapons threat rises.
+THIS IS A STORY
+US warns N Korea of military option
+/news/world-asia-39297031
+America's top diplomat says the US could strike if Pyongyang's weapons threat rises.
+THIS IS A STORY
+Guinness for royals on St Patrick's Day
+/news/uk-39308969
+The Duke and Duchess of Cambridge drank Guinness at a St Patrick's Day lunch with the Irish Guards.
+THIS IS A STORY
+Mother jailed for hiding baby's death
+/news/uk-england-london-39305951
+Victoria Gayle pleaded guilty to preventing the lawful and decent burial of her baby son.
+THIS IS A STORY
+Man dies charging iPhone in bath
+/news/uk-39307418
+A coroner and safety experts have since issued warnings about using electrical appliances in the bathroom.
+THIS IS A STORY
+Hungary puts migrants in containers
+/news/world-europe-39301003
+Camps for asylum seekers are being built out of shipping containers, despite international criticism.
+THIS IS A STORY
+Love Actually cast reunites for Comic Relief
+/news/entertainment-arts-39301010
+Film-maker Richard Curtis has brought the original stars of Love Actually back together in a special sequel for Comic Relief.
+THIS IS A STORY
+Sizing John wins Cheltenham Gold Cup
+/sport/horse-racing/39307278
+Irish challenger Sizing John wins the Cheltenham Gold Cup for jockey Robbie Power and trainer Jessica Harrington.
+THIS IS A STORY
+Miliband's joke steals Osborne's limelight
+/news/blogs-trending-39302846
+THIS IS A STORY
+BBC News Channel
+/news/10318089
+The latest breaking and developing stories 
+THIS IS A STORY
+BBC Radio 4 - PM
+http://www.bbc.co.uk/iplayer/console/bbc_radio_four
+An evening look at the day's events
+THIS IS A STORY
+Jam? Meet the Michael Jackson traffic cop
+/news/world-africa-39290410
+THIS IS A STORY
+Bake Off line-up: A winning recipe?
+/news/entertainment-arts-39301921
+THIS IS A STORY
+Weekly quiz: In which soap did Ed Sheeran appear?
+/news/magazine-39295274
+THIS IS A STORY
+What's the etiquette on vaping?
+/news/uk-39301430
+THIS IS A STORY
+Tall driver told to 'grow up' by judge
+/news/uk-england-tyne-39303893
+THIS IS A STORY
+The mystery of the murder in the Lucky Holiday Hotel
+/news/magazine-39297987
+THIS IS A STORY
+Britain’s bungled effort to clean up its first big oil spill
+/news/uk-england-39223308
+THIS IS A STORY
+Sweden's Got Talent: The pop star with sleep paralysis
+/news/entertainment-arts-39293139
+THIS IS A STORY
+George Osborne: From history buff to austerity editor
+/news/entertainment-arts-39304904
+THIS IS A STORY
+Reality Check: Is education spending at a record level?
+/news/education-39302746
+THIS IS A STORY
+When will a second referendum take place?
+/news/uk-scotland-scotland-politics-39306159
+THIS IS A STORY
+Defining moment for US and Germany
+/news/world-europe-39254553
+</code></pre>
+</div>
+
+<h2 id="turning-it-into-a-csv">Turning it into a CSV</h2>
+
+<p>Now that we have all of our elements, we can turn it into a CSV. There are three
+steps to building the CSV:</p>
+
+<ol>
+  <li><strong>Start with an empty list:</strong> Each story we’ll find, we’ll add it to the list</li>
+  <li><strong>Build a dictionary</strong> for each story element</li>
+  <li><strong>Convert the list to a DataFrame</strong>, and then</li>
+  <li><strong>Export the DataFrame to a CSV</strong></li>
+</ol>
+
+<p>The dictionary-buiding part can be complicated, so let’s look at <strong>two different
+ways of doing it</strong>.</p>
+
+<h3 id="method-one-all-at-once">Method One: All at once</h3>
+
+<p>For this method, we’ll make our <code class="highlighter-rouge">story_dict</code> all at once, then add it to the
+<code class="highlighter-rouge">stories_list</code>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Start with an empty list</span>
+<span class="n">stories_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">stories</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'gs-c-promo'</span> <span class="p">})</span>
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">stories</span><span class="p">:</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'h3'</span><span class="p">)</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'p'</span><span class="p">)</span>
+    <span class="c"># Does our story have a summary?</span>
+    <span class="k">if</span> <span class="n">summary</span><span class="p">:</span>
+        <span class="c"># Build a dict that HAS a summary</span>
+        <span class="n">story_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">'headline'</span><span class="p">:</span> <span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+            <span class="s">'url'</span><span class="p">:</span> <span class="n">link</span><span class="p">[</span><span class="s">'href'</span><span class="p">],</span>
+            <span class="s">'summary'</span><span class="p">:</span> <span class="n">summary</span><span class="o">.</span><span class="n">text</span>
+        <span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># Build a dict that does NOT have a summary</span>
+        <span class="n">story_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">'headline'</span><span class="p">:</span> <span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+            <span class="s">'url'</span><span class="p">:</span> <span class="n">link</span><span class="p">[</span><span class="s">'href'</span><span class="p">],</span>
+        <span class="p">}</span>    
+    <span class="c"># Add the dict to our list</span>
+    <span class="n">stories_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">story_dict</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">stories_list</span><span class="p">)</span>
+
+<span class="c"># Now that we're done, convert to a CSV and save.</span>
+<span class="c"># If you don't use index=False, you'll get an ugly dataframe!</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">stories_list</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">"../bbc.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[{'summary': 'Allegations that Donald Trump was wiretapped are "nonsense", the UK\'s intelligence agency says.', 'headline': "US 'will not repeat' GCHQ wiretap claims", 'url': '/news/uk-39300191'}, {'summary': 'Former chancellor faces calls to stand down as MP after being named as editor of London Evening Standard.', 'headline': 'George Osborne to edit London newspaper', 'url': '/news/uk-39304944'}, {'summary': 'The innovative new injection cuts cholesterol to lowest levels ever seen in medicine.', 'headline': "'Huge advance' in fighting biggest killer", 'url': '/news/health-39305640'}, {'summary': 'Nicola Sturgeon wants talks with Theresa May about a referendum date that suits both sides.', 'headline': 'Sturgeon up for referendum date talks', 'url': '/news/uk-scotland-scotland-politics-39299305'}, {'summary': 'A man who admitted raping a 12-year-old girl in Edinburgh is given an absolute discharge.', 'headline': 'No punishment for man who raped girl, 12', 'url': '/news/uk-scotland-edinburgh-east-fife-39305042'}, {'summary': 'Actress Lena Dunham, star and creator of Girls, says her recent weight loss "isn\'t a triumph".', 'headline': 'Dunham hits back after weight criticism', 'url': '/news/entertainment-arts-39303458'}, {'summary': "America's top diplomat says the US could strike if Pyongyang's weapons threat rises.", 'headline': 'US warns N Korea of military option', 'url': '/news/world-asia-39297031'}, {'summary': "America's top diplomat says the US could strike if Pyongyang's weapons threat rises.", 'headline': 'US warns N Korea of military option', 'url': '/news/world-asia-39297031'}, {'summary': "The Duke and Duchess of Cambridge drank Guinness at a St Patrick's Day lunch with the Irish Guards.", 'headline': "Guinness for royals on St Patrick's Day", 'url': '/news/uk-39308969'}, {'summary': 'Victoria Gayle pleaded guilty to preventing the lawful and decent burial of her baby son.', 'headline': "Mother jailed for hiding baby's death", 'url': '/news/uk-england-london-39305951'}, {'summary': 'A coroner and safety experts have since issued warnings about using electrical appliances in the bathroom.', 'headline': 'Man dies charging iPhone in bath', 'url': '/news/uk-39307418'}, {'summary': 'Camps for asylum seekers are being built out of shipping containers, despite international criticism.', 'headline': 'Hungary puts migrants in containers', 'url': '/news/world-europe-39301003'}, {'summary': 'Film-maker Richard Curtis has brought the original stars of Love Actually back together in a special sequel for Comic Relief.', 'headline': 'Love Actually cast reunites for Comic Relief', 'url': '/news/entertainment-arts-39301010'}, {'summary': 'Irish challenger Sizing John wins the Cheltenham Gold Cup for jockey Robbie Power and trainer Jessica Harrington.', 'headline': 'Sizing John wins Cheltenham Gold Cup', 'url': '/sport/horse-racing/39307278'}, {'headline': "Miliband's joke steals Osborne's limelight", 'url': '/news/blogs-trending-39302846'}, {'summary': 'The latest breaking and developing stories ', 'headline': 'BBC News Channel', 'url': '/news/10318089'}, {'summary': "An evening look at the day's events", 'headline': 'BBC Radio 4 - PM', 'url': 'http://www.bbc.co.uk/iplayer/console/bbc_radio_four'}, {'headline': 'Jam? Meet the Michael Jackson traffic cop', 'url': '/news/world-africa-39290410'}, {'headline': 'Bake Off line-up: A winning recipe?', 'url': '/news/entertainment-arts-39301921'}, {'headline': 'Weekly quiz: In which soap did Ed Sheeran appear?', 'url': '/news/magazine-39295274'}, {'headline': "What's the etiquette on vaping?", 'url': '/news/uk-39301430'}, {'headline': "Tall driver told to 'grow up' by judge", 'url': '/news/uk-england-tyne-39303893'}, {'headline': 'The mystery of the murder in the Lucky Holiday Hotel', 'url': '/news/magazine-39297987'}, {'headline': 'Britain’s bungled effort to clean up its first big oil spill', 'url': '/news/uk-england-39223308'}, {'headline': "Sweden's Got Talent: The pop star with sleep paralysis", 'url': '/news/entertainment-arts-39293139'}, {'headline': 'George Osborne: From history buff to austerity editor', 'url': '/news/entertainment-arts-39304904'}, {'headline': 'Reality Check: Is education spending at a record level?', 'url': '/news/education-39302746'}, {'headline': 'When will a second referendum take place?', 'url': '/news/uk-scotland-scotland-politics-39306159'}, {'headline': 'Defining moment for US and Germany', 'url': '/news/world-europe-39254553'}]
+</code></pre>
+</div>
+
+<h3 id="method-two-filling-in-the-blanks">Method Two: Filling in the blanks</h3>
+
+<p>For this method, we’ll make our <code class="highlighter-rouge">story_dict</code> in the beginning, then fill in any
+pieces that exist.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Start with an empty list</span>
+<span class="n">stories_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">stories</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'gs-c-promo'</span> <span class="p">})</span>
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">stories</span><span class="p">:</span>
+    <span class="c"># Create a dictionary without anything in it</span>
+    <span class="n">story_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'h3'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">headline</span><span class="p">:</span>
+        <span class="n">story_dict</span><span class="p">[</span><span class="s">'headline'</span><span class="p">]</span> <span class="o">=</span> <span class="n">headline</span><span class="o">.</span><span class="n">text</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">link</span><span class="p">:</span>
+        <span class="n">story_dict</span><span class="p">[</span><span class="s">'url'</span><span class="p">]</span> <span class="o">=</span> <span class="n">link</span><span class="p">[</span><span class="s">'href'</span><span class="p">]</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'p'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">summary</span><span class="p">:</span>
+        <span class="n">story_dict</span><span class="p">[</span><span class="s">'summary'</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span><span class="o">.</span><span class="n">text</span>
+    <span class="c"># Add the dict to our list</span>
+    <span class="n">stories_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">story_dict</span><span class="p">)</span>
+    
+<span class="c"># Now that we're done, convert to a CSV and save</span>
+<span class="c"># If you don't use index=False, you'll get an ugly dataframe!</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">stories_list</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">"../bbc.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

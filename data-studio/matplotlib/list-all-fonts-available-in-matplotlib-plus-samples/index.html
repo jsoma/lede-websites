@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>List all fonts available in matplotlib plus samples</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/data-studio/matplotlib/list-all-fonts-available-in-matplotlib-plus-samples/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="List all fonts available in matplotlib plus samples">
+  <meta property="twitter:title" content="List all fonts available in matplotlib plus samples">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Data Studio, Lede 2016</a> &gt;  List all fonts available in matplotlib plus samples</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">List all fonts available in matplotlib plus samples</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/data-studio/matplotlib/list-all-fonts-available-in-matplotlib-plus-samples.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <p>It’s pretty easy to find someone online giving you a list of all of the fonts
+available in <code class="highlighter-rouge">matplotlib</code>, but they’re always really ugly boring lists. This
+gives you a list <em>plus</em> samples of each font. There might be issues about system
+fonts vs. <code class="highlighter-rouge">matplotlib</code> fonts, but I haven’t noticed anything yet.</p>
+
+<h2 id="an-attractive-list-all-matplotlib-fonts">An attractive list all matplotlib fonts</h2>
+
+<p>You’ll need to run this code in your own Jupyter Notebook to get the fonts that
+will work on your own computer.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">matplotlib.font_manager</span>
+<span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+
+<span class="k">def</span> <span class="nf">make_html</span><span class="p">(</span><span class="n">fontname</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">"&lt;p&gt;{font}: &lt;span style='font-family:{font}; font-size: 24px;'&gt;{font}&lt;/p&gt;"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="n">fontname</span><span class="p">)</span>
+
+<span class="n">code</span> <span class="o">=</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">make_html</span><span class="p">(</span><span class="n">font</span><span class="p">)</span> <span class="k">for</span> <span class="n">font</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">font_manager</span><span class="o">.</span><span class="n">fontManager</span><span class="o">.</span><span class="n">ttflist</span><span class="p">]))])</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="s">"&lt;div style='column-count: 2;'&gt;{}&lt;/div&gt;"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code</span><span class="p">))</span></code></pre></figure>
+
+<div style="column-count: 2;"><p>.Hiragino Kaku Gothic Interface: <span style="font-family:.Hiragino Kaku Gothic Interface; font-size: 24px;">.Hiragino Kaku Gothic Interface
+<p>.Keyboard: <span style="font-family:.Keyboard; font-size: 24px;">.Keyboard
+<p>Adobe Arabic: <span style="font-family:Adobe Arabic; font-size: 24px;">Adobe Arabic
+<p>Adobe Caslon Pro: <span style="font-family:Adobe Caslon Pro; font-size: 24px;">Adobe Caslon Pro
+<p>Adobe Devanagari: <span style="font-family:Adobe Devanagari; font-size: 24px;">Adobe Devanagari
+<p>Adobe Fan Heiti Std: <span style="font-family:Adobe Fan Heiti Std; font-size: 24px;">Adobe Fan Heiti Std
+<p>Adobe Fangsong Std: <span style="font-family:Adobe Fangsong Std; font-size: 24px;">Adobe Fangsong Std
+<p>Adobe Garamond Pro: <span style="font-family:Adobe Garamond Pro; font-size: 24px;">Adobe Garamond Pro
+<p>Adobe Gothic Std: <span style="font-family:Adobe Gothic Std; font-size: 24px;">Adobe Gothic Std
+<p>Adobe Hebrew: <span style="font-family:Adobe Hebrew; font-size: 24px;">Adobe Hebrew
+<p>Adobe Heiti Std: <span style="font-family:Adobe Heiti Std; font-size: 24px;">Adobe Heiti Std
+<p>Adobe Kaiti Std: <span style="font-family:Adobe Kaiti Std; font-size: 24px;">Adobe Kaiti Std
+<p>Adobe Ming Std: <span style="font-family:Adobe Ming Std; font-size: 24px;">Adobe Ming Std
+<p>Adobe Myungjo Std: <span style="font-family:Adobe Myungjo Std; font-size: 24px;">Adobe Myungjo Std
+<p>Adobe Naskh: <span style="font-family:Adobe Naskh; font-size: 24px;">Adobe Naskh
+<p>Adobe Song Std: <span style="font-family:Adobe Song Std; font-size: 24px;">Adobe Song Std
+<p>Alfa Slab One: <span style="font-family:Alfa Slab One; font-size: 24px;">Alfa Slab One
+<p>Amatic SC: <span style="font-family:Amatic SC; font-size: 24px;">Amatic SC
+<p>Andale Mono: <span style="font-family:Andale Mono; font-size: 24px;">Andale Mono
+<p>Apple Braille: <span style="font-family:Apple Braille; font-size: 24px;">Apple Braille
+<p>Apple Chancery: <span style="font-family:Apple Chancery; font-size: 24px;">Apple Chancery
+<p>Apple SD Gothic Neo: <span style="font-family:Apple SD Gothic Neo; font-size: 24px;">Apple SD Gothic Neo
+<p>AppleGothic: <span style="font-family:AppleGothic; font-size: 24px;">AppleGothic
+<p>AppleMyungjo: <span style="font-family:AppleMyungjo; font-size: 24px;">AppleMyungjo
+<p>Arial: <span style="font-family:Arial; font-size: 24px;">Arial
+<p>Arial Black: <span style="font-family:Arial Black; font-size: 24px;">Arial Black
+<p>Arial Narrow: <span style="font-family:Arial Narrow; font-size: 24px;">Arial Narrow
+<p>Arial Rounded MT Bold: <span style="font-family:Arial Rounded MT Bold; font-size: 24px;">Arial Rounded MT Bold
+<p>Arial Unicode MS: <span style="font-family:Arial Unicode MS; font-size: 24px;">Arial Unicode MS
+<p>Ayuthaya: <span style="font-family:Ayuthaya; font-size: 24px;">Ayuthaya
+<p>Batang: <span style="font-family:Batang; font-size: 24px;">Batang
+<p>Bemio: <span style="font-family:Bemio; font-size: 24px;">Bemio
+<p>Big Caslon: <span style="font-family:Big Caslon; font-size: 24px;">Big Caslon
+<p>Birch Std: <span style="font-family:Birch Std; font-size: 24px;">Birch Std
+<p>Bitstream Vera Sans: <span style="font-family:Bitstream Vera Sans; font-size: 24px;">Bitstream Vera Sans
+<p>Bitstream Vera Sans Mono: <span style="font-family:Bitstream Vera Sans Mono; font-size: 24px;">Bitstream Vera Sans Mono
+<p>Bitstream Vera Serif: <span style="font-family:Bitstream Vera Serif; font-size: 24px;">Bitstream Vera Serif
+<p>Blackoak Std: <span style="font-family:Blackoak Std; font-size: 24px;">Blackoak Std
+<p>Blanch: <span style="font-family:Blanch; font-size: 24px;">Blanch
+<p>Bodoni 72 Smallcaps: <span style="font-family:Bodoni 72 Smallcaps; font-size: 24px;">Bodoni 72 Smallcaps
+<p>Bodoni Ornaments: <span style="font-family:Bodoni Ornaments; font-size: 24px;">Bodoni Ornaments
+<p>Bookshelf Symbol 7: <span style="font-family:Bookshelf Symbol 7; font-size: 24px;">Bookshelf Symbol 7
+<p>Bradley Hand: <span style="font-family:Bradley Hand; font-size: 24px;">Bradley Hand
+<p>Brush Script MT: <span style="font-family:Brush Script MT; font-size: 24px;">Brush Script MT
+<p>Brush Script Std: <span style="font-family:Brush Script Std; font-size: 24px;">Brush Script Std
+<p>Calibri: <span style="font-family:Calibri; font-size: 24px;">Calibri
+<p>Cambria: <span style="font-family:Cambria; font-size: 24px;">Cambria
+<p>Cambria Math: <span style="font-family:Cambria Math; font-size: 24px;">Cambria Math
+<p>Canadian Shields: <span style="font-family:Canadian Shields; font-size: 24px;">Canadian Shields
+<p>Candara: <span style="font-family:Candara; font-size: 24px;">Candara
+<p>Chalkduster: <span style="font-family:Chalkduster; font-size: 24px;">Chalkduster
+<p>Chaparral Pro: <span style="font-family:Chaparral Pro; font-size: 24px;">Chaparral Pro
+<p>Charlemagne Std: <span style="font-family:Charlemagne Std; font-size: 24px;">Charlemagne Std
+<p>Comic Sans MS: <span style="font-family:Comic Sans MS; font-size: 24px;">Comic Sans MS
+<p>Consolas: <span style="font-family:Consolas; font-size: 24px;">Consolas
+<p>Constantia: <span style="font-family:Constantia; font-size: 24px;">Constantia
+<p>Cooper Std: <span style="font-family:Cooper Std; font-size: 24px;">Cooper Std
+<p>Corbel: <span style="font-family:Corbel; font-size: 24px;">Corbel
+<p>Courier New: <span style="font-family:Courier New; font-size: 24px;">Courier New
+<p>Cubano: <span style="font-family:Cubano; font-size: 24px;">Cubano
+<p>DIN Alternate: <span style="font-family:DIN Alternate; font-size: 24px;">DIN Alternate
+<p>DIN Condensed: <span style="font-family:DIN Condensed; font-size: 24px;">DIN Condensed
+<p>Diploma: <span style="font-family:Diploma; font-size: 24px;">Diploma
+<p>Diwan Thuluth: <span style="font-family:Diwan Thuluth; font-size: 24px;">Diwan Thuluth
+<p>Droid Sans: <span style="font-family:Droid Sans; font-size: 24px;">Droid Sans
+<p>Farisi: <span style="font-family:Farisi; font-size: 24px;">Farisi
+<p>Feast of Flesh BB: <span style="font-family:Feast of Flesh BB; font-size: 24px;">Feast of Flesh BB
+<p>FontAwesome: <span style="font-family:FontAwesome; font-size: 24px;">FontAwesome
+<p>Franklin Gothic Book: <span style="font-family:Franklin Gothic Book; font-size: 24px;">Franklin Gothic Book
+<p>Franklin Gothic Medium: <span style="font-family:Franklin Gothic Medium; font-size: 24px;">Franklin Gothic Medium
+<p>Gabriola: <span style="font-family:Gabriola; font-size: 24px;">Gabriola
+<p>Georgia: <span style="font-family:Georgia; font-size: 24px;">Georgia
+<p>Giddyup Std: <span style="font-family:Giddyup Std; font-size: 24px;">Giddyup Std
+<p>Gill Sans MT: <span style="font-family:Gill Sans MT; font-size: 24px;">Gill Sans MT
+<p>Gujarati MT: <span style="font-family:Gujarati MT; font-size: 24px;">Gujarati MT
+<p>Gulim: <span style="font-family:Gulim; font-size: 24px;">Gulim
+<p>GungSeo: <span style="font-family:GungSeo; font-size: 24px;">GungSeo
+<p>Gurmukhi MT: <span style="font-family:Gurmukhi MT; font-size: 24px;">Gurmukhi MT
+<p>HeadLineA: <span style="font-family:HeadLineA; font-size: 24px;">HeadLineA
+<p>Herculanum: <span style="font-family:Herculanum; font-size: 24px;">Herculanum
+<p>Hiragino Kaku Gothic Pro: <span style="font-family:Hiragino Kaku Gothic Pro; font-size: 24px;">Hiragino Kaku Gothic Pro
+<p>Hiragino Kaku Gothic ProN: <span style="font-family:Hiragino Kaku Gothic ProN; font-size: 24px;">Hiragino Kaku Gothic ProN
+<p>Hiragino Kaku Gothic Std: <span style="font-family:Hiragino Kaku Gothic Std; font-size: 24px;">Hiragino Kaku Gothic Std
+<p>Hiragino Kaku Gothic StdN: <span style="font-family:Hiragino Kaku Gothic StdN; font-size: 24px;">Hiragino Kaku Gothic StdN
+<p>Hiragino Maru Gothic Pro: <span style="font-family:Hiragino Maru Gothic Pro; font-size: 24px;">Hiragino Maru Gothic Pro
+<p>Hiragino Maru Gothic ProN: <span style="font-family:Hiragino Maru Gothic ProN; font-size: 24px;">Hiragino Maru Gothic ProN
+<p>Hiragino Mincho Pro: <span style="font-family:Hiragino Mincho Pro; font-size: 24px;">Hiragino Mincho Pro
+<p>Hiragino Mincho ProN: <span style="font-family:Hiragino Mincho ProN; font-size: 24px;">Hiragino Mincho ProN
+<p>Hiragino Sans GB: <span style="font-family:Hiragino Sans GB; font-size: 24px;">Hiragino Sans GB
+<p>Hobo Std: <span style="font-family:Hobo Std; font-size: 24px;">Hobo Std
+<p>Hoefler Text: <span style="font-family:Hoefler Text; font-size: 24px;">Hoefler Text
+<p>Impact: <span style="font-family:Impact; font-size: 24px;">Impact
+<p>InaiMathi: <span style="font-family:InaiMathi; font-size: 24px;">InaiMathi
+<p>Kailasa: <span style="font-family:Kailasa; font-size: 24px;">Kailasa
+<p>Khmer Sangam MN: <span style="font-family:Khmer Sangam MN; font-size: 24px;">Khmer Sangam MN
+<p>Kokonor: <span style="font-family:Kokonor; font-size: 24px;">Kokonor
+<p>Kozuka Gothic Pr6N: <span style="font-family:Kozuka Gothic Pr6N; font-size: 24px;">Kozuka Gothic Pr6N
+<p>Kozuka Gothic Pro: <span style="font-family:Kozuka Gothic Pro; font-size: 24px;">Kozuka Gothic Pro
+<p>Kozuka Mincho Pr6N: <span style="font-family:Kozuka Mincho Pr6N; font-size: 24px;">Kozuka Mincho Pr6N
+<p>Kozuka Mincho Pro: <span style="font-family:Kozuka Mincho Pro; font-size: 24px;">Kozuka Mincho Pro
+<p>Krungthep: <span style="font-family:Krungthep; font-size: 24px;">Krungthep
+<p>Label-EZ Symbols: <span style="font-family:Label-EZ Symbols; font-size: 24px;">Label-EZ Symbols
+<p>Lao Sangam MN: <span style="font-family:Lao Sangam MN; font-size: 24px;">Lao Sangam MN
+<p>LastResort: <span style="font-family:LastResort; font-size: 24px;">LastResort
+<p>Lato: <span style="font-family:Lato; font-size: 24px;">Lato
+<p>League Gothic: <span style="font-family:League Gothic; font-size: 24px;">League Gothic
+<p>Letter Gothic Std: <span style="font-family:Letter Gothic Std; font-size: 24px;">Letter Gothic Std
+<p>LiHei Pro: <span style="font-family:LiHei Pro; font-size: 24px;">LiHei Pro
+<p>LiSong Pro: <span style="font-family:LiSong Pro; font-size: 24px;">LiSong Pro
+<p>Lithos Pro: <span style="font-family:Lithos Pro; font-size: 24px;">Lithos Pro
+<p>Lucida Console: <span style="font-family:Lucida Console; font-size: 24px;">Lucida Console
+<p>Lucida Sans Unicode: <span style="font-family:Lucida Sans Unicode; font-size: 24px;">Lucida Sans Unicode
+<p>Luminari: <span style="font-family:Luminari; font-size: 24px;">Luminari
+<p>MS Gothic: <span style="font-family:MS Gothic; font-size: 24px;">MS Gothic
+<p>MS Mincho: <span style="font-family:MS Mincho; font-size: 24px;">MS Mincho
+<p>MS PGothic: <span style="font-family:MS PGothic; font-size: 24px;">MS PGothic
+<p>MS PMincho: <span style="font-family:MS PMincho; font-size: 24px;">MS PMincho
+<p>MS Reference Sans Serif: <span style="font-family:MS Reference Sans Serif; font-size: 24px;">MS Reference Sans Serif
+<p>MS Reference Specialty: <span style="font-family:MS Reference Specialty; font-size: 24px;">MS Reference Specialty
+<p>Marlett: <span style="font-family:Marlett; font-size: 24px;">Marlett
+<p>Meiryo: <span style="font-family:Meiryo; font-size: 24px;">Meiryo
+<p>Mesquite Std: <span style="font-family:Mesquite Std; font-size: 24px;">Mesquite Std
+<p>MetaPlusBold: <span style="font-family:MetaPlusBold; font-size: 24px;">MetaPlusBold
+<p>MetaPlusNormal-Roman: <span style="font-family:MetaPlusNormal-Roman; font-size: 24px;">MetaPlusNormal-Roman
+<p>Mic 32Bold: <span style="font-family:Mic 32Bold; font-size: 24px;">Mic 32Bold
+<p>Microsoft Himalaya: <span style="font-family:Microsoft Himalaya; font-size: 24px;">Microsoft Himalaya
+<p>Microsoft Sans Serif: <span style="font-family:Microsoft Sans Serif; font-size: 24px;">Microsoft Sans Serif
+<p>Microsoft Tai Le: <span style="font-family:Microsoft Tai Le; font-size: 24px;">Microsoft Tai Le
+<p>Microsoft Yi Baiti: <span style="font-family:Microsoft Yi Baiti; font-size: 24px;">Microsoft Yi Baiti
+<p>MingLiU: <span style="font-family:MingLiU; font-size: 24px;">MingLiU
+<p>MingLiU-ExtB: <span style="font-family:MingLiU-ExtB; font-size: 24px;">MingLiU-ExtB
+<p>MingLiU_HKSCS: <span style="font-family:MingLiU_HKSCS; font-size: 24px;">MingLiU_HKSCS
+<p>MingLiU_HKSCS-ExtB: <span style="font-family:MingLiU_HKSCS-ExtB; font-size: 24px;">MingLiU_HKSCS-ExtB
+<p>Minion Pro: <span style="font-family:Minion Pro; font-size: 24px;">Minion Pro
+<p>Mishafi: <span style="font-family:Mishafi; font-size: 24px;">Mishafi
+<p>Mishafi Gold: <span style="font-family:Mishafi Gold; font-size: 24px;">Mishafi Gold
+<p>Mongolian Baiti: <span style="font-family:Mongolian Baiti; font-size: 24px;">Mongolian Baiti
+<p>Mshtakan: <span style="font-family:Mshtakan; font-size: 24px;">Mshtakan
+<p>Myanmar Sangam MN: <span style="font-family:Myanmar Sangam MN; font-size: 24px;">Myanmar Sangam MN
+<p>Myriad Arabic: <span style="font-family:Myriad Arabic; font-size: 24px;">Myriad Arabic
+<p>Myriad Hebrew: <span style="font-family:Myriad Hebrew; font-size: 24px;">Myriad Hebrew
+<p>Myriad Pro: <span style="font-family:Myriad Pro; font-size: 24px;">Myriad Pro
+<p>News Gothic Condensed: <span style="font-family:News Gothic Condensed; font-size: 24px;">News Gothic Condensed
+<p>Nueva Std: <span style="font-family:Nueva Std; font-size: 24px;">Nueva Std
+<p>OCR A Std: <span style="font-family:OCR A Std; font-size: 24px;">OCR A Std
+<p>Open Sans: <span style="font-family:Open Sans; font-size: 24px;">Open Sans
+<p>Orator Std: <span style="font-family:Orator Std; font-size: 24px;">Orator Std
+<p>Osaka: <span style="font-family:Osaka; font-size: 24px;">Osaka
+<p>Oswald: <span style="font-family:Oswald; font-size: 24px;">Oswald
+<p>PCMyungjo: <span style="font-family:PCMyungjo; font-size: 24px;">PCMyungjo
+<p>PMingLiU: <span style="font-family:PMingLiU; font-size: 24px;">PMingLiU
+<p>PMingLiU-ExtB: <span style="font-family:PMingLiU-ExtB; font-size: 24px;">PMingLiU-ExtB
+<p>Pacifico: <span style="font-family:Pacifico; font-size: 24px;">Pacifico
+<p>Palatino Linotype: <span style="font-family:Palatino Linotype; font-size: 24px;">Palatino Linotype
+<p>Perpetua: <span style="font-family:Perpetua; font-size: 24px;">Perpetua
+<p>PilGi: <span style="font-family:PilGi; font-size: 24px;">PilGi
+<p>Plantagenet Cherokee: <span style="font-family:Plantagenet Cherokee; font-size: 24px;">Plantagenet Cherokee
+<p>Poplar Std: <span style="font-family:Poplar Std; font-size: 24px;">Poplar Std
+<p>Prestige Elite Std: <span style="font-family:Prestige Elite Std; font-size: 24px;">Prestige Elite Std
+<p>Rosewood Std: <span style="font-family:Rosewood Std; font-size: 24px;">Rosewood Std
+<p>STFangsong: <span style="font-family:STFangsong; font-size: 24px;">STFangsong
+<p>STHeiti: <span style="font-family:STHeiti; font-size: 24px;">STHeiti
+<p>STIXGeneral: <span style="font-family:STIXGeneral; font-size: 24px;">STIXGeneral
+<p>STIXIntegralsD: <span style="font-family:STIXIntegralsD; font-size: 24px;">STIXIntegralsD
+<p>STIXIntegralsSm: <span style="font-family:STIXIntegralsSm; font-size: 24px;">STIXIntegralsSm
+<p>STIXIntegralsUp: <span style="font-family:STIXIntegralsUp; font-size: 24px;">STIXIntegralsUp
+<p>STIXIntegralsUpD: <span style="font-family:STIXIntegralsUpD; font-size: 24px;">STIXIntegralsUpD
+<p>STIXIntegralsUpSm: <span style="font-family:STIXIntegralsUpSm; font-size: 24px;">STIXIntegralsUpSm
+<p>STIXNonUnicode: <span style="font-family:STIXNonUnicode; font-size: 24px;">STIXNonUnicode
+<p>STIXSizeFiveSym: <span style="font-family:STIXSizeFiveSym; font-size: 24px;">STIXSizeFiveSym
+<p>STIXSizeFourSym: <span style="font-family:STIXSizeFourSym; font-size: 24px;">STIXSizeFourSym
+<p>STIXSizeOneSym: <span style="font-family:STIXSizeOneSym; font-size: 24px;">STIXSizeOneSym
+<p>STIXSizeThreeSym: <span style="font-family:STIXSizeThreeSym; font-size: 24px;">STIXSizeThreeSym
+<p>STIXSizeTwoSym: <span style="font-family:STIXSizeTwoSym; font-size: 24px;">STIXSizeTwoSym
+<p>STIXVariants: <span style="font-family:STIXVariants; font-size: 24px;">STIXVariants
+<p>Sathu: <span style="font-family:Sathu; font-size: 24px;">Sathu
+<p>SignPainter: <span style="font-family:SignPainter; font-size: 24px;">SignPainter
+<p>Silom: <span style="font-family:Silom; font-size: 24px;">Silom
+<p>SimHei: <span style="font-family:SimHei; font-size: 24px;">SimHei
+<p>SimSun: <span style="font-family:SimSun; font-size: 24px;">SimSun
+<p>SimSun-ExtB: <span style="font-family:SimSun-ExtB; font-size: 24px;">SimSun-ExtB
+<p>Skia: <span style="font-family:Skia; font-size: 24px;">Skia
+<p>State Highway Shields: <span style="font-family:State Highway Shields; font-size: 24px;">State Highway Shields
+<p>Stencil Std: <span style="font-family:Stencil Std; font-size: 24px;">Stencil Std
+<p>Symbol: <span style="font-family:Symbol; font-size: 24px;">Symbol
+<p>Tahoma: <span style="font-family:Tahoma; font-size: 24px;">Tahoma
+<p>Tekton Pro: <span style="font-family:Tekton Pro; font-size: 24px;">Tekton Pro
+<p>Times New Roman: <span style="font-family:Times New Roman; font-size: 24px;">Times New Roman
+<p>Trajan Pro: <span style="font-family:Trajan Pro; font-size: 24px;">Trajan Pro
+<p>Trattatello: <span style="font-family:Trattatello; font-size: 24px;">Trattatello
+<p>Trebuchet MS: <span style="font-family:Trebuchet MS; font-size: 24px;">Trebuchet MS
+<p>Tw Cen MT: <span style="font-family:Tw Cen MT; font-size: 24px;">Tw Cen MT
+<p>Verdana: <span style="font-family:Verdana; font-size: 24px;">Verdana
+<p>Wawati SC: <span style="font-family:Wawati SC; font-size: 24px;">Wawati SC
+<p>Wawati TC: <span style="font-family:Wawati TC; font-size: 24px;">Wawati TC
+<p>Webdings: <span style="font-family:Webdings; font-size: 24px;">Webdings
+<p>Weibei SC: <span style="font-family:Weibei SC; font-size: 24px;">Weibei SC
+<p>Weibei TC: <span style="font-family:Weibei TC; font-size: 24px;">Weibei TC
+<p>Wingdings: <span style="font-family:Wingdings; font-size: 24px;">Wingdings
+<p>Wingdings 2: <span style="font-family:Wingdings 2; font-size: 24px;">Wingdings 2
+<p>Wingdings 3: <span style="font-family:Wingdings 3; font-size: 24px;">Wingdings 3
+<p>YuGothic: <span style="font-family:YuGothic; font-size: 24px;">YuGothic
+<p>YuMincho: <span style="font-family:YuMincho; font-size: 24px;">YuMincho
+<p>Yuppy SC: <span style="font-family:Yuppy SC; font-size: 24px;">Yuppy SC
+<p>Yuppy TC: <span style="font-family:Yuppy TC; font-size: 24px;">Yuppy TC
+<p>Zapf Dingbats: <span style="font-family:Zapf Dingbats; font-size: 24px;">Zapf Dingbats
+<p>Zapfino: <span style="font-family:Zapfino; font-size: 24px;">Zapfino
+<p>cmb10: <span style="font-family:cmb10; font-size: 24px;">cmb10
+<p>cmex10: <span style="font-family:cmex10; font-size: 24px;">cmex10
+<p>cmmi10: <span style="font-family:cmmi10; font-size: 24px;">cmmi10
+<p>cmr10: <span style="font-family:cmr10; font-size: 24px;">cmr10
+<p>cmss10: <span style="font-family:cmss10; font-size: 24px;">cmss10
+<p>cmsy10: <span style="font-family:cmsy10; font-size: 24px;">cmsy10
+<p>cmtt10: <span style="font-family:cmtt10; font-size: 24px;">cmtt10
+
+
+
+
+
+</span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></span></p></div>
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

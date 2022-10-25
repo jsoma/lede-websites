@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Scraping - NYTimes</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2017/classes/adv-scraping/scraping-nytimes/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Scraping - NYTimes">
+  <meta property="twitter:title" content="Scraping - NYTimes">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2017</a> &gt;  Scraping - NYTimes</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Scraping - NYTimes</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations-2017/classes/adv-scraping/scraping-nytimes.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="scraping-httpswwwnytimescom">Scraping: https://www.nytimes.com/</h1>
+
+<p>Let’s try to scrape the frontpage of the NYT. We’re looking for</p>
+
+<ul>
+  <li>Headlines</li>
+  <li>Bylines</li>
+  <li>Article links</li>
+</ul>
+
+<h2 id="getting-started">Getting started</h2>
+
+<p>We’ll start by <strong>importing the necessary libraries</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span></code></pre></figure>
+
+<p>And then move into <strong>downloading the page</strong> and <strong>importing it into
+BeautifulSoup</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://www.nytimes.com'</span><span class="p">)</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'html.parser'</span><span class="p">)</span></code></pre></figure>
+
+<p>A lot of people call the analyzed page variable <code class="highlighter-rouge">soup</code> but for once in my life I
+actually go against the popular thing - I like to call it <code class="highlighter-rouge">doc</code>, since it helps
+me remember that it’s the <em>entire document</em>.</p>
+
+<h2 id="attempt-one-grabbing-the-tags-directly">ATTEMPT ONE: Grabbing the tags directly</h2>
+
+<p>Let’s jump right into trying to grab the link.</p>
+
+<p>Oh, look it’s an…. <code class="highlighter-rouge">a</code> tag. No special class or anything. What if we try to
+get all of the <code class="highlighter-rouge">a</code> tags on the page?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">links</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">[:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"This is a link"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>This is a link
+LEARN MORE »
+This is a link
+Skip to content
+This is a link
+Skip to navigation
+This is a link
+中文 (Chinese)
+This is a link
+Español
+This is a link
+
+
+
+
+
+This is a link
+Today’s Paper
+This is a link
+Video
+This is a link
+World
+This is a link
+U.S.
+</code></pre>
+</div>
+
+<p>Okay, that’s terrible. Do you know how many <code class="highlighter-rouge">a</code> tags are going to be on that
+page? Many many many. Many very useless ones.</p>
+
+<h2 id="talking-to-parents">Talking to parents</h2>
+
+<p>When you can’t uniquely identify something, sometimes you need to go up the tree
+to find its <strong>parent</strong>, the elements that are above it. We’ll be looking for an
+element that covers the <strong>entire story</strong>, then we’ll pick the link out of it.</p>
+
+<p>Great, it looks like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;article class="story theme-summary lede" id="topnews-100000004994965" data- story-id="100000004994965" data-rank="0" data-collection-renderstyle="LedeSum"&gt;
+</code></pre>
+</div>
+
+<p>I’m going to go out on a limb and say we should look for an <code class="highlighter-rouge">article</code> tag, but
+what about the class? <code class="highlighter-rouge">story theme-summary lede</code> gives us three options:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">story</code></li>
+  <li><code class="highlighter-rouge">theme-summary</code></li>
+  <li><code class="highlighter-rouge">lede</code></li>
+</ul>
+
+<p><code class="highlighter-rouge">story</code> sounds promising, yeah?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">story</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'article'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">story</span><span class="p">[:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"This is a story"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">story</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>This is a story
+
+Revised Trump Travel Ban Suffers Another Legal Setback
+By ADAM LIPTAK 2:09 PM ET
+A ruling by a federal appeals court was the latest in a string of decisions rejecting President Trump’s efforts to limit travel from several predominantly Muslim countries.The administration has already sought a Supreme Court review of a similar decision issued last month.
+
+ Comments
+
+
+This is a story
+
+Putin Opponent Is Arrested Amid Protests in Russia
+By NEIL MacFARQUHAR and ANDREW HIGGINS 1:26 PM ET
+The police detained Aleksei A. Navalny, a Kremlin critic and the architect of a wave of antigovernment protests across Russia.
+
+ Comments
+
+
+This is a story
+
+Why Cyberwar on ISIS Has Fallen Short of U.S. Hopes
+By DAVID E. SANGER and ERIC SCHMITT 
+The effectiveness of cyberweapons hit its limits against an enemy that exploits the internet to recruit, spread propaganda and use encrypted communications, all of which can be quickly reconstituted.
+
+ Comments
+
+
+This is a story
+
+Trump Holdings Are Unconstitutional, Pioneering Suit Says
+By SHARON LaFRANIERE 12:31 PM ET
+The complaint, filed in federal court by Maryland and the District of Columbia, alleges that the president’s failure to shed his businesses has undermined public trust and violated constitutional bans on self-dealing.
+
+This is a story
+
+Opioid Addicts Find an Ally in Blue
+By AL BAKER 
+Police leaders are assigning themselves a big role in reversing a complex crisis, and not through mass arrests.
+
+ Comments
+
+
+This is a story
+
+Addiction Drug Lacks Results, but It Has Powerful Friends 
+
+This is a story
+
+Role of Trump’s Lawyer Blurs Public and Private Lines
+By REBECCA R. RUIZ and SHARON LaFRANIERE 
+
+
+
+
+        Marc E. Kasowitz, the president’s private lawyer, has counseled administration staff and exerted broader influence over legal strategy.    
+
+ Comments
+
+
+This is a story
+
+Mediator 
+Trump Era, Unlike Watergate Era, Has Rival Sets of Facts
+By JIM RUTENBERG 
+Different versions of the Trump-Russia scandal are fighting for supremacy, leaving news veterans wondering, “What if Watergate happened now?”
+
+ Comments
+
+
+This is a story
+
+Fired U.S. Attorney Says Trump Tried to Build Relationship With Him 
+
+This is a story
+
+
+
+
+
+
+
+
+Credit
+	            Inez and Vinoodh for The New York Times. Stylist: Alex White. 	        
+
+
+The Long, Lonely Road of Chelsea Manning
+Her disclosure of classified documents in 2010 ushered in the age of leaks. Now, freed from prison, she talks about why she did it — and the isolation that followed.
+By MATTHEW SHAER 
+
+
+
+Comments
+</code></pre>
+</div>
+
+<p>Seems to work well enough! Now that we have a parent, <strong>we can use that parent
+to grab the elements inside of the story.</strong> We’ll use <code class="highlighter-rouge">.find</code> and <code class="highlighter-rouge">.find_all</code> to
+get everything we need.</p>
+
+<ul>
+  <li>STEP ONE: Get the story</li>
+  <li>STEP TWO: Get the headline</li>
+  <li>STEP THREE: Get the byline</li>
+  <li>STEP FOUR: Get the link</li>
+</ul>
+
+<p>If we examine the page, it looks like headlines might be <code class="highlighter-rouge">h2</code> tags that have a
+<code class="highlighter-rouge">story-heaing</code> class.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">story</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'article'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">story</span><span class="p">[:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"This is a story"</span><span class="p">)</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'h2'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story-heading'</span> <span class="p">})</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>This is a story
+Revised Trump Travel Ban Suffers Another Legal Setback
+This is a story
+Putin Opponent Is Arrested Amid Protests in Russia
+This is a story
+Why Cyberwar on ISIS Has Fallen Short of U.S. Hopes
+This is a story
+Trump Holdings Are Unconstitutional, Pioneering Suit Says
+This is a story
+Opioid Addicts Find an Ally in Blue
+This is a story
+Addiction Drug Lacks Results, but It Has Powerful Friends 
+This is a story
+Role of Trump’s Lawyer Blurs Public and Private Lines
+This is a story
+Trump Era, Unlike Watergate Era, Has Rival Sets of Facts
+This is a story
+Fired U.S. Attorney Says Trump Tried to Build Relationship With Him 
+This is a story
+
+
+
+---------------------------------------------------------------------------
+
+AttributeError                            Traceback (most recent call last)
+
+&lt;ipython-input-6-c39c462cfba2&gt; in &lt;module&gt;()
+      4     print("This is a story")
+      5     headline = story.find('h2', { 'class': 'story-heading' })
+----&gt; 6     print(headline.text)
+
+
+AttributeError: 'NoneType' object has no attribute 'text'
+</code></pre>
+</div>
+
+<h3 id="an-error-strikes">An error strikes!</h3>
+
+<p>But we get an error!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+&lt;ipython-input-57-9218ec61124f&gt; in &lt;module&gt;()
+      4     print("This is a story")
+      5     headline = story.find('h2', { 'class': 'story-heading' })
+----&gt; 6     print(headline.text)
+
+AttributeError: 'NoneType' object has no attribute 'text'
+</code></pre>
+</div>
+
+<p>Hm, a story missing a headline? Let’s look at it a little closer. We could do
+this in a classy way, but let’s just brute force it by print out every article
+just before the error line.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">story</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'article'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">story</span><span class="p">[:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"This is a story"</span><span class="p">)</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'h2'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story-heading'</span> <span class="p">})</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>This is a story
+&lt;article class="story theme-summary lede" data-collection-renderstyle="LedeSum" data-rank="0" data-story-id="100000005155100" id="topnews-100000005155100"&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/12/us/politics/trump-travel-ban-court-of-appeals.html"&gt;Revised Trump Travel Ban Suffers Another Legal Setback&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By ADAM LIPTAK &lt;time class="timestamp" data-eastern-timestamp="2:09 PM" data-utc-timestamp="1497290947" datetime="2017-06-12"&gt;2:09 PM ET&lt;/time&gt;&lt;/p&gt;
+&lt;p class="summary"&gt;&lt;ul&gt;&lt;li&gt;A ruling by a federal appeals court was the latest in a string of decisions rejecting President Trump’s efforts to limit travel from several predominantly Muslim countries.&lt;/li&gt;&lt;li&gt;The administration has already sought a Supreme Court review of a similar decision issued last month.&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/12/us/politics/trump-travel-ban-court-of-appeals.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+Revised Trump Travel Ban Suffers Another Legal Setback
+This is a story
+&lt;article class="story theme-summary" data-collection-renderstyle="HpSum" data-end-time="" data-rank="0" data-start-time="" data-story-id="100000005159260" id="topnews-100000005159260"&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/12/world/europe/russia-aleksei-navalny-kremlin-protests.html"&gt;Putin Opponent Is Arrested Amid Protests in Russia&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By NEIL MacFARQUHAR and ANDREW HIGGINS &lt;time class="timestamp" data-eastern-timestamp="1:26 PM" data-utc-timestamp="1497288362" datetime="2017-06-12"&gt;1:26 PM ET&lt;/time&gt;&lt;/p&gt;
+&lt;p class="summary"&gt;The police detained Aleksei A. Navalny, a Kremlin critic and the architect of a wave of antigovernment protests across Russia.&lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/12/world/europe/russia-aleksei-navalny-kremlin-protests.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+Putin Opponent Is Arrested Amid Protests in Russia
+This is a story
+&lt;article class="story theme-summary" data-collection-renderstyle="HpSum" data-end-time="" data-rank="0" data-start-time="" data-story-id="100000005146544" id="topnews-100000005146544"&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/12/world/middleeast/isis-cyber.html"&gt;Why Cyberwar on ISIS Has Fallen Short of U.S. Hopes&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By DAVID E. SANGER and ERIC SCHMITT &lt;/p&gt;
+&lt;p class="summary"&gt;The effectiveness of cyberweapons hit its limits against an enemy that exploits the internet to recruit, spread propaganda and use encrypted communications, all of which can be quickly reconstituted.&lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/12/world/middleeast/isis-cyber.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+Why Cyberwar on ISIS Has Fallen Short of U.S. Hopes
+This is a story
+&lt;article class="story theme-summary" data-collection-renderstyle="HpSum" data-end-time="" data-rank="0" data-start-time="" data-story-id="100000005159532" id="topnews-100000005159532"&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/12/us/trump-lawsuit-private-businesses.html"&gt;Trump Holdings Are Unconstitutional, Pioneering Suit Says&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By SHARON LaFRANIERE &lt;time class="timestamp" data-eastern-timestamp="12:31 PM" data-utc-timestamp="1497285082" datetime="2017-06-12"&gt;12:31 PM ET&lt;/time&gt;&lt;/p&gt;
+&lt;p class="summary"&gt;The complaint, filed in federal court by Maryland and the District of Columbia, alleges that the president’s failure to shed his businesses has undermined public trust and violated constitutional bans on self-dealing.&lt;/p&gt;
+&lt;/article&gt;
+Trump Holdings Are Unconstitutional, Pioneering Suit Says
+This is a story
+&lt;article class="story theme-summary" data-collection-renderstyle="HpSum" data-end-time="" data-rank="0" data-start-time="" data-story-id="100000005090510" id="topnews-100000005090510"&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/12/nyregion/when-opioid-addicts-find-an-ally-in-blue.html"&gt;Opioid Addicts Find an Ally in Blue&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By AL BAKER &lt;/p&gt;
+&lt;p class="summary"&gt;Police leaders are assigning themselves a big role in reversing a complex crisis, and not through mass arrests.&lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/12/nyregion/when-opioid-addicts-find-an-ally-in-blue.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+Opioid Addicts Find an Ally in Blue
+This is a story
+&lt;article class="story" data-collection-renderstyle="HpHeadline" data-rank="1" data-story-id="100000005137980" id="topnews-100000005137980"&gt;
+&lt;h2 class="story-heading"&gt;&lt;i class="icon"&gt;&lt;/i&gt;&lt;a href="https://www.nytimes.com/2017/06/11/health/vivitrol-drug-opioid-addiction.html"&gt;Addiction Drug Lacks Results, but It Has Powerful Friends&lt;/a&gt; &lt;/h2&gt;
+&lt;/article&gt;
+Addiction Drug Lacks Results, but It Has Powerful Friends 
+This is a story
+&lt;article class="story theme-summary" data-collection-renderstyle="HpSumSmallMedia" data-rank="0" data-story-id="100000005148452" id="topnews-100000005148452"&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/11/us/politics/trump-lawyer-marc-kasowitz.html"&gt;Role of Trump’s Lawyer Blurs Public and Private Lines&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By REBECCA R. RUIZ and SHARON LaFRANIERE &lt;/p&gt;
+&lt;div class="thumb"&gt;
+&lt;a href="https://www.nytimes.com/2017/06/11/us/politics/trump-lawyer-marc-kasowitz.html"&gt;&lt;img alt="" src="https://static01.nyt.com/images/2017/06/10/us/10dc-kasowitz/10dc-kasowitz-thumbStandard.jpg"/&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;p class="summary"&gt;
+        Marc E. Kasowitz, the president’s private lawyer, has counseled administration staff and exerted broader influence over legal strategy.    &lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/11/us/politics/trump-lawyer-marc-kasowitz.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+Role of Trump’s Lawyer Blurs Public and Private Lines
+This is a story
+&lt;article class="story theme-summary" data-collection-renderstyle="HpSum" data-end-time="" data-rank="0" data-start-time="" data-story-id="100000005158161" id="topnews-100000005158161"&gt;
+&lt;h3 class="kicker"&gt;Mediator &lt;/h3&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/11/business/media/comey-trump-watergate.html"&gt;Trump Era, Unlike Watergate Era, Has Rival Sets of Facts&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By JIM RUTENBERG &lt;/p&gt;
+&lt;p class="summary"&gt;Different versions of the Trump-Russia scandal are fighting for supremacy, leaving news veterans wondering, “What if Watergate happened now?”&lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/11/business/media/comey-trump-watergate.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+Trump Era, Unlike Watergate Era, Has Rival Sets of Facts
+This is a story
+&lt;article class="story" data-collection-renderstyle="HpHeadline" data-rank="1" data-story-id="100000005158566" id="topnews-100000005158566"&gt;
+&lt;h2 class="story-heading"&gt;&lt;i class="icon"&gt;&lt;/i&gt;&lt;a href="https://www.nytimes.com/2017/06/11/us/politics/preet-bharara-trump-contacts.html"&gt;Fired U.S. Attorney Says Trump Tried to Build Relationship With Him&lt;/a&gt; &lt;/h2&gt;
+&lt;/article&gt;
+Fired U.S. Attorney Says Trump Tried to Build Relationship With Him 
+This is a story
+&lt;article class="story theme-feature" data-collection-renderstyle="LargeMediaHeadlineSumCentered" data-rank="1" data-story-id="100000005159290" id="topnews-100000005159290"&gt;
+&lt;figure class="media photo"&gt;
+&lt;div class="image"&gt;
+&lt;a href="https://www.nytimes.com/2017/06/12/magazine/the-long-lonely-road-of-chelsea-manning.html"&gt;&lt;img alt="" src="https://static01.nyt.com/images/2017/06/18/magazine/18manning6-copy/18manning6-copy-largeHorizontal375-v2.jpg"/&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;figcaption class="caption" itemprop="description"&gt;
+&lt;span class="caption-text"&gt;&lt;/span&gt;
+&lt;span class="credit" itemprop="copyrightHolder"&gt;
+&lt;span class="visually-hidden"&gt;Credit&lt;/span&gt;
+	            Inez and Vinoodh for The New York Times. Stylist: Alex White. 	        &lt;/span&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h1 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/12/magazine/the-long-lonely-road-of-chelsea-manning.html"&gt;The Long, Lonely Road of Chelsea Manning&lt;/a&gt;&lt;/h1&gt;
+&lt;p class="summary"&gt;Her disclosure of classified documents in 2010 ushered in the age of leaks. Now, freed from prison, she talks about why she did it — and the isolation that followed.&lt;/p&gt;
+&lt;p class="byline"&gt;By MATTHEW SHAER &lt;/p&gt;
+&lt;ul class="refer theme-news-headlines"&gt;
+&lt;li&gt;
+&lt;article class="story" id="topnews-100000005159290"&gt;
+&lt;h2 class="refer-heading"&gt;&lt;span class="theme-comments"&gt;&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/12/magazine/the-long-lonely-road-of-chelsea-manning.html?target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt;Comments&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;&lt;/h2&gt;
+&lt;/article&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/article&gt;
+
+
+
+---------------------------------------------------------------------------
+
+AttributeError                            Traceback (most recent call last)
+
+&lt;ipython-input-7-a704a72bd6ca&gt; in &lt;module&gt;()
+      5     headline = story.find('h2', { 'class': 'story-heading' })
+      6     print(story)
+----&gt; 7     print(headline.text)
+
+
+AttributeError: 'NoneType' object has no attribute 'text'
+</code></pre>
+</div>
+
+<p>The error seems to happen with this one piece here:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;h1 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/03/17/nyregion/norman-podhoretz-still-picks- fights-and-drops-names.html"&gt;Legendary New York Intellectuals Are His Ex- Friends&lt;/a&gt;&lt;/h1&gt;
+&lt;p class="summary"&gt;Norman Podhoretz, the former editor at Commentary magazine, looks back at the fierce, argumentative parties of New York’s intelligentsia.&lt;/p&gt;
+&lt;p class="byline"&gt;By JOHN LELAND &lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/03/17/nyregion/norman-podhoretz-still-picks- fights-and-drops-names.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+</code></pre>
+</div>
+
+<p>Oh look, it uses an <code class="highlighter-rouge">h1</code> instead of an <code class="highlighter-rouge">h2</code>, but it’s still a <code class="highlighter-rouge">story-heading</code>.
+Let’s change our code to <strong>look for a <code class="highlighter-rouge">story-heading</code> class regardless of tag
+name</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">story</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'article'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">story</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"This is a story"</span><span class="p">)</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'story-heading'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>This is a story
+Revised Trump Travel Ban Suffers Another Legal Setback
+This is a story
+Putin Opponent Is Arrested Amid Protests in Russia
+This is a story
+Why Cyberwar on ISIS Has Fallen Short of U.S. Hopes
+This is a story
+Trump Holdings Are Unconstitutional, Pioneering Suit Says
+This is a story
+Opioid Addicts Find an Ally in Blue
+This is a story
+Addiction Drug Lacks Results, but It Has Powerful Friends 
+This is a story
+Role of Trump’s Lawyer Blurs Public and Private Lines
+This is a story
+Trump Era, Unlike Watergate Era, Has Rival Sets of Facts
+This is a story
+Fired U.S. Attorney Says Trump Tried to Build Relationship With Him 
+This is a story
+The Long, Lonely Road of Chelsea Manning
+This is a story
+
+
+
+---------------------------------------------------------------------------
+
+AttributeError                            Traceback (most recent call last)
+
+&lt;ipython-input-8-d8d1f3203fa2&gt; in &lt;module&gt;()
+      4     print("This is a story")
+      5     headline = story.find(class_='story-heading')
+----&gt; 6     print(headline.text)
+
+
+AttributeError: 'NoneType' object has no attribute 'text'
+</code></pre>
+</div>
+
+<p>Another error! Let’s print out again.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">story</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'article'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">story</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"This is a story"</span><span class="p">)</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'story-heading'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>This is a story
+&lt;article class="story theme-summary lede" data-collection-renderstyle="LedeSum" data-rank="0" data-story-id="100000005155100" id="topnews-100000005155100"&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/12/us/politics/trump-travel-ban-court-of-appeals.html"&gt;Revised Trump Travel Ban Suffers Another Legal Setback&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By ADAM LIPTAK &lt;time class="timestamp" data-eastern-timestamp="2:09 PM" data-utc-timestamp="1497290947" datetime="2017-06-12"&gt;2:09 PM ET&lt;/time&gt;&lt;/p&gt;
+&lt;p class="summary"&gt;&lt;ul&gt;&lt;li&gt;A ruling by a federal appeals court was the latest in a string of decisions rejecting President Trump’s efforts to limit travel from several predominantly Muslim countries.&lt;/li&gt;&lt;li&gt;The administration has already sought a Supreme Court review of a similar decision issued last month.&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/12/us/politics/trump-travel-ban-court-of-appeals.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+Revised Trump Travel Ban Suffers Another Legal Setback
+This is a story
+&lt;article class="story theme-summary" data-collection-renderstyle="HpSum" data-end-time="" data-rank="0" data-start-time="" data-story-id="100000005159260" id="topnews-100000005159260"&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/12/world/europe/russia-aleksei-navalny-kremlin-protests.html"&gt;Putin Opponent Is Arrested Amid Protests in Russia&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By NEIL MacFARQUHAR and ANDREW HIGGINS &lt;time class="timestamp" data-eastern-timestamp="1:26 PM" data-utc-timestamp="1497288362" datetime="2017-06-12"&gt;1:26 PM ET&lt;/time&gt;&lt;/p&gt;
+&lt;p class="summary"&gt;The police detained Aleksei A. Navalny, a Kremlin critic and the architect of a wave of antigovernment protests across Russia.&lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/12/world/europe/russia-aleksei-navalny-kremlin-protests.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+Putin Opponent Is Arrested Amid Protests in Russia
+This is a story
+&lt;article class="story theme-summary" data-collection-renderstyle="HpSum" data-end-time="" data-rank="0" data-start-time="" data-story-id="100000005146544" id="topnews-100000005146544"&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/12/world/middleeast/isis-cyber.html"&gt;Why Cyberwar on ISIS Has Fallen Short of U.S. Hopes&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By DAVID E. SANGER and ERIC SCHMITT &lt;/p&gt;
+&lt;p class="summary"&gt;The effectiveness of cyberweapons hit its limits against an enemy that exploits the internet to recruit, spread propaganda and use encrypted communications, all of which can be quickly reconstituted.&lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/12/world/middleeast/isis-cyber.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+Why Cyberwar on ISIS Has Fallen Short of U.S. Hopes
+This is a story
+&lt;article class="story theme-summary" data-collection-renderstyle="HpSum" data-end-time="" data-rank="0" data-start-time="" data-story-id="100000005159532" id="topnews-100000005159532"&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/12/us/trump-lawsuit-private-businesses.html"&gt;Trump Holdings Are Unconstitutional, Pioneering Suit Says&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By SHARON LaFRANIERE &lt;time class="timestamp" data-eastern-timestamp="12:31 PM" data-utc-timestamp="1497285082" datetime="2017-06-12"&gt;12:31 PM ET&lt;/time&gt;&lt;/p&gt;
+&lt;p class="summary"&gt;The complaint, filed in federal court by Maryland and the District of Columbia, alleges that the president’s failure to shed his businesses has undermined public trust and violated constitutional bans on self-dealing.&lt;/p&gt;
+&lt;/article&gt;
+Trump Holdings Are Unconstitutional, Pioneering Suit Says
+This is a story
+&lt;article class="story theme-summary" data-collection-renderstyle="HpSum" data-end-time="" data-rank="0" data-start-time="" data-story-id="100000005090510" id="topnews-100000005090510"&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/12/nyregion/when-opioid-addicts-find-an-ally-in-blue.html"&gt;Opioid Addicts Find an Ally in Blue&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By AL BAKER &lt;/p&gt;
+&lt;p class="summary"&gt;Police leaders are assigning themselves a big role in reversing a complex crisis, and not through mass arrests.&lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/12/nyregion/when-opioid-addicts-find-an-ally-in-blue.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+Opioid Addicts Find an Ally in Blue
+This is a story
+&lt;article class="story" data-collection-renderstyle="HpHeadline" data-rank="1" data-story-id="100000005137980" id="topnews-100000005137980"&gt;
+&lt;h2 class="story-heading"&gt;&lt;i class="icon"&gt;&lt;/i&gt;&lt;a href="https://www.nytimes.com/2017/06/11/health/vivitrol-drug-opioid-addiction.html"&gt;Addiction Drug Lacks Results, but It Has Powerful Friends&lt;/a&gt; &lt;/h2&gt;
+&lt;/article&gt;
+Addiction Drug Lacks Results, but It Has Powerful Friends 
+This is a story
+&lt;article class="story theme-summary" data-collection-renderstyle="HpSumSmallMedia" data-rank="0" data-story-id="100000005148452" id="topnews-100000005148452"&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/11/us/politics/trump-lawyer-marc-kasowitz.html"&gt;Role of Trump’s Lawyer Blurs Public and Private Lines&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By REBECCA R. RUIZ and SHARON LaFRANIERE &lt;/p&gt;
+&lt;div class="thumb"&gt;
+&lt;a href="https://www.nytimes.com/2017/06/11/us/politics/trump-lawyer-marc-kasowitz.html"&gt;&lt;img alt="" src="https://static01.nyt.com/images/2017/06/10/us/10dc-kasowitz/10dc-kasowitz-thumbStandard.jpg"/&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;p class="summary"&gt;
+        Marc E. Kasowitz, the president’s private lawyer, has counseled administration staff and exerted broader influence over legal strategy.    &lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/11/us/politics/trump-lawyer-marc-kasowitz.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+Role of Trump’s Lawyer Blurs Public and Private Lines
+This is a story
+&lt;article class="story theme-summary" data-collection-renderstyle="HpSum" data-end-time="" data-rank="0" data-start-time="" data-story-id="100000005158161" id="topnews-100000005158161"&gt;
+&lt;h3 class="kicker"&gt;Mediator &lt;/h3&gt;
+&lt;h2 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/11/business/media/comey-trump-watergate.html"&gt;Trump Era, Unlike Watergate Era, Has Rival Sets of Facts&lt;/a&gt;&lt;/h2&gt;
+&lt;p class="byline"&gt;By JIM RUTENBERG &lt;/p&gt;
+&lt;p class="summary"&gt;Different versions of the Trump-Russia scandal are fighting for supremacy, leaving news veterans wondering, “What if Watergate happened now?”&lt;/p&gt;
+&lt;p class="theme-comments"&gt;
+&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/11/business/media/comey-trump-watergate.html?hp&amp;amp;target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt; Comments&lt;/span&gt;&lt;/a&gt;
+&lt;/p&gt;
+&lt;/article&gt;
+Trump Era, Unlike Watergate Era, Has Rival Sets of Facts
+This is a story
+&lt;article class="story" data-collection-renderstyle="HpHeadline" data-rank="1" data-story-id="100000005158566" id="topnews-100000005158566"&gt;
+&lt;h2 class="story-heading"&gt;&lt;i class="icon"&gt;&lt;/i&gt;&lt;a href="https://www.nytimes.com/2017/06/11/us/politics/preet-bharara-trump-contacts.html"&gt;Fired U.S. Attorney Says Trump Tried to Build Relationship With Him&lt;/a&gt; &lt;/h2&gt;
+&lt;/article&gt;
+Fired U.S. Attorney Says Trump Tried to Build Relationship With Him 
+This is a story
+&lt;article class="story theme-feature" data-collection-renderstyle="LargeMediaHeadlineSumCentered" data-rank="1" data-story-id="100000005159290" id="topnews-100000005159290"&gt;
+&lt;figure class="media photo"&gt;
+&lt;div class="image"&gt;
+&lt;a href="https://www.nytimes.com/2017/06/12/magazine/the-long-lonely-road-of-chelsea-manning.html"&gt;&lt;img alt="" src="https://static01.nyt.com/images/2017/06/18/magazine/18manning6-copy/18manning6-copy-largeHorizontal375-v2.jpg"/&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;figcaption class="caption" itemprop="description"&gt;
+&lt;span class="caption-text"&gt;&lt;/span&gt;
+&lt;span class="credit" itemprop="copyrightHolder"&gt;
+&lt;span class="visually-hidden"&gt;Credit&lt;/span&gt;
+	            Inez and Vinoodh for The New York Times. Stylist: Alex White. 	        &lt;/span&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h1 class="story-heading"&gt;&lt;a href="https://www.nytimes.com/2017/06/12/magazine/the-long-lonely-road-of-chelsea-manning.html"&gt;The Long, Lonely Road of Chelsea Manning&lt;/a&gt;&lt;/h1&gt;
+&lt;p class="summary"&gt;Her disclosure of classified documents in 2010 ushered in the age of leaks. Now, freed from prison, she talks about why she did it — and the isolation that followed.&lt;/p&gt;
+&lt;p class="byline"&gt;By MATTHEW SHAER &lt;/p&gt;
+&lt;ul class="refer theme-news-headlines"&gt;
+&lt;li&gt;
+&lt;article class="story" id="topnews-100000005159290"&gt;
+&lt;h2 class="refer-heading"&gt;&lt;span class="theme-comments"&gt;&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/12/magazine/the-long-lonely-road-of-chelsea-manning.html?target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt;Comments&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;&lt;/h2&gt;
+&lt;/article&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/article&gt;
+The Long, Lonely Road of Chelsea Manning
+This is a story
+&lt;article class="story" id="topnews-100000005159290"&gt;
+&lt;h2 class="refer-heading"&gt;&lt;span class="theme-comments"&gt;&lt;a class="comments-link" href="https://www.nytimes.com/2017/06/12/magazine/the-long-lonely-road-of-chelsea-manning.html?target=comments#commentsContainer"&gt;&lt;i class="icon sprite-icon comments-icon"&gt;&lt;/i&gt;&lt;span class="comment-count"&gt;Comments&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;&lt;/h2&gt;
+&lt;/article&gt;
+
+
+
+---------------------------------------------------------------------------
+
+AttributeError                            Traceback (most recent call last)
+
+&lt;ipython-input-9-dfdf9ca56478&gt; in &lt;module&gt;()
+      5     headline = story.find(class_='story-heading')
+      6     print(story)
+----&gt; 7     print(headline.text)
+
+
+AttributeError: 'NoneType' object has no attribute 'text'
+</code></pre>
+</div>
+
+<p>It looks like it failed on this one.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;article class="story"&gt;
+&lt;h3 class="kicker"&gt;
+&lt;a href="http://wordplay.blogs.nytimes.com"&gt;Wordplay »&lt;/a&gt;
+&lt;/h3&gt;
+&lt;/article&gt;
+</code></pre>
+</div>
+
+<p>Now we have a choice to make: do we care about this? I… don’t. If we want to
+skip through to the next element in a loop, we can use <code class="highlighter-rouge">continue</code>.</p>
+
+<p>Let’s say <strong>hey, if you don’t have a headline, we’re going to skip you.</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">story</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'article'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">story</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"This is a story"</span><span class="p">)</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'story-heading'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">headline</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>This is a story
+Revised Trump Travel Ban Suffers Another Legal Setback
+This is a story
+Putin Opponent Is Arrested Amid Protests in Russia
+This is a story
+Why Cyberwar on ISIS Has Fallen Short of U.S. Hopes
+This is a story
+Trump Holdings Are Unconstitutional, Pioneering Suit Says
+This is a story
+Opioid Addicts Find an Ally in Blue
+This is a story
+Addiction Drug Lacks Results, but It Has Powerful Friends 
+This is a story
+Role of Trump’s Lawyer Blurs Public and Private Lines
+This is a story
+Trump Era, Unlike Watergate Era, Has Rival Sets of Facts
+This is a story
+Fired U.S. Attorney Says Trump Tried to Build Relationship With Him 
+This is a story
+The Long, Lonely Road of Chelsea Manning
+This is a story
+This is a story
+California Today: Talking to a Tony Winner
+This is a story
+
+
+      Listen to ‘The Daily’
+    
+
+This is a story
+How to Save on Summer Travel
+This is a story
+Ways Your iPhone Will Change After Apple’s iOS 11
+This is a story
+Gargantuan Job: Dismantling a Million Tons of North Sea Oil Rigs
+This is a story
+The Best (and Worst) of the 2017 Tony Awards
+This is a story
+‘Dear Evan Hansen’ Wins 6 Tonys; Midler Is Best Leading Actress
+This is a story
+Television Review: An Uneven Night for Kevin Spacey as Host
+This is a story
+Fashion Review: The Tony Awards Get the Red Carpet Blues
+This is a story
+‘We Are Not Unusual Anymore’: 50 Years of Mixed-Race Marriage in U.S.
+This is a story
+Ahead of ‘Brexit,’ Britons Face Economic Pinch at Home
+This is a story
+For Democrats, Spotlight Turns to Race to Replace Christie
+This is a story
+This is a story
+Death Penalty in Pakistan for Social Media Blasphemy 1:45 PM ET
+This is a story
+Theresa May Battles to Hold On as U.K. Prime Minister 12:54 PM ET
+This is a story
+Uber’s No. 2 Executive Leaves Firm 12:32 PM ET
+This is a story
+Jeffrey Immelt to Retire as General Electric Chief 1:56 PM ET
+This is a story
+Bill Cosby Sex Assault Trial: The Defense Rests 1:07 PM ET
+This is a story
+Morning Briefing: Australia Edition
+This is a story
+Morning Briefing: Asia Edition
+This is a story
+Morning Briefing: Europe Edition
+This is a story
+Morning Briefing
+This is a story
+
+Australia to Tighten Parole Laws After Deadly Siege
+
+This is a story
+
+Australian Politics Is Open to Foreign Cash, and China Has Much to Gain
+
+This is a story
+
+Australia Makes Riesling Its Own
+
+This is a story
+
+Take Our Quiz on Solving Global Warming
+
+This is a story
+
+Something Old and New at the French Open
+
+This is a story
+
+How a Dark Web Mastermind Went Down
+
+This is a story
+Making Google the Censor
+This is a story
+Editorial: Mr. Trump Goes After the Inspectors 
+This is a story
+Blow: Impeachment Anxiety 
+This is a story
+Krugman: They Don’t Need No Information 
+This is a story
+Sexual Abusers Shouldn’t Be Allowed to Run the Clock 
+This is a story
+A Night of Terror, a Year of Racism 
+This is a story
+The True Meaning of ‘Idiot’ 
+This is a story
+Loving, 50 Years Later
+This is a story
+Finally, Something Isn’t the Matter With Kansas 
+This is a story
+America Needs Closure on the Travel Ban 
+This is a story
+Follow us on Twitter » 
+This is a story
+
+Bar Code: A New Infatuation Poised for a Puzzle Craze
+
+This is a story
+
+Agree With ‘The 25 Best Films’? Tell Us How You Really Feel
+
+This is a story
+
+Bar Code: A New Infatuation Poised for a Puzzle Craze
+
+This is a story
+
+Play Today’s Puzzle 
+
+This is a story
+
+Play Today’s Puzzle 
+
+This is a story
+This is a story
+This is a story
+At Palace, the Unbearable Being of Lines
+This is a story
+A Fierce Famine Stalks Africa
+This is a story
+The Lice Ladies of Brooklyn Go Corporate
+This is a story
+The Revolutionary Specters of Russian Letters
+This is a story
+Meet the Musicians Who Modeled for Gucci
+This is a story
+What We’re Reading
+This is a story
+Ideas Sparked by Flow of Twitter Conversations
+This is a story
+Making Google the Censor
+This is a story
+What Yotam Ottolenghi Can’t Do Without
+This is a story
+Will Iran Descend Into Chaos?
+This is a story
+From the Subways to the Sofa: Pet Rats
+This is a story
+The Presence of Violence at the Kabul Bureau
+This is a story
+
+        U.S. Cyberweapons, Used Against Iran and North Korea, Are a Disappointment Against ISIS        
+This is a story
+
+
+            Reviving a Lost Language of Canada Through Film        
+
+This is a story
+
+
+            Emmanuel Macron’s Party on Track to Claim Majority in France’s Parliament        
+
+This is a story
+
+        Jeffrey Immelt to Retire as General Electric Chief        
+This is a story
+
+
+            Emil Michael Leaves Uber        
+
+This is a story
+
+
+            Uber Weighs Leave of Absence for Chief Executive        
+
+This is a story
+
+        Charles M. Blow: The Resistance: Impeachment Anxiety        
+This is a story
+
+
+            Editorial: Mr. Trump Goes After the Inspectors        
+
+This is a story
+
+
+            Op-Ed Contributor: Making Google the Censor        
+
+This is a story
+
+        ‘We Are Not Unusual Anymore’: 50 Years of Mixed-Race Marriage in U.S.        
+This is a story
+
+
+            For Flint, an 1882 Play About Bad Water Is ‘Exactly What We’re Living’        
+
+This is a story
+
+
+            Heroin Use? Juvenile Record? For Recruits, Police Forgive Past Sins        
+
+This is a story
+
+        Uber Weighs Leave of Absence for Chief Executive        
+This is a story
+
+
+            Emil Michael Leaves Uber        
+
+This is a story
+
+
+            U.S. Cyberweapons, Used Against Iran and North Korea, Are a Disappointment Against ISIS        
+
+This is a story
+
+        Tony Awards Briefing: ‘Dear Evan Hansen’ Wins 6 Tony Awards; Bette Midler Is Best Leading Actress        
+This is a story
+
+
+            The Best (and Worst) of the 2017 Tony Awards        
+
+This is a story
+
+
+            Et Tu, Delta? Shakespeare in the Park Sponsors Withdraw From Trump-Like ‘Julius Caesar’        
+
+This is a story
+
+        Supreme Court Bars Favoring Mothers Over Fathers in Citizenship Case        
+This is a story
+
+
+            Trump Loses Travel Ban Ruling in Appeals Court        
+
+This is a story
+
+
+            Ivanka Trump Says Father Felt ‘Vindicated’ by Comey Testimony        
+
+This is a story
+
+        On the Runway: The Tony Awards Get the Red Carpet Blues        
+This is a story
+
+
+            Styles Q. &amp; A.: Virgil Abloh Projects Politics Into His Florence Fashion Show        
+
+This is a story
+
+
+            Death of a Downtown Icon: Remembering Benjamin Cho        
+
+This is a story
+
+        The 25 Best Films of the 21st Century So Far.        
+This is a story
+
+
+            Review: ‘The Mummy,’ With Tom Cruise, Deserves a Quick Burial        
+
+This is a story
+
+
+            Review: Mom, Dad, the Kid and the Dog. What Could Be Scarier?        
+
+This is a story
+
+        When Opioid Addicts Find an Ally in Blue        
+This is a story
+
+
+            L.I.R.R. Announces Travel Options for ‘Summer of Hell’        
+
+This is a story
+
+
+            What’s the Insurance Capital Without Aetna? Hartford May Find Out        
+
+This is a story
+
+        Keeping Score: All Should Rise for Yankees’ Gary Sanchez, Too        
+This is a story
+
+
+            Penguins 2, Predators 0 | Pittsburgh wins series, 4-2: Pittsburgh Penguins Beat the Predators to Repeat as Stanley Cup Champions        
+
+This is a story
+
+
+            Give Baseball Scouts a (Perfect) 80 for Tradition        
+
+This is a story
+
+        The Best (and Worst) of the 2017 Tony Awards        
+This is a story
+
+
+            Tony Awards Briefing: ‘Dear Evan Hansen’ Wins 6 Tony Awards; Bette Midler Is Best Leading Actress        
+
+This is a story
+
+
+            Et Tu, Delta? Shakespeare in the Park Sponsors Withdraw From Trump-Like ‘Julius Caesar’        
+
+This is a story
+
+        On Nuclear Waste, Finland Shows U.S. How It Can Be Done        
+This is a story
+
+
+            Basics: The Liver: A ‘Blob’ That Runs the Body        
+
+This is a story
+
+
+            Trilobites: These Hungry Goats Learned to Branch Out        
+
+This is a story
+
+        Edith Shiffert, a Poet Inspired by Nature and Her Life in Japan, Dies at 101        
+This is a story
+
+
+            Sad Day for Gotham: Adam West, Who Played Batman, Dies at 88        
+
+This is a story
+
+
+            Andimba Toivo ya Toivo, Namibian Independence Leader, Dies at 92        
+
+This is a story
+
+        Television Review: An Uneven Night for Kevin Spacey as Tonys Host        
+This is a story
+
+
+            Oliver Stone’s ‘Putin Interviews’: Flattery, but Little Skepticism        
+
+This is a story
+
+
+            Televsion Review: ‘Claws’ on TNT: That Manicure Comes With a Murder        
+
+This is a story
+
+        Basics: The Liver: A ‘Blob’ That Runs the Body        
+This is a story
+
+
+             The New Old Age: Hearing Aids at the Mall? Congress Could Make It Happen        
+
+This is a story
+
+
+            More Than 10 Percent of World’s Population Is Obese, Study Finds        
+
+This is a story
+
+        The Getaway: How Much Are Frequent Flier Miles Really Worth?        
+This is a story
+
+
+            U.S. Islands: On a Georgia Island, a Lot of Good Food and Plenty of Nothing        
+
+This is a story
+
+
+            Essay: How to Ease Travel Anxiety in an Era of Terror: Travel More        
+
+This is a story
+
+        Nonfiction: How the Dark Web’s Dread Pirate Roberts Went Down        
+This is a story
+
+
+            Q. and A.: Tell Us 5 Things About Your Book: A Reporter Inside the World of Jihad        
+
+This is a story
+
+
+            Fiction: Arundhati Roy’s Return to the Form That Made Her Famous        
+
+This is a story
+
+        To Understand Betsy DeVos’s Educational Views, View Her Education        
+This is a story
+
+
+            David L. Kirp: Ending the Curse of Remedial Math        
+
+This is a story
+
+
+            Success Academy Wins Round in Fight Over Preschool Oversight        
+
+This is a story
+
+        Hungry City: At Bep Ga in Chinatown, It All Begins With Chicken        
+This is a story
+
+
+            City Kitchen: A Juicy Tenderloin, a Pesto Swirl        
+
+This is a story
+
+
+            A Good Appetite: The Simplest Shortbread You Can Bake        
+
+This is a story
+
+        Opinion: Is Putin Getting What He Wanted With Trump?        
+This is a story
+
+
+            Editorial: It’s the Olympics for Trump Apologists        
+
+This is a story
+
+
+            Frank Bruni: Can Democrats Save Themselves?        
+
+This is a story
+
+        The Elusive $1,500 Rental        
+This is a story
+
+
+            Exclusive: Where a Rockefeller Raised His Family        
+
+This is a story
+
+
+            Ask Real Estate: Creating New Windows Without Ruining the Building        
+
+This is a story
+
+        Your Rabbi? Probably a Democrat. Your Baptist Pastor? Probably a Republican. Your Priest? Who Knows.        
+This is a story
+
+
+            The New Health Care: There’s No Magical Savings in Showing Prices to Doctors        
+
+This is a story
+
+
+            Economic View: Why Women Don’t See Themselves as Entrepreneurs        
+
+This is a story
+
+        Feature: The Long, Lonely Road of Chelsea Manning        
+This is a story
+
+
+            Feature: America’s Hidden H.I.V. Epidemic        
+
+This is a story
+
+
+            Feature: The Bounty Hunter of Wall Street        
+
+This is a story
+
+        Driven: Video Review: With New Ioniq, Hyundai Goes After Prius        
+This is a story
+
+
+            Wheels: In Portland, a Rare Outpost for Die-Hard Saab Fans        
+
+This is a story
+
+
+            Bits: Electronic Setups of Driverless Cars Vulnerable to Hackers        
+
+This is a story
+
+        6 Designers (Straight Out of Fashion School) to Know        
+This is a story
+
+
+            Some Things T Editors Are Really Into Right Now        
+
+This is a story
+
+
+            8 Male Models to Watch This Season        
+
+This is a story
+
+        Bar Code: A New Infatuation Poised for a Puzzle Craze        
+This is a story
+
+
+            Ahead of the Tonys, Watching Everything        
+
+This is a story
+
+
+            Agree With ‘The 25 Best Films’? Tell Us How You Really Feel        
+
+This is a story
+Homes That Sold for Around $450,000
+This is a story
+Search for Homes for Sale or Rent
+This is a story
+Mortgage Calculator
+</code></pre>
+</div>
+
+<p>Maybe we can also say hey, let’s get rid of the whitespace on the headlines by
+using <code class="highlighter-rouge">.strip()</code></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">story</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'article'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">story</span><span class="p">:</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'story-heading'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">headline</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Revised Trump Travel Ban Suffers Another Legal Setback
+Putin Opponent Is Arrested Amid Protests in Russia
+Why Cyberwar on ISIS Has Fallen Short of U.S. Hopes
+Trump Holdings Are Unconstitutional, Pioneering Suit Says
+Opioid Addicts Find an Ally in Blue
+Addiction Drug Lacks Results, but It Has Powerful Friends
+Role of Trump’s Lawyer Blurs Public and Private Lines
+Trump Era, Unlike Watergate Era, Has Rival Sets of Facts
+Fired U.S. Attorney Says Trump Tried to Build Relationship With Him
+The Long, Lonely Road of Chelsea Manning
+California Today: Talking to a Tony Winner
+Listen to ‘The Daily’
+How to Save on Summer Travel
+Ways Your iPhone Will Change After Apple’s iOS 11
+Gargantuan Job: Dismantling a Million Tons of North Sea Oil Rigs
+The Best (and Worst) of the 2017 Tony Awards
+‘Dear Evan Hansen’ Wins 6 Tonys; Midler Is Best Leading Actress
+Television Review: An Uneven Night for Kevin Spacey as Host
+Fashion Review: The Tony Awards Get the Red Carpet Blues
+‘We Are Not Unusual Anymore’: 50 Years of Mixed-Race Marriage in U.S.
+Ahead of ‘Brexit,’ Britons Face Economic Pinch at Home
+For Democrats, Spotlight Turns to Race to Replace Christie
+Death Penalty in Pakistan for Social Media Blasphemy 1:45 PM ET
+Theresa May Battles to Hold On as U.K. Prime Minister 12:54 PM ET
+Uber’s No. 2 Executive Leaves Firm 12:32 PM ET
+Jeffrey Immelt to Retire as General Electric Chief 1:56 PM ET
+Bill Cosby Sex Assault Trial: The Defense Rests 1:07 PM ET
+Morning Briefing: Australia Edition
+Morning Briefing: Asia Edition
+Morning Briefing: Europe Edition
+Morning Briefing
+Australia to Tighten Parole Laws After Deadly Siege
+Australian Politics Is Open to Foreign Cash, and China Has Much to Gain
+Australia Makes Riesling Its Own
+Take Our Quiz on Solving Global Warming
+Something Old and New at the French Open
+How a Dark Web Mastermind Went Down
+Making Google the Censor
+Editorial: Mr. Trump Goes After the Inspectors
+Blow: Impeachment Anxiety
+Krugman: They Don’t Need No Information
+Sexual Abusers Shouldn’t Be Allowed to Run the Clock
+A Night of Terror, a Year of Racism
+The True Meaning of ‘Idiot’
+Loving, 50 Years Later
+Finally, Something Isn’t the Matter With Kansas
+America Needs Closure on the Travel Ban
+Follow us on Twitter »
+Bar Code: A New Infatuation Poised for a Puzzle Craze
+Agree With ‘The 25 Best Films’? Tell Us How You Really Feel
+Bar Code: A New Infatuation Poised for a Puzzle Craze
+Play Today’s Puzzle
+Play Today’s Puzzle
+At Palace, the Unbearable Being of Lines
+A Fierce Famine Stalks Africa
+The Lice Ladies of Brooklyn Go Corporate
+The Revolutionary Specters of Russian Letters
+Meet the Musicians Who Modeled for Gucci
+What We’re Reading
+Ideas Sparked by Flow of Twitter Conversations
+Making Google the Censor
+What Yotam Ottolenghi Can’t Do Without
+Will Iran Descend Into Chaos?
+From the Subways to the Sofa: Pet Rats
+The Presence of Violence at the Kabul Bureau
+U.S. Cyberweapons, Used Against Iran and North Korea, Are a Disappointment Against ISIS
+Reviving a Lost Language of Canada Through Film
+Emmanuel Macron’s Party on Track to Claim Majority in France’s Parliament
+Jeffrey Immelt to Retire as General Electric Chief
+Emil Michael Leaves Uber
+Uber Weighs Leave of Absence for Chief Executive
+Charles M. Blow: The Resistance: Impeachment Anxiety
+Editorial: Mr. Trump Goes After the Inspectors
+Op-Ed Contributor: Making Google the Censor
+‘We Are Not Unusual Anymore’: 50 Years of Mixed-Race Marriage in U.S.
+For Flint, an 1882 Play About Bad Water Is ‘Exactly What We’re Living’
+Heroin Use? Juvenile Record? For Recruits, Police Forgive Past Sins
+Uber Weighs Leave of Absence for Chief Executive
+Emil Michael Leaves Uber
+U.S. Cyberweapons, Used Against Iran and North Korea, Are a Disappointment Against ISIS
+Tony Awards Briefing: ‘Dear Evan Hansen’ Wins 6 Tony Awards; Bette Midler Is Best Leading Actress
+The Best (and Worst) of the 2017 Tony Awards
+Et Tu, Delta? Shakespeare in the Park Sponsors Withdraw From Trump-Like ‘Julius Caesar’
+Supreme Court Bars Favoring Mothers Over Fathers in Citizenship Case
+Trump Loses Travel Ban Ruling in Appeals Court
+Ivanka Trump Says Father Felt ‘Vindicated’ by Comey Testimony
+On the Runway: The Tony Awards Get the Red Carpet Blues
+Styles Q. &amp; A.: Virgil Abloh Projects Politics Into His Florence Fashion Show
+Death of a Downtown Icon: Remembering Benjamin Cho
+The 25 Best Films of the 21st Century So Far.
+Review: ‘The Mummy,’ With Tom Cruise, Deserves a Quick Burial
+Review: Mom, Dad, the Kid and the Dog. What Could Be Scarier?
+When Opioid Addicts Find an Ally in Blue
+L.I.R.R. Announces Travel Options for ‘Summer of Hell’
+What’s the Insurance Capital Without Aetna? Hartford May Find Out
+Keeping Score: All Should Rise for Yankees’ Gary Sanchez, Too
+Penguins 2, Predators 0 | Pittsburgh wins series, 4-2: Pittsburgh Penguins Beat the Predators to Repeat as Stanley Cup Champions
+Give Baseball Scouts a (Perfect) 80 for Tradition
+The Best (and Worst) of the 2017 Tony Awards
+Tony Awards Briefing: ‘Dear Evan Hansen’ Wins 6 Tony Awards; Bette Midler Is Best Leading Actress
+Et Tu, Delta? Shakespeare in the Park Sponsors Withdraw From Trump-Like ‘Julius Caesar’
+On Nuclear Waste, Finland Shows U.S. How It Can Be Done
+Basics: The Liver: A ‘Blob’ That Runs the Body
+Trilobites: These Hungry Goats Learned to Branch Out
+Edith Shiffert, a Poet Inspired by Nature and Her Life in Japan, Dies at 101
+Sad Day for Gotham: Adam West, Who Played Batman, Dies at 88
+Andimba Toivo ya Toivo, Namibian Independence Leader, Dies at 92
+Television Review: An Uneven Night for Kevin Spacey as Tonys Host
+Oliver Stone’s ‘Putin Interviews’: Flattery, but Little Skepticism
+Televsion Review: ‘Claws’ on TNT: That Manicure Comes With a Murder
+Basics: The Liver: A ‘Blob’ That Runs the Body
+The New Old Age: Hearing Aids at the Mall? Congress Could Make It Happen
+More Than 10 Percent of World’s Population Is Obese, Study Finds
+The Getaway: How Much Are Frequent Flier Miles Really Worth?
+U.S. Islands: On a Georgia Island, a Lot of Good Food and Plenty of Nothing
+Essay: How to Ease Travel Anxiety in an Era of Terror: Travel More
+Nonfiction: How the Dark Web’s Dread Pirate Roberts Went Down
+Q. and A.: Tell Us 5 Things About Your Book: A Reporter Inside the World of Jihad
+Fiction: Arundhati Roy’s Return to the Form That Made Her Famous
+To Understand Betsy DeVos’s Educational Views, View Her Education
+David L. Kirp: Ending the Curse of Remedial Math
+Success Academy Wins Round in Fight Over Preschool Oversight
+Hungry City: At Bep Ga in Chinatown, It All Begins With Chicken
+City Kitchen: A Juicy Tenderloin, a Pesto Swirl
+A Good Appetite: The Simplest Shortbread You Can Bake
+Opinion: Is Putin Getting What He Wanted With Trump?
+Editorial: It’s the Olympics for Trump Apologists
+Frank Bruni: Can Democrats Save Themselves?
+The Elusive $1,500 Rental
+Exclusive: Where a Rockefeller Raised His Family
+Ask Real Estate: Creating New Windows Without Ruining the Building
+Your Rabbi? Probably a Democrat. Your Baptist Pastor? Probably a Republican. Your Priest? Who Knows.
+The New Health Care: There’s No Magical Savings in Showing Prices to Doctors
+Economic View: Why Women Don’t See Themselves as Entrepreneurs
+Feature: The Long, Lonely Road of Chelsea Manning
+Feature: America’s Hidden H.I.V. Epidemic
+Feature: The Bounty Hunter of Wall Street
+Driven: Video Review: With New Ioniq, Hyundai Goes After Prius
+Wheels: In Portland, a Rare Outpost for Die-Hard Saab Fans
+Bits: Electronic Setups of Driverless Cars Vulnerable to Hackers
+6 Designers (Straight Out of Fashion School) to Know
+Some Things T Editors Are Really Into Right Now
+8 Male Models to Watch This Season
+Bar Code: A New Infatuation Poised for a Puzzle Craze
+Ahead of the Tonys, Watching Everything
+Agree With ‘The 25 Best Films’? Tell Us How You Really Feel
+Homes That Sold for Around $450,000
+Search for Homes for Sale or Rent
+Mortgage Calculator
+</code></pre>
+</div>
+
+<h3 id="next-step-adding-more-pieces">Next step: Adding more pieces</h3>
+
+<p>Now we need to add in the links and the bylines. We’ll start with the links by
+pulling in any <code class="highlighter-rouge">a</code> tags.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">story</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'article'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">story</span><span class="p">:</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'story-heading'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">headline</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">link</span><span class="p">[</span><span class="s">'href'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Revised Trump Travel Ban Suffers Another Legal Setback
+https://www.nytimes.com/2017/06/12/us/politics/trump-travel-ban-court-of-appeals.html
+Putin Opponent Is Arrested Amid Protests in Russia
+https://www.nytimes.com/2017/06/12/world/europe/russia-aleksei-navalny-kremlin-protests.html
+Why Cyberwar on ISIS Has Fallen Short of U.S. Hopes
+https://www.nytimes.com/2017/06/12/world/middleeast/isis-cyber.html
+Trump Holdings Are Unconstitutional, Pioneering Suit Says
+https://www.nytimes.com/2017/06/12/us/trump-lawsuit-private-businesses.html
+Opioid Addicts Find an Ally in Blue
+https://www.nytimes.com/2017/06/12/nyregion/when-opioid-addicts-find-an-ally-in-blue.html
+Addiction Drug Lacks Results, but It Has Powerful Friends
+https://www.nytimes.com/2017/06/11/health/vivitrol-drug-opioid-addiction.html
+Role of Trump’s Lawyer Blurs Public and Private Lines
+https://www.nytimes.com/2017/06/11/us/politics/trump-lawyer-marc-kasowitz.html
+Trump Era, Unlike Watergate Era, Has Rival Sets of Facts
+https://www.nytimes.com/2017/06/11/business/media/comey-trump-watergate.html
+Fired U.S. Attorney Says Trump Tried to Build Relationship With Him
+https://www.nytimes.com/2017/06/11/us/politics/preet-bharara-trump-contacts.html
+The Long, Lonely Road of Chelsea Manning
+https://www.nytimes.com/2017/06/12/magazine/the-long-lonely-road-of-chelsea-manning.html
+California Today: Talking to a Tony Winner
+https://www.nytimes.com/2017/06/12/us/california-today-talking-to-a-tony-winner.html
+Listen to ‘The Daily’
+https://www.nytimes.com/column/the-daily
+How to Save on Summer Travel
+https://www.nytimes.com/interactive/2017/05/16/travel/frugal-traveler-summer-travel-chat.html
+Ways Your iPhone Will Change After Apple’s iOS 11
+https://www.nytimes.com/2017/06/12/smarter-living/apple-iphone-ios11.html
+Gargantuan Job: Dismantling a Million Tons of North Sea Oil Rigs
+https://www.nytimes.com/2017/06/08/business/energy-environment/oil-north-sea-shell.html
+The Best (and Worst) of the 2017 Tony Awards
+https://www.nytimes.com/2017/06/12/theater/the-best-and-worst-of-the-2017-tony-awards.html
+‘Dear Evan Hansen’ Wins 6 Tonys; Midler Is Best Leading Actress
+https://www.nytimes.com/2017/06/11/theater/tony-awards.html
+Television Review: An Uneven Night for Kevin Spacey as Host
+https://www.nytimes.com/2017/06/12/theater/tony-awards-review-recap-kevin-spacey.html
+Fashion Review: The Tony Awards Get the Red Carpet Blues
+https://www.nytimes.com/2017/06/12/fashion/tony-awards-red-carpet-trends.html
+‘We Are Not Unusual Anymore’: 50 Years of Mixed-Race Marriage in U.S.
+https://www.nytimes.com/2017/06/11/us/mixed-race-marriage-loving-decision-anniversary.html
+Ahead of ‘Brexit,’ Britons Face Economic Pinch at Home
+https://www.nytimes.com/2017/06/11/business/economy/britain-economy-election-brexit.html
+For Democrats, Spotlight Turns to Race to Replace Christie
+https://www.nytimes.com/2017/06/09/nyregion/democrats-new-jersey-governor-philip-murphy.html
+Death Penalty in Pakistan for Social Media Blasphemy 1:45 PM ET
+https://www.nytimes.com/2017/06/12/world/asia/pakistan-blasphemy-sentence.html
+Theresa May Battles to Hold On as U.K. Prime Minister 12:54 PM ET
+https://www.nytimes.com/2017/06/12/world/europe/uk-theresa-may-britain.html
+Uber’s No. 2 Executive Leaves Firm 12:32 PM ET
+https://www.nytimes.com/2017/06/12/technology/uber-travis-kalanick-emil-michael.html
+Jeffrey Immelt to Retire as General Electric Chief 1:56 PM ET
+https://www.nytimes.com/2017/06/12/business/ge-immelt.html
+Bill Cosby Sex Assault Trial: The Defense Rests 1:07 PM ET
+https://www.nytimes.com/2017/06/12/arts/television/bill-cosby-trial-day-6.html
+Morning Briefing: Australia Edition
+https://www.nytimes.com/newsletters/morning-briefing-australia
+Morning Briefing: Asia Edition
+https://www.nytimes.com/newsletters/morning-briefing-asia
+Morning Briefing: Europe Edition
+https://www.nytimes.com/newsletters/morning-briefing-europe
+Morning Briefing
+https://www.nytimes.com/newsletters/morning-briefing
+Australia to Tighten Parole Laws After Deadly Siege
+https://www.nytimes.com/2017/06/09/world/australia/australia-melbourne-terror-parole.html
+Australian Politics Is Open to Foreign Cash, and China Has Much to Gain
+https://www.nytimes.com/2017/06/06/world/australia/china-political-influence-campaign-finance.html
+Australia Makes Riesling Its Own
+https://www.nytimes.com/2017/06/08/dining/wine-review-australian-riesling.html
+Take Our Quiz on Solving Global Warming
+https://www.nytimes.com/interactive/2017/06/09/climate/drawdown-climate-solutions-quiz.html
+Something Old and New at the French Open
+https://www.nytimes.com/2017/06/12/sports/tennis/something-old-something-new-at-french-open.html
+How a Dark Web Mastermind Went Down
+https://www.nytimes.com/2017/06/12/books/review/american-kingpin-nick-bilton.html
+Making Google the Censor
+https://www.nytimes.com/2017/06/12/opinion/making-google-the-censor.html
+Editorial: Mr. Trump Goes After the Inspectors
+https://www.nytimes.com/2017/06/12/opinion/mr-trump-goes-after-the-inspectors.html
+Blow: Impeachment Anxiety
+https://www.nytimes.com/2017/06/12/opinion/the-resistance-impeachment-anxiety.html
+Krugman: They Don’t Need No Information
+https://krugman.blogs.nytimes.com/2017/06/11/they-dont-need-no-information/
+Sexual Abusers Shouldn’t Be Allowed to Run the Clock
+https://www.nytimes.com/2017/06/12/opinion/sexual-abusers-shouldnt-be-allowed-to-run-the-clock.html
+A Night of Terror, a Year of Racism
+https://www.nytimes.com/2017/06/12/opinion/a-night-of-terror-a-year-of-racism.html
+The True Meaning of ‘Idiot’
+https://www.nytimes.com/2017/06/12/opinion/trump-and-the-true-meaning-of-idiot.html
+Loving, 50 Years Later
+https://www.nytimes.com/interactive/2017/06/12/opinion/loving-virginia-50-year-anniversary.html
+Finally, Something Isn’t the Matter With Kansas
+https://www.nytimes.com/2017/06/12/opinion/finally-something-isnt-the-matter-with-kansas.html
+America Needs Closure on the Travel Ban
+https://www.nytimes.com/2017/06/11/opinion/america-needs-closure-on-the-travel-ban.html
+Follow us on Twitter »
+https://twitter.com/nytopinion
+Bar Code: A New Infatuation Poised for a Puzzle Craze
+https://www.nytimes.com/2017/06/12/insider/bar-code-a-new-infatuation-poised-for-a-puzzle-craze.html
+Agree With ‘The 25 Best Films’? Tell Us How You Really Feel
+https://www.nytimes.com/2017/06/10/insider/agree-with-the-25-best-films-tell-us-how-you-really-feel.html
+Bar Code: A New Infatuation Poised for a Puzzle Craze
+http://www.nytimes.com/section/insider
+Play Today’s Puzzle
+http://www.nytimes.com/crosswords
+Play Today’s Puzzle
+http://www.nytimes.com/crosswords
+At Palace, the Unbearable Being of Lines
+https://www.nytimes.com/2017/06/12/fashion/palace-skateboards-british-supreme.html
+A Fierce Famine Stalks Africa
+https://www.nytimes.com/2017/06/12/opinion/a-fierce-famine-stalks-africa.html
+The Lice Ladies of Brooklyn Go Corporate
+https://www.nytimes.com/2017/06/08/nyregion/the-lice-ladies-of-brooklyn-go-corporate.html
+The Revolutionary Specters of Russian Letters
+https://www.nytimes.com/2017/06/12/opinion/the-revolutionary-specters-of-russian-letters.html
+Meet the Musicians Who Modeled for Gucci
+https://www.nytimes.com/2017/05/30/t-magazine/fashion/gucci-cruise-musicians-james-righton-lucio-corsi-francesco-bianconi.html
+What We’re Reading
+https://www.nytimes.com/2017/06/06/insider/what-were-reading.html
+Ideas Sparked by Flow of Twitter Conversations
+https://www.nytimes.com/2017/06/07/technology/personaltech/jenna-wortham-tech-twitter.html
+Making Google the Censor
+https://www.nytimes.com/2017/06/12/opinion/making-google-the-censor.html
+What Yotam Ottolenghi Can’t Do Without
+https://www.nytimes.com/2017/06/06/dining/tahini-cookies-cake-recipes.html
+Will Iran Descend Into Chaos?
+https://www.nytimes.com/2017/06/11/opinion/will-iran-descend-into-chaos.html
+From the Subways to the Sofa: Pet Rats
+https://www.nytimes.com/2017/06/08/nyregion/new-yorkers-adopting-rats-as-pets.html
+The Presence of Violence at the Kabul Bureau
+https://www.nytimes.com/2017/06/08/insider/first-thought-at-the-timess-kabul-bureau-we-are-under-attack.html
+U.S. Cyberweapons, Used Against Iran and North Korea, Are a Disappointment Against ISIS
+https://www.nytimes.com/2017/06/12/world/middleeast/isis-cyber.html
+Reviving a Lost Language of Canada Through Film
+https://www.nytimes.com/2017/06/11/world/americas/reviving-a-lost-language-of-canada-through-film.html
+Emmanuel Macron’s Party on Track to Claim Majority in France’s Parliament
+https://www.nytimes.com/2017/06/11/world/europe/france-legislative-elections-emmanuel-macron.html
+Jeffrey Immelt to Retire as General Electric Chief
+https://www.nytimes.com/2017/06/12/business/ge-immelt.html
+Emil Michael Leaves Uber
+https://www.nytimes.com/2017/06/12/technology/uber-travis-kalanick-emil-michael.html
+Uber Weighs Leave of Absence for Chief Executive
+https://www.nytimes.com/2017/06/11/technology/uber-holder-report.html
+Charles M. Blow: The Resistance: Impeachment Anxiety
+https://www.nytimes.com/2017/06/12/opinion/the-resistance-impeachment-anxiety.html
+Editorial: Mr. Trump Goes After the Inspectors
+https://www.nytimes.com/2017/06/12/opinion/mr-trump-goes-after-the-inspectors.html
+Op-Ed Contributor: Making Google the Censor
+https://www.nytimes.com/2017/06/12/opinion/making-google-the-censor.html
+‘We Are Not Unusual Anymore’: 50 Years of Mixed-Race Marriage in U.S.
+https://www.nytimes.com/2017/06/11/us/mixed-race-marriage-loving-decision-anniversary.html
+For Flint, an 1882 Play About Bad Water Is ‘Exactly What We’re Living’
+https://www.nytimes.com/2017/06/11/us/flint-water-crisis-theater-ibsen.html
+Heroin Use? Juvenile Record? For Recruits, Police Forgive Past Sins
+https://www.nytimes.com/2017/06/12/us/police-departments-american-history.html
+Uber Weighs Leave of Absence for Chief Executive
+https://www.nytimes.com/2017/06/11/technology/uber-holder-report.html
+Emil Michael Leaves Uber
+https://www.nytimes.com/2017/06/12/technology/uber-travis-kalanick-emil-michael.html
+U.S. Cyberweapons, Used Against Iran and North Korea, Are a Disappointment Against ISIS
+https://www.nytimes.com/2017/06/12/world/middleeast/isis-cyber.html
+Tony Awards Briefing: ‘Dear Evan Hansen’ Wins 6 Tony Awards; Bette Midler Is Best Leading Actress
+https://www.nytimes.com/2017/06/11/theater/tony-awards.html
+The Best (and Worst) of the 2017 Tony Awards
+https://www.nytimes.com/2017/06/12/theater/the-best-and-worst-of-the-2017-tony-awards.html
+Et Tu, Delta? Shakespeare in the Park Sponsors Withdraw From Trump-Like ‘Julius Caesar’
+https://www.nytimes.com/2017/06/11/arts/delta-airline-trump-public-theater-julius-caesar.html
+Supreme Court Bars Favoring Mothers Over Fathers in Citizenship Case
+https://www.nytimes.com/2017/06/12/us/politics/supreme-court-citizenship-ginsburg-gorsuch.html
+Trump Loses Travel Ban Ruling in Appeals Court
+https://www.nytimes.com/2017/06/12/us/politics/trump-travel-ban-court-of-appeals.html
+Ivanka Trump Says Father Felt ‘Vindicated’ by Comey Testimony
+https://www.nytimes.com/2017/06/12/us/politics/ivanka-trump-comey-donald-trump-fox-and-friends.html
+On the Runway: The Tony Awards Get the Red Carpet Blues
+https://www.nytimes.com/2017/06/12/fashion/tony-awards-red-carpet-trends.html
+Styles Q. &amp; A.: Virgil Abloh Projects Politics Into His Florence Fashion Show
+https://www.nytimes.com/2017/06/12/fashion/mens-style/virgil-abloh-pitti-uomo-florence-italy.html
+Death of a Downtown Icon: Remembering Benjamin Cho
+https://www.nytimes.com/2017/06/11/fashion/death-of-a-downtown-icon-benjamin-cho.html
+The 25 Best Films of the 21st Century So Far.
+https://www.nytimes.com/interactive/2017/06/09/movies/the-25-best-films-of-the-21st-century.html
+Review: ‘The Mummy,’ With Tom Cruise, Deserves a Quick Burial
+https://www.nytimes.com/2017/06/07/movies/the-mummy-review-tom-cruise.html
+Review: Mom, Dad, the Kid and the Dog. What Could Be Scarier?
+https://www.nytimes.com/2017/06/08/movies/it-comes-at-night-review.html
+When Opioid Addicts Find an Ally in Blue
+https://www.nytimes.com/2017/06/12/nyregion/when-opioid-addicts-find-an-ally-in-blue.html
+L.I.R.R. Announces Travel Options for ‘Summer of Hell’
+https://www.nytimes.com/2017/06/12/nyregion/lirr-train-schedule-penn-station-repairs.html
+What’s the Insurance Capital Without Aetna? Hartford May Find Out
+https://www.nytimes.com/2017/06/11/nyregion/hartford-aetna-relocation.html
+Keeping Score: All Should Rise for Yankees’ Gary Sanchez, Too
+https://www.nytimes.com/2017/06/12/sports/baseball/all-should-rise-for-yankees-gary-sanchez-too.html
+Penguins 2, Predators 0 | Pittsburgh wins series, 4-2: Pittsburgh Penguins Beat the Predators to Repeat as Stanley Cup Champions
+https://www.nytimes.com/2017/06/11/sports/hockey/stanley-cup-pittsburgh-penguins-nashville-predators.html
+Give Baseball Scouts a (Perfect) 80 for Tradition
+https://www.nytimes.com/2017/06/12/sports/baseball/give-baseball-scouts-a-perfect-80-for-tradition.html
+The Best (and Worst) of the 2017 Tony Awards
+https://www.nytimes.com/2017/06/12/theater/the-best-and-worst-of-the-2017-tony-awards.html
+Tony Awards Briefing: ‘Dear Evan Hansen’ Wins 6 Tony Awards; Bette Midler Is Best Leading Actress
+https://www.nytimes.com/2017/06/11/theater/tony-awards.html
+Et Tu, Delta? Shakespeare in the Park Sponsors Withdraw From Trump-Like ‘Julius Caesar’
+https://www.nytimes.com/2017/06/11/arts/delta-airline-trump-public-theater-julius-caesar.html
+On Nuclear Waste, Finland Shows U.S. How It Can Be Done
+https://www.nytimes.com/2017/06/09/science/nuclear-reactor-waste-finland.html
+Basics: The Liver: A ‘Blob’ That Runs the Body
+https://www.nytimes.com/2017/06/12/health/liver-bodily-function.html
+Trilobites: These Hungry Goats Learned to Branch Out
+https://www.nytimes.com/2017/06/12/science/goats-trees-seeds-morocco.html
+Edith Shiffert, a Poet Inspired by Nature and Her Life in Japan, Dies at 101
+https://www.nytimes.com/2017/06/11/arts/edith-shiffert-a-poet-inspired-by-nature-and-her-life-in-japan-dies-at-101.html
+Sad Day for Gotham: Adam West, Who Played Batman, Dies at 88
+https://www.nytimes.com/2017/06/10/arts/sad-day-for-gotham-adam-west-who-played-batman-dies-at-88.html
+Andimba Toivo ya Toivo, Namibian Independence Leader, Dies at 92
+https://www.nytimes.com/2017/06/10/world/africa/andimba-toivo-ya-toivo-dead.html
+Television Review: An Uneven Night for Kevin Spacey as Tonys Host
+https://www.nytimes.com/2017/06/12/theater/tony-awards-review-recap-kevin-spacey.html
+Oliver Stone’s ‘Putin Interviews’: Flattery, but Little Skepticism
+https://www.nytimes.com/2017/06/09/arts/television/review-the-putin-interviews-showtime-oliver-stone.html
+Televsion Review: ‘Claws’ on TNT: That Manicure Comes With a Murder
+https://www.nytimes.com/2017/06/11/arts/television/claws-on-tnt-that-manicure-comes-with-a-murder.html
+Basics: The Liver: A ‘Blob’ That Runs the Body
+https://www.nytimes.com/2017/06/12/health/liver-bodily-function.html
+The New Old Age: Hearing Aids at the Mall? Congress Could Make It Happen
+https://www.nytimes.com/2017/06/12/health/hearing-aids-congress.html
+More Than 10 Percent of World’s Population Is Obese, Study Finds
+https://www.nytimes.com/2017/06/12/health/obesity-study-10-percent-globally.html
+The Getaway: How Much Are Frequent Flier Miles Really Worth?
+https://www.nytimes.com/2017/06/12/travel/how-much-are-frequent-flier-miles-worth.html
+U.S. Islands: On a Georgia Island, a Lot of Good Food and Plenty of Nothing
+https://www.nytimes.com/2017/06/06/travel/cumberland-island-georgia-national-seashore.html
+Essay: How to Ease Travel Anxiety in an Era of Terror: Travel More
+https://www.nytimes.com/2017/06/08/travel/easing-anxiety-travelers-global-terror.html
+Nonfiction: How the Dark Web’s Dread Pirate Roberts Went Down
+https://www.nytimes.com/2017/06/12/books/review/american-kingpin-nick-bilton.html
+Q. and A.: Tell Us 5 Things About Your Book: A Reporter Inside the World of Jihad
+https://www.nytimes.com/2017/06/11/arts/tell-us-5-things-about-your-book-inside-the-world-of-jihad.html
+Fiction: Arundhati Roy’s Return to the Form That Made Her Famous
+https://www.nytimes.com/2017/06/09/books/review/arundhati-roys-return-to-the-form-that-made-her-famous.html
+To Understand Betsy DeVos’s Educational Views, View Her Education
+https://www.nytimes.com/2017/06/10/us/politics/betsy-devos-private-schools-choice.html
+David L. Kirp: Ending the Curse of Remedial Math
+https://www.nytimes.com/2017/06/10/opinion/sunday/cuny-ending-the-curse-of-remedial-math.html
+Success Academy Wins Round in Fight Over Preschool Oversight
+https://www.nytimes.com/2017/06/09/nyregion/success-academy-preschool-appeal.html
+Hungry City: At Bep Ga in Chinatown, It All Begins With Chicken
+https://www.nytimes.com/2017/06/08/dining/bep-ga-review-vietnamese-restaurant-chinatown.html
+City Kitchen: A Juicy Tenderloin, a Pesto Swirl
+https://www.nytimes.com/2017/06/09/dining/beef-tenderloin-recipe.html
+A Good Appetite: The Simplest Shortbread You Can Bake
+https://www.nytimes.com/2017/06/09/dining/shortbread-cookie-recipe.html
+Opinion: Is Putin Getting What He Wanted With Trump?
+https://www.nytimes.com/2017/06/10/opinion/sunday/is-putin-getting-what-he-wanted-with-trump.html
+Editorial: It’s the Olympics for Trump Apologists
+https://www.nytimes.com/2017/06/10/opinion/sunday/its-the-olympics-for-trump-apologists.html
+Frank Bruni: Can Democrats Save Themselves?
+https://www.nytimes.com/2017/06/10/opinion/sunday/can-democrats-save-themselves.html
+The Elusive $1,500 Rental
+https://www.nytimes.com/2017/06/09/realestate/finding-an-affordable-new-york-city-apartment.html
+Exclusive: Where a Rockefeller Raised His Family
+https://www.nytimes.com/2017/06/09/realestate/david-rockefeller-upper-east-side-home-for-sale.html
+Ask Real Estate: Creating New Windows Without Ruining the Building
+https://www.nytimes.com/2017/06/10/realestate/creating-new-windows-without-ruining-the-building.html
+Your Rabbi? Probably a Democrat. Your Baptist Pastor? Probably a Republican. Your Priest? Who Knows.
+https://www.nytimes.com/interactive/2017/06/12/upshot/the-politics-of-americas-religious-leaders.html
+The New Health Care: There’s No Magical Savings in Showing Prices to Doctors
+https://www.nytimes.com/2017/06/12/upshot/theres-no-magical-savings-in-showing-prices-to-doctors.html
+Economic View: Why Women Don’t See Themselves as Entrepreneurs
+https://www.nytimes.com/2017/06/09/upshot/why-women-dont-see-themselves-as-entrepreneurs.html
+Feature: The Long, Lonely Road of Chelsea Manning
+https://www.nytimes.com/2017/06/12/magazine/the-long-lonely-road-of-chelsea-manning.html
+Feature: America’s Hidden H.I.V. Epidemic
+https://www.nytimes.com/2017/06/06/magazine/americas-hidden-hiv-epidemic.html
+Feature: The Bounty Hunter of Wall Street
+https://www.nytimes.com/2017/06/08/magazine/the-bounty-hunter-of-wall-street.html
+Driven: Video Review: With New Ioniq, Hyundai Goes After Prius
+https://www.nytimes.com/2017/06/08/automobiles/autoreviews/video-review-with-new-ioniq-hyundai-goes-after-prius.html
+Wheels: In Portland, a Rare Outpost for Die-Hard Saab Fans
+https://www.nytimes.com/2017/06/08/automobiles/saab-autos-cars.html
+Bits: Electronic Setups of Driverless Cars Vulnerable to Hackers
+https://www.nytimes.com/2017/06/07/technology/electronic-setups-of-driverless-cars-vulnerable-to-hackers.html
+6 Designers (Straight Out of Fashion School) to Know
+https://www.nytimes.com/2017/06/09/t-magazine/fashion/ben-duncan-chungin-no-matt-dyer-new-young-designers.html
+Some Things T Editors Are Really Into Right Now
+https://www.nytimes.com/2017/06/09/t-magazine/givenchy-audrey-hepburn-editors-picks.html
+8 Male Models to Watch This Season
+https://www.nytimes.com/2017/06/09/t-magazine/fashion/male-models-mens-fashion-week-masao-parris-mathieu-franke-zack-hunt.html
+Bar Code: A New Infatuation Poised for a Puzzle Craze
+https://www.nytimes.com/2017/06/12/insider/bar-code-a-new-infatuation-poised-for-a-puzzle-craze.html
+Ahead of the Tonys, Watching Everything
+https://www.nytimes.com/2017/06/10/insider/tony-awards-theater-desk.html
+Agree With ‘The 25 Best Films’? Tell Us How You Really Feel
+https://www.nytimes.com/2017/06/10/insider/agree-with-the-25-best-films-tell-us-how-you-really-feel.html
+Homes That Sold for Around $450,000
+https://www.nytimes.com/2017/06/11/realestate/homes-that-sold-for-around-450000.html
+Search for Homes for Sale or Rent
+http://www.nytimes.com/real-estate/find-a-home
+Mortgage Calculator
+https://www.nytimes.com/real-estate/mortgage-calculator
+</code></pre>
+</div>
+
+<h2 id="adding-in-bylines">Adding in bylines</h2>
+
+<p>Bylines look like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;p class="byline"&gt;By PETER BAKER and STEVEN ERLANGER &lt;time class="timestamp" datetime="2017-03-17" data-eastern-timestamp="12:36 PM" data-utc- timestamp="1489768575"&gt;12:36 PM ET&lt;/time&gt;&lt;/p&gt;
+</code></pre>
+</div>
+
+<p>So… let’s just grab the element inside of story that has the class of
+<code class="highlighter-rouge">byline</code>!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">story</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'article'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">story</span><span class="p">:</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'story-heading'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">headline</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">link</span><span class="p">[</span><span class="s">'href'</span><span class="p">])</span>
+    <span class="n">byline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'byline'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">byline</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Revised Trump Travel Ban Suffers Another Legal Setback
+https://www.nytimes.com/2017/06/12/us/politics/trump-travel-ban-court-of-appeals.html
+By ADAM LIPTAK 2:09 PM ET
+Putin Opponent Is Arrested Amid Protests in Russia
+https://www.nytimes.com/2017/06/12/world/europe/russia-aleksei-navalny-kremlin-protests.html
+By NEIL MacFARQUHAR and ANDREW HIGGINS 1:26 PM ET
+Why Cyberwar on ISIS Has Fallen Short of U.S. Hopes
+https://www.nytimes.com/2017/06/12/world/middleeast/isis-cyber.html
+By DAVID E. SANGER and ERIC SCHMITT 
+Trump Holdings Are Unconstitutional, Pioneering Suit Says
+https://www.nytimes.com/2017/06/12/us/trump-lawsuit-private-businesses.html
+By SHARON LaFRANIERE 12:31 PM ET
+Opioid Addicts Find an Ally in Blue
+https://www.nytimes.com/2017/06/12/nyregion/when-opioid-addicts-find-an-ally-in-blue.html
+By AL BAKER 
+Addiction Drug Lacks Results, but It Has Powerful Friends
+https://www.nytimes.com/2017/06/11/health/vivitrol-drug-opioid-addiction.html
+
+
+
+---------------------------------------------------------------------------
+
+AttributeError                            Traceback (most recent call last)
+
+&lt;ipython-input-13-e0ae1796bc1c&gt; in &lt;module&gt;()
+      9     print(link['href'])
+     10     byline = story.find(class_='byline')
+---&gt; 11     print(byline.text)
+
+
+AttributeError: 'NoneType' object has no attribute 'text'
+</code></pre>
+</div>
+
+<p>So we get another one of those “missing byline” errors, yeah? Well, maybe not
+everything has a byline. It doesn’t mean we should skip the whole thing, let’s
+just skip the byline for that one.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">stories</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'article'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story'</span> <span class="p">})</span>
+
+<span class="k">for</span> <span class="n">story</span> <span class="ow">in</span> <span class="n">stories</span><span class="p">:</span>
+    <span class="n">headline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'story-heading'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">headline</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">link</span><span class="p">[</span><span class="s">'href'</span><span class="p">])</span>
+    <span class="n">byline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">'byline'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">byline</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">byline</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Revised Trump Travel Ban Suffers Another Legal Setback
+https://www.nytimes.com/2017/06/12/us/politics/trump-travel-ban-court-of-appeals.html
+By ADAM LIPTAK 2:09 PM ET
+Putin Opponent Is Arrested Amid Protests in Russia
+https://www.nytimes.com/2017/06/12/world/europe/russia-aleksei-navalny-kremlin-protests.html
+By NEIL MacFARQUHAR and ANDREW HIGGINS 1:26 PM ET
+Why Cyberwar on ISIS Has Fallen Short of U.S. Hopes
+https://www.nytimes.com/2017/06/12/world/middleeast/isis-cyber.html
+By DAVID E. SANGER and ERIC SCHMITT 
+Trump Holdings Are Unconstitutional, Pioneering Suit Says
+https://www.nytimes.com/2017/06/12/us/trump-lawsuit-private-businesses.html
+By SHARON LaFRANIERE 12:31 PM ET
+Opioid Addicts Find an Ally in Blue
+https://www.nytimes.com/2017/06/12/nyregion/when-opioid-addicts-find-an-ally-in-blue.html
+By AL BAKER 
+Addiction Drug Lacks Results, but It Has Powerful Friends
+https://www.nytimes.com/2017/06/11/health/vivitrol-drug-opioid-addiction.html
+Role of Trump’s Lawyer Blurs Public and Private Lines
+https://www.nytimes.com/2017/06/11/us/politics/trump-lawyer-marc-kasowitz.html
+By REBECCA R. RUIZ and SHARON LaFRANIERE 
+Trump Era, Unlike Watergate Era, Has Rival Sets of Facts
+https://www.nytimes.com/2017/06/11/business/media/comey-trump-watergate.html
+By JIM RUTENBERG 
+Fired U.S. Attorney Says Trump Tried to Build Relationship With Him
+https://www.nytimes.com/2017/06/11/us/politics/preet-bharara-trump-contacts.html
+The Long, Lonely Road of Chelsea Manning
+https://www.nytimes.com/2017/06/12/magazine/the-long-lonely-road-of-chelsea-manning.html
+By MATTHEW SHAER 
+California Today: Talking to a Tony Winner
+https://www.nytimes.com/2017/06/12/us/california-today-talking-to-a-tony-winner.html
+By JONAH ENGEL BROMWICH 8:30 AM ET
+Listen to ‘The Daily’
+https://www.nytimes.com/column/the-daily
+How to Save on Summer Travel
+https://www.nytimes.com/interactive/2017/05/16/travel/frugal-traveler-summer-travel-chat.html
+Ways Your iPhone Will Change After Apple’s iOS 11
+https://www.nytimes.com/2017/06/12/smarter-living/apple-iphone-ios11.html
+By LIAM STACK 
+Gargantuan Job: Dismantling a Million Tons of North Sea Oil Rigs
+https://www.nytimes.com/2017/06/08/business/energy-environment/oil-north-sea-shell.html
+By STANLEY REED 
+The Best (and Worst) of the 2017 Tony Awards
+https://www.nytimes.com/2017/06/12/theater/the-best-and-worst-of-the-2017-tony-awards.html
+By ERIK PIEPENBURG and SCOTT HELLER 11:32 AM ET
+‘Dear Evan Hansen’ Wins 6 Tonys; Midler Is Best Leading Actress
+https://www.nytimes.com/2017/06/11/theater/tony-awards.html
+Television Review: An Uneven Night for Kevin Spacey as Host
+https://www.nytimes.com/2017/06/12/theater/tony-awards-review-recap-kevin-spacey.html
+Fashion Review: The Tony Awards Get the Red Carpet Blues
+https://www.nytimes.com/2017/06/12/fashion/tony-awards-red-carpet-trends.html
+‘We Are Not Unusual Anymore’: 50 Years of Mixed-Race Marriage in U.S.
+https://www.nytimes.com/2017/06/11/us/mixed-race-marriage-loving-decision-anniversary.html
+By JENNIFER MEDINA 
+Ahead of ‘Brexit,’ Britons Face Economic Pinch at Home
+https://www.nytimes.com/2017/06/11/business/economy/britain-economy-election-brexit.html
+By PETER S. GOODMAN 
+For Democrats, Spotlight Turns to Race to Replace Christie
+https://www.nytimes.com/2017/06/09/nyregion/democrats-new-jersey-governor-philip-murphy.html
+By NICK CORASANITI 
+Death Penalty in Pakistan for Social Media Blasphemy 1:45 PM ET
+https://www.nytimes.com/2017/06/12/world/asia/pakistan-blasphemy-sentence.html
+Theresa May Battles to Hold On as U.K. Prime Minister 12:54 PM ET
+https://www.nytimes.com/2017/06/12/world/europe/uk-theresa-may-britain.html
+Uber’s No. 2 Executive Leaves Firm 12:32 PM ET
+https://www.nytimes.com/2017/06/12/technology/uber-travis-kalanick-emil-michael.html
+Jeffrey Immelt to Retire as General Electric Chief 1:56 PM ET
+https://www.nytimes.com/2017/06/12/business/ge-immelt.html
+Bill Cosby Sex Assault Trial: The Defense Rests 1:07 PM ET
+https://www.nytimes.com/2017/06/12/arts/television/bill-cosby-trial-day-6.html
+Morning Briefing: Australia Edition
+https://www.nytimes.com/newsletters/morning-briefing-australia
+Morning Briefing: Asia Edition
+https://www.nytimes.com/newsletters/morning-briefing-asia
+Morning Briefing: Europe Edition
+https://www.nytimes.com/newsletters/morning-briefing-europe
+Morning Briefing
+https://www.nytimes.com/newsletters/morning-briefing
+Australia to Tighten Parole Laws After Deadly Siege
+https://www.nytimes.com/2017/06/09/world/australia/australia-melbourne-terror-parole.html
+Australian Politics Is Open to Foreign Cash, and China Has Much to Gain
+https://www.nytimes.com/2017/06/06/world/australia/china-political-influence-campaign-finance.html
+Australia Makes Riesling Its Own
+https://www.nytimes.com/2017/06/08/dining/wine-review-australian-riesling.html
+Take Our Quiz on Solving Global Warming
+https://www.nytimes.com/interactive/2017/06/09/climate/drawdown-climate-solutions-quiz.html
+Something Old and New at the French Open
+https://www.nytimes.com/2017/06/12/sports/tennis/something-old-something-new-at-french-open.html
+How a Dark Web Mastermind Went Down
+https://www.nytimes.com/2017/06/12/books/review/american-kingpin-nick-bilton.html
+Making Google the Censor
+https://www.nytimes.com/2017/06/12/opinion/making-google-the-censor.html
+By DAPHNE KELLER 
+Editorial: Mr. Trump Goes After the Inspectors
+https://www.nytimes.com/2017/06/12/opinion/mr-trump-goes-after-the-inspectors.html
+Blow: Impeachment Anxiety
+https://www.nytimes.com/2017/06/12/opinion/the-resistance-impeachment-anxiety.html
+Krugman: They Don’t Need No Information
+https://krugman.blogs.nytimes.com/2017/06/11/they-dont-need-no-information/
+Sexual Abusers Shouldn’t Be Allowed to Run the Clock
+https://www.nytimes.com/2017/06/12/opinion/sexual-abusers-shouldnt-be-allowed-to-run-the-clock.html
+A Night of Terror, a Year of Racism
+https://www.nytimes.com/2017/06/12/opinion/a-night-of-terror-a-year-of-racism.html
+The True Meaning of ‘Idiot’
+https://www.nytimes.com/2017/06/12/opinion/trump-and-the-true-meaning-of-idiot.html
+Loving, 50 Years Later
+https://www.nytimes.com/interactive/2017/06/12/opinion/loving-virginia-50-year-anniversary.html
+Finally, Something Isn’t the Matter With Kansas
+https://www.nytimes.com/2017/06/12/opinion/finally-something-isnt-the-matter-with-kansas.html
+America Needs Closure on the Travel Ban
+https://www.nytimes.com/2017/06/11/opinion/america-needs-closure-on-the-travel-ban.html
+Follow us on Twitter »
+https://twitter.com/nytopinion
+Bar Code: A New Infatuation Poised for a Puzzle Craze
+https://www.nytimes.com/2017/06/12/insider/bar-code-a-new-infatuation-poised-for-a-puzzle-craze.html
+Agree With ‘The 25 Best Films’? Tell Us How You Really Feel
+https://www.nytimes.com/2017/06/10/insider/agree-with-the-25-best-films-tell-us-how-you-really-feel.html
+Bar Code: A New Infatuation Poised for a Puzzle Craze
+http://www.nytimes.com/section/insider
+Play Today’s Puzzle
+http://www.nytimes.com/crosswords
+Play Today’s Puzzle
+http://www.nytimes.com/crosswords
+At Palace, the Unbearable Being of Lines
+https://www.nytimes.com/2017/06/12/fashion/palace-skateboards-british-supreme.html
+A Fierce Famine Stalks Africa
+https://www.nytimes.com/2017/06/12/opinion/a-fierce-famine-stalks-africa.html
+The Lice Ladies of Brooklyn Go Corporate
+https://www.nytimes.com/2017/06/08/nyregion/the-lice-ladies-of-brooklyn-go-corporate.html
+The Revolutionary Specters of Russian Letters
+https://www.nytimes.com/2017/06/12/opinion/the-revolutionary-specters-of-russian-letters.html
+Meet the Musicians Who Modeled for Gucci
+https://www.nytimes.com/2017/05/30/t-magazine/fashion/gucci-cruise-musicians-james-righton-lucio-corsi-francesco-bianconi.html
+What We’re Reading
+https://www.nytimes.com/2017/06/06/insider/what-were-reading.html
+Ideas Sparked by Flow of Twitter Conversations
+https://www.nytimes.com/2017/06/07/technology/personaltech/jenna-wortham-tech-twitter.html
+Making Google the Censor
+https://www.nytimes.com/2017/06/12/opinion/making-google-the-censor.html
+What Yotam Ottolenghi Can’t Do Without
+https://www.nytimes.com/2017/06/06/dining/tahini-cookies-cake-recipes.html
+Will Iran Descend Into Chaos?
+https://www.nytimes.com/2017/06/11/opinion/will-iran-descend-into-chaos.html
+From the Subways to the Sofa: Pet Rats
+https://www.nytimes.com/2017/06/08/nyregion/new-yorkers-adopting-rats-as-pets.html
+The Presence of Violence at the Kabul Bureau
+https://www.nytimes.com/2017/06/08/insider/first-thought-at-the-timess-kabul-bureau-we-are-under-attack.html
+U.S. Cyberweapons, Used Against Iran and North Korea, Are a Disappointment Against ISIS
+https://www.nytimes.com/2017/06/12/world/middleeast/isis-cyber.html
+Reviving a Lost Language of Canada Through Film
+https://www.nytimes.com/2017/06/11/world/americas/reviving-a-lost-language-of-canada-through-film.html
+Emmanuel Macron’s Party on Track to Claim Majority in France’s Parliament
+https://www.nytimes.com/2017/06/11/world/europe/france-legislative-elections-emmanuel-macron.html
+Jeffrey Immelt to Retire as General Electric Chief
+https://www.nytimes.com/2017/06/12/business/ge-immelt.html
+Emil Michael Leaves Uber
+https://www.nytimes.com/2017/06/12/technology/uber-travis-kalanick-emil-michael.html
+Uber Weighs Leave of Absence for Chief Executive
+https://www.nytimes.com/2017/06/11/technology/uber-holder-report.html
+Charles M. Blow: The Resistance: Impeachment Anxiety
+https://www.nytimes.com/2017/06/12/opinion/the-resistance-impeachment-anxiety.html
+Editorial: Mr. Trump Goes After the Inspectors
+https://www.nytimes.com/2017/06/12/opinion/mr-trump-goes-after-the-inspectors.html
+Op-Ed Contributor: Making Google the Censor
+https://www.nytimes.com/2017/06/12/opinion/making-google-the-censor.html
+‘We Are Not Unusual Anymore’: 50 Years of Mixed-Race Marriage in U.S.
+https://www.nytimes.com/2017/06/11/us/mixed-race-marriage-loving-decision-anniversary.html
+For Flint, an 1882 Play About Bad Water Is ‘Exactly What We’re Living’
+https://www.nytimes.com/2017/06/11/us/flint-water-crisis-theater-ibsen.html
+Heroin Use? Juvenile Record? For Recruits, Police Forgive Past Sins
+https://www.nytimes.com/2017/06/12/us/police-departments-american-history.html
+Uber Weighs Leave of Absence for Chief Executive
+https://www.nytimes.com/2017/06/11/technology/uber-holder-report.html
+Emil Michael Leaves Uber
+https://www.nytimes.com/2017/06/12/technology/uber-travis-kalanick-emil-michael.html
+U.S. Cyberweapons, Used Against Iran and North Korea, Are a Disappointment Against ISIS
+https://www.nytimes.com/2017/06/12/world/middleeast/isis-cyber.html
+Tony Awards Briefing: ‘Dear Evan Hansen’ Wins 6 Tony Awards; Bette Midler Is Best Leading Actress
+https://www.nytimes.com/2017/06/11/theater/tony-awards.html
+The Best (and Worst) of the 2017 Tony Awards
+https://www.nytimes.com/2017/06/12/theater/the-best-and-worst-of-the-2017-tony-awards.html
+Et Tu, Delta? Shakespeare in the Park Sponsors Withdraw From Trump-Like ‘Julius Caesar’
+https://www.nytimes.com/2017/06/11/arts/delta-airline-trump-public-theater-julius-caesar.html
+Supreme Court Bars Favoring Mothers Over Fathers in Citizenship Case
+https://www.nytimes.com/2017/06/12/us/politics/supreme-court-citizenship-ginsburg-gorsuch.html
+Trump Loses Travel Ban Ruling in Appeals Court
+https://www.nytimes.com/2017/06/12/us/politics/trump-travel-ban-court-of-appeals.html
+Ivanka Trump Says Father Felt ‘Vindicated’ by Comey Testimony
+https://www.nytimes.com/2017/06/12/us/politics/ivanka-trump-comey-donald-trump-fox-and-friends.html
+On the Runway: The Tony Awards Get the Red Carpet Blues
+https://www.nytimes.com/2017/06/12/fashion/tony-awards-red-carpet-trends.html
+Styles Q. &amp; A.: Virgil Abloh Projects Politics Into His Florence Fashion Show
+https://www.nytimes.com/2017/06/12/fashion/mens-style/virgil-abloh-pitti-uomo-florence-italy.html
+Death of a Downtown Icon: Remembering Benjamin Cho
+https://www.nytimes.com/2017/06/11/fashion/death-of-a-downtown-icon-benjamin-cho.html
+The 25 Best Films of the 21st Century So Far.
+https://www.nytimes.com/interactive/2017/06/09/movies/the-25-best-films-of-the-21st-century.html
+Review: ‘The Mummy,’ With Tom Cruise, Deserves a Quick Burial
+https://www.nytimes.com/2017/06/07/movies/the-mummy-review-tom-cruise.html
+Review: Mom, Dad, the Kid and the Dog. What Could Be Scarier?
+https://www.nytimes.com/2017/06/08/movies/it-comes-at-night-review.html
+When Opioid Addicts Find an Ally in Blue
+https://www.nytimes.com/2017/06/12/nyregion/when-opioid-addicts-find-an-ally-in-blue.html
+L.I.R.R. Announces Travel Options for ‘Summer of Hell’
+https://www.nytimes.com/2017/06/12/nyregion/lirr-train-schedule-penn-station-repairs.html
+What’s the Insurance Capital Without Aetna? Hartford May Find Out
+https://www.nytimes.com/2017/06/11/nyregion/hartford-aetna-relocation.html
+Keeping Score: All Should Rise for Yankees’ Gary Sanchez, Too
+https://www.nytimes.com/2017/06/12/sports/baseball/all-should-rise-for-yankees-gary-sanchez-too.html
+Penguins 2, Predators 0 | Pittsburgh wins series, 4-2: Pittsburgh Penguins Beat the Predators to Repeat as Stanley Cup Champions
+https://www.nytimes.com/2017/06/11/sports/hockey/stanley-cup-pittsburgh-penguins-nashville-predators.html
+Give Baseball Scouts a (Perfect) 80 for Tradition
+https://www.nytimes.com/2017/06/12/sports/baseball/give-baseball-scouts-a-perfect-80-for-tradition.html
+The Best (and Worst) of the 2017 Tony Awards
+https://www.nytimes.com/2017/06/12/theater/the-best-and-worst-of-the-2017-tony-awards.html
+Tony Awards Briefing: ‘Dear Evan Hansen’ Wins 6 Tony Awards; Bette Midler Is Best Leading Actress
+https://www.nytimes.com/2017/06/11/theater/tony-awards.html
+Et Tu, Delta? Shakespeare in the Park Sponsors Withdraw From Trump-Like ‘Julius Caesar’
+https://www.nytimes.com/2017/06/11/arts/delta-airline-trump-public-theater-julius-caesar.html
+On Nuclear Waste, Finland Shows U.S. How It Can Be Done
+https://www.nytimes.com/2017/06/09/science/nuclear-reactor-waste-finland.html
+Basics: The Liver: A ‘Blob’ That Runs the Body
+https://www.nytimes.com/2017/06/12/health/liver-bodily-function.html
+Trilobites: These Hungry Goats Learned to Branch Out
+https://www.nytimes.com/2017/06/12/science/goats-trees-seeds-morocco.html
+Edith Shiffert, a Poet Inspired by Nature and Her Life in Japan, Dies at 101
+https://www.nytimes.com/2017/06/11/arts/edith-shiffert-a-poet-inspired-by-nature-and-her-life-in-japan-dies-at-101.html
+Sad Day for Gotham: Adam West, Who Played Batman, Dies at 88
+https://www.nytimes.com/2017/06/10/arts/sad-day-for-gotham-adam-west-who-played-batman-dies-at-88.html
+Andimba Toivo ya Toivo, Namibian Independence Leader, Dies at 92
+https://www.nytimes.com/2017/06/10/world/africa/andimba-toivo-ya-toivo-dead.html
+Television Review: An Uneven Night for Kevin Spacey as Tonys Host
+https://www.nytimes.com/2017/06/12/theater/tony-awards-review-recap-kevin-spacey.html
+Oliver Stone’s ‘Putin Interviews’: Flattery, but Little Skepticism
+https://www.nytimes.com/2017/06/09/arts/television/review-the-putin-interviews-showtime-oliver-stone.html
+Televsion Review: ‘Claws’ on TNT: That Manicure Comes With a Murder
+https://www.nytimes.com/2017/06/11/arts/television/claws-on-tnt-that-manicure-comes-with-a-murder.html
+Basics: The Liver: A ‘Blob’ That Runs the Body
+https://www.nytimes.com/2017/06/12/health/liver-bodily-function.html
+The New Old Age: Hearing Aids at the Mall? Congress Could Make It Happen
+https://www.nytimes.com/2017/06/12/health/hearing-aids-congress.html
+More Than 10 Percent of World’s Population Is Obese, Study Finds
+https://www.nytimes.com/2017/06/12/health/obesity-study-10-percent-globally.html
+The Getaway: How Much Are Frequent Flier Miles Really Worth?
+https://www.nytimes.com/2017/06/12/travel/how-much-are-frequent-flier-miles-worth.html
+U.S. Islands: On a Georgia Island, a Lot of Good Food and Plenty of Nothing
+https://www.nytimes.com/2017/06/06/travel/cumberland-island-georgia-national-seashore.html
+Essay: How to Ease Travel Anxiety in an Era of Terror: Travel More
+https://www.nytimes.com/2017/06/08/travel/easing-anxiety-travelers-global-terror.html
+Nonfiction: How the Dark Web’s Dread Pirate Roberts Went Down
+https://www.nytimes.com/2017/06/12/books/review/american-kingpin-nick-bilton.html
+Q. and A.: Tell Us 5 Things About Your Book: A Reporter Inside the World of Jihad
+https://www.nytimes.com/2017/06/11/arts/tell-us-5-things-about-your-book-inside-the-world-of-jihad.html
+Fiction: Arundhati Roy’s Return to the Form That Made Her Famous
+https://www.nytimes.com/2017/06/09/books/review/arundhati-roys-return-to-the-form-that-made-her-famous.html
+To Understand Betsy DeVos’s Educational Views, View Her Education
+https://www.nytimes.com/2017/06/10/us/politics/betsy-devos-private-schools-choice.html
+David L. Kirp: Ending the Curse of Remedial Math
+https://www.nytimes.com/2017/06/10/opinion/sunday/cuny-ending-the-curse-of-remedial-math.html
+Success Academy Wins Round in Fight Over Preschool Oversight
+https://www.nytimes.com/2017/06/09/nyregion/success-academy-preschool-appeal.html
+Hungry City: At Bep Ga in Chinatown, It All Begins With Chicken
+https://www.nytimes.com/2017/06/08/dining/bep-ga-review-vietnamese-restaurant-chinatown.html
+City Kitchen: A Juicy Tenderloin, a Pesto Swirl
+https://www.nytimes.com/2017/06/09/dining/beef-tenderloin-recipe.html
+A Good Appetite: The Simplest Shortbread You Can Bake
+https://www.nytimes.com/2017/06/09/dining/shortbread-cookie-recipe.html
+Opinion: Is Putin Getting What He Wanted With Trump?
+https://www.nytimes.com/2017/06/10/opinion/sunday/is-putin-getting-what-he-wanted-with-trump.html
+Editorial: It’s the Olympics for Trump Apologists
+https://www.nytimes.com/2017/06/10/opinion/sunday/its-the-olympics-for-trump-apologists.html
+Frank Bruni: Can Democrats Save Themselves?
+https://www.nytimes.com/2017/06/10/opinion/sunday/can-democrats-save-themselves.html
+The Elusive $1,500 Rental
+https://www.nytimes.com/2017/06/09/realestate/finding-an-affordable-new-york-city-apartment.html
+Exclusive: Where a Rockefeller Raised His Family
+https://www.nytimes.com/2017/06/09/realestate/david-rockefeller-upper-east-side-home-for-sale.html
+Ask Real Estate: Creating New Windows Without Ruining the Building
+https://www.nytimes.com/2017/06/10/realestate/creating-new-windows-without-ruining-the-building.html
+Your Rabbi? Probably a Democrat. Your Baptist Pastor? Probably a Republican. Your Priest? Who Knows.
+https://www.nytimes.com/interactive/2017/06/12/upshot/the-politics-of-americas-religious-leaders.html
+The New Health Care: There’s No Magical Savings in Showing Prices to Doctors
+https://www.nytimes.com/2017/06/12/upshot/theres-no-magical-savings-in-showing-prices-to-doctors.html
+Economic View: Why Women Don’t See Themselves as Entrepreneurs
+https://www.nytimes.com/2017/06/09/upshot/why-women-dont-see-themselves-as-entrepreneurs.html
+Feature: The Long, Lonely Road of Chelsea Manning
+https://www.nytimes.com/2017/06/12/magazine/the-long-lonely-road-of-chelsea-manning.html
+Feature: America’s Hidden H.I.V. Epidemic
+https://www.nytimes.com/2017/06/06/magazine/americas-hidden-hiv-epidemic.html
+Feature: The Bounty Hunter of Wall Street
+https://www.nytimes.com/2017/06/08/magazine/the-bounty-hunter-of-wall-street.html
+Driven: Video Review: With New Ioniq, Hyundai Goes After Prius
+https://www.nytimes.com/2017/06/08/automobiles/autoreviews/video-review-with-new-ioniq-hyundai-goes-after-prius.html
+Wheels: In Portland, a Rare Outpost for Die-Hard Saab Fans
+https://www.nytimes.com/2017/06/08/automobiles/saab-autos-cars.html
+Bits: Electronic Setups of Driverless Cars Vulnerable to Hackers
+https://www.nytimes.com/2017/06/07/technology/electronic-setups-of-driverless-cars-vulnerable-to-hackers.html
+6 Designers (Straight Out of Fashion School) to Know
+https://www.nytimes.com/2017/06/09/t-magazine/fashion/ben-duncan-chungin-no-matt-dyer-new-young-designers.html
+Some Things T Editors Are Really Into Right Now
+https://www.nytimes.com/2017/06/09/t-magazine/givenchy-audrey-hepburn-editors-picks.html
+8 Male Models to Watch This Season
+https://www.nytimes.com/2017/06/09/t-magazine/fashion/male-models-mens-fashion-week-masao-parris-mathieu-franke-zack-hunt.html
+Bar Code: A New Infatuation Poised for a Puzzle Craze
+https://www.nytimes.com/2017/06/12/insider/bar-code-a-new-infatuation-poised-for-a-puzzle-craze.html
+Ahead of the Tonys, Watching Everything
+https://www.nytimes.com/2017/06/10/insider/tony-awards-theater-desk.html
+Agree With ‘The 25 Best Films’? Tell Us How You Really Feel
+https://www.nytimes.com/2017/06/10/insider/agree-with-the-25-best-films-tell-us-how-you-really-feel.html
+Homes That Sold for Around $450,000
+https://www.nytimes.com/2017/06/11/realestate/homes-that-sold-for-around-450000.html
+Compiled by C.J. HUGHES 
+Search for Homes for Sale or Rent
+http://www.nytimes.com/real-estate/find-a-home
+Mortgage Calculator
+https://www.nytimes.com/real-estate/mortgage-calculator
+</code></pre>
+</div>
+
+<p><strong>Looking a lot better!</strong> Now the only problem is “By LOUIS LUCERO II 1:00 PM
+ET” instead of having “LOUIS LUCERO II” or even better “LOUIS LUCERO II”.</p>
+
+<h2 id="so-i-guess-you-better-learn-regular-expressions-eh">So I guess you better learn regular expressions, ‘eh?</h2>
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Debugging Classwork</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/debugging/08-debugging-classwork/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Debugging Classwork">
+  <meta property="twitter:title" content="Debugging Classwork">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt;  Debugging Classwork</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Debugging Classwork</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations/classes/debugging/08-debugging-classwork.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="debugging-classwork">Debugging Classwork</h1>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">dateutil.parser</span>
+<span class="kn">import</span> <span class="nn">datetime</span></code></pre></figure>
+
+<h2 id="walkthrough-1">Walkthrough #1</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">mytime</span> <span class="o">=</span> <span class="s">"0926P"</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">mytime</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+&lt;ipython-input-5-4234f0872e0f&gt; in &lt;module&gt;()
+----&gt; 1 dateutil.parser.parse(mytime)
+
+
+/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/dateutil/parser.py in parse(timestr, parserinfo, **kwargs)
+   1162         return parser(parserinfo).parse(timestr, **kwargs)
+   1163     else:
+-&gt; 1164         return DEFAULTPARSER.parse(timestr, **kwargs)
+   1165 
+   1166 
+
+
+/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/dateutil/parser.py in parse(self, timestr, default, ignoretz, tzinfos, **kwargs)
+    575                 repl['day'] = monthrange(cyear, cmonth)[1]
+    576 
+--&gt; 577         ret = default.replace(**repl)
+    578 
+    579         if res.weekday is not None and not res.day:
+
+
+ValueError: hour must be in 0..23
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">mytime</span> <span class="o">+</span> <span class="s">"M"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+&lt;ipython-input-6-dc0a828bca5e&gt; in &lt;module&gt;()
+----&gt; 1 dateutil.parser.parse(mytime + "M")
+
+
+/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/dateutil/parser.py in parse(timestr, parserinfo, **kwargs)
+   1162         return parser(parserinfo).parse(timestr, **kwargs)
+   1163     else:
+-&gt; 1164         return DEFAULTPARSER.parse(timestr, **kwargs)
+   1165 
+   1166 
+
+
+/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/dateutil/parser.py in parse(self, timestr, default, ignoretz, tzinfos, **kwargs)
+    575                 repl['day'] = monthrange(cyear, cmonth)[1]
+    576 
+--&gt; 577         ret = default.replace(**repl)
+    578 
+    579         if res.weekday is not None and not res.day:
+
+
+ValueError: hour must be in 0..23
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">newtime</span> <span class="o">=</span> <span class="s">"../09BLAHBLAH26PM"</span>
+<span class="c">#dateutil.parser.parse(newtime)</span>
+<span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">newtime</span><span class="p">,</span><span class="s">"</span><span class="si">%</span><span class="s">IBLAHBLAH</span><span class="si">%</span><span class="s">M</span><span class="si">%</span><span class="s">p"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>datetime.datetime(1900, 1, 1, 21, 26)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">convert_to_time</span><span class="p">(</span><span class="n">str_time</span><span class="p">):</span>
+    <span class="n">with_pm</span> <span class="o">=</span> <span class="n">str_time</span> <span class="o">+</span> <span class="s">"M"</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">with_pm</span><span class="p">,</span><span class="s">"</span><span class="si">%</span><span class="s">I</span><span class="si">%</span><span class="s">M</span><span class="si">%</span><span class="s">p"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">timestring</span> <span class="o">=</span> <span class="s">"0929P"</span>
+<span class="n">convert_to_time</span><span class="p">(</span><span class="n">timestring</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>datetime.datetime(1900, 1, 1, 21, 29)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">convert_to_time</span><span class="p">(</span><span class="s">"1201A"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>datetime.datetime(1900, 1, 1, 0, 1)
+</code></pre>
+</div>
+
+<h2 id="walkthrough-2">Walkthrough #2</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Read in the dataframe</span>
+<span class="n">times_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"times-and-serials.csv"</span><span class="p">)</span>
+<span class="n">times_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Owner</th>
+      <th>Time</th>
+      <th>Serial Number</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Daniella</td>
+      <td>8:35 AM</td>
+      <td>7754</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Carleen</td>
+      <td>7:46 AM</td>
+      <td>6881</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Daron</td>
+      <td>1:35 AM</td>
+      <td>4509</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Cherly</td>
+      <td>1:35 AM</td>
+      <td>2310</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Manda</td>
+      <td>1:35 AM</td>
+      <td>4362</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Try out a way of parsing one of the dates</span>
+<span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s">"8:35 AM"</span><span class="p">,</span> <span class="s">"</span><span class="si">%</span><span class="s">I:</span><span class="si">%</span><span class="s">M </span><span class="si">%</span><span class="s">p"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>datetime.datetime(1900, 1, 1, 8, 35)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c"># Build a function using that method</span>
+<span class="k">def</span> <span class="nf">time_to_datetime</span><span class="p">(</span><span class="n">str_time</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c">#print("Trying to convert", str_time, "into a time")</span>
+        <span class="k">if</span> <span class="n">str_time</span> <span class="o">==</span> <span class="s">'-999'</span><span class="p">:</span>
+            <span class="c">#print("It's -999")</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="c">#print("It's not -999")</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">str_time</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="s">"</span><span class="si">%</span><span class="s">I:</span><span class="si">%</span><span class="s">M </span><span class="si">%</span><span class="s">p"</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Apply that method to the 'Time' column of the dataframe</span>
+<span class="n">times_df</span><span class="p">[</span><span class="s">'Time'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">time_to_datetime</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0    1900-01-01 08:35:00
+1    1900-01-01 07:46:00
+2    1900-01-01 01:35:00
+3    1900-01-01 01:35:00
+4    1900-01-01 01:35:00
+5    1900-01-01 12:57:00
+6    1900-01-01 03:49:00
+7                    NaT
+8    1900-01-01 00:36:00
+9    1900-01-01 17:19:00
+10   1900-01-01 21:20:00
+11   1900-01-01 09:32:00
+12   1900-01-01 17:19:00
+13   1900-01-01 09:57:00
+14   1900-01-01 21:33:00
+15                   NaT
+16   1900-01-01 20:32:00
+17   1900-01-01 21:19:00
+18   1900-01-01 00:58:00
+19   1900-01-01 06:40:00
+20   1900-01-01 02:47:00
+21   1900-01-01 17:19:00
+22   1900-01-01 15:38:00
+23                   NaT
+24   1900-01-01 05:58:00
+25   1900-01-01 04:16:00
+26   1900-01-01 09:03:00
+27   1900-01-01 22:19:00
+28   1900-01-01 21:04:00
+29                   NaT
+30   1900-01-01 09:12:00
+31   1900-01-01 01:17:00
+32   1900-01-01 22:35:00
+33   1900-01-01 13:39:00
+34   1900-01-01 20:58:00
+35   1900-01-01 12:45:00
+36                   NaT
+37   1900-01-01 20:19:00
+38   1900-01-01 18:41:00
+39   1900-01-01 07:40:00
+40   1900-01-01 09:43:00
+41   1900-01-01 10:51:00
+42   1900-01-01 12:07:00
+43   1900-01-01 22:58:00
+44   1900-01-01 16:31:00
+Name: Time, dtype: datetime64[ns]
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Apply that method to the 'Time' column of the dataframe</span>
+<span class="n">times_df</span><span class="p">[</span><span class="s">'converted_time'</span><span class="p">]</span> <span class="o">=</span> <span class="n">times_df</span><span class="p">[</span><span class="s">'Time'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">time_to_datetime</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Let's take a peek at our new column</span>
+<span class="n">times_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Owner</th>
+      <th>Time</th>
+      <th>Serial Number</th>
+      <th>converted_time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Daniella</td>
+      <td>8:35 AM</td>
+      <td>7754</td>
+      <td>1900-01-01 08:35:00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Carleen</td>
+      <td>7:46 AM</td>
+      <td>6881</td>
+      <td>1900-01-01 07:46:00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Daron</td>
+      <td>1:35 AM</td>
+      <td>4509</td>
+      <td>1900-01-01 01:35:00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Cherly</td>
+      <td>1:35 AM</td>
+      <td>2310</td>
+      <td>1900-01-01 01:35:00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Manda</td>
+      <td>1:35 AM</td>
+      <td>4362</td>
+      <td>1900-01-01 01:35:00</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Keri</td>
+      <td>12:57 PM</td>
+      <td>3360</td>
+      <td>1900-01-01 12:57:00</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Frank</td>
+      <td>3:49 AM</td>
+      <td>5901</td>
+      <td>1900-01-01 03:49:00</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Berneice</td>
+      <td>-999</td>
+      <td>6995</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Janis</td>
+      <td>12:36 AM</td>
+      <td>4788</td>
+      <td>1900-01-01 00:36:00</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Tosha</td>
+      <td>5:19 PM</td>
+      <td>2585</td>
+      <td>1900-01-01 17:19:00</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Let's look at all of the columns where converted time</span>
+<span class="c"># didn't end up working out</span>
+<span class="n">times_df</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">times_df</span><span class="p">[</span><span class="s">'converted_time'</span><span class="p">])]</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Owner</th>
+      <th>Time</th>
+      <th>Serial Number</th>
+      <th>converted_time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>7</th>
+      <td>Berneice</td>
+      <td>-999</td>
+      <td>6995</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Renato</td>
+      <td>GERTRUDE</td>
+      <td>3226</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>Monserrate</td>
+      <td>45:18 PM</td>
+      <td>5634</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>Brianne</td>
+      <td>527</td>
+      <td>0</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>Meggan</td>
+      <td>0:17 AM</td>
+      <td>5241</td>
+      <td>NaT</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># don't do this it won't work</span>
+<span class="c"># if whatever == 'NaN'</span>
+<span class="c"># do this: np.isnull(whatever)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>nan
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">%</span><span class="n">pdb</span> <span class="n">on</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Automatic pdb calling has been turned ON
+</code></pre>
+</div>
+
+<h2 id="walkthrough-4">Walkthrough #4</h2>
+
+<ol>
+  <li>I want to make sure my Plate ID is a string. Can’t lose the leading zeroes!</li>
+  <li>I don’t think anyone’s car was built in 0AD. Discard the ‘0’s as NaN.</li>
+  <li>I want the dates to be dates! Read the read_csv documentation to find out how
+to make pandas automatically parse dates.</li>
+  <li>“Date first observed” is a pretty weird column, but it seems like it has a
+date hiding inside. Using a function with .apply, transform the string (e.g.
+“20140324”) into a Python date. Make the 0’s show up as NaN.</li>
+  <li>“Violation time” is… not a time. Make it a time.</li>
+  <li>There sure are a lot of colors of cars, too bad so many of them are the
+same. Make “BLK” and “BLACK”, “WT” and “WHITE”, and any other combinations that
+you notice.</li>
+  <li>Join the data with the Parking Violations Code dataset from the NYC Open Data
+site.</li>
+</ol>
+
+<blockquote>
+  <p><code class="highlighter-rouge">read_csv</code> documentation can be found at http://pandas.pydata.org/pandas-
+docs/stable/generated/pandas.read_csv.html</p>
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># import numpy as np</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"../million-violations.csv"</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1000000</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Homework - Animals (completed)</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/pandas%20introduction/homework-animals-completed/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Homework - Animals (completed)">
+  <meta property="twitter:title" content="Homework - Animals (completed)">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt;  Homework - Animals (completed)</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Homework - Animals (completed)</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations/classes/pandas%20introduction/homework-animals-completed.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="building-a-pandas-cheat-sheet-part-1-animals">01: Building a pandas Cheat Sheet, Part 1: Animals</h1>
+
+<ul>
+  <li>Use the csv I’ve attached to answer the following questions</li>
+  <li>Import pandas with the right name</li>
+  <li>Set all graphics from matplotlib to display inline</li>
+  <li>Read the csv in (it should be UTF-8 already so you don’t have to worry about
+encoding), save it with the proper boring name</li>
+  <li>Display the names of the columns in the csv</li>
+  <li>Display the first 3 animals.</li>
+  <li>Sort the animals to see the 3 longest animals.</li>
+  <li>What are the counts of the different values of the “../animal” column? a.k.a. how
+many cats and how many dogs.</li>
+  <li>Only select the dogs.</li>
+  <li>Display all of the animals that are greater than 40 cm.
+‘length’ is the animal’s length in cm. Create a new column called inches that is
+the length in inches.</li>
+  <li>Save the cats to a separate variable called “cats.” Save the dogs to a
+separate variable called “dogs.”</li>
+  <li>Display all of the animals that are cats and above 12 inches long. First do it
+using the “cats” variable, then do it using your normal dataframe.</li>
+  <li>What’s the mean length of a cat?</li>
+  <li>What’s the mean length of a dog?</li>
+  <li>Use groupby to accomplish both of the above tasks at once.</li>
+  <li>Make a histogram of the length of dogs. I apologize that it is so boring.</li>
+  <li>Change your graphing style to be something else (anything else!)</li>
+  <li>Make a horizontal bar graph of the length of the animals, with their name as
+the label (look at the billionaires notebook I put on Slack!)</li>
+  <li>Make a sorted horizontal bar graph of the cats, with the larger cats on top.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Import pandas with the right name</span>
+<span class="c"># Set all graphics from matplotlib to display inline</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="c"># don't do this, but it means the thing above</span>
+<span class="c">#from matplotlib import pyplot as plt</span>
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span></code></pre></figure>
+
+<ul>
+  <li>Read the csv in (it should be UTF-8 already so you don’t have to worry about
+encoding), save it with the proper boring name</li>
+  <li>Display the names of the columns in the csv</li>
+  <li>Display the first 3 animals.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"07-hw-animals.csv"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">columns</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Index(['animal', 'name', 'length'], dtype='object')
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>animal</th>
+      <th>name</th>
+      <th>length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>cat</td>
+      <td>Anne</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cat</td>
+      <td>Bob</td>
+      <td>45</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>dog</td>
+      <td>Egglesburg</td>
+      <td>65</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># * Sort the animals to see the 3 longest animals.</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'length'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>animal</th>
+      <th>name</th>
+      <th>length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>dog</td>
+      <td>Egglesburg</td>
+      <td>65</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>dog</td>
+      <td>Devon</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cat</td>
+      <td>Bob</td>
+      <td>45</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># * What are the counts of the different values of the "animal" column? a.k.a. how many cats and how many dogs.</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'animal'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cat    3
+dog    3
+Name: animal, dtype: int64
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># * Only select the dogs.</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'animal'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'dog'</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0    False
+1    False
+2     True
+3     True
+4    False
+5     True
+Name: animal, dtype: bool
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># If you want the rows back, you have to put a df[ ] on the outside</span>
+<span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'animal'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'dog'</span><span class="p">]</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>animal</th>
+      <th>name</th>
+      <th>length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>dog</td>
+      <td>Egglesburg</td>
+      <td>65</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>dog</td>
+      <td>Devon</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>dog</td>
+      <td>Fontaine</td>
+      <td>35</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">is_dog</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'animal'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'dog'</span>
+<span class="n">is_dog</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0    False
+1    False
+2     True
+3     True
+4    False
+5     True
+Name: animal, dtype: bool
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dogs</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">is_dog</span><span class="p">]</span>
+<span class="n">dogs</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>animal</th>
+      <th>name</th>
+      <th>length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>dog</td>
+      <td>Egglesburg</td>
+      <td>65</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>dog</td>
+      <td>Devon</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>dog</td>
+      <td>Fontaine</td>
+      <td>35</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dogs</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'length'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">40</span><span class="p">]</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/Users/soma/.virtualenvs/data-analysis/lib/python3.4/site-packages/ipykernel/__main__.py:1: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  if __name__ == '__main__':
+</code></pre>
+</div>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>animal</th>
+      <th>name</th>
+      <th>length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>dog</td>
+      <td>Egglesburg</td>
+      <td>65</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>dog</td>
+      <td>Devon</td>
+      <td>50</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'animal'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'dog'</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0    False
+1    False
+2     True
+3     True
+4    False
+5     True
+Name: animal, dtype: bool
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'animal'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'dog'</span><span class="p">]</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>animal</th>
+      <th>name</th>
+      <th>length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>dog</td>
+      <td>Egglesburg</td>
+      <td>65</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>dog</td>
+      <td>Devon</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>dog</td>
+      <td>Fontaine</td>
+      <td>35</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#* Display all of the animals that are greater than 40 cm.</span>
+<span class="c"># 'length' is the animal's length in cm. Create a new column called inches that is the length in inches.</span>
+<span class="c">#* Save the cats to a separate variable called "cats." Save the dogs to a separate variable called "dogs."</span>
+<span class="c">#* Display all of the animals that are cats and above 12 inches long. First do it using the "cats" variable, then do it using your normal dataframe.</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'length'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">40</span><span class="p">]</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>animal</th>
+      <th>name</th>
+      <th>length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>cat</td>
+      <td>Bob</td>
+      <td>45</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>dog</td>
+      <td>Egglesburg</td>
+      <td>65</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>dog</td>
+      <td>Devon</td>
+      <td>50</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># save a new column using a calculation on an existing column</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'inches'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'length'</span><span class="p">]</span> <span class="o">/</span> <span class="mf">2.54</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>animal</th>
+      <th>name</th>
+      <th>length</th>
+      <th>inches</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>cat</td>
+      <td>Anne</td>
+      <td>35</td>
+      <td>13.779528</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cat</td>
+      <td>Bob</td>
+      <td>45</td>
+      <td>17.716535</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>dog</td>
+      <td>Egglesburg</td>
+      <td>65</td>
+      <td>25.590551</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>dog</td>
+      <td>Devon</td>
+      <td>50</td>
+      <td>19.685039</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cat</td>
+      <td>Charlie</td>
+      <td>32</td>
+      <td>12.598425</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>dog</td>
+      <td>Fontaine</td>
+      <td>35</td>
+      <td>13.779528</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#* Display all of the animals that are cats and above 12 inches long.</span>
+<span class="c"># First do it using the "cats" variable, then do it using your normal dataframe.</span>
+<span class="n">cats</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'animal'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'cat'</span><span class="p">]</span>
+<span class="n">cats</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>animal</th>
+      <th>name</th>
+      <th>length</th>
+      <th>inches</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>cat</td>
+      <td>Anne</td>
+      <td>35</td>
+      <td>13.779528</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cat</td>
+      <td>Bob</td>
+      <td>45</td>
+      <td>17.716535</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cat</td>
+      <td>Charlie</td>
+      <td>32</td>
+      <td>12.598425</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">cats</span><span class="p">[</span><span class="n">cats</span><span class="p">[</span><span class="s">'inches'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">12</span><span class="p">]</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>animal</th>
+      <th>name</th>
+      <th>length</th>
+      <th>inches</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>cat</td>
+      <td>Anne</td>
+      <td>35</td>
+      <td>13.779528</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cat</td>
+      <td>Bob</td>
+      <td>45</td>
+      <td>17.716535</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cat</td>
+      <td>Charlie</td>
+      <td>32</td>
+      <td>12.598425</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#df[df['animal'] == 'cat' &amp; df['inches'] &gt; 12]</span>
+<span class="n">big_cats</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s">'animal'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'cat'</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'inches'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">12</span><span class="p">)]</span>
+<span class="n">big_cats</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>animal</th>
+      <th>name</th>
+      <th>length</th>
+      <th>inches</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>cat</td>
+      <td>Anne</td>
+      <td>35</td>
+      <td>13.779528</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cat</td>
+      <td>Bob</td>
+      <td>45</td>
+      <td>17.716535</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cat</td>
+      <td>Charlie</td>
+      <td>32</td>
+      <td>12.598425</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">is_cat</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'animal'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'cat'</span>
+<span class="n">is_over_twelve_inches</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'inches'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">12</span>
+<span class="n">df</span><span class="p">[</span><span class="n">is_cat</span> <span class="o">&amp;</span> <span class="n">is_over_twelve_inches</span><span class="p">]</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>animal</th>
+      <th>name</th>
+      <th>length</th>
+      <th>inches</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>cat</td>
+      <td>Anne</td>
+      <td>35</td>
+      <td>13.779528</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cat</td>
+      <td>Bob</td>
+      <td>45</td>
+      <td>17.716535</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cat</td>
+      <td>Charlie</td>
+      <td>32</td>
+      <td>12.598425</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#* What's the mean length of a cat?</span>
+<span class="c">#* What's the mean length of a dog?</span>
+<span class="c">#* Use groupby to accomplish both of the above tasks at once.</span>
+<span class="c">#* Make a histogram of the length of dogs. I apologize that it is so boring.</span>
+<span class="c">#* Change your graphing style to be something else (anything else!)</span>
+<span class="c">#* Make a horizontal bar graph of the length of the animals, with their name as the label (look at the billionaires notebook I put on Slack!)</span>
+<span class="c">#* Make a sorted horizontal bar graph of the cats, with the larger cats on top.</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">cats</span><span class="p">[</span><span class="s">'length'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>37.333333333333336
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">cats</span><span class="p">[</span><span class="s">'length'</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>count     3.000000
+mean     37.333333
+std       6.806859
+min      32.000000
+25%      33.500000
+50%      35.000000
+75%      40.000000
+max      45.000000
+Name: length, dtype: float64
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dogs</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'animal'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'dog'</span><span class="p">]</span>
+<span class="n">dogs</span><span class="p">[</span><span class="s">'length'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>50.0
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dogs</span><span class="p">[</span><span class="s">'length'</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>count     3.0
+mean     50.0
+std      15.0
+min      35.0
+25%      42.5
+50%      50.0
+75%      57.5
+max      65.0
+Name: length, dtype: float64
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#* Use groupby to accomplish both of the above tasks at once.</span>
+<span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">'animal'</span><span class="p">)</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>inches</th>
+      <th>length</th>
+    </tr>
+    <tr>
+      <th>animal</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="8" valign="top">cat</th>
+      <th>count</th>
+      <td>3.000000</td>
+      <td>3.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>14.698163</td>
+      <td>37.333333</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>2.679866</td>
+      <td>6.806859</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>12.598425</td>
+      <td>32.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>13.188976</td>
+      <td>33.500000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>13.779528</td>
+      <td>35.000000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>15.748031</td>
+      <td>40.000000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>17.716535</td>
+      <td>45.000000</td>
+    </tr>
+    <tr>
+      <th rowspan="8" valign="top">dog</th>
+      <th>count</th>
+      <td>3.000000</td>
+      <td>3.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>19.685039</td>
+      <td>50.000000</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>5.905512</td>
+      <td>15.000000</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>13.779528</td>
+      <td>35.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>16.732283</td>
+      <td>42.500000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>19.685039</td>
+      <td>50.000000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>22.637795</td>
+      <td>57.500000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>25.590551</td>
+      <td>65.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">'animal'</span><span class="p">)[</span><span class="s">'length'</span><span class="p">]</span><span class="o">.</span><span class="nb">sum</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>animal
+cat    112
+dog    150
+Name: length, dtype: int64
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dogs</span><span class="p">[</span><span class="s">'length'</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x108c64358&gt;
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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
+RK5CYII=" alt="png" /></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">"ggplot"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dogs</span><span class="p">[</span><span class="s">'length'</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x108d21ac8&gt;
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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
+Hs4cJ5NJWZY1ac3IyEjmeGRkZNIaSYrH44rH45nj1tZWrdjwwIwKXyhCodB8l+AqT/e3cqX02on5
+rsI1np6dXOxv5Upp3fw/L7q7uzO3o9GootHoVdfnvIxTU1OjwcFBDQ0NKZVKqbe3V3V1dVlr6urq
+9Kc//UmS9N5772nJkiUqLS2dtFc0GlVra2vmn88X60X0t7B5uT8v9yaZ0d/nszRX0Et5nNn7/X61
+tbWpvb1djuOosbFRkUhEPT098vl8isViuuWWW9Tf369t27Zp8eLF2rRpU0EaAgAURl7X7Gtra9XR
+0ZF1X3Nzc9ZxW1tb4aoCABTUvH6CNp+XHgsZ/S1sXu7Py71J9DcVn+M4jgu1AACuIXw3DgAYgLAH
+AAPM2YeqLl++rH379imVSimVSqmurk7r16/XK6+8otdff13Lli2TJN17772qra2dq7IKyrZt7d69
+W5ZlaefOnfrkk0/03HPPaWhoSMuXL9fDDz+s4uLi+S5zxmzb1q5duxQOh7Vz505PzW7Lli0qLi6W
+z+dTIBDQU0895an5TdWfl+Y3Pj6uX/ziF/roo4/k8/m0adMmVVRUeGJ+U/U2MDAw7dnN6TX7iYkJ
+LVq0SLZt6yc/+Ynuu+8+nTx5Ul/4whd01113zVUZrvn973+vDz74QBcvXtTOnTv18ssvKxQK6bvf
+/a6OHj2qf/3rX9qwYcN8lzlj/9nfK6+84pnZbd26VU8//bSWLl2auc9L85uqPy/N74UXXtCXv/xl
+NTQ0KJ1Oa2JiQr/97W89Mb+penvttdemPbs5vYyzaNEiSf8+y7dtO/PE88J7xCMjI+rv71dTU1Pm
+vhMnTmS+IO6OO+6Y9AVyC8lU/UnemJ307z7+sxcvzW+q/j67f6EbHx/Xu+++q4aGBklSIBBQcXGx
+J+Z3pd6k6c9uTr8b57PLAOfOnVNzc7MikYgk6dixY/rzn/+s6upq/fCHP1yQL7WOHDmi++67T+Pj
+45n7zp8/n/kkcWlpqc6fPz9f5c3aVP1J3pidJPl8PrW3t8vv9ysWi6mpqclT8/t8f01NTYrFYpK8
+Mb9//OMfCoVCOnTokD788EN98Ytf1P333++J+V2pN2n6s5vTsPf7/frZz36m8fFxPfnkk3rnnXf0
+7W9/Wz/4wQ/k8/n0m9/8RkeOHFlwn8B96623tGzZMlVVVWV9989/8vl8c1hV4VypPy/M7jNPPPGE
+ysrKdOHCBbW3t2vlypWT1izU+UnZ/T3xxBOKRCKemZ9t2zp9+rTa2tpUXV2trq4uHT16dNK6hTi/
+K/V25513Tnt28/K3cYqLi3XzzTfr1KlTKikpyQyhqalJp06dmo+SZuXdd9/ViRMntHXrVnV0dOjt
+t9/WgQMHVFpamvle/9HR0cybKQvNVP0dPHjQE7P7TFlZmSSppKREa9euVSKR8Mz8pOz+vva1rymR
+SHhmfpZlKRwOq7q6WpJ022236fTp056Y35V6m8ns5izsL1y4kLkE8Omnn+rkyZOqqqrK+p+cvPnm
+m1q1atVclVQw69ev14svvqiDBw9qx44d+spXvqJt27bp1ltv1fHjxyVJx48fn/QFcgvFVP1t3brV
+E7OT/v0XBy5duiRJunTpkv7yl7/o+uuv98z8pupv1apVnplfaWmpwuGwPv74Y0nSyZMnFYlEPDG/
+K/U2k9nN2WWc0dFRvfDCC5k3itatW6evfvWrOnjwoM6cOSOfz6fy8nJt3LhxrkpyXUtLi37+85/r
+j3/8o8rLy/Xwww/Pd0kF9fLLL3tidufPn9czzzwjn8+ndDqtdevWac2aNaqurvbE/K7Un5f+7P3o
+Rz/SgQMHlEqldN1112nz5s2ybdsT85uqt8OHD097dnxdAgAYgE/QAoABCHsAMABhDwAGIOwBwACE
+PQAYgLAHAAMQ9gBgAMIeAAzw/22Ag7FyQfe3AAAAAElFTkSuQmCC" alt="png" /></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#* Make a horizontal bar graph of the length of the animals, with their name as the label (look at the billionaires notebook I put on Slack!)</span>
+<span class="c">#* Make a sorted horizontal bar graph of the cats, with the larger cats on top.</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">'bar'</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">'name'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'length'</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x108ed2a58&gt;
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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" alt="png" /></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">'barh'</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">'name'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'length'</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1090b78d0&gt;
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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
+AABJRU5ErkJggg==" alt="png" /></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#* Make a sorted horizontal bar graph of the cats,</span>
+<span class="c"># with the larger cats on top.</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'animal'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'cat'</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'length'</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">'barh'</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">'name'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'length'</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x109be75c0&gt;
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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
+JNnOKjY2VtL5NY+uri4NGzbM/DPVUybJdk5nzpzR22+/rby8vO77rOfUUyap73NiE9ynGhoaNHLk
+yO7bycnJOnLkiGGi83w+n4qKihQVFaW8vDzNnj3bOlK3pqYmJSUlSTr/j1xTU5NxovNeffVVvf76
+65o0aZK+853vDPimiQs+/vhjffjhh8rIyPDMrC5kuummm1RdXW06qwubcE6dOqW77rpLY8eONZ9T
+T5kk28/UCy+8oAULFujcuXPd91nPqadMUt/nxBqQxz311FMqLi7W8uXL9ec//1nV1dXWkXrl8/ms
+I+jrX/+6AoGA1q1bp6SkJL3wwgsmOVpbW1VSUqL7779fcXFxF/3cYlafz2Q9q6ioKP385z9XaWmp
+qqqqFAwGL3rMQM/p85kqKytN53RhH2daWtol1y4Gck69ZbqcOVFAn0pOTtbp06e7bzc0NCg5Odkw
+0XkjRoyQJA0fPly5ubmeWCu7ICkpSY2NjZKkxsbG7p2PloYPH979ZczLy1NNTc2AZwiFQtqwYYNm
+zJihr371q5LsZ9VTJi/MSpLi4+P1la98RTU1NeZz6imT5Zyqq6u1b98+FRQUaNOmTTp48KB+8Ytf
+mM6pp0yBQOCy5kQBfSo9PV0fffSR6uvr1dnZqZ07dyonJ8c0U1tbm1pbWyWd/+31vffe07hx48zy
+fH5/VHZ2trZv3y5J2r59u8m8Pp/pwpdSkvbu3Wsyr9LSUo0dO1Z33313933Ws+opk+Wsmpubuzff
+tLe36/3339eNN95oOqeeMqWlpZnO6b777lNpaakCgYAeeeQRZWVlafHixaZz6ilTQUHBZc2JfUCf
+ioqK0ve+9z0VFRXJcRzNmjWre/uvlaamJq1bt04+n0+hUEh33HGHpkyZYpJl06ZNqqysVEtLixYu
+XKj8/Hzdc8892rhxo/7xj38oJSVFS5YsMc8UDAZVW1srn8+nlJQUPfTQQwOaqbq6Wm+88YbGjx+v
+H/3oR/L5fLr33ntNZ9Vbph07dpjNqrGxUc8880z3LxB33HGHbr31Vt14441mc+otUyAQMP1M9cT6
+u9eTrVu39nlOnIoHAGCCTXAAABMUEADABAUEADBBAQEATFBAAAATFBAAwAQFBAAwQQEBAEz8Fww/
+rxlxe33eAAAAAElFTkSuQmCC" alt="png" /></p>
+
+<h1 id="part-02-doing-some-research-billionaires">Part 02: Doing some research (billionaires)</h1>
+
+<p>Answer your own selection out of the following questions, or any other questions
+you might be able to think of.  Write the question down first in a markdown cell
+(use a # to make the question a nice header), THEN try to get an answer to it. A
+lot of these are remarkably similar, and some you’ll need to do manual work for
+- the GDP ones, for example.</p>
+
+<p>If you are trying to figure out some other question that we didn’t cover in
+class and it does not have to do with joining to another data set, we’re happy
+to help you figure it out during lab!</p>
+
+<ul>
+  <li>Take a peek at the billionaires notebook I uploaded into Slack, it should be
+helpful for the graphs (I added a few other styles and options, too). You’ll
+probably also want to look at the “sum()” line I added.</li>
+  <li>What country are most billionaires from? For the top ones, how many
+billionaires per billion people?</li>
+  <li>Who are the top 10 richest billionaires?</li>
+  <li>What’s the average wealth of a billionaire? Male? Female?</li>
+  <li>Who is the poorest billionaire? Who are the top 10 poorest billionaires?</li>
+  <li>‘What is relationship to company’? And what are the most common relationships?</li>
+  <li>Most common source of wealth? Male vs. female?</li>
+  <li>Given the richest person in a country, what % of the GDP is their wealth?</li>
+  <li>Add up the wealth of all of the billionaires in a given country (or a few
+countries) and then compare it to the GDP of the country, or other billionaires,
+so like pit the US vs India</li>
+  <li>What are the most common industries for billionaires to come from? What’s the
+total amount of billionaire money from each industry?</li>
+  <li>How many self made billionaires vs. others?</li>
+  <li>How old are billionaires? How old are billionaires self made vs. non self
+made? or different industries?</li>
+  <li>Who are the youngest billionaires? The oldest? Age distribution - maybe make a
+graph about it?</li>
+  <li>Maybe just made a graph about how wealthy they are in general?</li>
+  <li>Maybe plot their net worth vs age (scatterplot)</li>
+  <li>Make a bar graph of the top 10 or 20 richest</li>
+</ul>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

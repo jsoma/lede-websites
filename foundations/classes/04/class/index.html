@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>APIs</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/04/class/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="APIs">
+  <meta property="twitter:title" content="APIs">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt;  APIs</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">APIs</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="do-now">Do-Now</h2>
+
+<p><strong>1) What’s the output of the following lines?</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>name = "Tara"
+print "hello", "name"
+print "hello", name
+</code></pre>
+</div>
+<p><strong>Output:</strong>
+hello name
+hello Tara</p>
+
+<p><strong>2) What is the output of the following code? Which lines give you errors?</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>borough_name = 'Manhattan'
+z = [ 'Manhattan', 'Queens' ]
+x = { 'borough_name': 'Manhattan', 'population': 500 }
+y = {
+'Manhattan': 500,
+'Queens': 200
+}
+
+print x['borough_name'] # Manhattan
+print x[borough_name] # ERROR; no key named 'Manhattan'
+print x[0] # ERROR; x is a dictionary
+print y['borough_name'] # ERROR; no key named 'borough_name'
+print y[borough_name] # 500
+print y[0] # ERROR; y is a dictionary
+print z['borough_name'] # ERROR; z is a list
+print z[borough_name] # ERROR; z is a list
+print z[0] # Manhattan
+</code></pre>
+</div>
+
+<p>Errors and output are noted in comments above.</p>
+
+<p><strong>3) We have a list of integers called numbers. Loop through them but instead of printing the number print a number 100 times as big as the original number.</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>numbers = [1, 2, 3, 4]
+for number in numbers:
+    print number * 100
+</code></pre>
+</div>
+
+<p><strong>Output:</strong>
+100
+200
+300
+400</p>
+
+<p><strong>4a) Given the following, write code to calculate how many murders we have in total.</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>murders = { 'Albany': 23, 'Kings County': 10, 'Rochester': 7, 'Yonkers': 9 }
+</code></pre>
+</div>
+
+<p>Possible solution:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>total_murders = murders['Albany'] + murders['Kings County'] + murders['Rochester'] + murders['Yonkers']
+</code></pre>
+</div>
+
+<p>Another possible way:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>total_murders = 0
+cities = ['Albany', 'Kings County', 'Rochester', 'Yonkers']
+for city in cities:
+    # print(murders[city])
+    # instead of printing, let's keep a running count
+    total_murders = total_murders + murders[city]
+print(total_murders)
+</code></pre>
+</div>
+<p>Yet another way:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>total_murders = 0
+for city in murders.keys():
+    total_murders = total_murders + murders[city]
+print(total_murders)
+</code></pre>
+</div>
+<p>Another: <code class="highlighter-rouge">sum(murder.values())</code></p>
+
+<p><strong>4b) Write code to calculate the percentage of the murders happened in Kings County.</strong></p>
+
+<p><code class="highlighter-rouge">print(murders['Kings County'] / total_murders)</code></p>
+
+<h2 id="apis">APIs</h2>
+
+<p>Start a new python script (name it as you please) and start a virtual environment in the directory where that file is located and call it ‘apis’ (<code class="highlighter-rouge">mkvirtualenv apis</code>).</p>
+
+<ul>
+  <li><strong>An aside: the reason why we’re using a virtual environment:</strong> virtual environments allow us to partition off what we need so that when you upgrade things in the future, it doesn’t break things from the past.</li>
+</ul>
+
+<p>API stands for <strong>application programming interface</strong>.</p>
+
+<h3 id="importing-requests">Importing requests</h3>
+
+<p>We’re going to use a library called <strong>requests</strong> to work with APIs. You don’t have to write 100s of lines of code to make a request to a website because we have the code that someone else already wrote (you can even view the code for <strong>requests</strong> on <a href="https://github.com/kennethreitz/requests">Github</a>).</p>
+
+<p>(We’re going to be using the following 3 lines of code over and over again! Well, we’ll change the URL we pass, but mostly use variations of the lines below.)</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>import requests
+
+response = requests.get('http://www.nytimes.com')
+print(response.text)
+</code></pre>
+</div>
+
+<p>But this won’t work until we install the <strong>requests</strong> package on our computer. <code class="highlighter-rouge">pip3 install requests</code> (make sure you are in a virtual environment when you do this).</p>
+
+<p>A <strong>scraper</strong> teaches your computer to how to interpret what it gets back from <code class="highlighter-rouge">response.text</code> from a website! An <strong>API</strong> gets you data back from a source in a format that your computer can understand. APIs usually come with <strong>documentation</strong> that tells you how its data is structured.</p>
+
+<h3 id="example-lets-go-check-out-the-spotify-apihttpsdeveloperspotifycomweb-api">Example: Let’s go check out the <a href="https://developer.spotify.com/web-api/">Spotify API</a></h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>import requests
+response = requests.get('https://api.spotify.com/v1/search?query=80s&amp;type=playlist')
+</code></pre>
+</div>
+
+<ul>
+  <li><strong>API Endpoint:</strong> This just means ‘URL that your computer can visit’
+    <ul>
+      <li>Everything to the right of the ? are the <strong>parameters</strong></li>
+      <li>To the left, we have the <strong>URL</strong></li>
+    </ul>
+  </li>
+  <li><strong>API Endpoint Reference:</strong> The API Endpoint reference tells us all the parameters we can use. This is usually a good first stop when you begin working with a particular API – <strong>read their documentation!</strong></li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>data = response.json()
+print(data.keys())
+</code></pre>
+</div>
+
+<p>Note that we are passing <code class="highlighter-rouge">response.json()</code> to data, rather than response.text – given the format of the data we get back from Spotify, we know (now) that we need to interpret it as JSON (stands for JavaScript Object Notation)!</p>
+
+<p>Whenever we get new “data”, we’re going to be using our tried and test methods to “poke through” and get a better understanding of what that data actually looks like. A few of our favorite ways of investigating the data:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>print(type(data['playlists']))  # Tells us its a dictionary
+# So we know we can print its keys
+print(data['playlists'].keys())  # we know we want the items key!
+
+playlists = data['playlists']['items']
+print(type(playlists))  # it's a list
+
+for playlist in playlists:
+    print(playlist['name'], playlist['href'])
+</code></pre>
+</div>
+
+<p><strong>Print, print, print</strong>! And for APIs, you can always use the <strong>documentation</strong> to guide your investigations.</p>
+
+<h3 id="api-authorization">API authorization</h3>
+
+<ul>
+  <li>Some APIs require authorizations to access their data – this is the case for some of Spotify’s data, which uses an authentication tool called OAuth. Basically, they want to know who you are.</li>
+  <li>Other APIs have simplied their authentication process – they’ll issue you an API key, which serves as a unique identifier that again, allows them to know who is accessing their data.</li>
+</ul>
+
+<h2 id="starting-exploratory-data-analysis">Starting exploratory data analysis</h2>
+
+<p>We’re going to move to ipython/Jupyter notebook to look through our Spotify data. Jupyter is notebooks are particularly great for <strong>exploratory data analysis</strong>. Instead of running our entire script each time we make a small change, Jupyter notebooks allow us to run our code in smaller cells.</p>
+
+<p><strong>A note for exploratory data analysis</strong>: don’t just blindly poke around your data. Instead, form a question and try to get the answer out of your data.</p>
+
+<p>Here’s what we did in class:</p>
+
+<iframe src="../../../../downloads/spotify_classwork.html" frameborder="0" width="900" height="600"></iframe>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

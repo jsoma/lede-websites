@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Command Line & Python Basics</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2018/classes/command%20line/command-line/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Command Line & Python Basics">
+  <meta property="twitter:title" content="Command Line & Python Basics">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2018</a> &gt;  Command Line &amp; Python Basics</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Command Line & Python Basics</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="the-command-line">The Command Line</h2>
+
+<p>The <strong>command line</strong> is a more intimate way of interacting with your computer (than say, Finder on Mac or Explorer on Windows). We’ve already used it to install Python 3 during orientation (<a href="../../getting-started/installing-python/">if you haven’t done that, go do that now</a>). You might also hear folks referring to the command line as the <strong>shell</strong>, <strong>Terminal</strong> (on Mac) or <strong>Command Prompt</strong> (on Windows).</p>
+
+<p>I’ve compiled a ton of <a href="../../using-the-shell/reference/">common shell commands</a>! I won’t repeat them all here now, but remember <code class="highlighter-rouge">pwd</code>, <code class="highlighter-rouge">ls</code>, <code class="highlighter-rouge">cd [foldername]</code>, <code class="highlighter-rouge">cd ..</code> are really helpful when you are moving around your computer using the command line. A few other things to keep in mind:</p>
+
+<ul>
+  <li>You can add <strong>flags</strong> to commands to instruct shell to do specific things or structure its output in a specific way. A few helpful flags to add to the <code class="highlighter-rouge">ls</code> command:
+    <ul>
+      <li><code class="highlighter-rouge">-l</code>: displays more information about your files and folders (you’d enter it as <code class="highlighter-rouge">ls -l</code> in your shell)</li>
+      <li><code class="highlighter-rouge">-h</code>: makes the displayed filesize numbers human readable!</li>
+      <li><code class="highlighter-rouge">-a</code>: all, shows you hidden files, usually important stuff your computer doesn’t want you to deal with.</li>
+      <li>You can use a bunch of flags together <code class="highlighter-rouge">ls -lh</code> or <code class="highlighter-rouge">ls -lha</code></li>
+    </ul>
+  </li>
+  <li><strong>A few helpful <code class="highlighter-rouge">cd</code> commands:</strong>
+    <ul>
+      <li><code class="highlighter-rouge">cd ..</code> moves you “up” one directory</li>
+      <li>When you see <em>~</em> in terminal, it means you’re in your home directory.</li>
+      <li><code class="highlighter-rouge">cd ~</code>: takes you directly to your home directory</li>
+      <li><code class="highlighter-rouge">cd ~/Downloads</code>: takes you directly to your Downloads folder</li>
+      <li><code class="highlighter-rouge">cd [drag the folder from Finder into Terminal]</code>: it’ll autocomplete the path to that folder! This only works on Macs.</li>
+    </ul>
+  </li>
+  <li>If your command line is running something it shouldn’t be, use <code class="highlighter-rouge">Ctrl+C</code> to escape/exit.</li>
+  <li><code class="highlighter-rouge">clear</code> will do exactly as it sounds; your Terminal/Babun shell will be cleared of all commands and output.</li>
+  <li>File and folder names have to be typed exactly as is! <code class="highlighter-rouge">cd desktop</code> and <code class="highlighter-rouge">cd Desktop</code> are different (you probably want to use the latter).</li>
+</ul>
+
+<h3 id="exploring-folders--files">Exploring Folders &amp; Files</h3>
+
+<p>In class, we downloaded a file from Slack to test out our new commands! Extract the zip file, and then:</p>
+
+<ol>
+  <li><code class="highlighter-rouge">pwd</code> to see where you are</li>
+  <li><code class="highlighter-rouge">ls</code> see what’s there!</li>
+  <li><code class="highlighter-rouge">cd ~/Downloads</code> to change directory into your Downloads folder</li>
+  <li><code class="highlighter-rouge">cd class-01</code></li>
+  <li><code class="highlighter-rouge">pwd</code> to check you’re in the right place!</li>
+  <li><code class="highlighter-rouge">cat [filename]</code> to view a file’s contents!</li>
+  <li>Typing the file name is super annoying though - write <code class="highlighter-rouge">cat [first letter(s) of your filename]</code> and then hit TAB to autocomplete the filename.</li>
+</ol>
+
+<blockquote>
+  <p><strong>TIP:</strong> If pressing TAB does not autocomplete your folder or filename, then you may need to enter a few more letters to disambiguate which folder or file you mean.</p>
+
+  <p>Also, make sure that autocomplete gave you the ENTIRE folder or file name. Sometimes, you will have to enter the next letter hit TAB again, especially if there are spaces in your filename.</p>
+
+  <p><strong>DON’T PUT SPACES OR APOSTROPHES IN YOUR FILE NAMES</strong>.</p>
+</blockquote>
+
+<p>Besides using <code class="highlighter-rouge">cat</code> to see the entire file, you can also take a peak at the beginning or end of a file.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">head -n 20 [filename]</code>: see the first 20 lines; change the number to see more or less lines.</li>
+  <li><code class="highlighter-rouge">tail</code>: use tail to see the end of the file; structure the command the way that the <code class="highlighter-rouge">head</code> command is structured directly above.</li>
+</ul>
+
+<h3 id="treasure-hunt">Treasure Hunt!</h3>
+
+<p>So we found an awesome treasure in class! The <strong>MOST IMPORTANT</strong> takeaway from the exercise was that you should use TAB to autocomplete folder and file names as much as possible. See above tips on using autocomplete/TAB.</p>
+
+<ol>
+  <li>Navigate to where your downloaded (and hopefully extracted) zipfile is located.</li>
+  <li><code class="highlighter-rouge">cat instructions.txt</code> to see the treasure hunt instructions.</li>
+  <li>You’ll notice that the folder and file names are cuh-razy. Use TAB/autocomplete to get your computer to do all the hard work for you.
+    <ul>
+      <li><code class="highlighter-rouge">\ </code> indicates that the space character is actually part of the name you’re looking for! The <code class="highlighter-rouge">\</code> is an <strong>escape character</strong> – because spaces can mean other things on Terminal, using the <code class="highlighter-rouge">\ </code> before a space lets Terminal know that you really mean it! You’ll see this structure appear with other “special characters” as well (not just spaces).</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p><strong>TIP:</strong> Use ↑ and ↓ on your keyboard to move through the other commands you’ve typed on the command line.</p>
+</blockquote>
+
+<h3 id="other-fun-commands">Other fun commands</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">grep</code>: allows you to search for a specific set of characters inside of a file
+    <ul>
+      <li><code class="highlighter-rouge">grep [search term] [filename]</code></li>
+      <li><code class="highlighter-rouge">grep -i [search term] [filename]</code>: case insensitive search</li>
+      <li><code class="highlighter-rouge">grep "[search term]" [filename]</code></li>
+      <li><code class="highlighter-rouge">grep -r "[search term]" [directory or folder name]</code>: this searches all the files in the specified directory for your search term</li>
+      <li>Note that the search terms are case-sensitive</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">man [command]</code>: see the manual entry for that command. Ex: <code class="highlighter-rouge">man wc</code>
+    <ul>
+      <li>use <code class="highlighter-rouge">q</code> to escape from the manual, because it’s horrible</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">wc -l [filename]</code>: get the line count for the given file</li>
+</ul>
+
+<p><strong>Piping</strong> a way of connecting different commands together on the terminal.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">grep bugs [filename] | wc -l</code>: displays the line count of the output of <code class="highlighter-rouge">grep bugs [filename]</code> (rather than the whole file)</li>
+  <li><a href="../../using-the-shell/tildes-pipes-and-redirecting-output/">More on piping.</a></li>
+</ul>
+
+<h2 id="how-to-write-and-run-python-scripts">How to write and run Python scripts</h2>
+
+<ol>
+  <li>Open up your text editor and create a new file: File &gt; Save “intro.py”</li>
+  <li>On the command line, <code class="highlighter-rouge">cd</code> into the folder where you saved intro.py.</li>
+  <li>Let’s edit intro.py in your text editor so that our script actually does things!</li>
+</ol>
+
+<blockquote>
+  <p><strong>Remember:</strong> We use <code class="highlighter-rouge">#</code> to write comments within our code.</p>
+</blockquote>
+
+<h2 id="using-os-x-commands-on-windows">Using OS X commands on Windows</h2>
+
+<p>Command Prompt has a different set of similar commands - <a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/4/html/Step_by_Step_Guide/ap-doslinux.html">see this reference</a>. We can install some software CoreUtils, though, which gives us the “normal” OS X/Linux commands.</p>
+
+<p>First, we’ll need to install <a href="https://chocolatey.org/">Chocolatey</a>. It’s a “package manager” which means it lets us install software on the command line without going through big installer programs. The OS X version is called Homebrew.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" &amp;&amp; SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+</code></pre>
+</div>
+
+<p>Then we’ll use Chocolatey to install <a href="https://www.gnu.org/software/coreutils/coreutils.html">CoreUtils</a>…</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>choco install gnuwin32-coreutils.install
+</code></pre>
+</div>
+
+<p>…and life is now perfect! <code class="highlighter-rouge">ls</code> and <code class="highlighter-rouge">pwd</code> forever!</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

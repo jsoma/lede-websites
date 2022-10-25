@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Creating Waffle Charts in pandas</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2018/matplotlib/creating-waffle-charts-in-pandas/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Creating Waffle Charts in pandas">
+  <meta property="twitter:title" content="Creating Waffle Charts in pandas">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Foundations, Lede 2018</a> &gt;  Creating Waffle Charts in pandas</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Creating Waffle Charts in pandas</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations-2018/matplotlib/creating-waffle-charts-in-pandas.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h2 id="getting-set-up">Getting set up</h2>
+
+<h3 id="installing-pywaffle">Installing pyWaffle</h3>
+
+<p>We’ll be using the <a href="https://github.com/ligyxy/PyWaffle"><code class="highlighter-rouge">pyWaffle</code> library</a>,
+which you can install with <code class="highlighter-rouge">pip</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip install pywaffle
+</code></pre>
+</div>
+
+<h3 id="importing-into-your-jupyter-notebook">Importing into your Jupyter Notebook</h3>
+
+<p>You’ll need to import all of these to make it work!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">pywaffle</span> <span class="kn">import</span> <span class="n">Waffle</span></code></pre></figure>
+
+<h2 id="type-1-using-columns-for-drawing">Type 1: Using columns for drawing</h2>
+
+<p>Sometimes you’ll just want to use columns right out of your dataframe.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s">'crime_type'</span><span class="p">:</span> <span class="p">[</span><span class="s">'felony'</span><span class="p">,</span> <span class="s">'misdemeanor'</span><span class="p">,</span> <span class="s">'violation'</span><span class="p">],</span>
+    <span class="s">'number_of_cases'</span><span class="p">:</span> <span class="p">[</span><span class="mi">54</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="n">df</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>crime_type</th>
+      <th>number_of_cases</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>felony</td>
+      <td>54</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>misdemeanor</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>violation</td>
+      <td>8</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span>
+    <span class="n">FigureClass</span><span class="o">=</span><span class="n">Waffle</span><span class="p">,</span> 
+    <span class="n">rows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">values</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">number_of_cases</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">crime_type</span><span class="p">)</span>
+<span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/Users/jonathansoma/.pyenv/versions/3.6.5/lib/python3.6/site-packages/matplotlib/figure.py:2267: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  warnings.warn("This figure includes Axes that are not compatible "
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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" alt="png" /></p>
+
+<h2 id="type-2-using-pandas-calculations-for-a-waffle-chart">Type 2: Using pandas calculations for a waffle chart</h2>
+
+<p>First we’ll read in/create our dataset…</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s">'District'</span><span class="p">:</span> <span class="p">[</span><span class="s">'District 12'</span><span class="p">,</span> <span class="s">'District 23'</span><span class="p">,</span> <span class="s">'District 32'</span><span class="p">,</span> <span class="s">'District 45'</span><span class="p">,</span> <span class="s">'District 65'</span><span class="p">,</span> <span class="s">'District 67'</span><span class="p">,</span> <span class="s">'District 33'</span><span class="p">],</span>
+    <span class="s">'party'</span><span class="p">:</span> <span class="p">[</span><span class="s">'Republican'</span><span class="p">,</span> <span class="s">'Republican'</span><span class="p">,</span> <span class="s">'Republican'</span><span class="p">,</span> <span class="s">'Republican'</span><span class="p">,</span> <span class="s">'Democrat'</span><span class="p">,</span> <span class="s">'Democrat'</span><span class="p">,</span> <span class="s">'Democrat'</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="n">df</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>District</th>
+      <th>party</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>District 12</td>
+      <td>Republican</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>District 23</td>
+      <td>Republican</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>District 32</td>
+      <td>Republican</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>District 45</td>
+      <td>Republican</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>District 65</td>
+      <td>Democrat</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>District 67</td>
+      <td>Democrat</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>District 33</td>
+      <td>Democrat</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>We can’t use this raw data for our waffle chart, because we need a list of
+numbers for it! In order to chart the number of Democrats and Republicans, we
+need to first get a value counts…</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">calculated</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">party</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="n">calculated</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Republican    4
+Democrat      3
+Name: party, dtype: int64
+</code></pre>
+</div>
+
+<p>…then you’ll feed the <code class="highlighter-rouge">index</code> and <code class="highlighter-rouge">values</code> into your waffle chart separately.
+The <code class="highlighter-rouge">index</code> (on the left) will be your labels, the values (on the right) will be
+the number of each square to display. If you don’t use <code class="highlighter-rouge">list()</code> with the labels
+part it won’t work.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span>
+    <span class="n">FigureClass</span><span class="o">=</span><span class="n">Waffle</span><span class="p">,</span> 
+    <span class="n">rows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
+    <span class="n">values</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">calculated</span><span class="o">.</span><span class="n">values</span><span class="p">),</span>
+    <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">calculated</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/Users/jonathansoma/.pyenv/versions/3.6.5/lib/python3.6/site-packages/matplotlib/figure.py:2267: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  warnings.warn("This figure includes Axes that are not compatible "
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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" alt="png" /></p>
+
+<h2 id="hot-tips-customizing-your-graphic">Hot tips: Customizing your graphic</h2>
+
+<p>You can use <code class="highlighter-rouge">figsize=</code>, <code class="highlighter-rouge">legend=</code>, and <a href="https://github.com/ligyxy/PyWaffle">other
+options</a>, too.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s">'crime_type'</span><span class="p">:</span> <span class="p">[</span><span class="s">'felony'</span><span class="p">,</span> <span class="s">'misdemeanor'</span><span class="p">,</span> <span class="s">'violation'</span><span class="p">],</span>
+    <span class="s">'number_of_cases'</span><span class="p">:</span> <span class="p">[</span><span class="mi">54</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="n">df</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>crime_type</th>
+      <th>number_of_cases</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>felony</td>
+      <td>54</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>misdemeanor</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>violation</td>
+      <td>8</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span>
+    <span class="n">FigureClass</span><span class="o">=</span><span class="n">Waffle</span><span class="p">,</span> 
+    <span class="n">rows</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">values</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">number_of_cases</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">crime_type</span><span class="p">),</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="n">legend</span><span class="o">=</span><span class="p">{</span><span class="s">'loc'</span><span class="p">:</span> <span class="s">'upper left'</span><span class="p">,</span> <span class="s">'bbox_to_anchor'</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}</span>
+<span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/Users/jonathansoma/.pyenv/versions/3.6.5/lib/python3.6/site-packages/matplotlib/figure.py:2267: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  warnings.warn("This figure includes Axes that are not compatible "
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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J08+fdiwYeVVVVX9jua1E7wAABnx3nvvlcycObNu06ZNqzZt2lSycOHCntXV1etuv/32LbfffvvXDj73rrvu+trTTz9ds379+jVPPfXUxoiI2bNnn9qxY8fGt99+e/Vtt932/po1azpHRGzbtq34jjvu+Nrzzz9fs2bNmrUjRozYc+utt5Y2P9fpp5++f926dWvOO++8XT/60Y/6L1myZNOrr766btasWX0ivojljRs3lrz55ptr165du+aNN97o9OSTT3aJiFi4cOHm1atXr33jjTfWzJ8/v7S2trYoIuLzzz8vHDNmzK7169evGTNmzK7f//73vSIiqqqqTp8yZcr2mpqaNZMmTdpeVVV1WvOObdu2tX/99dfXLViwYMvRvG6CFwAgI/r27btv9OjRnxcVFUVZWdnnF1988c7CwsIYMWLEni1btnQ4+NxRo0btmjJlSv85c+acUl9fHxERL774Ypcrr7xye0TEeeed93lZWdmeiIhnn32286ZNm0pGjx5dXl5eXvHwww/3fPfdd9s3P9f3v//9TyIihg4dumfEiBG7u3fv3tinT5/69u3bN3700UdFTz311EnPP//8SRUVFRWDBw+u2LRpU8m6detKIiJmzZpVOnDgwIqRI0cOqq2tbbd69eqSiIh27do1XXHFFZ9GRIwcOXL3P//5z/YREStWrOg8ffr0HRERVVVVO5YvX96lecdll132cXHx0d/54R5eAICMaN++fVPz14WFhVFSUtIUEVFUVBQNDQ0FB5+7aNGid//+9793fuKJJ7qNHDmyYvny5WuO9LxNTU0xduzYnUuWLHnncMebr1NYWPhfGw4cOFDQ1NQUN9xww7Zf/OIXHx38uKVLl3Z97rnnulZXV6/r2rVr4+jRowd+/vnnhRERxcXFTYWFX7z3WlxcHPX19f+x/3C6dOnS2No5h+MdXgCABK1evbrDxRdfvPt//ud/3u/evXv922+/3X7s2LG7Fi5c2CMi4rXXXiupqanpFBHx7W9/e3d1dXWXVatWdYiI2LlzZ+Gbb77ZoaXnP9i4ceN2/vnPfz6l+b7fd955p93WrVuLP/nkk6Ju3bo1dO3atXHFihUlK1eu7Nzacw0fPnz3ggULukdEzJ8/v8eoUaN2fZmf/2De4QUA+DJKOtcf648lO2bPFRE33nhjv82bN3doamoqGDt27M7zzz//82HDhu294oorzhwwYMDgs88+e29FRcXuiIg+ffrUz58/f/MVV1wxYP/+/QUREbfccsvWYcOG7WvLtS677LKdq1evLvn6179eHhHRqVOnxoULF74zceLET//whz/0GjBgwOABAwbsrays3N3ac91zzz3vTp06tf/dd9/du2fPnvUPPvjg5q/wMkSE4AUA+FK+6mfmHq2BAwfu37Bhw+rmXy9evHjzEY5tj4h4+umnNx36HF26dGlaunTp24d7/gkTJnw2YcKEtYd+f+vWrW81f/2zn/1se/PzH3rs5ptv/uDmm2/+4NDHP//88xsOd709e/asaP562rRpH0+bNu3jiIiysrL9r7zySs2h5x/88x4ttzQAAJA0wQsAQNIELwAASRO8AAAkTfACAJC0XAZvXQ6v3ZrWtuXr9qzujmh5W1Z3t+V4LnnNT6ys7o7I7vas7o7I722QOQVNTU2tnwUA8P+5lStXbq6srPz3vyT2vw+vqNy7r+GYfcRrSYei+p9cMfyoPups8+bN7X784x+f9tRTTx32o8YivvjXzubMmVO6bNmyjUc65+WXX+743nvvtZ80adKnERELFy7stnr16o533HFH7dHsyaWVK1eeUllZ2f9wx3wOLwDAl3AsY/fLPl///v0PtBS7bVVdXd2purq6c3PwTpky5dOI+PSrPm++cA8vAEAG/OQnP+l755139mr+9YwZM/r8+te/Lj3nnHMGR0Ts2bOn4Hvf+17/srKyikGDBlUsWbKk66HPsWzZsk7nnntu+aBBgyqGDx9evnLlyg579+4tuPPOO/ssWbKke3l5ecUf//jH7vPmzes5derU0yMi1q9f3/78888vKysrqxgzZkzZhg0b2kdETJw4sf8Pf/jD04YPH17er1+/offff3/3E/VaHC3BCwCQAVOmTNnx6KOP9mj+9eOPP979ggsu+Pc/1Ttr1qxTCwoKoqamZs2iRYvenj59ev89e/YUHPwclZWVe1977bV1a9euXXPLLbdsvemmm/qVlJQ0/fKXv3z/u9/97sfr1q1bc+2113588GOqqqpOnzJlyvaampo1kyZN2l5VVXVa87G6urp21dXV6x5//PENt9xyS9/j+fN/FW5pAADIgG984xufb9++vXjz5s3ttm3bVtytW7eGM888c3/z8ZdffrnL9ddf/0FExPDhw/f26dNn/1tvvVVy8HPs2LGjaNKkSWdu3ry5pKCgoOnAgQMFh17nUCtWrOj85JNPboqIqKqq2vGb3/ymX/OxCRMmfFJUVBQjR47cu3379nbH7qc9tgQvAEBGTJgw4eOHHnqoe21tbbvLLrtsx9E+fubMmX2/9a1vffa3v/1t0/r169tffPHFA7/KnpKSkn9/+kE+fxCCWxoAADLiBz/4wY7Fixf3WLp0afcrr7zyP249+MY3vrHroYce6hER8eabb3bYtm1b+2HDhu09+JydO3cW9evXb39ExPz5809p/v5JJ53UsGvXrsN24fDhw3cvWLCg+78e02PUqFG7jvXPdbzl7B3e615YVBsRpbm6fivq5l84ufeRDubx9qzujmhhe1Z3R2R3e1Z3R+T19hZ3N8y9Ol93R0TUFc24N4vbW9w994HqfN0dEVE346pRR9xOfijpUFR/rD+WrLVzRo0atXf37t2FpaWl+88444wD69evb9987Kabbvpg6tSpZ5SVlVUUFRXF/PnzN3fs2PE/3nadOXNm7TXXXHPmrFmz+lx66aWfNH9/3Lhxn82ePftr5eXlFT//+c+3HfyYe+65592pU6f2v/vuu3v37Nmz/sEHH9x8DH7cEyqXtzTk6x8yEa1vy9ftWd0d0fK2rO5uy/Fc8pqfWFndHZHd7VndHZHf2/iXo/3M3GOlpqZmTfPXAwcO3L9hw4bVERGdOnVqeuSRRzYfev748eM/Gz9+/GcREZdccsnuzZs3r2o+Nm/evPcjIkpLSxtWrVq19pCHbo+IKCsr2//KK6/UHPq8ixcv/o9r7dmzZ8WX/qGOM7c0AACQNMELAEDSBC8AQNs0NjY2tvoxXpx4//rv0nik44IXAKBtVn344YfdRG9+aWxsLPjwww+7RcSqI53jc3gBANqgvr7+mtra2gW1tbVDwpuG+aQxIlbV19dfc6QTBC8AQBuMHDnyg4iYkOsdHD1/OwEAIGmCFwCApAleAACSJngBAEia4AUAIGmCFwCApAleAACSJngBAEia4AUAIGmCFwCApAleAACSJngBAEia4AUAIGmCFwCApAleAACSJngBAEia4AUAIGmCFwCApAleAACSJngBAEia4AUAIGmCFwCApAleAACSJngBAEia4AUAIGmCFwCApAleAACSJngBAEia4AUAIGmCFwCApAleAACSlsvgrcvhtVvT2rZ83Z7V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" alt="png" /></p>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

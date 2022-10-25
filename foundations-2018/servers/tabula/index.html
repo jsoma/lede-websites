@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Using Tabula on your Digital Ocean or AWS EC2 server</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2018/servers/tabula/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Using Tabula on your Digital Ocean or AWS EC2 server">
+  <meta property="twitter:title" content="Using Tabula on your Digital Ocean or AWS EC2 server">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Foundations, Lede 2018</a> &gt;  Using Tabula on your Digital Ocean or AWS EC2 server</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Using Tabula on your Digital Ocean or AWS EC2 server</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>Running Tabula on a server - whether it’s a Digital Ocean server or an AWS/EC2 server - is pretty easy, and allows you a lot of flexibility to might otherwise not have.</p>
+
+<p>When you run Tabula on your own computer, you’re running a “local server”, a.k.a. your computer becomes a server. This makes it easy to adapt to run on a <em>real</em> server! But why would you want to do that?</p>
+
+<p><strong>Need extra RAM for Tabula but don’t want to buy a new computer?</strong> If you run a Digital Ocean or AWS server, you can have all the RAM you want!</p>
+
+<p><strong>Trying to teach a class but not everyone has permissions to run or install Tabula on their machine?</strong> If you run a Digital Ocean or AWS server, you can create one server that everyone can use!</p>
+
+<h2 id="create-your-server">Create your server</h2>
+
+<p>Create a new server using Ubuntu. I’m only using 1GB of RAM in the example below, but having more RAM is always better.</p>
+
+<p>If you need help creating a new server, read my documentation on <a href="../creating/">creating</a> and <a href="../setting-up/">setting up</a> a Digital Ocean server. If you’re using AWS/EC2, that’s okay, the rest of this will be more or less the same.</p>
+
+<h2 id="connect-to-your-server">Connect to your server</h2>
+
+<p>Use SSH to connect to your server as the <code class="highlighter-rouge">root</code> user. When I connect give the server a specific SSH key to use, which is the <code class="highlighter-rouge">-i ~/.ssh/foundations_key</code> part.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh -i ~/.ssh/foundations_key root@12.34.56.78
+</code></pre>
+</div>
+
+<p>Instead of <code class="highlighter-rouge">12.34.56.78</code> you’ll use the IP address of your server.</p>
+
+<p>When it tells you “The authenticity of host ‘12.34.56.78 (12.34.56.78)’ can’t be established” just type “yes” - your computer is just warning you it hasn’t seen the server before and wants to know if you can trust it.</p>
+
+<h2 id="setting-up-the-server">Setting up the server</h2>
+
+<p>Once you’re connected, you’ll want to download and unzip Tabula. We’re specifically using the <code class="highlighter-rouge">1.1.1</code> release here, although by the time you read this a newer version might be out. We’re also installing the <code class="highlighter-rouge">unzip</code> utility because it doesn’t automatically come with the server.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wget https://github.com/tabulapdf/tabula/releases/download/v1.1.1/tabula-jar-1.1.1.zip
+apt install unzip
+unzip tabula-jar-1.1.1.zip
+</code></pre>
+</div>
+
+<h2 id="installing-java-on-the-server">Installing java on the server</h2>
+
+<p>Tabula is a Java application, which means we need to install Java on the server. Install it with</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt install default-jre
+</code></pre>
+</div>
+
+<p>JRE stands for Java Runtime Enviroment. It will ask if you really want to install it (<code class="highlighter-rouge">y</code>es!) and take a little time to download and install all of the pieces.</p>
+
+<blockquote>
+  <p>If you get the message <code class="highlighter-rouge">Error: Could not find the 'java' executable at '', are you sure your JAVA_HOME environment variable is pointing to a proper java installation?</code> when trying to run Tabula later, Java was not successfully installed.</p>
+</blockquote>
+
+<h2 id="running-tabula">Running Tabula</h2>
+
+<p>Now we’ll want to tell the <code class="highlighter-rouge">java</code> command to go find the <code class="highlighter-rouge">tabula.jar</code> program inside of the <code class="highlighter-rouge">tabula</code> directory and to run it.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>java -Dfile.encoding<span class="o">=</span>utf-8 -Xms256M -Xmx1024M -jar tabula/tabula.jar
+</code></pre>
+</div>
+
+<p>Give it a minute to warm up, and you’ll see something like the following:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>============================================================
+http://127.0.0.1:8080
+============================================================
+should we open browser?
+java.lang.Boolean.getBoolean('tabula.openBrowser'): false
+
+======================================================
+Server now listening at: http://127.0.0.1:8080
+
+You may now open a web browser to the above URL.
+When you're done using the Tabula interface, you may
+return to this window and press "Control-C" to close it.
+======================================================
+
+2018-01-16 15:20:40.099:INFO:oejsh.ContextHandler:main: Started o.e.j.w.WebAppContext@27ddd392{/,file:/tmp/jetty-0.0.0.0-8080-tabula.jar-_-any-4252256658897739382.dir/webapp/,AVAILABLE}{file:/root/tabula/tabula.jar}
+2018-01-16 15:20:40.100:WARN:oejsh.RequestLogHandler:main: !RequestLog
+2018-01-16 15:20:40.161:INFO:oejs.ServerConnector:main: Started ServerConnector@631c89a7{HTTP/1.1}{0.0.0.0:8080}
+2018-01-16 15:20:40.167:INFO:oejs.Server:main: Started @32233ms
+</code></pre>
+</div>
+
+<p>That means you’re ready to go! Connect to Tabula by visiting <code class="highlighter-rouge">http://104.131.31.81:8080/</code> in your web browser - but with your server’s IP address, not mine. The <code class="highlighter-rouge">8080</code> is the <em>port</em> you’re connected to. A port is just a different door you go through.</p>
+
+<p><img src="../images/tabula-connect.png" alt="" /></p>
+
+<h2 id="shutting-down-the-server">Shutting down the server</h2>
+
+<p>To stop your server, hold the <code class="highlighter-rouge">Control</code> key and press <code class="highlighter-rouge">C</code> (aka press <code class="highlighter-rouge">Ctrl+C</code>).</p>
+
+<h2 id="security-warning">SECURITY WARNING</h2>
+
+<p>Right now, <strong>everyone in the world connect to your server</strong>. They can read your Tabula data, they can upload PDFs, they can do anything! It isn’t secure. This might not matter to you, but it’s <strong>easy to fix.</strong></p>
+
+<p>To fix this, we’re going to set up a <strong>firewall rule</strong> to say hey, only accept connections to port <code class="highlighter-rouge">8080</code> from my computer. It only takes two quick steps.</p>
+
+<h3 id="step-1-find-out-your-ip-address">Step 1: Find out your IP address</h3>
+
+<p>Not your <strong>server’s</strong> IP address, your <strong>own</strong> IP address. You can just type <a href="https://www.google.com/search?q=what+is+my+ip+address">“what is my IP address?”</a> into Google and it will tell you. In this example, mine is <code class="highlighter-rouge">185.92.26.5</code>.</p>
+
+<p><img src="../images/tabula-ip.png" alt="" /></p>
+
+<p>We want to tell the server to <strong>only accept port <code class="highlighter-rouge">8080</code> connections from <code class="highlighter-rouge">185.92.26.5</code></strong>.</p>
+
+<h3 id="step-2-add-an-iptables-rule">Step 2: Add an <code class="highlighter-rouge">iptables</code> rule</h3>
+
+<p><code class="highlighter-rouge">iptables</code> is the command you use to update firewall rules on your server. If you’re currently running Tabula on your server, stop it by pressing <code class="highlighter-rouge">Ctrl+C</code>.</p>
+
+<p>Now we’re going to say “only accept connections from my computer’s IP (<code class="highlighter-rouge">185.92.26.5</code>) for port <code class="highlighter-rouge">8080</code>” (be sure to use your computer’s IP address, not mine!). Run the following command, replacing my IP address - <code class="highlighter-rouge">185.92.26.5</code> - with yours:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>iptables -A INPUT -p tcp -s 185.92.26.5 --dport 8080 -j ACCEPT
+iptables -A INPUT -p tcp -s 0.0.0.0/0 --dport 8080 -j DROP
+</code></pre>
+</div>
+
+<p>The first command allows connections from <code class="highlighter-rouge">185.92.26.5</code> (<code class="highlighter-rouge">ACCEPT</code>), and the second command blocks them from every other IP (<code class="highlighter-rouge">0.0.0.0/0</code>, <code class="highlighter-rouge">DROP</code>).</p>
+
+<h3 id="step-3-run-tabula-again">Step 3: Run Tabula again</h3>
+
+<p>Now you need to run Tabula again with the same command as before</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>java -Dfile.encoding<span class="o">=</span>utf-8 -Xms256M -Xmx1024M -jar tabula/tabula.jar
+</code></pre>
+</div>
+
+<h3 id="if-you-messed-something-up">If you messed something up</h3>
+
+<p>Did you mess something up? Can you not connect any more? Undo your changes to <code class="highlighter-rouge">iptables</code> by running the following two commands on your server:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>iptables -X
+iptables -F
+</code></pre>
+</div>
+
+<h2 id="running-the-server-after-youve-disconnected">Running the server after you’ve disconnected</h2>
+
+<p>If you’d like to keep your server running after you’ve disconnected, you need to run it in the background, and make sure it doesn’t stop when you disconnect. To do this, we add two pieces to our tabula command.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">nohup</code> is going to keep Tabula running after you disconnect</li>
+  <li><code class="highlighter-rouge">&amp;</code> is going to run Tabula in the background</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>nohup java -Dfile.encoding<span class="o">=</span>utf-8 -Xms256M -Xmx1024M -jar tabula/tabula.jar &amp;
+</code></pre>
+</div>
+
+<p>Now you can type <code class="highlighter-rouge">exit</code> to leave your server but still be able to access it through the web. If it isn’t working yet, be sure to wait a few minutes for Tabula to start before you panic!</p>
+
+<h3 id="stopping-tabula-if-its-running-in-the-background">Stopping Tabula if it’s running in the background</h3>
+
+<p>Connect to the server, and run this command to stop Tabula</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>killall java
+</code></pre>
+</div>
+
+<p>This will tell all <code class="highlighter-rouge">java</code> programs to exit (you’re hopefully only running Tabula!).</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

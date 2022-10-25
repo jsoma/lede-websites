@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Classwork (Civil List)</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/pandas%20columns%20and%20functions/classwork-civil-list/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Classwork (Civil List)">
+  <meta property="twitter:title" content="Classwork (Civil List)">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt;  Classwork (Civil List)</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Classwork (Civil List)</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations/classes/pandas%20columns%20and%20functions/classwork-civil-list.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"../Civil_List_2014.csv"</span><span class="p">,</span> 
+                 <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s">"DPT"</span><span class="p">,</span><span class="s">"NAME"</span><span class="p">,</span><span class="s">"ADDRESS"</span><span class="p">,</span><span class="s">"TTL"</span><span class="p">,</span> <span class="s">"PC"</span><span class="p">,</span><span class="s">"SAL-RATE"</span><span class="p">],</span> 
+                 <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">dtype</span><span class="o">=</span><span class="n">col_types</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>DPT</th>
+      <th>NAME</th>
+      <th>ADDRESS</th>
+      <th>TTL</th>
+      <th>PC</th>
+      <th>SAL-RATE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>868</td>
+      <td>B J  SANDIFORD</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>12702</td>
+      <td>X</td>
+      <td>$5.00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>868</td>
+      <td>C A  WIGFALL</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>12702</td>
+      <td>X</td>
+      <td>$5.00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>69</td>
+      <td>A E A-AWOSOGBA</td>
+      <td>HRA/DEPARTMENT OF SOCIAL S</td>
+      <td>52311</td>
+      <td>A</td>
+      <td>$51955.00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>868</td>
+      <td>K D AABY</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>10209</td>
+      <td>X</td>
+      <td>$12.00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>56</td>
+      <td>I D AADIL</td>
+      <td>POLICE DEPARTMENT</td>
+      <td>71012</td>
+      <td>A</td>
+      <td>$46953.00</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>DPT</th>
+      <th>NAME</th>
+      <th>ADDRESS</th>
+      <th>TTL</th>
+      <th>PC</th>
+      <th>SAL-RATE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>DPT</td>
+      <td>NAME</td>
+      <td>ADDRESS</td>
+      <td>TTL #</td>
+      <td>PC</td>
+      <td>SAL-RATE</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>868</td>
+      <td>B J  SANDIFORD</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>12702</td>
+      <td>X</td>
+      <td>$5.00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>868</td>
+      <td>C A  WIGFALL</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>12702</td>
+      <td>X</td>
+      <td>$5.00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>69</td>
+      <td>A E A-AWOSOGBA</td>
+      <td>HRA/DEPARTMENT OF SOCIAL S</td>
+      <td>52311</td>
+      <td>A</td>
+      <td>$51955.00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>868</td>
+      <td>K D AABY</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>10209</td>
+      <td>X</td>
+      <td>$12.00</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>56</td>
+      <td>I D AADIL</td>
+      <td>POLICE DEPARTMENT</td>
+      <td>71012</td>
+      <td>A</td>
+      <td>$46953.00</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>69</td>
+      <td>M   AAKIRI</td>
+      <td>HRA/DEPARTMENT OF SOCIAL S</td>
+      <td>56056</td>
+      <td>A</td>
+      <td>$33000.00</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>464</td>
+      <td>A   AALAI</td>
+      <td>CUNY QUEENSBOROUGH COMMUNI</td>
+      <td>4607</td>
+      <td>N</td>
+      <td>$73.53</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>998</td>
+      <td>A V AALEVIK</td>
+      <td>N.Y.C. TRANSIT AUTHORITY</td>
+      <td>402</td>
+      <td>2</td>
+      <td>$33280.00</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>998</td>
+      <td>M   AAMIR</td>
+      <td>N.Y.C. TRANSIT AUTHORITY</td>
+      <td>00T07</td>
+      <td>4</td>
+      <td>$60878.00</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'SAL-RATE'</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>count        269838
+unique        27533
+top       $76488.00
+freq          26024
+Name: SAL-RATE, dtype: object
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'PC'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>---------------------------------------------------------------------------
+
+KeyError                                  Traceback (most recent call last)
+
+/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/pandas/indexes/base.py in get_loc(self, key, method, tolerance)
+   1944             try:
+-&gt; 1945                 return self._engine.get_loc(key)
+   1946             except KeyError:
+
+
+pandas/index.pyx in pandas.index.IndexEngine.get_loc (pandas/index.c:4154)()
+
+
+pandas/index.pyx in pandas.index.IndexEngine.get_loc (pandas/index.c:4018)()
+
+
+pandas/hashtable.pyx in pandas.hashtable.PyObjectHashTable.get_item (pandas/hashtable.c:12368)()
+
+
+pandas/hashtable.pyx in pandas.hashtable.PyObjectHashTable.get_item (pandas/hashtable.c:12322)()
+
+
+KeyError: 'PC'
+
+
+During handling of the above exception, another exception occurred:
+
+
+KeyError                                  Traceback (most recent call last)
+
+&lt;ipython-input-6-b75b76613fc7&gt; in &lt;module&gt;()
+----&gt; 1 df['PC'].value_counts()
+
+
+/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/pandas/core/frame.py in __getitem__(self, key)
+   1995             return self._getitem_multilevel(key)
+   1996         else:
+-&gt; 1997             return self._getitem_column(key)
+   1998 
+   1999     def _getitem_column(self, key):
+
+
+/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/pandas/core/frame.py in _getitem_column(self, key)
+   2002         # get column
+   2003         if self.columns.is_unique:
+-&gt; 2004             return self._get_item_cache(key)
+   2005 
+   2006         # duplicate columns &amp; possible reduce dimensionality
+
+
+/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/pandas/core/generic.py in _get_item_cache(self, item)
+   1348         res = cache.get(item)
+   1349         if res is None:
+-&gt; 1350             values = self._data.get(item)
+   1351             res = self._box_item_values(item, values)
+   1352             cache[item] = res
+
+
+/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/pandas/core/internals.py in get(self, item, fastpath)
+   3288 
+   3289             if not isnull(item):
+-&gt; 3290                 loc = self.items.get_loc(item)
+   3291             else:
+   3292                 indexer = np.arange(len(self.items))[isnull(self.items)]
+
+
+/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/pandas/indexes/base.py in get_loc(self, key, method, tolerance)
+   1945                 return self._engine.get_loc(key)
+   1946             except KeyError:
+-&gt; 1947                 return self._engine.get_loc(self._maybe_cast_indexer(key))
+   1948 
+   1949         indexer = self.get_indexer([key], method=method, tolerance=tolerance)
+
+
+pandas/index.pyx in pandas.index.IndexEngine.get_loc (pandas/index.c:4154)()
+
+
+pandas/index.pyx in pandas.index.IndexEngine.get_loc (pandas/index.c:4018)()
+
+
+pandas/hashtable.pyx in pandas.hashtable.PyObjectHashTable.get_item (pandas/hashtable.c:12368)()
+
+
+pandas/hashtable.pyx in pandas.hashtable.PyObjectHashTable.get_item (pandas/hashtable.c:12322)()
+
+
+KeyError: 'PC'
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">columns</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Index(['DPT     ', 'NAME    ', 'ADDRESS ', 'TTL #   ', 'PC      ', 'SAL-RATE'], dtype='object')
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="s">"DPT     "</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'DPT'
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>DPT
+NAME
+ADDRESS
+TTL #
+PC
+SAL-RATE
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># it's a list, so - []</span>
+<span class="c"># it's a loop, so - [for col in df.columns]</span>
+<span class="c"># col.strip(), so - [col.strip() for col in columns]</span>
+
+<span class="p">[</span><span class="n">col</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>['DPT', 'NAME', 'ADDRESS', 'TTL #', 'PC', 'SAL-RATE']
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">columns</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Index(['DPT', 'NAME', 'ADDRESS', 'TTL #', 'PC', 'SAL-RATE'], dtype='object')
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'PC'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>A     100521
+D      54881
+X      24403
+4      23259
+3      19866
+1      13083
+K       7635
+F       6361
+N       4671
+U       3409
+B       2817
+BW      1766
+E       1300
+W       1257
+G       1085
+I        730
+2        721
+M        708
+O        536
+WK       488
+P        307
+L         25
+S          4
+0          3
+V          2
+Name: PC, dtype: int64
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'SAL-RATE'</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>count        269838
+unique        27533
+top       $76488.00
+freq          26024
+Name: SAL-RATE, dtype: object
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">money_to_float</span><span class="p">(</span><span class="n">money_str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">money_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">"$"</span><span class="p">,</span><span class="s">""</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">","</span><span class="p">,</span><span class="s">""</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">money_to_int</span><span class="p">(</span><span class="s">"$76488.00"</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">money_to_int</span><span class="p">(</span><span class="s">"$5.00"</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">money_to_int</span><span class="p">(</span><span class="s">"$1,500.00"</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>76488.0
+5.0
+1500.0
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#money_to_float(df['SAL-RATE'])</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'SAL-RATE'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">money_to_float</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0              5.00
+1              5.00
+2          51955.00
+3             12.00
+4          46953.00
+5          33000.00
+6             73.53
+7          33280.00
+8          60878.00
+9          69272.00
+10         89960.00
+11         38324.00
+12         39019.00
+13           369.92
+14         66127.00
+15         64250.00
+16         32510.00
+17             2.65
+18        109087.00
+19        111606.00
+20             5.00
+21         56555.00
+22         51643.00
+23         77015.00
+24         76488.00
+25         67627.00
+26         68095.00
+27         66127.00
+28         76689.00
+29         48153.00
+            ...    
+269808     85287.00
+269809     65564.00
+269810     56937.00
+269811     81439.00
+269812    118506.00
+269813     42064.00
+269814        33.18
+269815    116364.00
+269816     98072.00
+269817    107563.00
+269818     37150.00
+269819     74646.00
+269820     64040.00
+269821     76488.00
+269822     83802.00
+269823        17.16
+269824     85667.00
+269825        46.89
+269826        67.42
+269827     51916.00
+269828     57514.00
+269829     74605.00
+269830     74605.00
+269831     64403.00
+269832     51936.00
+269833        47.58
+269834     87738.00
+269835     78683.00
+269836     76488.00
+269837         5.00
+Name: SAL-RATE, dtype: float64
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'salary'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'SAL-RATE'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">money_to_float</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>DPT</th>
+      <th>NAME</th>
+      <th>ADDRESS</th>
+      <th>TTL #</th>
+      <th>PC</th>
+      <th>SAL-RATE</th>
+      <th>salary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>868</td>
+      <td>B J  SANDIFORD</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>12702</td>
+      <td>X</td>
+      <td>$5.00</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>868</td>
+      <td>C A  WIGFALL</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>12702</td>
+      <td>X</td>
+      <td>$5.00</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>69</td>
+      <td>A E A-AWOSOGBA</td>
+      <td>HRA/DEPARTMENT OF SOCIAL S</td>
+      <td>52311</td>
+      <td>A</td>
+      <td>$51955.00</td>
+      <td>51955.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>868</td>
+      <td>K D AABY</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>10209</td>
+      <td>X</td>
+      <td>$12.00</td>
+      <td>12.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>56</td>
+      <td>I D AADIL</td>
+      <td>POLICE DEPARTMENT</td>
+      <td>71012</td>
+      <td>A</td>
+      <td>$46953.00</td>
+      <td>46953.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'salary'</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>count    269838.000000
+mean      54143.707486
+std       32345.656289
+min           0.500000
+25%       36899.000000
+50%       57855.000000
+75%       76488.000000
+max      300000.000000
+Name: salary, dtype: float64
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'salary'</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x10c3177b8&gt;
+</code></pre>
+</div>
+
+<p><img src="data:image/png;base64,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" alt="png" /></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="p">[</span><span class="s">'ADDRESS'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>N.Y.C. TRANSIT AUTHORITY      56932
+POLICE DEPARTMENT             51453
+FIRE DEPARTMENT               15848
+DEPARTMENT OF CITYWIDE ADM    15739
+HRA/DEPARTMENT OF SOCIAL S    13676
+DEPARTMENT OF EDUCATION       11689
+N.Y.C. HOUSING AUTHORITY      11501
+DEPARTMENT OF CORRECTION      10188
+DEPARTMENT OF SANITATION       9666
+DEPARTMENT OF PARKS &amp; RECR     7261
+ADMINISTRATION FOR CHILDRE     6033
+DEPARTMENT OF ENVIRONMENTA     5717
+DEPARTMENT OF HEALTH AND M     5676
+DEPARTMENT OF TRANSPORTATI     4589
+CUNY LAGUARDIA COMMUNITY C     3379
+CUNY KINGSBOROUGH COMMMUNI     3260
+CUNY MANHATTAN COMMUNITY C     2974
+TRIBOROUGH BRIDGE AND TUNN     2254
+HOUSING PRESERVATION &amp; DEV     2078
+CUNY QUEENSBOROUGH COMMUNI     2030
+DEPARTMENT OF HOMELESS SER     1966
+DEPARTMENT OF FINANCE          1953
+CUNY BRONX COMMUNITY COLLE     1923
+LAW DEPARTMENT                 1514
+DISTRICT ATTORNEY-NEW YORK     1384
+CUNY HOSTOS COMMUNITY COLL     1295
+DEPARTMENT OF DESIGN AND C     1193
+DEPARTMENT OF INFORMATION      1162
+DEPARTMENT OF BUILDINGS        1111
+DISTRICT ATTORNEY-KINGS CO     1062
+                              ...  
+COMMUNITY BOARD NO.12-BROO        3
+COMMUNITY BOARD NO.4-QUEEN        3
+COMMUNITY BOARD NO.1-BROOK        3
+COMMUNITY BOARD NO.13-QUEE        3
+COMMUNITY BOARD NO.12-BRON        3
+COMMUNITY BOARD NO.11-QUEE        3
+COMMUNITY BOARD NO.2-BROOK        3
+COMMUNITY BOARD NO.14-QUEE        3
+COMMUNITY BOARD NO.7-MANHA        3
+COMMUNITY BOARD N0.9-MANHA        3
+COMMUNITY BOARD NO.6-BROOK        3
+COMMUNITY BOARD NO.3-BROOK        3
+COMMUNITY BOARD NO.8-BRONX        3
+COMMUNITY BOARD NO.11-BROO        3
+COMMUNITY BOARD NO.4-MANHA        3
+COMMUNITY BOARD NO.8-BROOK        3
+COMMUNITY BOARD NO.12-QUEE        3
+COMMUNITY BOARD NO.10-BROO        3
+COMMUNITY BOARD NO.1-RICHM        3
+COMMUNITY BOARD NO.14-BROO        3
+COMMUNITY BOARD NO.6-BRONX        2
+COMMUNITY BOARD NO.9-QUEEN        2
+COMMUNITY BOARD NO.15-BROO        2
+COMMUNITY BOARD NO.1 BRONX        2
+CUNY MEDGAR EVERS COLLEGE         2
+COMMUNITY BOARD NO.9-BROOK        2
+COMMUNITY BOARD NO.3-BRONX        2
+COMMUNITY BOARD NO.6-MANHA        2
+COMMUNITY BOARD NO.16-BROO        2
+COMMUNITY BOARD NO.5-BRONX        2
+Name: ADDRESS, dtype: int64
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>DPT</th>
+      <th>NAME</th>
+      <th>ADDRESS</th>
+      <th>TTL #</th>
+      <th>PC</th>
+      <th>SAL-RATE</th>
+      <th>salary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>868</td>
+      <td>B J  SANDIFORD</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>12702</td>
+      <td>X</td>
+      <td>$5.00</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>868</td>
+      <td>C A  WIGFALL</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>12702</td>
+      <td>X</td>
+      <td>$5.00</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>69</td>
+      <td>A E A-AWOSOGBA</td>
+      <td>HRA/DEPARTMENT OF SOCIAL S</td>
+      <td>52311</td>
+      <td>A</td>
+      <td>$51955.00</td>
+      <td>51955.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>868</td>
+      <td>K D AABY</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>10209</td>
+      <td>X</td>
+      <td>$12.00</td>
+      <td>12.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>56</td>
+      <td>I D AADIL</td>
+      <td>POLICE DEPARTMENT</td>
+      <td>71012</td>
+      <td>A</td>
+      <td>$46953.00</td>
+      <td>46953.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">agencies_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"../cleaned-agencies.csv"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">'str'</span><span class="p">)</span>
+<span class="n">agencies_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>code</th>
+      <th>agency</th>
+      <th>is_mayoral</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>002</td>
+      <td>OFFICE OF THE MAYOR</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>003</td>
+      <td>BOARD OF ELECTIONS</td>
+      <td>Y</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>004</td>
+      <td>CAMPAIGN FINANCE BOARD</td>
+      <td>Y</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>005</td>
+      <td>BOARD OF ESTIMATE-SECRETARY</td>
+      <td>Y</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>006</td>
+      <td>MAYOR'S OFFICE OF OPERATIONS</td>
+      <td>N</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">col_types</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'code'</span><span class="p">:</span> <span class="s">'str'</span> <span class="p">}</span>
+<span class="n">agencies_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"../cleaned-agencies.csv"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">col_types</span><span class="p">)</span>
+<span class="n">agencies_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>code</th>
+      <th>agency</th>
+      <th>is_mayoral</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>002</td>
+      <td>OFFICE OF THE MAYOR</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>003</td>
+      <td>BOARD OF ELECTIONS</td>
+      <td>Y</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>004</td>
+      <td>CAMPAIGN FINANCE BOARD</td>
+      <td>Y</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>005</td>
+      <td>BOARD OF ESTIMATE-SECRETARY</td>
+      <td>Y</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>006</td>
+      <td>MAYOR'S OFFICE OF OPERATIONS</td>
+      <td>N</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">col_types</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'code'</span><span class="p">:</span> <span class="s">'str'</span> <span class="p">}</span>
+<span class="n">agencies_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"../cleaned-agencies.csv"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">col_types</span><span class="p">,</span> <span class="n">true_values</span><span class="o">=</span><span class="s">'Y'</span><span class="p">,</span> <span class="n">false_values</span><span class="o">=</span><span class="s">'N'</span><span class="p">)</span>
+<span class="n">agencies_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>code</th>
+      <th>agency</th>
+      <th>is_mayoral</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-999</td>
+      <td>THIS IS FAKE</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-999</td>
+      <td>THIS IS ALSO FAKE</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-999</td>
+      <td>THESE ARE ALL FAKE</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>002</td>
+      <td>OFFICE OF THE MAYOR</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>003</td>
+      <td>BOARD OF ELECTIONS</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">col_types</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'code'</span><span class="p">:</span> <span class="s">'str'</span> <span class="p">}</span>
+<span class="n">agencies_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"../cleaned-agencies.csv"</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="p">[</span><span class="s">"-999"</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">col_types</span><span class="p">,</span> <span class="n">true_values</span><span class="o">=</span><span class="s">'Y'</span><span class="p">,</span> <span class="n">false_values</span><span class="o">=</span><span class="s">'N'</span><span class="p">)</span>
+<span class="n">agencies_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>code</th>
+      <th>agency</th>
+      <th>is_mayoral</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>NaN</td>
+      <td>THIS IS FAKE</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NaN</td>
+      <td>THIS IS ALSO FAKE</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>THESE ARE ALL FAKE</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>002</td>
+      <td>OFFICE OF THE MAYOR</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>003</td>
+      <td>BOARD OF ELECTIONS</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">agencies_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"../cleaned-agencies.csv"</span><span class="p">)</span>
+<span class="n">agencies_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>code</th>
+      <th>agency</th>
+      <th>is_mayoral</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-999</td>
+      <td>THIS IS FAKE</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-999</td>
+      <td>THIS IS ALSO FAKE</td>
+      <td>Y</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-999</td>
+      <td>THESE ARE ALL FAKE</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2</td>
+      <td>OFFICE OF THE MAYOR</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3</td>
+      <td>BOARD OF ELECTIONS</td>
+      <td>Y</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>DPT</th>
+      <th>NAME</th>
+      <th>ADDRESS</th>
+      <th>TTL</th>
+      <th>PC</th>
+      <th>SAL-RATE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>868</td>
+      <td>B J  SANDIFORD</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>12702</td>
+      <td>X</td>
+      <td>$5.00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>868</td>
+      <td>C A  WIGFALL</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>12702</td>
+      <td>X</td>
+      <td>$5.00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>69</td>
+      <td>A E A-AWOSOGBA</td>
+      <td>HRA/DEPARTMENT OF SOCIAL S</td>
+      <td>52311</td>
+      <td>A</td>
+      <td>$51955.00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>868</td>
+      <td>K D AABY</td>
+      <td>DEPARTMENT OF CITYWIDE ADM</td>
+      <td>10209</td>
+      <td>X</td>
+      <td>$12.00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>56</td>
+      <td>I D AADIL</td>
+      <td>POLICE DEPARTMENT</td>
+      <td>71012</td>
+      <td>A</td>
+      <td>$46953.00</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">agencies_df</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s">'DPT'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s">'code'</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>DPT</th>
+      <th>NAME</th>
+      <th>ADDRESS</th>
+      <th>TTL</th>
+      <th>PC</th>
+      <th>SAL-RATE</th>
+      <th>code</th>
+      <th>agency</th>
+      <th>is_mayoral</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

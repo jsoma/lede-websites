@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Functions & Cron Jobs</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/functions/class/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Functions & Cron Jobs">
+  <meta property="twitter:title" content="Functions & Cron Jobs">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt; <a href="..">Functions</a> &gt;  Functions &amp; Cron Jobs</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Functions & Cron Jobs</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="functions">Functions</h2>
+
+<p>Functions are like <strong>tiny, self-contained programs</strong> – they allow you to execute a large block of code by just calling its name! And, we’ve already seen some functions at work: <code class="highlighter-rouge">print()</code>, <code class="highlighter-rouge">len()</code>, <code class="highlighter-rouge">sum()</code>, etc., so we have <em>some</em> idea of how they work.</p>
+
+<blockquote>
+  <p><strong>Methods</strong> are also a thing – they are similar to functions, but they “attached” to an object and look like <code class="highlighter-rouge">my_list.sort()</code> (remember that <code class="highlighter-rouge">.sort()</code> acts on our original list, rather than returning a new list object).</p>
+</blockquote>
+
+<h3 id="basic-structure-of-a-function">Basic structure of a function</h3>
+
+<p>Functions take in <strong>inputs</strong> that we call <strong>parameters</strong> and return an output, using a <strong>return statement</strong>. Sample function below:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>def function_name(parameter):
+    some_variable = 0
+    # a block of code where you do something with/to your parameter
+    # a block of code where you do something with/to your parameter
+    return some_item
+</code></pre>
+</div>
+
+<p><strong>REALLY IMPORTANT POINTS</strong>:</p>
+
+<ul>
+  <li>You can pretty much name your parameter ANYTHING you want! Just like in our for loop structure (<code class="highlighter-rouge">for item in my_list:</code>) it doesn’t matter what you call <code class="highlighter-rouge">item</code>, it doesn’t matter what we call <code class="highlighter-rouge">parameter</code>, as long as you understand what it’s supposed to be. But, you probably don’t want to name it the same name as another variable that exists in your code somewhere – this will get confusing for all sentient and non-sentient beings involved!</li>
+  <li>You <strong>DO</strong> want to name your parameter something that reminds you what type of thing you want to pass as an input to your function.
+    <ul>
+      <li>For example: the <code class="highlighter-rouge">sorted()</code> function always takes in a list of numbers or strings. When you are writing your own function, you will want to think about what you want your function to accept as an input (how do you want to <strong>design</strong> your function?). If you were writing the <code class="highlighter-rouge">sorted()</code> function, you might do something like: <code class="highlighter-rouge">def sorted(some_list):</code></li>
+    </ul>
+  </li>
+  <li>If you define a variable within the body of your function, <strong>DO NOT</strong> use that variable name anywhere outside of that function.</li>
+  <li>Somewhat similarly, if you have a variable name you’ve used in your earlier in your code, DO NOT overwrite that variable within your function – just come up with a new name!</li>
+</ul>
+
+<h3 id="how-to-write-a-function">How to write a function</h3>
+
+<p>To start off your function, you have to tell Python that you’re about to define a function using: <code class="highlighter-rouge">def function_name(parameter):</code>. Pay special attention to syntax like <code class="highlighter-rouge">:</code>. The code indented below that first line is the code that will run when you call the function (so, as always, <strong>pay special attention to indentation</strong>).</p>
+
+<p>In your indented code, you will probably do something to or with the parameter you’ve passed your function.</p>
+
+<p>To get things out of your function, you have to use <code class="highlighter-rouge">return</code>.</p>
+
+<h3 id="sample-double-function">Sample double() function</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>def double(number):
+    bigger = number * 2
+    return bigger
+
+</code></pre>
+</div>
+
+<ul>
+  <li>Note that the name <code class="highlighter-rouge">number</code> is not significant! we could have called that <code class="highlighter-rouge">blahblahblah</code> if we wanted – but we called it <code class="highlighter-rouge">number</code> just to make our code easier to read and understand.</li>
+  <li>Make sure that every name that you give your function is <strong>unique</strong>.</li>
+</ul>
+
+<h3 id="debugging-your-function">Debugging your function</h3>
+
+<p>Do you remember our #1 favorite hobby of all time? It’s <strong>PRINTING</strong>. But, we have to get a little tricky to our functions.</p>
+
+<p>One, it’s always, always, always to write code incrementally. Build one line, test it, then add the text line.</p>
+
+<p><strong>For functions, you want to write both a function definition (as seen above in our sample <code class="highlighter-rouge">double()</code> function) AND call to that function.</strong> In other words, the only way you can check to see if a function works is to USE IT. For our <code class="highlighter-rouge">double()</code> function, we could use something like <code class="highlighter-rouge">print(double(3))</code> to test our function.</p>
+
+<p>If within the body of your function you are saving something to a variable, print that variable to make sure it actually holds what you think it holds.</p>
+
+<h2 id="cron-jobs">Cron Jobs</h2>
+
+<p><strong>Cron</strong> is a tool that allow us to automate tasks on our computer. By our <strong>crontab</strong> file, we can tell our computer how frequently we want it to run some command.</p>
+
+<p>For example, in class, we edited our crontab files (in Terminal/Babun, run <code class="highlighter-rouge">crontab -e</code> to begin editing your crontab file) to tell our computers to announce the time every minute. The code looked like this: <code class="highlighter-rouge">*/1 * * * * say "it's a new minute"</code>. The <code class="highlighter-rouge">*/1 * * * *</code> portion of this code looks pretty weird, but this is what tells your computer how frequently it should run the command that follows. Here’s more info about the <a href="http://www.nncron.ru/help/EN/working/cron-format.htm">format</a>.</p>
+
+<blockquote>
+  <p>An aside: <a href="http://www.gabrielserafini.com/blog/2008/08/19/mac-os-x-voices-for-using-with-the-say-command/">You can further customize how you want the <code class="highlighter-rouge">say</code> command to sound</a>.</p>
+</blockquote>
+
+<p>We can also do other cool, useful things (besides making our computers talk):</p>
+
+<ul>
+  <li><a href="https://source.opennews.org/en-US/articles/how-break-news-while-you-sleep/">How to break news while you sleep</a></li>
+  <li><a href="http://www.theatlantic.com/technology/archive/2014/03/how-a-california-earthquake-becomes-the-news-an-extremely-precise-timeline/284506/">How a California Earthquake Becomes the News</a></li>
+  <li><a href="https://twitter.com/nyt4thdownbot">NY 4th Down Bot</a></li>
+</ul>
+
+<h3 id="how-to-setup-an-automated-task">How to setup an automated task</h3>
+
+<ul>
+  <li>We’re going to use a tool called <strong>Cron</strong> to schedule automated tasks</li>
+  <li>We can use the text editors called <strong>vi</strong> or <strong>nano</strong> to edit our crontab file.</li>
+</ul>
+
+<p><strong>Let’s get ready to edit our crontab file</strong></p>
+
+<ul>
+  <li><code class="highlighter-rouge">export EDITOR=nano</code>: sets your</li>
+  <li><code class="highlighter-rouge">crontab -e</code>: lets us edit our configurations for tasks we want our computer to run automatically.</li>
+</ul>
+
+<p><strong>Possible lines we could add to our crontab file</strong></p>
+
+<ul>
+  <li><code class="highlighter-rouge">*/1 * * * * say "it's a new minute"</code>: for every minute divisible by 1, say it’s a new minute</li>
+  <li><code class="highlighter-rouge">*/1 * * 6,7 1,3</code>: Every minute on Mondays and Wednesdays of June and July, say it’s a new minute</li>
+  <li>Use the <code class="highlighter-rouge">date</code> command:
+    <ul>
+      <li>To get “Monday June 20 11:57 AM”: <code class="highlighter-rouge">date +"%A %B %d, %I:%M %p"</code></li>
+      <li><code class="highlighter-rouge">echo date</code></li>
+      <li>Every other minute between 12-1: <code class="highlighter-rouge">*/2 12 * * * say </code>date +”%A %B %d, %I:%M %p”``</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>IMPORTANT:</strong> Use <code class="highlighter-rouge">#</code> to command stuff out in crontab</p>
+
+<blockquote>
+  <p>When you run cronjob and there’s an error, it’ll send you an email about it. But not to your gmail or something – it’s mail related to your computer account… you can pretty much ignore it.</p>
+</blockquote>
+
+<h3 id="practical-application-regularly-scaping-nytimes-homepage">Practical application: regularly scaping NYTimes homepage</h3>
+
+<p>We mayyy want to do something besides periodically making our computers talk. What if we wanted to periodically download the NYTimes homepage? We could use a <strong>cronjob</strong> to accomplish that task!</p>
+
+<p>There are a couple of ways to handle this task:</p>
+
+<ul>
+  <li>We could use something like: <code class="highlighter-rouge">curl http://www.nytimes.com &gt; ~/Desktop/nytimes.txt</code>
+    <ul>
+      <li>This will grab the nytimes page, save and download it.</li>
+      <li>But each time we run this command, it’ll overwrite the previous nytimes.txt file.</li>
+      <li>Ideally we’d want to put the date and time in our filename so that each time, it produces a unique filename.</li>
+      <li>This downloads and saves the NYTimes homepage every 10 minutes with a datestamped filename prefixed with nytimes
+<code class="highlighter-rouge">*/10 * * * * curl http://www.nytimes.com &gt; ~/Desktop/nytimes+</code>date +”%Y-%m-%d-%I-%M”<code class="highlighter-rouge">.txt</code></li>
+    </ul>
+  </li>
+  <li>We can also just tell crontab to run a Python scraper script every 10 minutes! <code class="highlighter-rouge">*/10 * * * * python3 nytimes_scraper.py</code>
+    <ul>
+      <li>Note that while we can write our scraper in a Jupyter notebook, we will want to download it as a <code class="highlighter-rouge">.py</code> file in order to run the scraper from the command line.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>This is the scraper we wrote in class:</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>import requests
+from bs4 import BeautifulSoup
+
+# Grab the NYT homepage
+response = requests.get("http://www.nytimes.com")
+
+# Feed it into BeautifulSoup
+doc = BeautifulSoup(response.text, 'html.parser')
+
+stories = doc.find_all("article", { 'class': 'story' })
+
+# Scrape to find headlines and bylines; save to a list of dictionaries
+all_stories = []
+# Grab their headlines and bylines
+for story in stories:
+    # Grab all of the h2's inside of the story
+    headline = story.find('h2', {'class': 'story-heading'})
+    # If a headline exists, then process the rest!
+    if headline:
+        # They're COVERED in whitespace
+        headline_text = headline.text.strip()
+        # Make a dictionary with the headline
+        this_story = { 'headline': headline_text }
+        byline = story.find('p', {'class': 'byline'})
+        # Not all of them have a byline
+        if byline:
+            byline_text = byline.text.strip()
+            this_story['byline'] = byline_text
+        all_stories.append(this_story)
+
+import pandas as pd
+# Save our list of dictionaries as a DataFrame
+stories_df = pd.DataFrame(all_stories)
+
+# We use this to save the current time to 'datestring'
+import time
+datestring = time.strftime("%Y-%m-%d-%H-%M")
+
+# We create a string that includes our timestamp
+# We save the scraped data into a .csv with a unique, time/datastamped file name!
+filename = "../nyt-data-" + datestring + ".csv"
+stories_df.to_csv(filename, index=False
+
+</code></pre>
+</div>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

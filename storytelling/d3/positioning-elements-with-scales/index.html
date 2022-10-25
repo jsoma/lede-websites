@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Positioning elements with scales</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/storytelling/d3/positioning-elements-with-scales/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Positioning elements with scales">
+  <meta property="twitter:title" content="Positioning elements with scales">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Storytelling with Data, Lede 2016</a> &gt;  Positioning elements with scales</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Positioning elements with scales</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>You need to use <code class="highlighter-rouge">x</code>, <code class="highlighter-rouge">y</code>, <code class="highlighter-rouge">cx</code> and <code class="highlighter-rouge">cy</code> to position your elements on the page, but how do you translate your data (number of ducks, weight of gold, etc) into a number of pixels on the screen? <strong>SCALES!</strong></p>
+
+<h2 id="how-scales-work">How scales work</h2>
+
+<p>When you use a scale, you need to decide on three things.</p>
+
+<ol>
+  <li><strong>Scale type:</strong> What type of scale are you using?</li>
+  <li><strong>Domain:</strong> What values are you going to send the scale? (from your data)</li>
+  <li><strong>Range:</strong> What values do you expect to get back? (pixels on screen)</li>
+</ol>
+
+<p>For example <code class="highlighter-rouge">d3.scaleLinear().domain([0,10]).range([0,960])</code>: it’s a <strong>linear scale</strong> that expects inputs between <strong>0 and 10</strong> and translates them into numbers between <strong>0 to 960</strong>. If I send it 10, it’ll send me back 960. If I send it 5, it’ll return 480.</p>
+
+<h2 id="what-scale-do-i-use">What scale do I use?</h2>
+
+<p>If your data is <strong>quantitative</strong>, it’s usually a <code class="highlighter-rouge">scaleLinear()</code>. If you’re dealing with a circle’s radius, though, it’s <code class="highlighter-rouge">scaleSqrt()</code>.</p>
+
+<p>If your data is <strong>nominal</strong>, it gets a little more complicated with <code class="highlighter-rouge">d3.ordinal()</code>, <code class="highlighter-rouge">d3.scalePoint()</code>, <code class="highlighter-rouge">d3.scaleBand()</code> etc.</p>
+
+<blockquote>
+  <p><strong>NOTE:</strong> In the examples below, <code class="highlighter-rouge">...</code> means I’ve hidden some code from you. If you’d like to view the code, first click the <strong>Open Example In New Window</strong> link. Then select <code class="highlighter-rouge">View</code> from your top menu, then <code class="highlighter-rouge">Developer</code> &gt; <code class="highlighter-rouge">View Source</code>.</p>
+</blockquote>
+
+<h3 id="numericquantitative-variables-on-the-x-or-y-axis">Numeric/quantitative variables on the x or y axis</h3>
+
+<p>When you’re working with <strong>quantitative</strong> variables on a plane, you generally use <code class="highlighter-rouge">d3.scaleLinear()</code>.</p>
+
+<p>Look at how I use the scale for <code class="highlighter-rouge">cx</code> to position both the circles and the text in the example below.</p>
+
+<iframe class="iframe-demo" src="/demos/05-positioning-elements-with-scales-31d3e28cbb5d9db6b3528ea4582541e4.html"></iframe>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-31d3e28cbb5d9db6b3528ea4582541e4.html">Open example in new window</a></p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">...</span>
+
+<span class="kd">var</span> <span class="nx">datapoints</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="na">year</span><span class="p">:</span> <span class="mi">1992</span><span class="p">,</span> <span class="na">title</span><span class="p">:</span> <span class="s2">"A"</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">year</span><span class="p">:</span> <span class="mi">1997</span><span class="p">,</span> <span class="na">title</span><span class="p">:</span> <span class="s2">"B"</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">year</span><span class="p">:</span> <span class="mi">1999</span><span class="p">,</span> <span class="na">title</span><span class="p">:</span> <span class="s2">"C"</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">year</span><span class="p">:</span> <span class="mi">2002</span><span class="p">,</span> <span class="na">title</span><span class="p">:</span> <span class="s2">"D"</span> <span class="p">}</span>
+<span class="p">];</span>
+
+<span class="c1">// 1990-2010 will be evenly spread between 0 and the width of the viz</span>
+<span class="kd">var</span> <span class="nx">xPositionScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scaleLinear</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="mi">1990</span><span class="p">,</span><span class="mi">2010</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">]);</span>
+
+<span class="nx">...</span>
+
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">"circle"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">datapoints</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"circle"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"cy"</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"r"</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"cx"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">xPositionScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">year</span><span class="p">);</span>
+  <span class="p">});</span>
+
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">"text"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">datapoints</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"text"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"text-anchor"</span><span class="p">,</span> <span class="s2">"middle"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"y"</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"r"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">xPositionScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">year</span><span class="p">)</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">year</span><span class="p">;</span>
+  <span class="p">});</span></code></pre></figure>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-31d3e28cbb5d9db6b3528ea4582541e4.html">Open example in new window</a></p>
+
+<h3 id="nominalcategorical-variables-on-the-x-or-y-axis-points-only">Nominal/categorical variables on the x or y axis (POINTS ONLY)</h3>
+
+<p>If you’re putting evenly spaced circles on the screen, a.k.a. <strong>putting a nominal category on a planar variable</strong> (x or y), you’ll use <code class="highlighter-rouge">d3.scalePoint()</code>. You give it a list of all of your quantitative variables and it evenly spaces them out for you.</p>
+
+<p>Look at how I use the scale to set the <code class="highlighter-rouge">cx</code> for circles and <code class="highlighter-rouge">x</code> for the text below.</p>
+
+<iframe class="iframe-demo" src="/demos/05-positioning-elements-with-scales-2ed9c527823d203a1fbd524eb9d3cdee.html"></iframe>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-2ed9c527823d203a1fbd524eb9d3cdee.html">Open example in new window</a></p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">...</span>
+
+<span class="kd">var</span> <span class="nx">datapoints</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Julia"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">50</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Roger"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">11</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Timpani"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">125</span> <span class="p">}</span>
+<span class="p">];</span>
+<span class="c1">// Julia, Roger and Timpani will be evenly spread between 0 and the width of the viz</span>
+<span class="kd">var</span> <span class="nx">xPositionScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scalePoint</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="s2">"Julia"</span><span class="p">,</span> <span class="s2">"Roger"</span><span class="p">,</span> <span class="s2">"Timpani"</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">]);</span>
+<span class="nx">...</span>
+
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">"circle"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">datapoints</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"circle"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"cy"</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"r"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"cx"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">xPositionScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+  <span class="p">})</span>
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">"text"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">datapoints</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"text"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"text-anchor"</span><span class="p">,</span> <span class="s2">"middle"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"y"</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"r"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">xPositionScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">name</span>
+  <span class="p">});</span></code></pre></figure>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-2ed9c527823d203a1fbd524eb9d3cdee.html">Open example in new window</a></p>
+
+<p>Instead of giving the list of names manually, you can also use <code class="highlighter-rouge">.map</code> to translate the list of data points into a list of names.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">datapoints</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Julia"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">50</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Roger"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">11</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Timpani"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">125</span> <span class="p">}</span>
+<span class="p">];</span>
+<span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="nx">datapoints</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">name</span> <span class="p">})</span>
+<span class="kd">var</span> <span class="nx">xPositionScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scalePoint</span><span class="p">().</span><span class="nx">domain</span><span class="p">(</span><span class="nx">names</span><span class="p">).</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">]);</span></code></pre></figure>
+
+<h3 id="nominalcategorical-variables-on-the-x-or-y-axis-bars-only">Nominal/categorical variables on the x or y axis (BARS ONLY)</h3>
+
+<p>If you’re putting evenly spaced bars on the screen, a.k.a. <strong>putting a nominal category on a planar variable</strong> (x or y), you’ll use <code class="highlighter-rouge">d3.scaleBand()</code>. You give it a list of all of your quantitative variables and it evenly spaces out the bars out for you.</p>
+
+<p><a href="https://github.com/d3/d3-scale/blob/master/README.md#band-scales">Read the documentation if you’d like</a></p>
+
+<p>Along with the <code class="highlighter-rouge">x</code>, this also gives you the <code class="highlighter-rouge">width</code> of your rectangles (or if you’re going on the <code class="highlighter-rouge">y</code> axis, the <code class="highlighter-rouge">height</code>). If you don’t want all of the bars squished together, you’ll want to add <code class="highlighter-rouge">.padding(0.1)</code> when you’re working on the <code class="highlighter-rouge">scaleBand</code>.</p>
+
+<iframe class="iframe-demo" src="/demos/05-positioning-elements-with-scales-07f15cf4040a435f2f0b2118d0c35274.html"></iframe>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-07f15cf4040a435f2f0b2118d0c35274.html">Open example in new window</a></p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">...</span>
+<span class="kd">var</span> <span class="nx">datapoints</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Julia"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">50</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Roger"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">11</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Timpani"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">125</span> <span class="p">}</span>
+<span class="p">];</span>
+<span class="c1">// Julia, Roger and Timpani will be evenly spread between 0 and the width of the viz</span>
+<span class="kd">var</span> <span class="nx">xPositionScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scaleBand</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="s2">"Julia"</span><span class="p">,</span> <span class="s2">"Roger"</span><span class="p">,</span> <span class="s2">"Timpani"</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">]).</span><span class="nx">padding</span><span class="p">(</span><span class="mf">0.1</span><span class="p">);</span>
+<span class="nx">...</span>
+
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">"rect"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">datapoints</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"rect"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"y"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"fill"</span><span class="p">,</span> <span class="s2">"black"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="nx">xPositionScale</span><span class="p">.</span><span class="nx">bandwidth</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">xPositionScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+  <span class="p">})</span></code></pre></figure>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-07f15cf4040a435f2f0b2118d0c35274.html">Open example in new window</a></p>
+
+<blockquote>
+  <p>Do you want to set the size/length based on the ducks? Read down below below!</p>
+</blockquote>
+
+<h3 id="quantitative-variables-as-colors">Quantitative variables as colors</h3>
+
+<iframe class="iframe-demo" src="/demos/05-positioning-elements-with-scales-ee2b4fcf0631d2b23953b244212d75d0.html"></iframe>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-ee2b4fcf0631d2b23953b244212d75d0.html">Open example in new window</a></p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">...</span>
+<span class="kd">var</span> <span class="nx">datapoints</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Mylo"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="na">team</span><span class="p">:</span> <span class="s2">"Mallards"</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Harper"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="na">team</span><span class="p">:</span> <span class="s2">"Mallards"</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Bowling Ball"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">125</span><span class="p">,</span> <span class="na">team</span><span class="p">:</span> <span class="s2">"Bills"</span> <span class="p">}</span>
+<span class="p">];</span>
+<span class="c1">// 0 ducks is beige</span>
+<span class="c1">// 125 ducks is red</span>
+<span class="kd">var</span> <span class="nx">colorScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scaleLinear</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">125</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="s1">'beige'</span><span class="p">,</span> <span class="s1">'red'</span><span class="p">]);</span>
+<span class="nx">...</span>
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">"circle"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">datapoints</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"circle"</span><span class="p">)</span>
+<span class="nx">...</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"fill"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">colorScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">ducks</span><span class="p">);</span>
+  <span class="p">})</span>
+<span class="nx">...</span></code></pre></figure>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-ee2b4fcf0631d2b23953b244212d75d0.html">Open example in new window</a></p>
+
+<h3 id="nominal-variables-as-colors">Nominal variables as colors</h3>
+
+<p>If you’d like to take categories and turn them into colors, you use a <code class="highlighter-rouge">d3.scaleOrdinal(d3.schemeCategory10)</code>, which is horrible to read, yes. You don’t need to specify a domain or range - it just works automatically, and it comes with default colors which we’ll just use for now.</p>
+
+<iframe class="iframe-demo" src="/demos/05-positioning-elements-with-scales-1d8d5a956f7bd3c73d3874f3e41b8c51.html"></iframe>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-1d8d5a956f7bd3c73d3874f3e41b8c51.html">Open example in new window</a></p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">...</span>
+<span class="kd">var</span> <span class="nx">datapoints</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Mylo"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="na">team</span><span class="p">:</span> <span class="s2">"Mallards"</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Harper"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="na">team</span><span class="p">:</span> <span class="s2">"Bills"</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Bowling Ball"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">125</span><span class="p">,</span> <span class="na">team</span><span class="p">:</span> <span class="s2">"Mallards"</span> <span class="p">}</span>
+<span class="p">];</span>
+
+<span class="c1">// Don't need to specify domain or range</span>
+<span class="kd">var</span> <span class="nx">colorScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scaleOrdinal</span><span class="p">(</span><span class="nx">d3</span><span class="p">.</span><span class="nx">schemeCategory10</span><span class="p">);</span>
+<span class="nx">...</span>
+
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">"circle"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">datapoints</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"circle"</span><span class="p">)</span>
+<span class="nx">...</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"fill"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">colorScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">team</span><span class="p">);</span>
+  <span class="p">})</span>
+<span class="nx">...</span></code></pre></figure>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-1d8d5a956f7bd3c73d3874f3e41b8c51.html">Open example in new window</a></p>
+
+<h3 id="quantitative-variables-as-sizearea-circles">Quantitative variables as size/area (circles)</h3>
+
+<p>When you’re dealing with <strong>area of circles</strong>, you increase the radius <em>not</em> linearly but rather as a square root. Don’t worry about <em>why</em> yet, just know it’s how you do it.</p>
+
+<iframe class="iframe-demo" src="/demos/05-positioning-elements-with-scales-5040af029b2f1a4f8b35dc5e6b1f82bc.html"></iframe>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-5040af029b2f1a4f8b35dc5e6b1f82bc.html">Open example in new window</a></p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">...</span>
+<span class="kd">var</span> <span class="nx">datapoints</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Mylo"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="na">team</span><span class="p">:</span> <span class="s2">"Mallards"</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Harper"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="na">team</span><span class="p">:</span> <span class="s2">"Bills"</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Bowling Ball"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">125</span><span class="p">,</span> <span class="na">team</span><span class="p">:</span> <span class="s2">"Mallards"</span> <span class="p">}</span>
+<span class="p">];</span>
+
+<span class="c1">// If you have 0 ducks, you have 0 radius</span>
+<span class="c1">// If you have 200 ducks, your radius will be 30</span>
+<span class="c1">// We're using a scaleSqrt because it's a circle</span>
+<span class="kd">var</span> <span class="nx">circleRadiusScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scaleSqrt</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">]);</span>
+<span class="nx">...</span>
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">"circle"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">datapoints</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"circle"</span><span class="p">)</span>
+<span class="nx">...</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"r"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">circleRadiusScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">ducks</span><span class="p">);</span>
+  <span class="p">})</span></code></pre></figure>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-5040af029b2f1a4f8b35dc5e6b1f82bc.html">Open example in new window</a></p>
+
+<h3 id="quantitative-variables-as-sizelength-bars">Quantitative variables as size/length (bars)</h3>
+
+<p>Remember when we used <code class="highlighter-rouge">d3.scaleBand()</code> up above to space out some bars? The bars get pretty boring if you don’t bring something quantitative in. So let’s space the bars out with one scale, then change their size/length with another scale.</p>
+
+<p>We’re going to use a <code class="highlighter-rouge">d3.scaleLinear()</code> because we want the bars to increase in size/length just as the data points are increasing.</p>
+
+<iframe class="iframe-demo" src="/demos/05-positioning-elements-with-scales-427bb2e16cd7a7fc759c5c667ce0cee5.html"></iframe>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-427bb2e16cd7a7fc759c5c667ce0cee5.html">Open example in new window</a></p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">...</span>
+<span class="kd">var</span> <span class="nx">datapoints</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Julia"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">50</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Roger"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">11</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Timpani"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">125</span> <span class="p">}</span>
+<span class="p">];</span>
+<span class="c1">// If you have 0 ducks, 0 height. 125 ducks will give you 50 pixels of height.</span>
+<span class="kd">var</span> <span class="nx">heightScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scaleLinear</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">125</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">]);</span>
+<span class="c1">// Julia, Roger and Timpani will be evenly spread between 0 and the width of the viz</span>
+<span class="c1">// and we'll give a little bit of padding, too</span>
+<span class="kd">var</span> <span class="nx">xPositionScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scaleBand</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="s2">"Julia"</span><span class="p">,</span> <span class="s2">"Roger"</span><span class="p">,</span> <span class="s2">"Timpani"</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">]).</span><span class="nx">padding</span><span class="p">(</span><span class="mf">0.1</span><span class="p">);</span>
+<span class="nx">...</span>
+
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">"rect"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">datapoints</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"rect"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"y"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"fill"</span><span class="p">,</span> <span class="s2">"black"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="nx">xPositionScale</span><span class="p">.</span><span class="nx">bandwidth</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">xPositionScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">heightScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">ducks</span><span class="p">);</span>
+  <span class="p">})</span></code></pre></figure>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-427bb2e16cd7a7fc759c5c667ce0cee5.html">Open example in new window</a></p>
+
+<p>But hey… Did you notice that the bars are, uh, going in the wrong direction? That’s because <strong><code class="highlighter-rouge">x</code> and <code class="highlighter-rouge">y</code> set the top left-hand side, and height grows DOWN from there</strong>, so if <code class="highlighter-rouge">y</code> is always the same, our bars always going to be growing DOWN from the same line on the <code class="highlighter-rouge">y</code> axis.</p>
+
+<p>The solution is instead of basing our <code class="highlighter-rouge">y</code> on a set number, we say “start drawing the <code class="highlighter-rouge">rect</code> from [bar height] pixels from the bottom of the screen”, a.k.a. <code class="highlighter-rouge">height - heightScale(y.ducks)</code>. If you don’t get it, that’s perfectly fine, just memorize it for now.</p>
+
+<iframe class="iframe-demo" src="/demos/05-positioning-elements-with-scales-957ba1ed86aa41935e57c10e797ff8ec.html"></iframe>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-957ba1ed86aa41935e57c10e797ff8ec.html">Open example in new window</a></p>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">...</span>
+<span class="kd">var</span> <span class="nx">datapoints</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Julia"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">50</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Roger"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">11</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Timpani"</span><span class="p">,</span> <span class="na">ducks</span><span class="p">:</span> <span class="mi">125</span> <span class="p">}</span>
+<span class="p">];</span>
+<span class="c1">// If you have 0 ducks, 0 height. 125 ducks will give you 50 pixels of height.</span>
+<span class="kd">var</span> <span class="nx">heightScale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scaleLinear</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">125</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">]);</span>
+<span class="nx">...</span>
+
+<span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">"rect"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">datapoints</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"rect"</span><span class="p">)</span>
+<span class="nx">...</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"y"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">height</span> <span class="o">-</span> <span class="nx">heightScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">ducks</span><span class="p">);</span>
+  <span class="p">})</span>
+<span class="nx">...</span>
+  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">heightScale</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">ducks</span><span class="p">);</span>
+  <span class="p">})</span></code></pre></figure>
+<p class="iframe-note"><a target="_new" href="/demos/05-positioning-elements-with-scales-957ba1ed86aa41935e57c10e797ff8ec.html">Open example in new window</a></p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

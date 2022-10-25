@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Introduction to Git</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/03/class/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Introduction to Git">
+  <meta property="twitter:title" content="Introduction to Git">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt;  Introduction to Git</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Introduction to Git</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="github">Github</h2>
+
+<blockquote>
+  <p><strong>FYI:</strong> This set of notes goes over what we did in class, but Soma covers some of these topics in greater detail in his ‘Git and Github’ section, found on the sidebar. <a href="http://jonathansoma.com/site/lede/foundations/git-and-github/understanding-git/">Check it out</a> – it’s really detailed and thorough.</p>
+</blockquote>
+
+<p>Go to <a href="http://www.github.com">Github</a> and make an account. Git is a command line tool (there are non-command line/desktop versions of Git… but Soma doesn’t want you to use that!).</p>
+
+<ul>
+  <li>Git is a version control system (“VCS”).</li>
+  <li>Git and Github are NOT the same. Git is the thing that runs on your computer, github runs magically on the cloud…
+    <ul>
+      <li>bitbucket is another service like Github.</li>
+      <li>gitlab, not open-source version of Github.</li>
+    </ul>
+  </li>
+  <li>Sample project on Github: Soma’s <a href="https://github.com/jsoma/tabletop">Tabletop.js</a>.</li>
+  <li>The code on Github is <strong>open source</strong> or <strong>free/open source software (FOSS)</strong> – you can download and run the programs you see!</li>
+  <li>People can make their own derivative versions of your code, OR they can fix errors in your code and ask if you want to incorporate the changes into your code. Essentially, lots of people can contribute to make a project better.</li>
+</ul>
+
+<p>Open up Terminal, type <code class="highlighter-rouge">git --version</code> to make sure you have git on your computer.</p>
+
+<p>We’re going to setup your Github!</p>
+
+<ul>
+  <li><code class="highlighter-rouge">git config --global user.name "YOUR NAME"</code></li>
+  <li><code class="highlighter-rouge">git config --global user.email "YOUR EMAIL ADDRESS"</code></li>
+  <li><a href="https://help.github.com/articles/caching-your-github-password-in-git/">Next Steps</a>:
+    <ul>
+      <li><code class="highlighter-rouge">git credential-osxkeychain</code></li>
+      <li><code class="highlighter-rouge">git config --global credential.helper osxkeychain</code></li>
+    </ul>
+  </li>
+  <li>Go to Github; we’re going to make a repository.
+    <ul>
+      <li>Make sure you’re logged in</li>
+      <li>Click the ‘+’ and then click ‘New Repository’</li>
+      <li>Create a new repository (give it a name), make it private.</li>
+      <li>A <strong>repository</strong> is a home for your code!</li>
+    </ul>
+  </li>
+  <li>We’re going to make a directory somewhere on our computer.
+    <ul>
+      <li><code class="highlighter-rouge">mkdir [directory_name]</code>: create a folder that will be your sample repository</li>
+      <li><code class="highlighter-rouge">cd [directory_name]</code></li>
+      <li><code class="highlighter-rouge">echo "# sample-repo" &gt;&gt; README.md</code></li>
+      <li><code class="highlighter-rouge">git init</code>: this basically says “hey i’m about to work on a project in here!”</li>
+      <li><code class="highlighter-rouge">git add README.md</code></li>
+      <li><code class="highlighter-rouge">git commit -m "first commit"</code>: committing requires you to give a little summary of what you’re adding.</li>
+      <li><code class="highlighter-rouge">git remove add origin git@github.com:username/repo_name.git</code></li>
+      <li><code class="highlighter-rouge">git push -u origin master</code></li>
+    </ul>
+  </li>
+  <li>Windows people: <a href="https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/">do this</a> and then <a href="https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/">this</a>.</li>
+</ul>
+
+<h2 id="homework">Homework</h2>
+
+<p>We’re going to create a repository for homework.</p>
+
+<h3 id="creating-a-github-repository">Creating a Github repository</h3>
+
+<ul>
+  <li><a href="http://www.github.com/new">Create a new repository</a>, name your repo, make it public.</li>
+  <li>Click ‘Initialize this repository with a README’ option. (You don’t really need to add a license, but you can)</li>
+  <li>On your README.md file, click the little pencil icon (“Edit this File”).</li>
+  <li>Using <strong>markdown</strong> on your README:
+    <ul>
+      <li>the <code class="highlighter-rouge">#</code> allows your to add headers to your page. <code class="highlighter-rouge">##</code> and <code class="highlighter-rouge">###</code> get you sub-headers of smaller and smaller sizes!</li>
+      <li><code class="highlighter-rouge">*italics*</code></li>
+      <li><code class="highlighter-rouge">**bold**</code></li>
+      <li><code class="highlighter-rouge">[add a link](http://www.google.com)</code></li>
+      <li>Make a list:
+        <ul>
+          <li><code class="highlighter-rouge">* List Item</code></li>
+          <li><code class="highlighter-rouge">* Another list item</code></li>
+        </ul>
+      </li>
+      <li>Make an ordered list
+        <ol>
+          <li><code class="highlighter-rouge">1. List Item</code></li>
+          <li><code class="highlighter-rouge">2. Another List Item</code></li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>In your new Foundations Homework repo, use ‘Create new file’ link repo page to start a new file.</p>
+
+<h3 id="cloning-a-repository">Cloning a repository</h3>
+
+<p>We want to connect this repo to our computer! To copy a repo from github to our computer, we will need to <strong>clone</strong> the repo. Use the green “Clone or Download” button and the “Copy to Clipboard” link to copy the HTTPS or SSH code.</p>
+
+<p>Then in Terminal, navigate to where you want to save your repo. Then, <code class="highlighter-rouge">git clone [HTTPS/SSH code]</code>. You should have a new directory (that’s your homework repo in your folder).</p>
+
+<p>You can use Finder to add folders and file into that directory! Or the following commands on Terminal/Babun:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">cp [filepath to file you want] .</code>: to copy a particular file into the current directory</li>
+  <li><code class="highlighter-rouge">mv [filepath to the file you want] .</code> to move a particular file into the current directory</li>
+</ul>
+
+<p><strong>Check what’s going on in your directory:</strong> <code class="highlighter-rouge">git status</code> (when you are in the correct folder)</p>
+
+<ol>
+  <li>Add new files: <code class="highlighter-rouge">git add .</code></li>
+  <li>Commit your changes: <code class="highlighter-rouge">git commit -m "updates"</code> – you mayyyy have to use <code class="highlighter-rouge">-am</code> instead of <code class="highlighter-rouge">-m</code></li>
+  <li>Push to Github: <code class="highlighter-rouge">git push</code></li>
+</ol>
+
+<blockquote>
+  <p>Add a .gitignore file and in that file, add the line <code class="highlighter-rouge">.DS_Store</code> – this prevents files with that name from being add to github; this will make pushing and pulling much more seamless.</p>
+</blockquote>
+
+<p><strong>Add a README.md to each of your HW directories.</strong></p>
+
+<ul>
+  <li><code class="highlighter-rouge">atom .</code>: opens a new window that has the current directory in it</li>
+</ul>
+
+<p>When you make a change on Github, you make to make sure your local directory also has the new changes (use <code class="highlighter-rouge">git pull</code> to keep your local directory updated with what’s up on Github).</p>
+
+<p><strong>Add READMEs in your 02 and 03 directories.</strong></p>
+
+<ul>
+  <li>Save them as <code class="highlighter-rouge">README.md</code> in their respective directories</li>
+  <li>Atom knows about git and knows when we’re in a git repo. It changes those file names to be green to reflect that we’ve added or changed those files but have not add or committed the changes.</li>
+  <li><code class="highlighter-rouge">git add .</code></li>
+  <li><code class="highlighter-rouge">git commit -m "adding new README files to hw assignments"</code></li>
+  <li>Now green highlighting in Atom will go away. But we still need to <code class="highlighter-rouge">git push</code> to see the changes on Github</li>
+  <li>We get an error – our push was rejected. Suggests that you integrate the remote changes.</li>
+  <li><code class="highlighter-rouge">git pull</code> to solve this issue! And then <code class="highlighter-rouge">git push</code></li>
+</ul>
+
+<p><strong>For your homework:</strong> Create a new folder, put your homework in there, git add/git commit/git push.</p>
+
+<h2 id="spotify-data">Spotify Data</h2>
+
+<p>Let’s take a peak at the data you’ll be looking at for homework. <code class="highlighter-rouge">cd</code> into the directory where you downloaded Soma’s Spotify data. Reminder: Soma got the data from Spotify’s API and saved it in a variable called “data” – for the purpose of class notes, I won’t copy the contents of <strong>data</strong> here (but remember that it is held in the same python script that you see below).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>print(data)
+# Let's try to figure out what our data type is
+print(type(data))
+
+#  try to get the keys
+print(data.keys)
+# that didn't work because it's a method! we need to use paratheses.
+# you'll see this error: &lt;built-in method keys of dict object at 0x10e87e288&gt;
+# this will fix that error:
+print(data.keys())
+</code></pre>
+</div>
+<p>If you know that you’re looking at a <strong>dictionary</strong>, the best way to learn more about what it looks like is to use the <code class="highlighter-rouge">.keys()</code> method. Once you have the names of the keys, you can use <code class="highlighter-rouge">dictionary_name['key']</code> to access the values/data stored in specific keys.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>print(data['artists'])
+# it looks like a dictionary inside a dictionary (because our above print showed curly braces on the outside)
+
+print(type(data['artists']))
+# confirmed! dictionary!
+
+# let's get keys again
+print((data['artists']).keys())
+</code></pre>
+</div>
+<p>Keep using the <code class="highlighter-rouge">type()</code> function and the <code class="highlighter-rouge">.keys()</code> method to investigate your dictionary further. If you’re dealing with data that has nested dictionaries within dictionaries, it may be a good idea to use variables to make your code more readable (as Some does below).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># if this seems confusing, you can also make a new variable out of the above and then use .keys()
+artist_data = data['artists']
+print(artist_data.keys())
+</code></pre>
+</div>
+<p>Because we don’t know what’s in each key, Soma prints the contents of each of the keys one by one:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>print(data['artists']['next'])
+print(data['artists']['href'])
+print(data['artists']['limit'])
+</code></pre>
+</div>
+<p>And here he finds what he’s looking for:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># here's the real deal
+print(data['artists']['items'])
+print(type(data['artists']['items']))
+
+print(data['artists']['items'][0])
+</code></pre>
+</div>
+<p>Notice that in the last print statement, he used <code class="highlighter-rouge">[0]</code> to pull out data. This sort of indexing is a clue that the data type you’re looking at is a <strong>list</strong>! In the code below, he uses a variable called <code class="highlighter-rouge">artists</code> to “save” that list/simplify how he calls it.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>artists = data['artists']['items']
+print(artists)
+
+print("Here is the first Drake result")
+print(artists[0])
+
+print(type(artists[0]))
+# it's a dictionary!
+</code></pre>
+</div>
+<p>Because we don’t know what each item in our <code class="highlighter-rouge">artists</code> list is, he uses <code class="highlighter-rouge">type(artists[0])</code> to check the data type of the first item and discovers that <code class="highlighter-rouge">artists</code> is actually a <strong>list of dictionaries!</strong></p>
+
+<p>He knows he can call and print each item in the list by using its index (but maybe there’s a more programmatic way of doing the same thing…).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>print((artists[0]).keys())
+print(artists[0]['name'], "has a popularity of", artists[0]['popularity'])
+print(artists[1]['name'], "has a popularity of", artists[1]['popularity'])
+print(artists[2]['name'], "has a popularity of", artists[2]['popularity'])
+
+# how many artists do we have?
+
+print(len(artists))
+</code></pre>
+</div>
+<p>And here is the more programmatic way of printing every item in a list! <strong>For loops</strong>!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># Don't Repeat Yourself.... but we still want to go through every single one of those artists
+for artist in artists:
+    print(artist['name'], "has a popularity of", artist['popularity'])
+</code></pre>
+</div>
+<p>Soma only cares about the real Drake and by investigating the names and popularities scores above, he knows that <code class="highlighter-rouge">artists[0]</code> is the real Drake. Let’s look further into “real Drake”:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>real_drake = artists[0]
+
+print(real_drake.keys())
+print(real_drake['uri'])
+print(real_drake['href'])
+print(real_drake['images'])
+
+print(real_drake['images'][0])
+print(type(real_drake['images'][0]))
+
+print(real_drake['images'][0].keys())
+
+# let's get the URL of the first image of Drake
+print(real_drake['images'][0]['url'])
+</code></pre>
+</div>
+<p>We can use a <strong>for loop</strong> again to see each of the images stores associated with Drake on Spotify.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># What's your favorite image of Drake?
+for image in real_drake['images']:
+    # print type(image)
+    # print(image.keys())
+    print(image['url'])
+
+</code></pre>
+</div>
+
+<p><strong>Note:</strong> The code above is a great demo of how to investigate data you aren’t familiar with. It shows you how to poke through lists and dictionaries – make sure you know what functions and methods make sense for each data type and what clues you have for understanding the structure of your data better. <strong>You aren’t printing for the sake of printing!</strong> Look at what you have printed – what clues do you see? (<strong>HINT:</strong> look to see whether your prints end in <code class="highlighter-rouge">]</code> or <code class="highlighter-rouge">}</code>).</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

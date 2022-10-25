@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Working with many files in pandas</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2017/classes/working-with-many-files/class/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Working with many files in pandas">
+  <meta property="twitter:title" content="Working with many files in pandas">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2017</a> &gt;  Working with many files in pandas</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Working with many files in pandas</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="dealing-with-files">Dealing with files</h2>
+
+<h3 id="opening-a-file-not-in-your-notebook-directory">Opening a file not in your notebook directory</h3>
+
+<p>You can use <strong>relative paths</strong> to use files not in your current notebook directory. Usually this means “start from the current directory, and go inside of a directory, and then find a file in there.”</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Open an excel file inside of the 'data' directory</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s">"data/cooldata.xlsx"</span><span class="o">../</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="renaming-columns">Renaming columns</h3>
+
+<p>If you only want to rename some columns, you can use a dictionary. Be sure to use <code class="highlighter-rouge">inplace=True</code> to save the result!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s">'id_no'</span><span class="p">:</span> <span class="s">'ID Number'</span><span class="p">,</span> <span class="s">'cntry'</span><span class="p">:</span> <span class="s">'Country'</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>If you know the order of the columns, you can just assign something on top of the dataframe’s <code class="highlighter-rouge">columns</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># You know that id is first and country is second</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">'ID Number'</span><span class="p">,</span> <span class="s">'Country'</span><span class="p">]</span>
+</code></pre>
+</div>
+
+<h2 id="selecting-data">Selecting data</h2>
+
+<h3 id="selecting-null-or-non-null-rows">Selecting null or non-null rows</h3>
+
+<p>You can use <code class="highlighter-rouge">.notnull()</code> and <code class="highlighter-rouge">.isnull()</code> to select rows based on whether a column is missing data.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Select everywhere that name is null</span>
+<span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">notnull</span><span class="p">()]</span>
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Select everywhere that name is not null</span>
+<span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span>
+</code></pre>
+</div>
+
+<h3 id="selecting-columns-that-do-not-contain-specific-text">Selecting columns that do NOT contain specific text</h3>
+
+<p>If you wanted to find rows where the country is a “-stan,” you can use <code class="highlighter-rouge">.str.contains</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Select rows where Country ends in 'stan'</span>
+<span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"stan$"</span><span class="p">)]</span>
+</code></pre>
+</div>
+
+<p>In order to get the opposite, you can use <code class="highlighter-rouge">~</code> to negate your condition (aka “do the opposite”).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"stan$"</span><span class="p">)]</span>
+</code></pre>
+</div>
+
+<p>You can do this for many other things, but it’s most common with situations like <code class="highlighter-rouge">.str.contains</code>.</p>
+
+<h2 id="reading-in-many-files">Reading in many files</h2>
+
+<p>When you’re working with a lot of files (or spreadsheet pages, etc), you normally go through a four step process.</p>
+
+<ol>
+  <li>Get a list of filenames (or sheets)</li>
+  <li>Turn those into a list of dataframes</li>
+  <li>Add the filename as a column to each dataframe</li>
+  <li>Combine the dataframes into one big huge dataframe</li>
+</ol>
+
+<h3 id="step-one-getting-a-list-of-filenames">STEP ONE: Getting a list of filenames</h3>
+
+<p>We use the <code class="highlighter-rouge">glob</code> library to get a list of files matching a pattern. It’s such a fun name that I try to say it as much as possible.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="c"># The * is not a regex, it just means "match anything"</span>
+<span class="c"># This matches datafile-0.csv, datafile-1.csv, etc.</span>
+<span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">"datafile-*.csv"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>You do <strong>not</strong> do this if you have an Excel sheet. Hopefully you just have them in a list, because I don’t really want to tell you about <code class="highlighter-rouge">pd.ExcelFile</code>.</p>
+
+<h3 id="step-two-turn-those-into-a-list-of-dataframes">STEP TWO: Turn those into a list of dataframes</h3>
+
+<p><strong>Working with a list of csv filenames</strong></p>
+
+<p>Now that we have a list of filenames, we can convert those into a list of dataframes with a list compehension. Each filename goes in, and the appropriate dataframe comes out.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">list_of_dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">]</span>
+</code></pre>
+</div>
+
+<p><strong>Working with a list of Excel sheet names</strong></p>
+
+<p>If you’re working with an Excel file, it’s basically the same, you just use the variable to change <code class="highlighter-rouge">sheetname</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">sheetnames</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Sheet1'</span><span class="p">,</span> <span class="s">'Sheet2'</span><span class="p">,</span> <span class="s">'Sheet3'</span><span class="p">]</span>
+<span class="n">list_of_dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s">"datastuff.xlsx"</span><span class="p">,</span> <span class="n">sheetname</span><span class="o">=</span><span class="n">sheet</span><span class="p">)</span> <span class="k">for</span> <span class="n">sheet</span> <span class="ow">in</span> <span class="n">sheetnames</span><span class="p">]</span>
+</code></pre>
+</div>
+
+<h3 id="step-three-adding-the-filename-to-each-dataframe">STEP THREE: Adding the filename to each dataframe</h3>
+
+<p>Each dataframe is from a specific file, and it’s usually helpful to take that filename and make it a column. Sometimes your filename is <code class="highlighter-rouge">2015-data.csv</code> and <code class="highlighter-rouge">2014-data.csv</code> but there is no ‘year’ column! So you need to take the filename, add it to a column, and then extract the year.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># zip loops through TWO THINGS AT ONCE</span>
+<span class="c"># so you're looking at dataframe #1 and filename #1</span>
+<span class="c"># then dataframe #2 and filename #2</span>
+<span class="c"># etc</span>
+<span class="c"># and assigning that filename as a new column in the dataframe</span>
+<span class="k">for</span> <span class="n">dataframe</span><span class="p">,</span> <span class="n">filename</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">list_of_dfs</span><span class="p">,</span> <span class="n">filenames</span><span class="p">)</span>
+  <span class="n">dataframe</span><span class="p">[</span><span class="s">'filename'</span><span class="p">]</span> <span class="o">=</span> <span class="n">filename</span>
+</code></pre>
+</div>
+
+<p>You can see if it worked by looking at <code class="highlighter-rouge">list_of_dfs[0]</code> and <code class="highlighter-rouge">list_of_dfs[-1]</code> to see if the first and last both have the filename in there.</p>
+
+<p>After you merge them in the next step you’ll then be able to extract any useful data from the filename.</p>
+
+<h3 id="step-four-combining-multiple-dataframes">STEP FOUR: Combining multiple dataframes</h3>
+
+<p>Your best friend when stacking Python files on top of each other is <code class="highlighter-rouge">pd.concat</code>. It accepts a list of dataframes. You have a list of dataframes already, so it’s going to be easy!</p>
+
+<p>You should always add <code class="highlighter-rouge">ignore_index=True</code> when using <code class="highlighter-rouge">pd.concat</code> or else spooky bugs will come and eat you in your sleep. It re-indexes your data, otherwise if you have 100 dataframes you’re comabining you’ll have 100 things with index <code class="highlighter-rouge">0</code> and 100 things with index <code class="highlighter-rouge">1</code> and 100 things with index <code class="highlighter-rouge">2</code>. We don’t want that, so <code class="highlighter-rouge">ignore_index=True</code>!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Combine a list of dataframes, on top of each other</span>
+<span class="n">combined_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">list_of_dfs</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="deleting-rows">Deleting rows</h2>
+
+<h3 id="deleting-rows-based-on-a-condition">Deleting rows based on a condition</h3>
+
+<p>The easiest way to delete a row isn’t to delete it, but just to create a new dataframe! For example, “delete rows where age is null” can be rephrased as “create a new dataframe where age is not null.”</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Find the rows where age isn't null</span>
+<span class="c"># And save them into your new dataframe</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">notnull</span><span class="p">()]</span>
+</code></pre>
+</div>
+
+<h3 id="deleting-rows-based-on-null-values">Deleting rows based on null values</h3>
+
+<p>You can also use <code class="highlighter-rouge">.dropna()</code> to drop rows that have missing data. You usually use this with <code class="highlighter-rouge">subset</code> to specify which columns to pay attention to.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Drop all rows where age or name are missing</span>
+<span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s">'age'</span><span class="p">,</span> <span class="s">'name'</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Be sure to use <code class="highlighter-rouge">inplace=True</code> to save the result</p>
+
+<h2 id="filling-in-missing-data">Filling in missing data</h2>
+
+<h3 id="filling-in-all-missing-data">Filling in all missing data</h3>
+
+<p>If you want to fill in some missing data, <code class="highlighter-rouge">fillna</code> is great. It will take every <code class="highlighter-rouge">NaN</code> and replace it with some data.</p>
+
+<p>For example, let’s say you had a bunch of null values and you wanted to replace them with the word “Unknown”</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Use inplace=True to save it back to the dataframe</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'height'</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s">"Unknown"</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>This is similar to using <code class="highlighter-rouge">.replace</code> with <code class="highlighter-rouge">np.nan</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">np</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'height'</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s">"Unknown"</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>But <code class="highlighter-rouge">fillna</code> doesn’t need an import!</p>
+
+<h3 id="filling-down-from-a-column-through-missing-data">Filling DOWN from a column through missing data</h3>
+
+<p>Let’s say we had something that looked like this</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Neighborhood</th>
+      <th>Borough</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">NaN</code></td>
+      <td>Brooklyn</td>
+    </tr>
+    <tr>
+      <td>Prospect Heights</td>
+      <td><code class="highlighter-rouge">NaN</code></td>
+    </tr>
+    <tr>
+      <td>Fort Greene</td>
+      <td><code class="highlighter-rouge">NaN</code></td>
+    </tr>
+    <tr>
+      <td>Clinton Hill</td>
+      <td><code class="highlighter-rouge">NaN</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">NaN</code></td>
+      <td>Manhattan</td>
+    </tr>
+    <tr>
+      <td>Murray Hill</td>
+      <td><code class="highlighter-rouge">NaN</code></td>
+    </tr>
+    <tr>
+      <td>Flatiron</td>
+      <td><code class="highlighter-rouge">NaN</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>And we wanted to pul down “Brooklyn” and “Manhattan” into the columns below it. This is <strong>very common</strong> when using data from Excel sheets, because people love to put weird headers everywhere and not continue to data down.</p>
+
+<p>To make this work, you use <code class="highlighter-rouge">fillna</code>, but instead of giving it a value you say “use the value above the missing data.”</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="p">[</span><span class="s">'Borough'</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">'ffill'</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Then you’ll end up with this:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Neighborhood</th>
+      <th>Borough</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">NaN</code></td>
+      <td>Brooklyn</td>
+    </tr>
+    <tr>
+      <td>Prospect Heights</td>
+      <td><strong>Brooklyn</strong></td>
+    </tr>
+    <tr>
+      <td>Fort Greene</td>
+      <td><strong>Brooklyn</strong></td>
+    </tr>
+    <tr>
+      <td>Clinton Hill</td>
+      <td><strong>Brooklyn</strong></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">NaN</code></td>
+      <td>Manhattan</td>
+    </tr>
+    <tr>
+      <td>Murray Hill</td>
+      <td><strong>Manhattan</strong></td>
+    </tr>
+    <tr>
+      <td>Flatiron</td>
+      <td><strong>Manhattan</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>And then you can delete those boring header rows!</p>
+
+<p>It has <a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.fillna.html">other options</a>, too, like filling up, etc.</p>
+
+<h2 id="customizing-your-graphics">Customizing your graphics</h2>
+
+<p>The <a href="https://matplotlib.org/gallery.html">matplotlib gallery</a> is a great resource for kind-of-understandable code. Just be sure to read the comments and spend some time with them. For example, <a href="https://matplotlib.org/examples/ticks_and_spines/tick-locators.html">customizing ticks</a> might be useful.</p>
+
+<p>You can also check the <a href="https://matplotlib.org/api/index.html">actual documentation</a> which is pretty good SOMETIMES, <a href="https://matplotlib.org/api/axis_api.html#ticks-tick-labels-and-offset-text">for example this page</a> - you can just read it and figure out what’s possible!</p>
+
+<h3 id="overview-of-plot-customization">Overview of plot customization</h3>
+
+<p>Sometimes you can set options when using <code class="highlighter-rouge">.plot</code>…</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'Country'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'GDP'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">'barh'</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">'GDP of different countires'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>…or you can save the plot as an <code class="highlighter-rouge">ax</code> and use it to make tweaks.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">ax</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'Country'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'GDP'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">'barh'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">'GDP of different countries'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Honestly, the best way to do this is to type <code class="highlighter-rouge">ax.set_</code> and <strong>press tab</strong> to see what your options might be. It’s usually better to try that first than fighting Stack Overflow.</p>
+
+<h3 id="setting-titles-and-axis-labels">Setting titles and axis labels</h3>
+
+<p>There are simple <code class="highlighter-rouge">.set_</code> options available for you!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">"This is the title"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">"Here is the x axis label"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">"Here is the y axis label"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>The axes can also be done a little more complicatedly…</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">"This is the x axis label"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">"This is the y axis label"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="removing-the-box-around-your-graph-or-aprt-of-it">Removing the box around your graph (or aprt of it)</h3>
+
+<p>The box that’s around all of your stuff are called <strong>splines</strong>, and you can turn them off and on.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># If you wanted to turn all of them off</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s">'right'</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s">'top'</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s">'bottom'</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s">'left'</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="adjusting-ticks">Adjusting ticks</h3>
+
+<p><strong>Ticks are the little marks on the edge of each axis.</strong> You can move ticks to the top, bottom, left, right, or make them disappear with <a href="https://matplotlib.org/api/axis_api.html#ticks-tick-labels-and-offset-text"><code class="highlighter-rouge">.set_ticks_position</code></a>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Put y axis ticks on the top</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s">'top'</span><span class="p">)</span>
+<span class="c"># Remove the x axis ticks</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s">'none'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>You can set the values that tick marks show up by using <code class="highlighter-rouge">.set_ticks</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<h3 id="grid-lines">Grid lines</h3>
+
+<p>Grids can be set with <a href="https://matplotlib.org/api/_as_gen/matplotlib.axis.Axis.grid.html#matplotlib.axis.Axis.grid"><code class="highlighter-rouge">.grid</code></a>, where you can turn them off and on and use fun things like <code class="highlighter-rouge">linestyle</code> and <code class="highlighter-rouge">linewidth</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Turn on all grids</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="c"># Turn on grids on the y axis</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s">'y'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="format-axis-numbers">Format axis numbers</h3>
+
+<p>We’re going to use weird formats like <code class="highlighter-rouge">${x:,.0f}</code> to say “make this have a dollar sign and commas and even if it’s a floating point use 0 numbers after the decimal point.”</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.ticker</span> <span class="kn">as</span> <span class="nn">ticker</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s">"${x:,.0f}"</span><span class="p">))</span>
+</code></pre>
+</div>
+
+<p>You can play around with that to get what you need.</p>
+
+<h3 id="setting-maxmin-values">Setting max/min values</h3>
+
+<p>Maximum and minimum values on each axis can be set up with <code class="highlighter-rouge">xlim</code> and <code class="highlighter-rouge">ylim</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Send it when plotting</span>
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'age'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'gdp'</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10000000</span><span class="p">))</span>
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Use .set after you make the ax</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'age'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'gdp'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000000</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<p>Not sure what your largest numbers are? You could do something like <code class="highlighter-rouge">df.age.max()</code> to get the maximum, and then feed it into <code class="highlighter-rouge">xlim</code>!</p>
+
+<h3 id="turn-off-legends">Turn off legends</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'age'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'gdp'</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="combining-dataframes">Combining dataframes</h2>
+
+<h3 id="stacking-dataframes-on-top-of-one-another">Stacking dataframes “on top” of one another</h3>
+
+<p>Given a list of dataframes, you can use <code class="highlighter-rouge">df.concat</code> to push them all together. You also need to use <code class="highlighter-rouge">ignore_index</code> to say “give them new indexes” so that you don’t have dozens of index <code class="highlighter-rouge">0</code>s and index <code class="highlighter-rouge">1</code>s and all of that.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">combined</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">list_of_dfs</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="pushing-dataframes-next-to-one-another">Pushing dataframes “next to” one another</h3>
+
+<p>We can also stack side by side, kind of like merge, by changing the axis we tell concat to pay attention to.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">combined</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">list_of_dfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="extracting-data-from-a-single-column">Extracting data from a single column</h2>
+
+<h3 id="extracting-multiple-columns-out-a-single-text-column">Extracting multiple columns out a single text column</h3>
+
+<p>We’ve used <code class="highlighter-rouge">.str.extract</code> before to pull out one column and assign it to a column, but you can also do it with multiple pieces of information at the same time!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># expand=True is default, but I add it to keep it from yelling</span>
+<span class="n">df</span><span class="o">.</span><span class="n">sentence</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s">'My name is (.*) and I like (.*)'</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Looking for multiple matches gives you a <strong>dataframe</strong> instead of a series, so you can’t just push them into a column in your original dataframe.</p>
+
+<h3 id="making-those-a-nice-dataframe">Making those a nice dataframe</h3>
+
+<p>In order to add those to a dataframe, you should probably rename the columns first.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">extracted</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sentence</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s">'My name is (.*) and I like (.*)'</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">extracted</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">'name'</span><span class="p">,</span> <span class="s">'food'</span><span class="p">]</span>
+</code></pre>
+</div>
+
+<p>Once you have <code class="highlighter-rouge">extracted</code>, you can put it side-by-side with the original dataframe using <code class="highlighter-rouge">concat</code> (see above) in order to create the new columns.</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

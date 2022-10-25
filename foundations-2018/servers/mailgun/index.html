@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Sending mail with Mailgun</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2018/servers/mailgun/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Sending mail with Mailgun">
+  <meta property="twitter:title" content="Sending mail with Mailgun">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Foundations, Lede 2018</a> &gt;  Sending mail with Mailgun</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Sending mail with Mailgun</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>Sometimes you want to send mail. You <em>could</em> do it from your server, but it would probably get caught in a spam filter! Instead, we’re going to be using the service <a href="https://www.mailgun.com/">Mailgun</a>.</p>
+
+<p>When you sign up with Mailgun, you wind up at a page that tells you a lot of things you need to do. <strong>You only need to activate your account.</strong></p>
+
+<p>Once you’re activated, you end up on <a href="https://app.mailgun.com/app/dashboard?activation_complete=true">https://app.mailgun.com/app/dashboard?activation_complete=true</a>. You see a note that says <strong>FREE ACCOUNTS ARE RESTRICTED TO AUTHORIZED RECIPIENTS ONLY</strong> - you’ll need to add yourself as an authorized recipient, which you can do at <a href="https://app.mailgun.com/app/account/authorized">https://app.mailgun.com/app/account/authorized</a>. After you try to add yourself, you’ll get another email from Mailgun. Click the link inside to confirm that you want to receive emails from Mailgun.</p>
+
+<p>Now you can start sending mail!</p>
+
+<p>You can read <a href="https://documentation.mailgun.com/en/latest/quickstart-sending.html">the documentation</a> if you’d like. You’re going to want to use the ‘API’ version (not SMTP), and you have to <strong>make sure you’re looking at the Python documentation</strong>. You do this by scrolling up to the very top of the page and clicking <strong>Python</strong>. It’s pretty hidden, it’s at the very top!</p>
+
+<p>Their code looks like this (if you take it out of the function):</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s">"https://api.mailgun.net/v3/YOUR_DOMAIN_NAME/messages"</span><span class="p">,</span>
+        <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">"api"</span><span class="p">,</span> <span class="s">"YOUR_API_KEY"</span><span class="p">),</span>
+        <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">"from"</span><span class="p">:</span> <span class="s">"Excited User &lt;mailgun@YOUR_DOMAIN_NAME&gt;"</span><span class="p">,</span>
+              <span class="s">"to"</span><span class="p">:</span> <span class="p">[</span><span class="s">"bar@example.com"</span><span class="p">,</span> <span class="s">"YOU@YOUR_DOMAIN_NAME"</span><span class="p">],</span>
+              <span class="s">"subject"</span><span class="p">:</span> <span class="s">"Hello"</span><span class="p">,</span>
+              <span class="s">"text"</span><span class="p">:</span> <span class="s">"Testing some Mailgun awesomness!"</span><span class="p">})</span> 
+</code></pre>
+</div>
+
+<p>And you say “Wait! I don’t have a domain name!”… but you do have one - Mailgun gave it to you, they just didn’t tell you.</p>
+
+<p>To find it, go to <a href="https://app.mailgun.com/app/dashboard">https://app.mailgun.com/app/dashboard</a> and scroll down to your “Sandbox domains.” Sandboxes are where you test things. Click the domain to see the details (like IP, API base URL, password, and API key - <em>you won’t use all of that information</em>)</p>
+
+<p>Fill in the blanks for everything in <code class="highlighter-rouge">ALL_CAPS</code>, changing the ‘from’ and ‘to’ both be yourself (in the example it’s actually sending to two email addresses).</p>
+
+<p>If you run the code in a single cell, it will only tell you if it worked (200) or didn’t work (any other number). It’s more helpful if you actually look at the response, like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s">"https://api.mailgun.net/v3/YOUR_DOMAIN_NAME/messages"</span><span class="p">,</span>
+        <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">"api"</span><span class="p">,</span> <span class="s">"YOUR_API_KEY"</span><span class="p">),</span>
+        <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">"from"</span><span class="p">:</span> <span class="s">"Excited User &lt;mailgun@YOUR_DOMAIN_NAME&gt;"</span><span class="p">,</span>
+              <span class="s">"to"</span><span class="p">:</span> <span class="p">[</span><span class="s">"bar@example.com"</span><span class="p">,</span> <span class="s">"YOU@YOUR_DOMAIN_NAME"</span><span class="p">],</span>
+              <span class="s">"subject"</span><span class="p">:</span> <span class="s">"Hello"</span><span class="p">,</span>
+              <span class="s">"text"</span><span class="p">:</span> <span class="s">"Testing some Mailgun awesomness!"</span><span class="p">})</span> 
+<span class="n">response</span><span class="o">.</span><span class="n">text</span>
+</code></pre>
+</div>
+
+<p>If it says <strong>Queued, thank you</strong> then you’re doing okay! If the response says <strong>Domain not found</strong> you’ll want to check your domain (and make sure it has <code class="highlighter-rouge">/messages</code> after it). If it says <strong>Forbidden</strong> your API key is probably wrong.</p>
+
+<p>If you’d like to send an email with an attachment, you can adjust your code a little bit:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s">"https://api.mailgun.net/v3/YOUR_DOMAIN_NAME/messages"</span><span class="o">../</span><span class="p">,</span>
+        <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">"api"</span><span class="p">,</span> <span class="s">"YOUR_API_KEY"</span><span class="p">),</span>
+        <span class="n">files</span><span class="o">=</span><span class="p">[(</span><span class="s">"attachment"</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s">"test.csv"</span><span class="p">))],</span>
+        <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">"from"</span><span class="p">:</span> <span class="s">"Excited User &lt;mailgun@YOUR_DOMAIN_NAME&gt;"</span><span class="p">,</span>
+              <span class="s">"to"</span><span class="p">:</span> <span class="p">[</span><span class="s">"bar@example.com"</span><span class="p">,</span> <span class="s">"YOU@YOUR_DOMAIN_NAME"</span><span class="p">],</span>
+              <span class="s">"subject"</span><span class="p">:</span> <span class="s">"Hello"</span><span class="p">,</span>
+              <span class="s">"text"</span><span class="p">:</span> <span class="s">"Testing some Mailgun awesomness!"</span><span class="p">})</span> 
+<span class="n">response</span><span class="o">.</span><span class="n">text</span>
+</code></pre>
+</div>
+
+<p>If you’re sending an image, you might want to do <code class="highlighter-rouge">open("test.jpg", "rb")</code> instead - <code class="highlighter-rouge">rb</code> means “read it as binary data, not as text data.” Binary data is just, well, not text data.</p>
+
+<p>If you want to send multiple attachments, it becomes <code class="highlighter-rouge">files=[("attachment", open("test1.csv")), ("attachment", open("test2.csv")), ("attachment", open("test3.csv"))],</code>.</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

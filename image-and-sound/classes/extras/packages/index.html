@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Libraries and packages</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/image-and-sound/classes/extras/packages/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Libraries and packages">
+  <meta property="twitter:title" content="Libraries and packages">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Image and Sound, Data, CJS 2017</a> &gt;  Libraries and packages</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Libraries and packages</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p><strong>Libraries</strong> are prepackaged pieces of reuseable code that you’re free to use in your Python code. Someone else wrote them, and you get to use them. They’re also known as packages, modules, and a million other words.</p>
+
+<p>For example, maybe you’d like to round up or round down? It isn’t built-in to normal Python, but the module named <code class="highlighter-rouge">math</code> can give you a hand.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">math</span>
+<span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mf">3.14</span><span class="p">)</span> <span class="c"># 4</span>
+<span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="mf">3.14</span><span class="p">)</span> <span class="c"># 3</span>
+</code></pre>
+</div>
+
+<h2 id="examples-of-packages">Examples of packages</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">requests</code> allows you to download web pages.</li>
+  <li><code class="highlighter-rouge">pg8000</code> lets Python connect to a PostgreSQL database.</li>
+  <li><code class="highlighter-rouge">BeautifulSoup</code> is used for reading the content on downloaded web pages.</li>
+  <li><code class="highlighter-rouge">pandas</code> helps with manipulating and understanding csv files.</li>
+</ul>
+
+<p>There are ten million more, many of which you can find on the <a href="https://github.com/vinta/awesome-python">Awesome Python</a> repository.</p>
+
+<h2 id="installing-packages-with-pip">Installing packages with <code class="highlighter-rouge">pip</code></h2>
+
+<p>The <code class="highlighter-rouge">math</code> module comes with Python, but for most every other package you’ll need to install it separately.</p>
+
+<p><code class="highlighter-rouge">pip</code> is a <strong>package manager</strong> for Python, in that you can use it to… install packages. In fact, <code class="highlighter-rouge">pip</code> stands for <code class="highlighter-rouge">Pip Installs Packages</code>! To use <code class="highlighter-rouge">pip</code> to install a package, run a command like the following from the command line.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip install requests
+</code></pre>
+</div>
+
+<p><strong>IF YOU’RE USING VIRTUAL ENVIRONMENTS</strong> and run <code class="highlighter-rouge">pip</code>, you’ll only be installing the package <strong>for the current virtual environment</strong>. If you have three Python 3 data analysis virtual environments you’ll need to <code class="highlighter-rouge">workon</code> each of them and <code class="highlighter-rouge">pip install pandas</code> three separate times.</p>
+
+<p><strong>IF YOU AREN’T USING VIRTUAL ENVIRONMENTS</strong>, you’ll want to use <code class="highlighter-rouge">pip3</code>, which will make sure you’re installing the Python 3 version of the packages. If you’d like to use a package inside of Python 2, you’ll want to use <code class="highlighter-rouge">pip</code>.</p>
+
+<h2 id="using-packages">Using packages</h2>
+
+<p>In order to use a package, you’ll need to tell Python that you’d like to include it in your code. You do this by <code class="highlighter-rouge">import</code>ing the package up at the top of your code.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+</code></pre>
+</div>
+
+<p>Why do each of those ways of importing look different? Well… that’s just kind of how life works. Usually you should just copy what everyone else is doing in documentation or on StackOverflow, but if you wanted to know a little more…</p>
+
+<h3 id="simple-imports">Simple imports</h3>
+
+<p>Once you import a library, you usually just refer to it by its name when you’d like to use it.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Import requests library</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="c"># Download Drake's top tracks on Spotify</span>
+<span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://api.spotify.com/v1/artists/4W9G3Vnt9eXWTo4VeOQkSa/top-tracks?country=US'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="renaming-your-import">Renaming your import</h3>
+
+<p>People don’t like to type out the word <code class="highlighter-rouge">pandas</code>, instead they like to type out <code class="highlighter-rouge">pd</code>. So when they import it, they rename it.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Import pandas library,</span>
+<span class="c"># but we want to call it pd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="c"># Import a csv of superbowl data</span>
+<span class="c"># save it into a variable called df</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'superbowls.csv'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="importing-sub-modules">Importing sub-modules</h3>
+
+<p>Sometimes the code you want is one part of a package, so you specifically pick that one module out.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Import requests normally, but</span>
+<span class="c"># import BeautifulSoup from inside bs4</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="c"># Use requests to download a webpage</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://www.nytimes.com'</span><span class="p">)</span>
+
+<span class="c"># Use BeautifulSoup to analyze the content of the page</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="s">'html.parser'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="finding-libraries-modules-and-packages">Finding libraries, modules and packages</h2>
+
+<p>Google is your friend! The best and worst thing about packages is that <strong>anyone can write them</strong>, which means you’ll have great ones and terrible ones and popular ones and unpopular ones.</p>
+
+<p>How do you know which one to pick? Again, google.</p>
+
+<p>If you’d like to be jealous look at <a href="https://www.ruby-toolbox.com/">Ruby Toolbox</a>, which shows the most popular packages for the programming language Ruby. It also shows not only how often they’re being used, but how often they’re being updated and change over time!</p>
+
+<p>With Python you just kind of have to cross your fingers and hope you’re picking the right one. Alas!</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

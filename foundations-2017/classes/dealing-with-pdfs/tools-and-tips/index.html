@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Tools and tips for dealing with PDFs</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2017/classes/dealing-with-pdfs/tools-and-tips/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Tools and tips for dealing with PDFs">
+  <meta property="twitter:title" content="Tools and tips for dealing with PDFs">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2017</a> &gt;  Tools and tips for dealing with PDFs</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Tools and tips for dealing with PDFs</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>PDFs are a journalist’s work nightmare. But we can beat them!</p>
+
+<p>Find all of the command-line commands <a href="http://jonathansoma.com/lede/foundations-2017/classes/dealing-with-pdfs/commands-for-pdf-analysis/">over here</a>.</p>
+
+<h2 id="tabulahttptabulatechnology-convert-table-based-pdf-into-spreadsheets"><a href="http://tabula.technology/">Tabula</a>: Convert table-based PDF into spreadsheets</h2>
+
+<p><a href="http://tabula.technology/">http://tabula.technology/</a></p>
+
+<p><strong>Installation</strong></p>
+
+<p><a href="http://tabula.technology/">Download from their site</a></p>
+
+<ul>
+  <li>Convert table-based data into spreadsheets</li>
+  <li>Can’t be images, though</li>
+</ul>
+
+<h2 id="pdfminerhttpsgithubcompdfminerpdfminersix-python-pdf-parser"><a href="https://github.com/pdfminer/pdfminer.six">PDFMiner</a>: Python PDF Parser</h2>
+
+<p><a href="https://github.com/pdfminer/pdfminer.six">https://github.com/pdfminer/pdfminer.six</a> (the default version is Python 2, this is the Python 3 version)</p>
+
+<p><strong>Installation</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip install pdfminer.six
+</code></pre>
+</div>
+
+<ul>
+  <li>Open PDF files in Python</li>
+  <li>Also installs the <code class="highlighter-rouge">pdf2txt.py</code> tool for the command line</li>
+  <li>…which probably won’t work on OS X, you’ll need to use dos2unix to convert it</li>
+</ul>
+
+<p><strong>OS X troubleshooting</strong></p>
+
+<p>When you try to run it you’ll probably get an error about not finding Python, with a weird backslash <code class="highlighter-rouge">\r</code>. This is something called “DOS- (or Windows-) style line endings” and is a tragedy. Use the following command to install <code class="highlighter-rouge">dos2unix</code>, which is a conversion utility, and then use it to convert the command.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>brew install dos2unix
+dos2unix /usr/local/bin/pdf2txt.py
+</code></pre>
+</div>
+
+<p>If the default <code class="highlighter-rouge">python</code> on your system isn’t Python 3, you’ll also get a “module not found” error. You can run the following to force the <code class="highlighter-rouge">python</code> command on your system to be <code class="highlighter-rouge">python3</code>. This prrrobably won’t break anything, but make sure you <strong>cut and paste it, don’t try to type it.</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo chown -R <span class="sb">`</span>whoami<span class="sb">`</span> /usr/local
+ln -sf <span class="sb">`</span>which python3<span class="sb">`</span> /usr/local/bin/python
+</code></pre>
+</div>
+
+<h2 id="pdfqueryhttpsgithubcomjcushmanpdfquery-xpath-for-pdfs-in-python"><a href="https://github.com/jcushman/pdfquery">PDFQuery</a>: XPath for PDFs in Python</h2>
+
+<p><a href="https://github.com/jcushman/pdfquery">https://github.com/jcushman/pdfquery</a></p>
+
+<p><strong>Installation</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip install pdfquery
+</code></pre>
+</div>
+
+<ul>
+  <li>Search PDFs with XPath in Python, kiiiind of</li>
+  <li><code class="highlighter-rouge">in_bbox(..)</code>, <code class="highlighter-rouge">overlays_bbox(..)</code>, <code class="highlighter-rouge">contains(..)</code></li>
+  <li>Coordinates from LOWER LEFT</li>
+</ul>
+
+<h2 id="tesseracthttpsgithubcomtesseract-ocrtesseract-converts-images-to-text"><a href="https://github.com/tesseract-ocr/tesseract">Tesseract</a>: Converts images to text</h2>
+
+<p><a href="https://github.com/tesseract-ocr/tesseract">https://github.com/tesseract-ocr/tesseract</a></p>
+
+<ul>
+  <li>Free, open-source OCR (optical character recognition) software</li>
+  <li>Convert images to text</li>
+</ul>
+
+<p><strong>Installation (OS X)</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>brew install tesseract
+</code></pre>
+</div>
+
+<p><strong>Installation (Windows)</strong></p>
+
+<p>Download the 3.05 version <a href="https://github.com/UB-Mannheim/tesseract/wiki">from here</a>. If you want non-English language ability pay attention during installation!</p>
+
+<p>If you want to run it from the command line without typing out the entire path, it needs to be added to the PATH or you can cheat and run this command <code class="highlighter-rouge">cmd /c mklink C:\Windows\System32\tesseract.exe "C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"</code></p>
+
+<h2 id="pytesseracthttpsgithubcommadmazepytesseract-tesseract-bindings-for-python"><a href="https://github.com/madmaze/pytesseract">Pytesseract</a>: Tesseract bindings for Python</h2>
+
+<p><a href="https://github.com/madmaze/pytesseract">https://github.com/madmaze/pytesseract</a></p>
+
+<p><strong>Summary:</strong> Allows you to use tesseract from Python</p>
+
+<p><strong>Installation</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip install pytesseract
+</code></pre>
+</div>
+
+<h2 id="kullhttpsjsomagithubiokull-imagepdf-region-selection-tool"><a href="https://jsoma.github.io/kull/">Kull</a>: Image/PDF region selection tool</h2>
+
+<p><a href="https://jsoma.github.io/kull/">https://jsoma.github.io/kull/</a></p>
+
+<p><strong>Summary:</strong> Visual tool for creating PDFQuery bounding boxes/statements. You can also generate tesseract OCR regions by exporting UZN files</p>
+
+<h2 id="tesseract-uznhttpsgithubcomjsomatesseract-uzn-simplify-using-uzn-files-with-tesseract"><a href="https://github.com/jsoma/tesseract-uzn">tesseract-uzn</a>: Simplify using UZN files with tesseract</h2>
+
+<p><a href="https://github.com/jsoma/tesseract-uzn">https://github.com/jsoma/tesseract-uzn</a></p>
+
+<p><strong>Summary:</strong> Simplified workflow for zone files with tesseract</p>
+
+<ul>
+  <li>UZN files with tesseract are kind of a pain</li>
+  <li>Might be useful if you’re extracting the same regions on many documents</li>
+</ul>
+
+<h2 id="imagemagickhttpswwwimagemagickorgscriptindexphp-edit-images-from-the-command-line"><a href="https://www.imagemagick.org/script/index.php">Imagemagick</a>: Edit images from the command line</h2>
+
+<p><a href="https://www.imagemagick.org/script/index.php">https://www.imagemagick.org/script/index.php</a></p>
+
+<p><strong>Summary:</strong> Command-line image editing and conversion tool</p>
+
+<ul>
+  <li>Convert between different image formats</li>
+  <li>Useful for to convert PDF to PNG for tesseract</li>
+</ul>
+
+<p><strong>Installation (OS X)</strong></p>
+
+<p><strong>OS X:</strong> <code class="highlighter-rouge">brew install imagemagick</code> and then <code class="highlighter-rouge">brew install ghostscript</code> 👻</p>
+
+<p><strong>Windows:</strong> <a href="https://www.imagemagick.org/script/download.php#windows">Download the installer</a></p>
+
+<h2 id="muckrockhttpswwwmuckrockcom-open-foia-requests"><a href="https://www.muckrock.com">Muckrock</a>: Open FOIA requests</h2>
+
+<p><a href="https://www.muckrock.com">https://www.muckrock.com</a></p>
+
+<p><strong>Summary:</strong> Open FOIA/FOIL requests</p>
+
+<p>Searching for <a href="https://www.muckrock.com/foi/list/?q=&amp;status=done&amp;user-autocomplete=&amp;agency-autocomplete=&amp;jurisdiction-autocomplete=&amp;projects-autocomplete=&amp;tags-autocomplete=&amp;has_embargo=&amp;has_crowdfund=&amp;minimum_pages=&amp;date_range_0=&amp;date_range_1=">Completed requests</a> is a great way to find “real” documents to work on</p>
+
+<h2 id="documentcloudhttpswwwdocumentcloudorg"><a href="https://www.documentcloud.org/">DocumentCloud</a></h2>
+
+<p><a href="https://www.documentcloud.org/">https://www.documentcloud.org/</a></p>
+
+<p><strong>Summary:</strong> The gold standard for journalists doing things with documents</p>
+
+<h2 id="cometdocshttpswwwcometdocscom"><a href="https://www.cometdocs.com/">Cometdocs</a></h2>
+
+<p><a href="https://www.cometdocs.com/">https://www.cometdocs.com/</a></p>
+
+<p><strong>Summary:</strong> Convert PDFs to Excel/CSV</p>
+
+<p>Not a tool on your computer, but sometimes you’re too lazy to run Tabula and you know Cometdocs will work</p>
+
+<h2 id="other-tools-may-cost-">Other tools (may cost $$$)</h2>
+
+<ul>
+  <li><a href="https://www.abbyy.com/en-us/finereader/">ABBYY FineReader</a> / <a href="https://www.abbyy.com/en-us/finereader/pro-for-mac/">OS X Version</a></li>
+  <li><a href="https://www.nuance.com/print-capture-and-pdf-solutions/optical-character-recognition/omnipage.html">Omnipage</a></li>
+  <li>Might want to give a read-through of <a href="https://source.opennews.org/articles/you-got-documents-now-what/">You Got the Documents. Now What?</a> by Jonathan Stray</li>
+</ul>
+
+<h2 id="command-line-commands">Command-line commands</h2>
+
+<p>I moved this! Find all of the command-line commands <a href="http://jonathansoma.com/lede/foundations-2017/classes/dealing-with-pdfs/commands-for-pdf-analysis/">over here</a>.</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

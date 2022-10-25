@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>TextBlob spaCy sklearn lemmas stems and vectorization</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/algorithms-2017/classes/text-analysis/textblob-spacy-sklearn-lemmas-stems-and-vectorization/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="TextBlob spaCy sklearn lemmas stems and vectorization">
+  <meta property="twitter:title" content="TextBlob spaCy sklearn lemmas stems and vectorization">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Algorithms, Lede 2017</a> &gt;  TextBlob spaCy sklearn lemmas stems and vectorization</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">TextBlob spaCy sklearn lemmas stems and vectorization</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/algorithms-2017/classes/text-analysis/textblob-spacy-sklearn-lemmas-stems-and-vectorization.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="installing-some-packages">Installing some packages</h1>
+
+<p>You’ll need to install a handful of packages.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip3 install textblob
+python3 -m textblob.download_corpora
+pip3 install spacy
+python3 -m spacy download en
+pip3 install scikit-learn
+</code></pre>
+</div>
+
+<h1 id="the-libraries-well-be-using">The libraries we’ll be using</h1>
+
+<h2 id="textblob-simplified-text-processing">TextBlob: “Simplified text processing”</h2>
+
+<p>Super simple, super easy, super misleading.</p>
+
+<p>https://textblob.readthedocs.io/en/dev/</p>
+
+<h2 id="spacy-industrial-strength-natural-language-processing">spaCy: “Industrial-Strength Natural Language Processing”</h2>
+
+<p>Super powerful, super incomplete (kind of), super nice website, super full of
+gotchas.</p>
+
+<p>https://spacy.io/</p>
+
+<h2 id="scikit-learn-machine-learning-in-python">scikit-learn: “Machine Learning in Python”</h2>
+
+<p>Super powerful (in a different way than spaCy), super popular, super not focused
+on text analysis.</p>
+
+<p>http://scikit-learn.org/</p>
+
+<h2 id="natural-language-toolkit-nltk-a-leading-platform-for-building-python">Natural Language Toolkit (NLTK): “A leading platform for building Python</h2>
+<p>programs to work with human language data”</p>
+
+<p>Super old, super popular, super difficult to work with.</p>
+
+<p>http://www.nltk.org/</p>
+
+<h1 id="hey-look-were-sentiment-analysis-experts-now">Hey look we’re sentiment analysis experts now</h1>
+
+<p>With practically no knowledge and absolutely no respect for truth or accuracy,
+we can know analyze sentiment using TextBlob!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">textblob</span> <span class="kn">import</span> <span class="n">TextBlob</span>
+
+<span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s">"I hate driving the car."</span><span class="p">)</span>
+<span class="n">blob</span><span class="o">.</span><span class="n">sentiment</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Sentiment(polarity=-0.8, subjectivity=0.9)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">textblob</span> <span class="kn">import</span> <span class="n">TextBlob</span>
+
+<span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s">"I don't know if i love driving the car SO MUCH."</span><span class="p">)</span>
+<span class="n">blob</span><span class="o">.</span><span class="n">sentiment</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Sentiment(polarity=0.35, subjectivity=0.4)
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">tweet</span> <span class="o">=</span> <span class="s">'''I am very disappointed in China. Our foolish past leaders 
+have allowed them to make hundreds of billions of dollars a year in trade, yet
+they do NOTHING for us with North Korea, just talk. We will no longer allow this
+to continue. China could easily solve this problem!'''</span>
+
+<span class="n">TextBlob</span><span class="p">(</span><span class="n">tweet</span><span class="p">)</span><span class="o">.</span><span class="n">sentiment</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Sentiment(polarity=-0.22777777777777777, subjectivity=0.6861111111111112)
+</code></pre>
+</div>
+
+<p>Don’t ever do this unless you are reading movie reviews! You can use <a href="https://textblob.readthedocs.io/en/dev/classifiers.html">the
+documentation</a> to build
+your own easily enough. We’re going to talk about how to do it step-by-step in
+other ways, too.</p>
+
+<h1 id="counting-words-with-count">Counting words with <code class="highlighter-rouge">.count</code></h1>
+
+<p>When you first start counting words in Python, you’ll probably just try out
+<code class="highlighter-rouge">.count</code>. Let’s take a sentence and see how many times “fish” is used in it.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="s">"I tried to fish for fish but I didn't catch any fish"</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">"fish"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>3
+</code></pre>
+</div>
+
+<p>Pretty simple, right? They don’t always need to be sentences, either, you can do
+this on longer text, too. Paragraphs, multiple lines, even whole books!</p>
+
+<p>The big downside is that it’s going to count any instance of your word, <em>even if
+it’s in the middle of a word</em>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="s">"The canny toucan can't recant about the pelican's scant canteloupe"</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">"can"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>7
+</code></pre>
+</div>
+
+<p>That sentence has <code class="highlighter-rouge">"can"</code> in it at most <em>once</em>, so we’re going to need to do
+something better.</p>
+
+<h1 id="tokenization">Tokenization</h1>
+
+<p>So I guess that isn’t going to work! Luckily for us, people worked for billions
+of years to solve this problem using something called <strong>tokenization</strong>.
+Tokenization in this situation means “splitting up a sentence into the parts
+that matter.”</p>
+
+<p>You can think of it as breaking the sentence apart in words.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">fish_sentence</span> <span class="o">=</span> <span class="s">"I tried to fish for fish but I didn't catch any fish"</span>
+<span class="n">fish_sentence</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>['I',
+ 'tried',
+ 'to',
+ 'fish',
+ 'for',
+ 'fish',
+ 'but',
+ 'I',
+ "didn't",
+ 'catch',
+ 'any',
+ 'fish']
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">fish_sentence</span> <span class="o">=</span> <span class="s">"I tried to fish for fish but I didn't catch any fish"</span>
+<span class="n">fish_list</span> <span class="o">=</span> <span class="n">fish_sentence</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
+<span class="n">fish_list</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">"fish"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>3
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">toucan_sentence</span> <span class="o">=</span> <span class="s">"The canny toucan can't recant the pelican's scant canteloupe"</span>
+<span class="n">toucan_list</span> <span class="o">=</span> <span class="n">toucan_sentence</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
+<span class="n">toucan_list</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">"can"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0
+</code></pre>
+</div>
+
+<h2 id="improving-our-tokenization">Improving our tokenization</h2>
+
+<p>Splitting on spaces and counting words is fiiiine, but problems start to show up
+with capital letters and punctuation.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dinner_sentence</span> <span class="o">=</span> <span class="s">"Dinner was great tonight, I enjoyed the potatoes."</span>
+<span class="n">dinner_list</span> <span class="o">=</span> <span class="n">dinner_sentence</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
+<span class="n">dinner_list</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>['Dinner', 'was', 'great', 'tonight,', 'I', 'enjoyed', 'the', 'potatoes.']
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># How many times does 'dinner' appear?</span>
+<span class="n">dinner_list</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">"dinner"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># How many times does 'potatoes' appear?</span>
+<span class="n">dinner_list</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">"potatoes"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dinner_sentence</span> <span class="o">=</span> <span class="s">"Dinner was great tonight, I enjoyed the potatoes."</span>
+<span class="n">dinner_sentence</span> <span class="o">=</span> <span class="n">dinner_sentence</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">"."</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
+<span class="n">dinner_list</span> <span class="o">=</span> <span class="n">dinner_sentence</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
+<span class="n">dinner_list</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>['dinner', 'was', 'great', 'tonight,', 'i', 'enjoyed', 'the', 'potatoes']
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dinner_list</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">"dinner"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>1
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dinner_list</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">"potatoes"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>1
+</code></pre>
+</div>
+
+<h1 id="tokenizing-with-textblob">Tokenizing with TextBlob</h1>
+
+<p>TextBlob is easy to use, but not as full-featured as spaCy.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># First we'll import TextBlob</span>
+<span class="kn">from</span> <span class="nn">textblob</span> <span class="kn">import</span> <span class="n">TextBlob</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Then we'll use TextBlob</span>
+<span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s">"The dangerous cats ran dangerously toward dangers."</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">blob</span><span class="o">.</span><span class="n">tokens</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">token</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>The
+dangerous
+cats
+ran
+dangerously
+toward
+dangers
+.
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">blob</span><span class="o">.</span><span class="n">words</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">word</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>The
+dangerous
+cats
+ran
+dangerously
+toward
+dangers
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s">"I am a sentence"</span><span class="p">)</span>
+<span class="n">blob</span><span class="o">.</span><span class="n">words</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>WordList(['I', 'am', 'a', 'sentence'])
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s">"у меня зазвонил телефон"</span><span class="p">)</span>
+<span class="n">blob</span><span class="o">.</span><span class="n">words</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>WordList(['у', 'меня', 'зазвонил', 'телефон'])
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s">"私は鉛筆です"</span><span class="p">)</span>
+<span class="n">blob</span><span class="o">.</span><span class="n">words</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>WordList(['私は鉛筆です'])
+</code></pre>
+</div>
+
+<p>Notice how it keeps the period when you use <code class="highlighter-rouge">.tokens</code>?</p>
+
+<h1 id="tokenizing-with-spacy">Tokenizing with spaCy</h1>
+
+<p>spaCy can do anything, but is a bit more difficult to use than TextBlob.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># First we'll import spaCy</span>
+<span class="kn">import</span> <span class="nn">spacy</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">'en'</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Then we'll use spaCy</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s">"The dangerous cats ran dangerously toward dangers"</span><span class="p">)</span>
+<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">token</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">]</span>
+<span class="n">tokens</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[The, dangerous, cats, ran, dangerously, toward, dangers]
+</code></pre>
+</div>
+
+<h1 id="other-magic-with-textblob">Other magic with TextBlob</h1>
+
+<p>You’ll probably wind up using TextBlob for things, so here’re some other fun
+stuff it can do!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">text</span> <span class="o">=</span> <span class="s">'''Today I went driving to the 
+grocery store.  I hate to drive the car, 
+but I love visiting the gas station!'''</span></code></pre></figure>
+
+<h2 id="all-of-the-words">All of the words</h2>
+
+<p>This is like tokens, but gets rid of the punctuation.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">doc</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">doc</span><span class="o">.</span><span class="n">words</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>WordList(['Today', 'I', 'went', 'driving', 'to', 'the', 'grocery', 'store', 'I', 'hate', 'to', 'drive', 'the', 'car', 'but', 'I', 'love', 'visiting', 'the', 'gas', 'station'])
+</code></pre>
+</div>
+
+<h2 id="noun-phrases">Noun phrases</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">doc</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">doc</span><span class="o">.</span><span class="n">noun_phrases</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>WordList(['grocery store', 'gas station'])
+</code></pre>
+</div>
+
+<h2 id="all-of-the-sentences">All of the sentences</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">doc</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">doc</span><span class="o">.</span><span class="n">sentences</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[Sentence("Today I went driving to the 
+ grocery store."), Sentence("I hate to drive the car, 
+ but I love visiting the gas station!")]
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="o">.</span><span class="n">words</span><span class="p">)</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">sentences</span><span class="p">]</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[8, 13]
+</code></pre>
+</div>
+
+<h2 id="n-grams">n-grams</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">doc</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s">"I went to the pet store to buy a fish."</span><span class="p">)</span>
+<span class="n">doc</span><span class="o">.</span><span class="n">ngrams</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[WordList(['I', 'went']),
+ WordList(['went', 'to']),
+ WordList(['to', 'the']),
+ WordList(['the', 'pet']),
+ WordList(['pet', 'store']),
+ WordList(['store', 'to']),
+ WordList(['to', 'buy']),
+ WordList(['buy', 'a']),
+ WordList(['a', 'fish'])]
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">doc</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s">"He really likes cars. I don't like cars, but she said she would buy a car for the moon. He screamed."</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+<span class="c"># Shorter way</span>
+<span class="p">[</span><span class="n">ngram</span> <span class="k">for</span> <span class="n">ngram</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ngrams</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">ngram</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">'he'</span><span class="p">]</span>
+
+<span class="c"># Longer way</span>
+<span class="k">for</span> <span class="n">ngram</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ngrams</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">ngram</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">'he'</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">ngram</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>['he', 'really']
+['he', 'screamed']
+</code></pre>
+</div>
+
+<h2 id="what-can-a-word-do">What can a word do?</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">doc</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s">"The dangerous cats ran dangerously toward dangers."</span><span class="p">)</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">words</span>
+<span class="n">words</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>WordList(['The', 'dangerous', 'cats', 'ran', 'dangerously', 'toward', 'dangers'])
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'cats'
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">pluralize</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'catss'
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">pluralize</span><span class="p">()</span><span class="o">.</span><span class="n">pluralize</span><span class="p">()</span><span class="o">.</span><span class="n">pluralize</span><span class="p">()</span><span class="o">.</span><span class="n">pluralize</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'catssesses'
+</code></pre>
+</div>
+
+<h2 id="stems-and-lemmas-with-textblob">Stems and lemmas with TextBlob</h2>
+
+<p>This is something a word can do, but it’s <em>pretty important</em>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s">"The dangerous cats ran dangerously toward dangers."</span><span class="p">)</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">words</span>
+
+<span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"ORIGINAL:"</span><span class="p">,</span> <span class="n">word</span><span class="p">,</span> <span class="s">"| LEMMA:"</span><span class="p">,</span> <span class="n">word</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(),</span> <span class="s">"| STEM:"</span><span class="p">,</span> <span class="n">word</span><span class="o">.</span><span class="n">stem</span><span class="p">())</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ORIGINAL: The | LEMMA: The | STEM: the
+ORIGINAL: dangerous | LEMMA: dangerous | STEM: danger
+ORIGINAL: cats | LEMMA: cat | STEM: cat
+ORIGINAL: ran | LEMMA: ran | STEM: ran
+ORIGINAL: dangerously | LEMMA: dangerously | STEM: danger
+ORIGINAL: toward | LEMMA: toward | STEM: toward
+ORIGINAL: dangers | LEMMA: danger | STEM: danger
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">blob</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">'danger'</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>0
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">blob</span><span class="o">.</span><span class="n">words</span></code></pre></figure>
+
+<p>The lemmatizing in TextBlob <strong>is terrible.</strong> It thinks everything is a noun, and
+you have to specifically tell it otherwise.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">TextBlob</span><span class="p">(</span><span class="s">"fairies"</span><span class="p">)</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'fairy'
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">TextBlob</span><span class="p">(</span><span class="s">"fairies"</span><span class="p">)</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'fairi'
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">TextBlob</span><span class="p">(</span><span class="s">"cats"</span><span class="p">)</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'cat'
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">TextBlob</span><span class="p">(</span><span class="s">"running"</span><span class="p">)</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'running'
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">TextBlob</span><span class="p">(</span><span class="s">"running"</span><span class="p">)</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'run'
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">TextBlob</span><span class="p">(</span><span class="s">"ran"</span><span class="p">)</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'ran'
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">TextBlob</span><span class="p">(</span><span class="s">"running"</span><span class="p">)</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="s">'v'</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'run'
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">TextBlob</span><span class="p">(</span><span class="s">"ran"</span><span class="p">)</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="s">'v'</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'run'
+</code></pre>
+</div>
+
+<h1 id="tokenizing-with-spacy-1">Tokenizing with spaCy</h1>
+
+<p>spaCy is much more powerful than TextBlob, but it’s a little more difficult to
+use.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># First we'll import spaCy</span>
+<span class="kn">import</span> <span class="nn">spacy</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">'en'</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Then we'll use spaCy</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s">"The dangerous cats ran dangerously toward dangers."</span><span class="p">)</span>
+<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">token</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">]</span>
+<span class="n">tokens</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[The, dangerous, cats, ran, dangerously, toward, dangers, .]
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Then we'll use spaCy</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s">"The dangerous cats ran dangerously toward dangers."</span><span class="p">)</span>
+<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">lemma</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">]</span>
+<span class="n">tokens</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[501, 2321, 2481, 1022, 18671, 3185, 4541, 453]
+</code></pre>
+</div>
+
+<h2 id="sentiment-with-spacy">Sentiment with spaCy???</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">phrases</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'i love cars'</span><span class="p">,</span> 
+    <span class="s">'i hate cars'</span><span class="p">,</span> 
+    <span class="s">'i butter cars'</span><span class="p">,</span> 
+    <span class="s">'misery and gloomy pain cars'</span>
+<span class="p">]</span>
+
+<span class="k">for</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="n">phrases</span><span class="p">:</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">phrase</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"The sentiment for"</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="s">"is"</span><span class="p">,</span> <span class="n">doc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sentiment</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>The sentiment for i love cars is 0.0
+The sentiment for i hate cars is 0.0
+The sentiment for i butter cars is 0.0
+The sentiment for misery and gloomy pain cars is 0.0
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s">'love'</span><span class="p">,</span> <span class="s">'hate'</span><span class="p">,</span> <span class="s">'butter'</span><span class="p">,</span> <span class="s">'misery and gloomy pain'</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+    <span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"The sentiment for"</span><span class="p">,</span> <span class="n">word</span><span class="p">,</span> <span class="s">"is"</span><span class="p">,</span> <span class="n">blob</span><span class="o">.</span><span class="n">sentiment</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>The sentiment for love is Sentiment(polarity=0.5, subjectivity=0.6)
+The sentiment for hate is Sentiment(polarity=-0.8, subjectivity=0.9)
+The sentiment for butter is Sentiment(polarity=0.0, subjectivity=0.0)
+The sentiment for misery and gloomy pain is Sentiment(polarity=0.0, subjectivity=0.0)
+</code></pre>
+</div>
+
+<h1 id="intro-to-scikit-learn-sklearn">Intro to scikit-learn (sklearn)</h1>
+
+<p>Scikit-learn is for machine learning, which is turns out is <em>kind of what we’re
+doing</em>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">phrases</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'i love cars'</span><span class="p">,</span> 
+    <span class="s">'i hate cars'</span><span class="p">,</span> 
+    <span class="s">'cars butter cars'</span><span class="p">,</span> 
+    <span class="s">'misery and gloomy pain cars'</span><span class="p">,</span>
+    <span class="s">'the cars hate butter'</span>
+<span class="p">]</span></code></pre></figure>
+
+<h2 id="words-into-numbers-vectorization">Words into numbers: Vectorization</h2>
+
+<p>The process of converting words (which computers can’t understand) to numbers
+(which computers <em>can</em> understand) is called <strong>vectorization</strong>. So what we’re
+about to do is…. <strong>vectorization!</strong></p>
+
+<p>We take our vectorizer - the <code class="highlighter-rouge">CountVectorizer</code> - from a part of scikit-learn
+called <code class="highlighter-rouge">feature_extraction.text</code>. In machine learning, “features” are things
+that make an object unique. It’s how you compare things and classify things and
+know how each <em>thing</em> is different.</p>
+
+<p>In this case, our <em>things</em> are <em>sentences</em>, and you know how they’re different
+because they have different words: our <strong>“features”</strong> are <strong>word counts</strong>.
+That’s why this next line reads like it does!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span></code></pre></figure>
+
+<p>Now that we’ve imported the vectorizer - which will convert words to numbers -
+we need to use the vectorizer to count all of the words in our sentences.
+<code class="highlighter-rouge">CountVectorizer</code> always takes a list of documents, never just one! It’s kind of
+boring to compare one document to nothing.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Give me a THING that will count words for me!!!!!</span>
+<span class="n">vec</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">()</span>
+<span class="c"># I have some sentences, please count the words in them</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">phrases</span><span class="p">)</span>
+<span class="c"># What did you find?????</span>
+<span class="n">matrix</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;5x9 sparse matrix of type '&lt;class 'numpy.int64'&gt;'
+	with 15 stored elements in Compressed Sparse Row format&gt;
+</code></pre>
+</div>
+
+<p>A <strong>sparse matrix</strong> is just a Python way of saying “we have a list of lists but
+there isn’t much stuff in it so I don’t want to show it to you. We’ll use
+<strong>.toarray()</strong> to see the result.</p>
+
+<p>Each row is a sentence, and each column is a word. The numbers are how many
+times that word appears in that sentence.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Our content has been.... VECTORIZED!!!!</span>
+<span class="n">matrix</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>array([[0, 0, 1, 0, 0, 1, 0, 0, 0],
+       [0, 0, 1, 0, 1, 0, 0, 0, 0],
+       [0, 1, 2, 0, 0, 0, 0, 0, 0],
+       [1, 0, 1, 1, 0, 0, 1, 1, 0],
+       [0, 1, 1, 0, 1, 0, 0, 0, 1]], dtype=int64)
+</code></pre>
+</div>
+
+<p>Looks kind of ugly, though. <strong>Let’s make a dataframe out of it!</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">toarray</span><span class="p">())</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>That’s a little bit nicer, but if only there were a way to get a list of the
+original words. I don’t know which words “column number 2” is!</p>
+
+<p><strong>Oh but there is a way to get the words:</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">vec</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>['and', 'butter', 'cars', 'gloomy', 'hate', 'love', 'misery', 'pain', 'the']
+</code></pre>
+</div>
+
+<p>And hey, what if we set it in as the column names for the dataframe???</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">docs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">vec</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">())</span>
+<span class="n">docs</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>and</th>
+      <th>butter</th>
+      <th>cars</th>
+      <th>gloomy</th>
+      <th>hate</th>
+      <th>love</th>
+      <th>misery</th>
+      <th>pain</th>
+      <th>the</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Oh boy. Such magic. <strong>Which sentence includes ‘cars’ the most times?</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">docs</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">'cars'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>and</th>
+      <th>butter</th>
+      <th>cars</th>
+      <th>gloomy</th>
+      <th>hate</th>
+      <th>love</th>
+      <th>misery</th>
+      <th>pain</th>
+      <th>the</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

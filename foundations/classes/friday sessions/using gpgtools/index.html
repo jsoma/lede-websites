@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>OS X text encryption with GPGTools</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/friday%20sessions/using%20gpgtools/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="OS X text encryption with GPGTools">
+  <meta property="twitter:title" content="OS X text encryption with GPGTools">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt;  OS X text encryption with GPGTools</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">OS X text encryption with GPGTools</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>GPGTools allows you to encrypt/decrypt/verify/sign/etc text <em>all throughout OS X</em> via a right-click context menu. It also integrates with email clients.</p>
+
+<h2 id="installing-gpgtools">Installing GPGTools</h2>
+
+<p>Visit the <a href="https://gpgtools.org/">GPGTools homepage</a> to install the GPGTools Suite. Unfortunately you can’t install them one piece at a time!</p>
+
+<blockquote>
+  <p>Ignore the message on the front page about how it doesn’t work with El Capitain, if you read closely it’s just saying “we have a beta version of the email integration,” not “it doesn’t work.” They need a new copywriter.</p>
+</blockquote>
+
+<h2 id="setting-up-gpgtools">Setting up GPGTools</h2>
+
+<p>I don’t like the original settings of GPGTools at <em>all</em>, so we’re all going to change them.</p>
+
+<p>Go into <strong>System Preferences</strong> and click <strong>Keyboard</strong>.</p>
+
+<p><img src="../images/50.png" alt="" /></p>
+
+<p>Once you’re in Keyboard, select <strong>Shortcuts</strong> from the top tab menu, then <strong>Services</strong> on the left hand side.</p>
+
+<p><img src="../images/51.png" alt="" /></p>
+
+<p>You can now scroll through the right-hand listing until you see OpenPGP options. I’ve selected:</p>
+
+<ul>
+  <li>OpenPGP: Decrypt</li>
+  <li>OpenPGP: Encrypt</li>
+  <li>OpenPGP: Import key</li>
+  <li>OpenPGP: Insert my fingerprint</li>
+  <li>OpenPGP: Insert my key</li>
+  <li>OpenPGP: Sign</li>
+  <li>OPenPGP: Verify</li>
+</ul>
+
+<h2 id="using-gpgtools">Using GPGTools</h2>
+
+<p>To use GPGTools, all you need to do is <strong>right click some selected text</strong>, go to <strong>Services</strong>, and select what you’d like to do with it.</p>
+
+<h3 id="adding-a-key">Adding a key</h3>
+
+<p>Select the text below, right click, <strong>Services</strong>, and then <strong>OpenPGP: Import Key</strong>.</p>
+
+<p><img src="../images/52.png" alt="" /></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+UbcR/ciAvBkdA6VeUbr1TTimhQ==
+=LLVY
+-----END PGP PUBLIC KEY BLOCK-----
+</code></pre>
+</div>
+
+<h2 id="verifying-signatures">Verifying signatures</h2>
+
+<p>You can verify a signature by selecting a signed message, right-clicking, <strong>Services</strong>, and then selecting <strong>OpenPGP: Verify</strong>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+I might eat Chipotle for lunch today.
+-----BEGIN PGP SIGNATURE-----
+
+iQIcBAEBCAAGBQJXdllSAAoJEJ+YbdnIhiyaY5wP/3CW0rBXxZuskK0+5GaVIKTY
+xxxSorGDV9BKd3abT4OVwx59BgTfMTVal2y8jik/2hbXry2XNeb/gK1ZTQpyug3u
+V+wVTdXotolzfb6zK+ZEkkVW7k9P1vWA8uMG0e07d2rzzSZnj675MW+2bp12hzsG
+/pQJZhtLbKd1A+EJHi4Nzz5dsd0h8wOEEg0tvYC4krj2CaVsk2lv4hUNHrhdtzee
+J4QkUtyemfBEZlATlUY6ID4kvXKfxUZY3GsfazGj2iioYFxB0LNNlBU8h2MsZB1J
+OLl22NruwNjqebgVOlRH/DceQzok1sqrXioPz9MrE7Xf2mp0hkmysA1KlC3TPKEq
+dwK8TXbGPVChVBKWCUIDkiGMjaP5NrHdvCKXxQXzDdsorNfEizVfuhufNGrS/W25
+hZaD3ZVghgkj4hAfXa1S5x5AwaidGBclh3ndsy2g9FSNxWMuvXy7rvkF9pgUWwvO
+WYQGDYWvZmMFSAfoNMKeojYsdR36vg1TzIykjrEezAt8z/albtfAs7AhSdAbB//u
+/L/hlB+OzImT04+z+SdhnWNHRENvuF4WqGNAe+WkTODYXLUIBNDOvp8SPD7ZeHH4
+gXBFijS071PYt5kTCUOs0ri0HFEIrq4ybQ3J6pLPitOZW3qwHrCdwkrhMf4RPw2L
+di4hPMPvFpa+9xuBQOrB
+=mDGT
+-----END PGP SIGNATURE-----
+</code></pre>
+</div>
+
+<p><img src="../images/53.png" alt="" /></p>
+
+<p>Now try to verify the one below.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+I might eat mice for lunch today.
+-----BEGIN PGP SIGNATURE-----
+
+iQIcBAEBCAAGBQJXdllSAAoJEJ+YbdnIhiyaY5wP/3CW0rBXxZuskK0+5GaVIKTY
+xxxSorGDV9BKd3abT4OVwx59BgTfMTVal2y8jik/2hbXry2XNeb/gK1ZTQpyug3u
+V+wVTdXotolzfb6zK+ZEkkVW7k9P1vWA8uMG0e07d2rzzSZnj675MW+2bp12hzsG
+/pQJZhtLbKd1A+EJHi4Nzz5dsd0h8wOEEg0tvYC4krj2CaVsk2lv4hUNHrhdtzee
+J4QkUtyemfBEZlATlUY6ID4kvXKfxUZY3GsfazGj2iioYFxB0LNNlBU8h2MsZB1J
+OLl22NruwNjqebgVOlRH/DceQzok1sqrXioPz9MrE7Xf2mp0hkmysA1KlC3TPKEq
+dwK8TXbGPVChVBKWCUIDkiGMjaP5NrHdvCKXxQXzDdsorNfEizVfuhufNGrS/W25
+hZaD3ZVghgkj4hAfXa1S5x5AwaidGBclh3ndsy2g9FSNxWMuvXy7rvkF9pgUWwvO
+WYQGDYWvZmMFSAfoNMKeojYsdR36vg1TzIykjrEezAt8z/albtfAs7AhSdAbB//u
+/L/hlB+OzImT04+z+SdhnWNHRENvuF4WqGNAe+WkTODYXLUIBNDOvp8SPD7ZeHH4
+gXBFijS071PYt5kTCUOs0ri0HFEIrq4ybQ3J6pLPitOZW3qwHrCdwkrhMf4RPw2L
+di4hPMPvFpa+9xuBQOrB
+=mDGT
+-----END PGP SIGNATURE-----
+</code></pre>
+</div>
+
+<p><img src="../images/54.png" alt="" /></p>
+
+<h2 id="encrypting-a-message">Encrypting a message</h2>
+
+<p>You can also encrypt messages. You could even encrypt <em>this</em> message. Select text, right click, <strong>Services</strong>, and <strong>OpenPGP: Encrypt</strong>.</p>
+
+<p><img src="../images/55.png" alt="" /></p>
+
+<p>You’ll be prompted for who you want to send it to, and then tada!</p>
+
+<p><img src="../images/56.png" alt="" /></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-----BEGIN PGP MESSAGE-----
+
+hQIMAzOWSuxcaD4YAQ/5AYjO6QYV5reK9WfuTAY2TKm+1vlkioRWhtjtaAqPy3b9
+UxWQdoRus/9Hf81chQ/vWw3GoRBEno0TRQDk9AKdD3dFom7fhABD/UwOwREleAfz
+fc13s8SBqyFjmxPa6MYEDPd3xZee28HH3k36qKoVh3wqorlXSS/S8VRkxP5vpRMW
+HEKL7AZheOOW97lkYbzOQHW4G2bwwZE8H1BMAlx7++S8vHcorWG6fQSrwjdB5iAO
+u7dYiKlLOqg1kO38YJXMjR0kUkZpW7vhIbEHGM60R8rsmfk1trHpflkqcz/X8sBr
+rx2QNLWPcCJSQxrxrEgwbpVfFNxFIYpymSvgVSpiG+yJ0H4un+7MzRPbleyLTvvY
+lIhc2uyMn1LjMQzjuN98uYnehlIjJHLCZUkwLHsuSFfL02hG15V2vBJJ9VoY5zRo
+goolufW5Mp0Jalu/daCsBPwvOeKP0mDSy/wnZN0xbK87d+/30vLC/2v1XJLhZmVJ
+aGGMHeVVH7Y1Hsq4IE6TP4aKxRhszfP2ACxwUBGlk8I6v+D0p5BYDQ5QGC1S09/0
+Pm58ufOIYN9kk6bI3FkubDNgGPdpYmjbTQNOpdNCQOMYpkAQpU8xvIPKgpDPmKqE
+nX8d7meNmDmcXYWEQtPbms/WSIHC6lcrftVITvliynZXfA1Tp4Mp4O9NMufBMdvS
+qgF2d6bjKJaKJq+FY6eguyK3Y9fXvUXgkipCvhaw+X/H3OqkMqEyoz1CaUj2he4v
+Vjge9WtGA6B9aPhLSkkyNfulMyjNmlKuh0xp1zi1/Cr7FlE6OzHnk353SN+nN2Za
+mCh1vws8cb4Ip/wayW088Zy9sWLSuEfshYz2y+gcAfUtzl0SWxbbO1p5/nGltOG3
+nETTCMpihl2yxKO/RmXn/G1n+uWnGHwECeD2
+=tGYJ
+-----END PGP MESSAGE-----
+</code></pre>
+</div>
+
+<p>You can’t read this, <em>as I’m the only intended recipient</em> (be sure you pick who you’re sending it to! If you don’t have their key, track it down).</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

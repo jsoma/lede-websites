@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Multiple pages of data from APIs</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2018/classes/apis/multiple-pages-of-data-from-apis/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Multiple pages of data from APIs">
+  <meta property="twitter:title" content="Multiple pages of data from APIs">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2018</a> &gt; <a href="..">APIs</a> &gt;  Multiple pages of data from APIs</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Multiple pages of data from APIs</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations-2018/classes/apis/multiple-pages-of-data-from-apis.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <p>Sometimes when you’re dealing with an API, <strong>it doesn’t give you all of the
+results it knows about</strong>.</p>
+
+<p>For example, let’s use the <a href="https://swapi.co">Star Wars API</a> to search for
+everyone with the letter <code class="highlighter-rouge">a</code> in their name.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://swapi.co/api/people/?search=a"</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="n">data</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="err">'count':</span><span class="w"> </span><span class="err">60,</span><span class="w">
+ </span><span class="err">'next':</span><span class="w"> </span><span class="err">'https://swapi.co/api/people/?search=a&amp;page=2',</span><span class="w">
+ </span><span class="err">'previous':</span><span class="w"> </span><span class="err">None,</span><span class="w">
+ </span><span class="err">'results':</span><span class="w"> </span><span class="err">[{'birth_year':</span><span class="w"> </span><span class="err">'19BBY',</span><span class="w">
+   </span><span class="err">'created':</span><span class="w"> </span><span class="err">'2014-12-09T13:50:51.644000Z',</span><span class="w">
+   </span><span class="err">'edited':</span><span class="w"> </span><span class="err">'2014-12-20T21:17:56.891000Z',</span><span class="w">
+   </span><span class="err">'eye_color':</span><span class="w"> </span><span class="err">'blue',</span><span class="w">
+   </span><span class="err">'films':</span><span class="w"> </span><span class="err">['https://swapi.co/api/films/2/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/6/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/3/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/1/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/7/'],</span><span class="w">
+   </span><span class="err">'gender':</span><span class="w"> </span><span class="err">'male',</span><span class="w">
+   </span><span class="err">'hair_color':</span><span class="w"> </span><span class="err">'blond',</span><span class="w">
+   </span><span class="err">'height':</span><span class="w"> </span><span class="err">'172',</span><span class="w">
+   </span><span class="err">'homeworld':</span><span class="w"> </span><span class="err">'https://swapi.co/api/planets/1/',</span><span class="w">
+   </span><span class="err">'mass':</span><span class="w"> </span><span class="err">'77',</span><span class="w">
+   </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Luke</span><span class="w"> </span><span class="err">Skywalker',</span><span class="w">
+   </span><span class="err">'skin_color':</span><span class="w"> </span><span class="err">'fair',</span><span class="w">
+   </span><span class="err">'species':</span><span class="w"> </span><span class="err">['https://swapi.co/api/species/1/'],</span><span class="w">
+   </span><span class="err">'starships':</span><span class="w"> </span><span class="err">['https://swapi.co/api/starships/12/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/starships/22/'],</span><span class="w">
+   </span><span class="err">'url':</span><span class="w"> </span><span class="err">'https://swapi.co/api/people/1/',</span><span class="w">
+   </span><span class="err">'vehicles':</span><span class="w"> </span><span class="err">['https://swapi.co/api/vehicles/14/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/vehicles/30/']</span><span class="p">}</span><span class="err">,</span><span class="w">
+  </span><span class="p">{</span><span class="err">'birth_year':</span><span class="w"> </span><span class="err">'41.9BBY',</span><span class="w">
+   </span><span class="err">'created':</span><span class="w"> </span><span class="err">'2014-12-10T15:18:20.704000Z',</span><span class="w">
+   </span><span class="err">'edited':</span><span class="w"> </span><span class="err">'2014-12-20T21:17:50.313000Z',</span><span class="w">
+   </span><span class="err">'eye_color':</span><span class="w"> </span><span class="err">'yellow',</span><span class="w">
+   </span><span class="err">'films':</span><span class="w"> </span><span class="err">['https://swapi.co/api/films/2/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/6/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/3/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/1/'],</span><span class="w">
+   </span><span class="err">'gender':</span><span class="w"> </span><span class="err">'male',</span><span class="w">
+   </span><span class="err">'hair_color':</span><span class="w"> </span><span class="err">'none',</span><span class="w">
+   </span><span class="err">'height':</span><span class="w"> </span><span class="err">'202',</span><span class="w">
+   </span><span class="err">'homeworld':</span><span class="w"> </span><span class="err">'https://swapi.co/api/planets/1/',</span><span class="w">
+   </span><span class="err">'mass':</span><span class="w"> </span><span class="err">'136',</span><span class="w">
+   </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Darth</span><span class="w"> </span><span class="err">Vader',</span><span class="w">
+   </span><span class="err">'skin_color':</span><span class="w"> </span><span class="err">'white',</span><span class="w">
+   </span><span class="err">'species':</span><span class="w"> </span><span class="err">['https://swapi.co/api/species/1/'],</span><span class="w">
+   </span><span class="err">'starships':</span><span class="w"> </span><span class="err">['https://swapi.co/api/starships/13/'],</span><span class="w">
+   </span><span class="err">'url':</span><span class="w"> </span><span class="err">'https://swapi.co/api/people/4/',</span><span class="w">
+   </span><span class="err">'vehicles':</span><span class="w"> </span><span class="err">[]</span><span class="p">}</span><span class="err">,</span><span class="w">
+  </span><span class="p">{</span><span class="err">'birth_year':</span><span class="w"> </span><span class="err">'19BBY',</span><span class="w">
+   </span><span class="err">'created':</span><span class="w"> </span><span class="err">'2014-12-10T15:20:09.791000Z',</span><span class="w">
+   </span><span class="err">'edited':</span><span class="w"> </span><span class="err">'2014-12-20T21:17:50.315000Z',</span><span class="w">
+   </span><span class="err">'eye_color':</span><span class="w"> </span><span class="err">'brown',</span><span class="w">
+   </span><span class="err">'films':</span><span class="w"> </span><span class="err">['https://swapi.co/api/films/2/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/6/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/3/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/1/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/7/'],</span><span class="w">
+   </span><span class="err">'gender':</span><span class="w"> </span><span class="err">'female',</span><span class="w">
+   </span><span class="err">'hair_color':</span><span class="w"> </span><span class="err">'brown',</span><span class="w">
+   </span><span class="err">'height':</span><span class="w"> </span><span class="err">'150',</span><span class="w">
+   </span><span class="err">'homeworld':</span><span class="w"> </span><span class="err">'https://swapi.co/api/planets/2/',</span><span class="w">
+   </span><span class="err">'mass':</span><span class="w"> </span><span class="err">'49',</span><span class="w">
+   </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Leia</span><span class="w"> </span><span class="err">Organa',</span><span class="w">
+   </span><span class="err">'skin_color':</span><span class="w"> </span><span class="err">'light',</span><span class="w">
+   </span><span class="err">'species':</span><span class="w"> </span><span class="err">['https://swapi.co/api/species/1/'],</span><span class="w">
+   </span><span class="err">'starships':</span><span class="w"> </span><span class="err">[],</span><span class="w">
+   </span><span class="err">'url':</span><span class="w"> </span><span class="err">'https://swapi.co/api/people/5/',</span><span class="w">
+   </span><span class="err">'vehicles':</span><span class="w"> </span><span class="err">['https://swapi.co/api/vehicles/30/']</span><span class="p">}</span><span class="err">,</span><span class="w">
+  </span><span class="p">{</span><span class="err">'birth_year':</span><span class="w"> </span><span class="err">'52BBY',</span><span class="w">
+   </span><span class="err">'created':</span><span class="w"> </span><span class="err">'2014-12-10T15:52:14.024000Z',</span><span class="w">
+   </span><span class="err">'edited':</span><span class="w"> </span><span class="err">'2014-12-20T21:17:50.317000Z',</span><span class="w">
+   </span><span class="err">'eye_color':</span><span class="w"> </span><span class="err">'blue',</span><span class="w">
+   </span><span class="err">'films':</span><span class="w"> </span><span class="err">['https://swapi.co/api/films/5/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/6/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/1/'],</span><span class="w">
+   </span><span class="err">'gender':</span><span class="w"> </span><span class="err">'male',</span><span class="w">
+   </span><span class="err">'hair_color':</span><span class="w"> </span><span class="err">'brown,</span><span class="w"> </span><span class="err">grey',</span><span class="w">
+   </span><span class="err">'height':</span><span class="w"> </span><span class="err">'178',</span><span class="w">
+   </span><span class="err">'homeworld':</span><span class="w"> </span><span class="err">'https://swapi.co/api/planets/1/',</span><span class="w">
+   </span><span class="err">'mass':</span><span class="w"> </span><span class="err">'120',</span><span class="w">
+   </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Owen</span><span class="w"> </span><span class="err">Lars',</span><span class="w">
+   </span><span class="err">'skin_color':</span><span class="w"> </span><span class="err">'light',</span><span class="w">
+   </span><span class="err">'species':</span><span class="w"> </span><span class="err">['https://swapi.co/api/species/1/'],</span><span class="w">
+   </span><span class="err">'starships':</span><span class="w"> </span><span class="err">[],</span><span class="w">
+   </span><span class="err">'url':</span><span class="w"> </span><span class="err">'https://swapi.co/api/people/6/',</span><span class="w">
+   </span><span class="err">'vehicles':</span><span class="w"> </span><span class="err">[]</span><span class="p">}</span><span class="err">,</span><span class="w">
+  </span><span class="p">{</span><span class="err">'birth_year':</span><span class="w"> </span><span class="err">'47BBY',</span><span class="w">
+   </span><span class="err">'created':</span><span class="w"> </span><span class="err">'2014-12-10T15:53:41.121000Z',</span><span class="w">
+   </span><span class="err">'edited':</span><span class="w"> </span><span class="err">'2014-12-20T21:17:50.319000Z',</span><span class="w">
+   </span><span class="err">'eye_color':</span><span class="w"> </span><span class="err">'blue',</span><span class="w">
+   </span><span class="err">'films':</span><span class="w"> </span><span class="err">['https://swapi.co/api/films/5/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/6/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/1/'],</span><span class="w">
+   </span><span class="err">'gender':</span><span class="w"> </span><span class="err">'female',</span><span class="w">
+   </span><span class="err">'hair_color':</span><span class="w"> </span><span class="err">'brown',</span><span class="w">
+   </span><span class="err">'height':</span><span class="w"> </span><span class="err">'165',</span><span class="w">
+   </span><span class="err">'homeworld':</span><span class="w"> </span><span class="err">'https://swapi.co/api/planets/1/',</span><span class="w">
+   </span><span class="err">'mass':</span><span class="w"> </span><span class="err">'75',</span><span class="w">
+   </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Beru</span><span class="w"> </span><span class="err">Whitesun</span><span class="w"> </span><span class="err">lars',</span><span class="w">
+   </span><span class="err">'skin_color':</span><span class="w"> </span><span class="err">'light',</span><span class="w">
+   </span><span class="err">'species':</span><span class="w"> </span><span class="err">['https://swapi.co/api/species/1/'],</span><span class="w">
+   </span><span class="err">'starships':</span><span class="w"> </span><span class="err">[],</span><span class="w">
+   </span><span class="err">'url':</span><span class="w"> </span><span class="err">'https://swapi.co/api/people/7/',</span><span class="w">
+   </span><span class="err">'vehicles':</span><span class="w"> </span><span class="err">[]</span><span class="p">}</span><span class="err">,</span><span class="w">
+  </span><span class="p">{</span><span class="err">'birth_year':</span><span class="w"> </span><span class="err">'24BBY',</span><span class="w">
+   </span><span class="err">'created':</span><span class="w"> </span><span class="err">'2014-12-10T15:59:50.509000Z',</span><span class="w">
+   </span><span class="err">'edited':</span><span class="w"> </span><span class="err">'2014-12-20T21:17:50.323000Z',</span><span class="w">
+   </span><span class="err">'eye_color':</span><span class="w"> </span><span class="err">'brown',</span><span class="w">
+   </span><span class="err">'films':</span><span class="w"> </span><span class="err">['https://swapi.co/api/films/1/'],</span><span class="w">
+   </span><span class="err">'gender':</span><span class="w"> </span><span class="err">'male',</span><span class="w">
+   </span><span class="err">'hair_color':</span><span class="w"> </span><span class="err">'black',</span><span class="w">
+   </span><span class="err">'height':</span><span class="w"> </span><span class="err">'183',</span><span class="w">
+   </span><span class="err">'homeworld':</span><span class="w"> </span><span class="err">'https://swapi.co/api/planets/1/',</span><span class="w">
+   </span><span class="err">'mass':</span><span class="w"> </span><span class="err">'84',</span><span class="w">
+   </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Biggs</span><span class="w"> </span><span class="err">Darklighter',</span><span class="w">
+   </span><span class="err">'skin_color':</span><span class="w"> </span><span class="err">'light',</span><span class="w">
+   </span><span class="err">'species':</span><span class="w"> </span><span class="err">['https://swapi.co/api/species/1/'],</span><span class="w">
+   </span><span class="err">'starships':</span><span class="w"> </span><span class="err">['https://swapi.co/api/starships/12/'],</span><span class="w">
+   </span><span class="err">'url':</span><span class="w"> </span><span class="err">'https://swapi.co/api/people/9/',</span><span class="w">
+   </span><span class="err">'vehicles':</span><span class="w"> </span><span class="err">[]</span><span class="p">}</span><span class="err">,</span><span class="w">
+  </span><span class="p">{</span><span class="err">'birth_year':</span><span class="w"> </span><span class="err">'57BBY',</span><span class="w">
+   </span><span class="err">'created':</span><span class="w"> </span><span class="err">'2014-12-10T16:16:29.192000Z',</span><span class="w">
+   </span><span class="err">'edited':</span><span class="w"> </span><span class="err">'2014-12-20T21:17:50.325000Z',</span><span class="w">
+   </span><span class="err">'eye_color':</span><span class="w"> </span><span class="err">'blue-gray',</span><span class="w">
+   </span><span class="err">'films':</span><span class="w"> </span><span class="err">['https://swapi.co/api/films/2/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/5/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/4/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/6/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/3/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/1/'],</span><span class="w">
+   </span><span class="err">'gender':</span><span class="w"> </span><span class="err">'male',</span><span class="w">
+   </span><span class="err">'hair_color':</span><span class="w"> </span><span class="err">'auburn,</span><span class="w"> </span><span class="err">white',</span><span class="w">
+   </span><span class="err">'height':</span><span class="w"> </span><span class="err">'182',</span><span class="w">
+   </span><span class="err">'homeworld':</span><span class="w"> </span><span class="err">'https://swapi.co/api/planets/20/',</span><span class="w">
+   </span><span class="err">'mass':</span><span class="w"> </span><span class="err">'77',</span><span class="w">
+   </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Obi-Wan</span><span class="w"> </span><span class="err">Kenobi',</span><span class="w">
+   </span><span class="err">'skin_color':</span><span class="w"> </span><span class="err">'fair',</span><span class="w">
+   </span><span class="err">'species':</span><span class="w"> </span><span class="err">['https://swapi.co/api/species/1/'],</span><span class="w">
+   </span><span class="err">'starships':</span><span class="w"> </span><span class="err">['https://swapi.co/api/starships/48/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/starships/59/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/starships/64/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/starships/65/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/starships/74/'],</span><span class="w">
+   </span><span class="err">'url':</span><span class="w"> </span><span class="err">'https://swapi.co/api/people/10/',</span><span class="w">
+   </span><span class="err">'vehicles':</span><span class="w"> </span><span class="err">['https://swapi.co/api/vehicles/38/']</span><span class="p">}</span><span class="err">,</span><span class="w">
+  </span><span class="p">{</span><span class="err">'birth_year':</span><span class="w"> </span><span class="err">'41.9BBY',</span><span class="w">
+   </span><span class="err">'created':</span><span class="w"> </span><span class="err">'2014-12-10T16:20:44.310000Z',</span><span class="w">
+   </span><span class="err">'edited':</span><span class="w"> </span><span class="err">'2014-12-20T21:17:50.327000Z',</span><span class="w">
+   </span><span class="err">'eye_color':</span><span class="w"> </span><span class="err">'blue',</span><span class="w">
+   </span><span class="err">'films':</span><span class="w"> </span><span class="err">['https://swapi.co/api/films/5/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/4/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/6/'],</span><span class="w">
+   </span><span class="err">'gender':</span><span class="w"> </span><span class="err">'male',</span><span class="w">
+   </span><span class="err">'hair_color':</span><span class="w"> </span><span class="err">'blond',</span><span class="w">
+   </span><span class="err">'height':</span><span class="w"> </span><span class="err">'188',</span><span class="w">
+   </span><span class="err">'homeworld':</span><span class="w"> </span><span class="err">'https://swapi.co/api/planets/1/',</span><span class="w">
+   </span><span class="err">'mass':</span><span class="w"> </span><span class="err">'84',</span><span class="w">
+   </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Anakin</span><span class="w"> </span><span class="err">Skywalker',</span><span class="w">
+   </span><span class="err">'skin_color':</span><span class="w"> </span><span class="err">'fair',</span><span class="w">
+   </span><span class="err">'species':</span><span class="w"> </span><span class="err">['https://swapi.co/api/species/1/'],</span><span class="w">
+   </span><span class="err">'starships':</span><span class="w"> </span><span class="err">['https://swapi.co/api/starships/59/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/starships/65/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/starships/39/'],</span><span class="w">
+   </span><span class="err">'url':</span><span class="w"> </span><span class="err">'https://swapi.co/api/people/11/',</span><span class="w">
+   </span><span class="err">'vehicles':</span><span class="w"> </span><span class="err">['https://swapi.co/api/vehicles/44/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/vehicles/46/']</span><span class="p">}</span><span class="err">,</span><span class="w">
+  </span><span class="p">{</span><span class="err">'birth_year':</span><span class="w"> </span><span class="err">'64BBY',</span><span class="w">
+   </span><span class="err">'created':</span><span class="w"> </span><span class="err">'2014-12-10T16:26:56.138000Z',</span><span class="w">
+   </span><span class="err">'edited':</span><span class="w"> </span><span class="err">'2014-12-20T21:17:50.330000Z',</span><span class="w">
+   </span><span class="err">'eye_color':</span><span class="w"> </span><span class="err">'blue',</span><span class="w">
+   </span><span class="err">'films':</span><span class="w"> </span><span class="err">['https://swapi.co/api/films/6/',</span><span class="w"> </span><span class="err">'https://swapi.co/api/films/1/'],</span><span class="w">
+   </span><span class="err">'gender':</span><span class="w"> </span><span class="err">'male',</span><span class="w">
+   </span><span class="err">'hair_color':</span><span class="w"> </span><span class="err">'auburn,</span><span class="w"> </span><span class="err">grey',</span><span class="w">
+   </span><span class="err">'height':</span><span class="w"> </span><span class="err">'180',</span><span class="w">
+   </span><span class="err">'homeworld':</span><span class="w"> </span><span class="err">'https://swapi.co/api/planets/21/',</span><span class="w">
+   </span><span class="err">'mass':</span><span class="w"> </span><span class="err">'unknown',</span><span class="w">
+   </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Wilhuff</span><span class="w"> </span><span class="err">Tarkin',</span><span class="w">
+   </span><span class="err">'skin_color':</span><span class="w"> </span><span class="err">'fair',</span><span class="w">
+   </span><span class="err">'species':</span><span class="w"> </span><span class="err">['https://swapi.co/api/species/1/'],</span><span class="w">
+   </span><span class="err">'starships':</span><span class="w"> </span><span class="err">[],</span><span class="w">
+   </span><span class="err">'url':</span><span class="w"> </span><span class="err">'https://swapi.co/api/people/12/',</span><span class="w">
+   </span><span class="err">'vehicles':</span><span class="w"> </span><span class="err">[]</span><span class="p">}</span><span class="err">,</span><span class="w">
+  </span><span class="p">{</span><span class="err">'birth_year':</span><span class="w"> </span><span class="err">'200BBY',</span><span class="w">
+   </span><span class="err">'created':</span><span class="w"> </span><span class="err">'2014-12-10T16:42:45.066000Z',</span><span class="w">
+   </span><span class="err">'edited':</span><span class="w"> </span><span class="err">'2014-12-20T21:17:50.332000Z',</span><span class="w">
+   </span><span class="err">'eye_color':</span><span class="w"> </span><span class="err">'blue',</span><span class="w">
+   </span><span class="err">'films':</span><span class="w"> </span><span class="err">['https://swapi.co/api/films/2/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/6/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/3/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/1/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/films/7/'],</span><span class="w">
+   </span><span class="err">'gender':</span><span class="w"> </span><span class="err">'male',</span><span class="w">
+   </span><span class="err">'hair_color':</span><span class="w"> </span><span class="err">'brown',</span><span class="w">
+   </span><span class="err">'height':</span><span class="w"> </span><span class="err">'228',</span><span class="w">
+   </span><span class="err">'homeworld':</span><span class="w"> </span><span class="err">'https://swapi.co/api/planets/14/',</span><span class="w">
+   </span><span class="err">'mass':</span><span class="w"> </span><span class="err">'112',</span><span class="w">
+   </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Chewbacca',</span><span class="w">
+   </span><span class="err">'skin_color':</span><span class="w"> </span><span class="err">'unknown',</span><span class="w">
+   </span><span class="err">'species':</span><span class="w"> </span><span class="err">['https://swapi.co/api/species/3/'],</span><span class="w">
+   </span><span class="err">'starships':</span><span class="w"> </span><span class="err">['https://swapi.co/api/starships/10/',</span><span class="w">
+    </span><span class="err">'https://swapi.co/api/starships/22/'],</span><span class="w">
+   </span><span class="err">'url':</span><span class="w"> </span><span class="err">'https://swapi.co/api/people/13/',</span><span class="w">
+   </span><span class="err">'vehicles':</span><span class="w"> </span><span class="err">['https://swapi.co/api/vehicles/19/']</span><span class="p">}</span><span class="err">]}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>It <em>looks</em> like a lot of stuff, but let’s examine it a little more closely. How
+many results is it, really?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data</span><span class="p">[</span><span class="s">'count'</span><span class="p">]</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>60
+</code></pre>
+</div>
+
+<p>Okay, cool, 60 results! Let’s loop through them.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s">'results'</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">person</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Luke Skywalker
+Darth Vader
+Leia Organa
+Owen Lars
+Beru Whitesun lars
+Biggs Darklighter
+Obi-Wan Kenobi
+Anakin Skywalker
+Wilhuff Tarkin
+Chewbacca
+</code></pre>
+</div>
+
+<p><strong>Wait a second, that’s not 60 people!</strong> It’s… a lot less.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">'results'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>10
+</code></pre>
+</div>
+
+<p>It’s… it’s 10! <strong>How do we only have 10 results if <code class="highlighter-rouge">data['count']</code> says we
+should have 60?</strong></p>
+
+<h2 id="pagination-in-an-api">Pagination in an API</h2>
+
+<p>Most APIs that allow you to search only return <strong>some of the results at a
+time</strong>. In this case, you get 10 results at a time, even though there are 60
+total. But, to be helpful, the API comes with a <code class="highlighter-rouge">next</code> key that tells you where
+to find more.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">'next'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://swapi.co/api/people/?search=a&amp;page=2
+</code></pre>
+</div>
+
+<p>All we need to do to get page 2 is to make a request to that page…</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://swapi.co/api/people/?search=a&amp;page=2"</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s">'results'</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">person</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Han Solo
+Jabba Desilijic Tiure
+Wedge Antilles
+Yoda
+Palpatine
+Boba Fett
+Lando Calrissian
+Ackbar
+Mon Mothma
+Arvel Crynyd
+</code></pre>
+</div>
+
+<p>…and we get everyone who is on that second page.</p>
+
+<p>Remember how our <code class="highlighter-rouge">data['next']</code> on page 1 gave us the URL to page 2? On page 2,
+<code class="highlighter-rouge">data['next']</code> will also point to the next page, page 3.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">'next'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://swapi.co/api/people/?search=a&amp;page=3
+</code></pre>
+</div>
+
+<p>If we keep going and going and going, eventually the <code class="highlighter-rouge">next</code> page doesn’t exist
+any more. In this case, it happens on <strong>page 6</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://swapi.co/api/people/?search=a&amp;page=6"</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">'next'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>None
+</code></pre>
+</div>
+
+<p>When <code class="highlighter-rouge">data['next']</code> is <code class="highlighter-rouge">None</code>, we’re finally at the end.</p>
+
+<p>How does this work when getting data from an API, though? Are we supposed to
+keep changing the page number time after time by hand?</p>
+
+<p>No!</p>
+
+<p>There’s an easier way.</p>
+
+<h2 id="scraping-all-of-the-pages-at-once">Scraping all of the pages at once</h2>
+
+<p>Technically, there are <strong>two easier ways</strong> to do this, not just one. The first
+way involves a <strong>cool new kind of loop</strong> called a <code class="highlighter-rouge">while</code> loop, while the second
+uses a normal <code class="highlighter-rouge">for</code> loop.</p>
+
+<h3 id="method-one-while-loop">METHOD ONE: <code class="highlighter-rouge">while</code> loop</h3>
+
+<p>A <code class="highlighter-rouge">while</code> loop is kind of like an <code class="highlighter-rouge">if</code> statement. For example, maybe we’re
+wondering if we need to get a second page of results:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Grab the search results</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Downloading the original search results"</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://swapi.co/api/people/?search=a"</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+<span class="c"># If data['next'] isn't empty, let's download the next page, too</span>
+<span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s">'next'</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Next page found, downloading"</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">'next'</span><span class="p">])</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">'next'</span><span class="p">])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Downloading the original search results
+Next page found, downloading https://swapi.co/api/people/?search=a&amp;page=2
+</code></pre>
+</div>
+
+<p>The way a <code class="highlighter-rouge">while</code> loop works is that it <em>keeps doing something until the
+statement is <code class="highlighter-rouge">False</code></em>. <code class="highlighter-rouge">if</code> does something <strong>once</strong>, and <code class="highlighter-rouge">while</code> does something
+<strong>forever</strong> (maybe).</p>
+
+<p>So in this case, it’s going to keep downloading pages as long as <code class="highlighter-rouge">data['next']
+is not None</code>. In other words, <strong>it will only stop when <code class="highlighter-rouge">data['next']</code> is
+empty.</strong></p>
+
+<p>Let’s change our <code class="highlighter-rouge">if</code> to <code class="highlighter-rouge">while</code>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Grab the search results</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Downloading the original search results"</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://swapi.co/api/people/?search=a"</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+<span class="c"># While data['next'] isn't empty, let's download the next page, too</span>
+<span class="k">while</span> <span class="n">data</span><span class="p">[</span><span class="s">'next'</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Next page found, downloading"</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">'next'</span><span class="p">])</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">'next'</span><span class="p">])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Downloading the original search results
+Next page found, downloading https://swapi.co/api/people/?search=a&amp;page=2
+Next page found, downloading https://swapi.co/api/people/?search=a&amp;page=3
+Next page found, downloading https://swapi.co/api/people/?search=a&amp;page=4
+Next page found, downloading https://swapi.co/api/people/?search=a&amp;page=5
+Next page found, downloading https://swapi.co/api/people/?search=a&amp;page=6
+</code></pre>
+</div>
+
+<p>We just need one small change - let’s make an empty list of <code class="highlighter-rouge">total_results</code> and
+keep adding <code class="highlighter-rouge">data['results']</code> to it each time.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Start with an empty list</span>
+<span class="n">total_results</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c"># Grab the search results</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Downloading the original search results"</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://swapi.co/api/people/?search=a"</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+<span class="c"># Store the first page of results</span>
+<span class="n">total_results</span> <span class="o">=</span> <span class="n">total_results</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s">'results'</span><span class="p">]</span>
+
+<span class="c"># While data['next'] isn't empty, let's download the next page, too</span>
+<span class="k">while</span> <span class="n">data</span><span class="p">[</span><span class="s">'next'</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Next page found, downloading"</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s">'next'</span><span class="p">])</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">'next'</span><span class="p">])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="c"># Store the current page of results</span>
+    <span class="n">total_results</span> <span class="o">=</span> <span class="n">total_results</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s">'results'</span><span class="p">]</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"We have"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">total_results</span><span class="p">),</span> <span class="s">"total results"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Downloading the original search results
+Next page found, downloading https://swapi.co/api/people/?search=a&amp;page=2
+Next page found, downloading https://swapi.co/api/people/?search=a&amp;page=3
+Next page found, downloading https://swapi.co/api/people/?search=a&amp;page=4
+Next page found, downloading https://swapi.co/api/people/?search=a&amp;page=5
+Next page found, downloading https://swapi.co/api/people/?search=a&amp;page=6
+We have 60 total results
+</code></pre>
+</div>
+
+<h3 id="method-two-for-loop-and-range">METHOD TWO: <code class="highlighter-rouge">for</code> loop and <code class="highlighter-rouge">range</code></h3>
+
+<p>I think <code class="highlighter-rouge">while</code> loops can be trouble because if you write them wrong, <strong>your
+program might run forever!</strong> This is pretty bad!</p>
+
+<p>If you know how many pages you need to go through, though, you can use a <code class="highlighter-rouge">for</code>
+loop instead.</p>
+
+<p>In this case, we know we need to get everything between page 1 and page 6.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">https://swapi.co/api/people/?search=a&amp;page=1</code></li>
+  <li><code class="highlighter-rouge">https://swapi.co/api/people/?search=a&amp;page=2</code></li>
+  <li><code class="highlighter-rouge">https://swapi.co/api/people/?search=a&amp;page=3</code></li>
+  <li><code class="highlighter-rouge">https://swapi.co/api/people/?search=a&amp;page=4</code></li>
+  <li><code class="highlighter-rouge">https://swapi.co/api/people/?search=a&amp;page=5</code></li>
+  <li><code class="highlighter-rouge">https://swapi.co/api/people/?search=a&amp;page=6</code></li>
+</ul>
+
+<p>A boring way to do this is to make a list of numbers, and loop through it.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">page_num</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]:</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">"https://swapi.co/api/people/?search=a&amp;page="</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">page_num</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://swapi.co/api/people/?search=a&amp;page=1
+https://swapi.co/api/people/?search=a&amp;page=2
+https://swapi.co/api/people/?search=a&amp;page=3
+https://swapi.co/api/people/?search=a&amp;page=4
+https://swapi.co/api/people/?search=a&amp;page=5
+https://swapi.co/api/people/?search=a&amp;page=6
+</code></pre>
+</div>
+
+<p>If that’s too much typing, Python can also help out. The <code class="highlighter-rouge">range</code> function will
+automatically build the list for you.</p>
+
+<p><code class="highlighter-rouge">range(6)</code> will give you <code class="highlighter-rouge">[0, 1, 2, 3, 4, 5]</code>, so you can either do <code class="highlighter-rouge">+ 1</code> on
+that or <code class="highlighter-rouge">range(1,7)</code> to get <code class="highlighter-rouge">[1, 2, 3, 4, 5, 6]</code>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">page_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">"https://swapi.co/api/people/?search=a&amp;page="</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">page_num</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://swapi.co/api/people/?search=a&amp;page=1
+https://swapi.co/api/people/?search=a&amp;page=2
+https://swapi.co/api/people/?search=a&amp;page=3
+https://swapi.co/api/people/?search=a&amp;page=4
+https://swapi.co/api/people/?search=a&amp;page=5
+https://swapi.co/api/people/?search=a&amp;page=6
+</code></pre>
+</div>
+
+<p>Once you have all of the pages, you can do what we did before - each time
+through the loop, request the page and take the results.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Start with an empty list</span>
+<span class="n">total_results</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c"># Loop through from pages 1 to 6</span>
+<span class="k">for</span> <span class="n">page_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
+    <span class="c"># Build the URL and download the results</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">"https://swapi.co/api/people/?search=a&amp;page="</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">page_num</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Downloading"</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">total_results</span> <span class="o">=</span> <span class="n">total_results</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s">'results'</span><span class="p">]</span>
+
+
+<span class="k">print</span><span class="p">(</span><span class="s">"We have"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">total_results</span><span class="p">),</span> <span class="s">"total results"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Downloading https://swapi.co/api/people/?search=a&amp;page=1
+Downloading https://swapi.co/api/people/?search=a&amp;page=2
+Downloading https://swapi.co/api/people/?search=a&amp;page=3
+Downloading https://swapi.co/api/people/?search=a&amp;page=4
+Downloading https://swapi.co/api/people/?search=a&amp;page=5
+Downloading https://swapi.co/api/people/?search=a&amp;page=6
+We have 60 total results
+</code></pre>
+</div>
+
+<p>This might be easier to read, but there’s one problem: <strong>how do you know you
+have 6 pages?</strong> Honestly, nothing automatic - you probably manually get the
+first page, then calculate how many pages it is. It’s a little more work, but if
+it makes more sense, go for it.</p>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

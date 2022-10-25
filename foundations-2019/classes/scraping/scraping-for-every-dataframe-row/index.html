@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>scraping-for-every-dataframe-row</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2019/classes/scraping/scraping-for-every-dataframe-row/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="scraping-for-every-dataframe-row">
+  <meta property="twitter:title" content="scraping-for-every-dataframe-row">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2019</a> &gt;  scraping-for-every-dataframe-row</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">scraping-for-every-dataframe-row</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations-2019/classes/scraping/scraping-for-every-dataframe-row.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <p>Okay, so, well, maybe I could teach you how <code class="highlighter-rouge">.apply</code> works, right? Maybe we
+could go deep into scraping, go big on columns vs rows in pandas, learn every
+single thing about how everything works?</p>
+
+<p>Or, we could just figure out <strong>how to do it</strong>. That’s easier for me to write, so
+I’m going to be lazy.</p>
+
+<h2 id="scraping-a-single-page-on-yelp">Scraping a single page on Yelp</h2>
+
+<p>Let’s say you’re scraping a page on Yelp. Our page is going to be <a href="https://www.yelp.com/biz/shake-shack-new-york-54">this Shake
+Shake location</a>.</p>
+
+<p>We’ll scrape it just like normal, and make a dictionary of the information on
+it.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">()</span>
+
+<span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://www.yelp.com/biz/shake-shack-new-york-54'</span><span class="p">)</span>
+
+<span class="n">store_name</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">"../biz-page-title"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+<span class="n">full_address</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">"street-address"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+<span class="n">stars</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">"i-stars"</span><span class="p">)</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s">'title'</span><span class="p">)</span>
+<span class="n">categories</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">"category-str-list"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+
+<span class="n">store</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'name'</span><span class="p">:</span> <span class="n">store_name</span><span class="p">,</span>
+    <span class="s">'address'</span><span class="p">:</span> <span class="n">full_address</span><span class="p">,</span>
+    <span class="s">'stars'</span><span class="p">:</span> <span class="n">stars</span><span class="p">,</span>
+    <span class="s">'categories'</span><span class="p">:</span> <span class="n">categories</span>
+<span class="p">}</span>
+
+<span class="n">store</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="err">'address':</span><span class="w"> </span><span class="err">'2957</span><span class="w"> </span><span class="err">Broadway\nNew</span><span class="w"> </span><span class="err">York,</span><span class="w"> </span><span class="err">NY</span><span class="w"> </span><span class="err">10025',</span><span class="w">
+ </span><span class="err">'categories':</span><span class="w"> </span><span class="err">'Hot</span><span class="w"> </span><span class="err">Dogs,</span><span class="w"> </span><span class="err">Burgers,</span><span class="w"> </span><span class="err">Ice</span><span class="w"> </span><span class="err">Cream</span><span class="w"> </span><span class="err">&amp;</span><span class="w"> </span><span class="err">Frozen</span><span class="w"> </span><span class="err">Yogurt',</span><span class="w">
+ </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Shake</span><span class="w"> </span><span class="err">Shack',</span><span class="w">
+ </span><span class="err">'stars':</span><span class="w"> </span><span class="err">'3.5</span><span class="w"> </span><span class="err">star</span><span class="w"> </span><span class="err">rating'</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<h2 id="scraping-many-pages-on-yelp">Scraping many pages on Yelp</h2>
+
+<p>But sometimes instead of scraping <em>one</em> page, you need to scrape <em>many</em> pages.
+In this case, you need two things:</p>
+
+<ol>
+  <li>A dataframe, where you’re going to scrape for each row</li>
+  <li>A function to do the actual scraping</li>
+</ol>
+
+<h3 id="our-dataframe">Our dataframe</h3>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"yelp.csv"</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>slug</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Shake Shack</td>
+      <td>shake-shack-new-york-54</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Flat Top</td>
+      <td>flat-top-new-york</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Friedman's</td>
+      <td>friedmans-new-york-62</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="a-function-to-do-the-scraping">A function to do the scraping</h3>
+
+<p>We’re just going to take our old scraping code and make a few adjustments:</p>
+
+<h3 id="add-def-somethingsomethingrow-to-turn-it-into-a-function">1. Add <code class="highlighter-rouge">def somethingsomething(row)</code> to turn it into a function</h3>
+
+<p>Because it’s a function, we’ll need to indent.</p>
+
+<p>Also, we want to make sure we do NOT have <code class="highlighter-rouge">driver = webdriver.Chrome()</code> inside
+of the function, or else it will make a new Chrome every time we want to visit
+another page.</p>
+
+<h3 id="use-the-row-variable-so-it-isnt-always-scraping-the-same-page">2. Use the <code class="highlighter-rouge">row</code> variable so it isn’t always scraping the same page</h3>
+
+<p>Before we always got the same URL from Yelp. We don’t want to do that anymore!</p>
+
+<p><strong>Old code</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://www.yelp.com/biz/shake-shack-new-york-54"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Now we have a <code class="highlighter-rouge">row</code> variable that is our row of data. If we want to build a URL,
+we take <code class="highlighter-rouge">"https://www.yelp.com/biz/"</code> and add <code class="highlighter-rouge">row['slug']</code> (that’s how Yelp
+URLs look).</p>
+
+<p><strong>New code</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://www.yelp.com/biz/"</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s">'slug'</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<h3 id="return-a-pdseries-of-our-data-instead-of-creating-a-dictionary">3. Return a <code class="highlighter-rouge">pd.Series</code> of our data instead of creating a dictionary</h3>
+
+<p><strong>Old code</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">store</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'name'</span><span class="p">:</span> <span class="n">store_name</span><span class="p">,</span>
+    <span class="s">'address'</span><span class="p">:</span> <span class="n">full_address</span><span class="p">,</span>
+    <span class="s">'stars'</span><span class="p">:</span> <span class="n">stars</span><span class="p">,</span>
+    <span class="s">'categories'</span><span class="p">:</span> <span class="n">categories</span>
+<span class="p">}</span>
+
+<span class="n">store</span>
+</code></pre>
+</div>
+
+<p>Because it’s a function, we need to <strong>return</strong> something - and to add columns to
+our dataframe, it needs to be a <code class="highlighter-rouge">pd.Series</code>.</p>
+
+<p><strong>New code</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span>
+    <span class="s">'name'</span><span class="p">:</span> <span class="n">store_name</span><span class="p">,</span>
+    <span class="s">'address'</span><span class="p">:</span> <span class="n">full_address</span><span class="p">,</span>
+    <span class="s">'stars'</span><span class="p">:</span> <span class="n">stars</span><span class="p">,</span>
+    <span class="s">'categories'</span><span class="p">:</span> <span class="n">categories</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+
+<h2 id="complete-old-code">Complete OLD code</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">()</span>
+
+<span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://www.yelp.com/biz/shake-shack-new-york-54"</span><span class="p">)</span>
+
+<span class="n">store_name</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">"biz-page-title"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+<span class="n">full_address</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">"street-address"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+<span class="n">stars</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">"i-stars"</span><span class="p">)</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s">'title'</span><span class="p">)</span>
+<span class="n">categories</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">"category-str-list"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+
+<span class="n">store</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'name'</span><span class="p">:</span> <span class="n">store_name</span><span class="p">,</span>
+    <span class="s">'address'</span><span class="p">:</span> <span class="n">full_address</span><span class="p">,</span>
+    <span class="s">'stars'</span><span class="p">:</span> <span class="n">stars</span><span class="p">,</span>
+    <span class="s">'categories'</span><span class="p">:</span> <span class="n">categories</span>
+<span class="p">}</span>
+
+<span class="n">store</span></code></pre></figure>
+
+<h2 id="complete-new-code">Complete NEW code</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">get_yelp_info</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://www.yelp.com/biz/"</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s">'slug'</span><span class="p">])</span>
+
+    <span class="n">store_name</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">"biz-page-title"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+    <span class="n">full_address</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">"street-address"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+    <span class="n">stars</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">"i-stars"</span><span class="p">)</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s">'title'</span><span class="p">)</span>
+    <span class="n">categories</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">"category-str-list"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span>
+        <span class="s">'store_name'</span><span class="p">:</span> <span class="n">store_name</span><span class="p">,</span>
+        <span class="s">'address'</span><span class="p">:</span> <span class="n">full_address</span><span class="p">,</span>
+        <span class="s">'stars'</span><span class="p">:</span> <span class="n">stars</span><span class="p">,</span>
+        <span class="s">'categories'</span><span class="p">:</span> <span class="n">categories</span>
+    <span class="p">})</span></code></pre></figure>
+
+<h2 id="using-our-function">Using our function</h2>
+
+<p>Now that we’ve made a function, we need to <strong>use it.</strong></p>
+
+<ol>
+  <li>Open up a new <code class="highlighter-rouge">driver</code></li>
+  <li>Use <code class="highlighter-rouge">.apply</code> to use the function on each row</li>
+  <li>Use <code class="highlighter-rouge">.join</code> to add the columns to the dataframe</li>
+</ol>
+
+<p>Basically you’ll always cut and paste this code. <strong>Be sure to change your
+variable names.</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Open up a new Chrome</span>
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">()</span>
+
+<span class="c"># Take every row and send it to get_yelp_info, and combine with old data</span>
+<span class="n">new_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">get_yelp_info</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">new_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>address</th>
+      <th>categories</th>
+      <th>stars</th>
+      <th>store_name</th>
+      <th>name</th>
+      <th>slug</th>
+      <th>url</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2957 Broadway\nNew York, NY 10025</td>
+      <td>Hot Dogs, Burgers, Ice Cream &amp; Frozen Yogurt</td>
+      <td>3.5 star rating</td>
+      <td>Shake Shack</td>
+      <td>Shake Shack</td>
+      <td>shake-shack-new-york-54</td>
+      <td>https://www.yelp.com/biz/shake-shack-new-york-54</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1241 Amsterdam Ave\nNew York, NY 10027</td>
+      <td>American (New), Cafes, Breakfast &amp; Brunch</td>
+      <td>4.0 star rating</td>
+      <td>Flat Top</td>
+      <td>Flat Top</td>
+      <td>flat-top-new-york</td>
+      <td>https://www.yelp.com/biz/flat-top-new-york</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1187 Amsterdam Ave\nNew York, NY 10027</td>
+      <td>American (Traditional), Breakfast &amp; Brunch</td>
+      <td>3.5 star rating</td>
+      <td>Friedman’s</td>
+      <td>Friedman's</td>
+      <td>friedmans-new-york-62</td>
+      <td>https://www.yelp.com/biz/friedmans-new-york-62</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2937 Broadway\nNew York, NY 10025</td>
+      <td>Salad, Vegetarian</td>
+      <td>3.0 star rating</td>
+      <td>sweetgreen</td>
+      <td>sweetgreen</td>
+      <td>sweetgreen-new-york-6</td>
+      <td>https://www.yelp.com/biz/sweetgreen-new-york-6</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2168 Frederick Douglass Blvd\nNew York, NY 10026</td>
+      <td>Italian, Breakfast &amp; Brunch, Cocktail Bars</td>
+      <td>4.0 star rating</td>
+      <td>Lido</td>
+      <td>Lido</td>
+      <td>lido-new-york</td>
+      <td>https://www.yelp.com/biz/lido-new-york</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="but-what-about-beautifulsoup">But what about BeautifulSoup?</h2>
+
+<p>No problem, you can do the <em>exact same thing.</em> This isn’t about Selenium, it’s
+about pandas!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">get_yelp_with_bs</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://www.yelp.com/biz/"</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s">'slug'</span><span class="p">])</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'html.parser'</span><span class="p">)</span>
+    
+    <span class="n">store_name</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">"biz-page-title"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+    <span class="n">full_address</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">"street-address"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+    <span class="n">stars</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">"i-stars"</span><span class="p">)[</span><span class="s">'title'</span><span class="p">]</span>
+    <span class="n">categories</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s">"category-str-list"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span>
+        <span class="s">'store_name'</span><span class="p">:</span> <span class="n">store_name</span><span class="p">,</span>
+        <span class="s">'address'</span><span class="p">:</span> <span class="n">full_address</span><span class="p">,</span>
+        <span class="s">'stars'</span><span class="p">:</span> <span class="n">stars</span><span class="p">,</span>
+        <span class="s">'categories'</span><span class="p">:</span> <span class="n">categories</span>
+    <span class="p">})</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">bs_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">get_yelp_with_bs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">bs_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>address</th>
+      <th>categories</th>
+      <th>stars</th>
+      <th>store_name</th>
+      <th>name</th>
+      <th>slug</th>
+      <th>url</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>\n\n        2957 BroadwayNew York, NY 10025\n ...</td>
+      <td>\nHot Dogs,\n                    Burgers,\n   ...</td>
+      <td>3.5 star rating</td>
+      <td>\n            Shake Shack\n</td>
+      <td>Shake Shack</td>
+      <td>shake-shack-new-york-54</td>
+      <td>https://www.yelp.com/biz/shake-shack-new-york-54</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>\n\n        1241 Amsterdam AveNew York, NY 100...</td>
+      <td>\nAmerican (New),\n                    Cafes,\...</td>
+      <td>4.0 star rating</td>
+      <td>\n            Flat Top\n</td>
+      <td>Flat Top</td>
+      <td>flat-top-new-york</td>
+      <td>https://www.yelp.com/biz/flat-top-new-york</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>\n\n        1187 Amsterdam AveNew York, NY 100...</td>
+      <td>\nAmerican (Traditional),\n                   ...</td>
+      <td>3.5 star rating</td>
+      <td>\n            Friedman’s\n</td>
+      <td>Friedman's</td>
+      <td>friedmans-new-york-62</td>
+      <td>https://www.yelp.com/biz/friedmans-new-york-62</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>\n\n        2937 BroadwayNew York, NY 10025\n ...</td>
+      <td>\nSalad,\n                    Vegetarian\n</td>
+      <td>3.0 star rating</td>
+      <td>\n            sweetgreen\n</td>
+      <td>sweetgreen</td>
+      <td>sweetgreen-new-york-6</td>
+      <td>https://www.yelp.com/biz/sweetgreen-new-york-6</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>\n\n        2168 Frederick Douglass BlvdNew Yo...</td>
+      <td>\nItalian,\n                    Breakfast &amp; Br...</td>
+      <td>4.0 star rating</td>
+      <td>\n            Lido\n</td>
+      <td>Lido</td>
+      <td>lido-new-york</td>
+      <td>https://www.yelp.com/biz/lido-new-york</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="bonus-how-fast-is-selenium-vs-beautifulsoup">BONUS: How fast is Selenium vs. BeautifulSoup?</h2>
+
+<p>We can use the magic <code class="highlighter-rouge">%%time</code> to time them. <strong>IT’S A RACE!</strong></p>
+
+<p>First up, <strong>Selenium:</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">%%</span><span class="n">time</span>
+<span class="n">new_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">get_yelp_info</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">new_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>CPU times: user 89.9 ms, sys: 7.38 ms, total: 97.2 ms
+Wall time: 53.9 s
+</code></pre>
+</div>
+
+<p>Now let’s try <strong>BeautifulSoup and requests:</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">%%</span><span class="n">time</span>
+<span class="n">bs_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">get_yelp_with_bs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">bs_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>CPU times: user 6.46 s, sys: 85.3 ms, total: 6.54 s
+Wall time: 41.2 s
+</code></pre>
+</div>
+
+<p>Not that much different in this case!</p>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Overview</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2019/classes/data%20structures/overview/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Overview">
+  <meta property="twitter:title" content="Overview">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2019</a> &gt;  Overview</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Overview</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <p>This is a rough run-through of dictionaries and lists, in the style that we did in class. If you’d like something clearer or more specific, you’ll probably want to check out the individual pages on <a href="../lists">lists</a>, <a href="../dictionaries">dictionaries</a> and <a href="../functions-and-methods">functions and methods</a>!</p>
+
+<h3 id="variable-assignment">Variable Assignment</h3>
+
+<p>This is just a quick overview of how variables work!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">name</span> <span class="o">=</span> <span class="s">"Soma"</span>
+<span class="n">city</span> <span class="o">=</span> <span class="s">"Brooklyn"</span>
+<span class="n">hometown</span> <span class="o">=</span> <span class="s">"Virginia"</span>
+<span class="n">age</span> <span class="o">=</span> <span class="mi">34</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"Hi, I'm"</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s">"from"</span><span class="p">,</span> <span class="n">hometown</span><span class="p">)</span>
+
+<span class="n">friend_name</span> <span class="o">=</span> <span class="s">"Jen"</span>
+<span class="n">friend_city</span> <span class="o">=</span> <span class="s">"Brooklyn"</span>
+<span class="n">friend_age</span> <span class="o">=</span> <span class="mi">33</span>
+<span class="n">friend_hometown</span> <span class="o">=</span> <span class="s">"Massachusetts"</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"This is"</span><span class="p">,</span> <span class="n">friend_name</span><span class="p">,</span> <span class="s">"from"</span><span class="p">,</span> <span class="n">friend_hometown</span><span class="p">)</span>
+
+<span class="n">other_friend_name</span> <span class="o">=</span> <span class="s">"Bartleby"</span>
+<span class="n">other_friend_city</span> <span class="o">=</span> <span class="s">"Brooklyn"</span>
+<span class="n">other_friend_age</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">other_friend_hometown</span> <span class="o">=</span> <span class="s">"New Jersey"</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"Here's"</span><span class="p">,</span> <span class="n">other_friend_name</span><span class="p">,</span> <span class="s">"from"</span><span class="p">,</span> <span class="n">other_friend_hometown</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p><strong>Variable assignment</strong> can be more complicated than it seems at first glance. Particularly, once you start manipulating your variables with math. For example, what should print if you run the following code?</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">fingers</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">fingers</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="k">print</span><span class="p">(</span><span class="n">fingers</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">fingers</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>If you run this code in command line (type <code class="highlighter-rouge">python3</code> and then type out what you see above), you’ll notice that you don’t print 10 as you might expect, but rather, you’ll print 5 again. <code class="highlighter-rouge">fingers + 5</code> didn’t actually change the variable <code class="highlighter-rouge">fingers</code>.</p>
+
+<p>In order to pass add onto the old value, we have to do something like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">fingers</span> <span class="o">=</span> <span class="n">fingers</span> <span class="o">+</span> <span class="mi">5</span>
+</code></pre>
+</div>
+
+<p>In math, we couldn’t do this! If your calculations get you to the point where x = x + 5, you know something has gone terribly wrong. BUT, in the world of coding, we HAVE to do this to add onto the existing value of a variable. The reason it works is that your computer, or python interpreter, always reads the <strong>right-hand side</strong> of a variable assignment first. <a href="http://anh.cs.luc.edu/python/hands-on/3.1/handsonHtml/variables.html">This is worth reading up on if you’re unconvinced</a>!</p>
+
+<p>For now, what if we could keep all the information about a specific thing in one place, instead of using a billion variables?</p>
+
+<h3 id="dictionaries--lists">Dictionaries &amp; Lists</h3>
+
+<p><strong>Dictionaries</strong> allow us to save lots of information about one particular thing.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">me</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">"Soma"</span><span class="p">,</span> <span class="s">'city'</span><span class="p">:</span> <span class="s">"Brooklyn"</span><span class="p">,</span> <span class="s">'age'</span><span class="p">:</span> <span class="mi">34</span> <span class="p">}</span>
+<span class="c"># In order to get things out you use me['name']</span>
+<span class="k">print</span><span class="p">(</span><span class="n">me</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span> <span class="c"># output will be: Soma</span>
+<span class="k">print</span><span class="p">(</span><span class="n">me</span><span class="p">[</span><span class="s">'city'</span><span class="p">])</span> <span class="c"># output will be: Brooklyn</span>
+</code></pre>
+</div>
+
+<p>The data in a dictionary is structured in comma-separated <strong>key-value pairs</strong>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span> <span class="s">'key'</span><span class="p">:</span> <span class="s">'value'</span><span class="p">,</span> <span class="s">'key2'</span><span class="p">:</span> <span class="s">'value2'</span><span class="p">}</span>
+</code></pre>
+</div>
+
+<p>When you see curly braces, <code class="highlighter-rouge"><span class="p">{</span><span class="w"> </span><span class="p">}</span></code>, you’ll know that you’re dealing with a dictionary.</p>
+
+<p>The key-value pairs in a dictionary are not ordered, meaning that each time you <code class="highlighter-rouge">print(me)</code>, you may see <code class="highlighter-rouge">name</code>, <code class="highlighter-rouge">city</code>, and <code class="highlighter-rouge">age</code> appear in different orders.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">friend</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">'Jen'</span><span class="p">,</span> <span class="s">'city'</span><span class="p">:</span> <span class="s">'Brooklyn'</span><span class="p">,</span> <span class="s">'age'</span><span class="p">:</span> <span class="mi">33</span><span class="p">}</span>
+<span class="k">print</span><span class="p">(</span><span class="n">friend</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span>
+
+<span class="c"># 'name' is a key</span>
+<span class="c"># 'city' is a key, 'age' is a key</span>
+<span class="c"># keys are the words in your dictionary</span>
+<span class="c"># 'Blake' is a value</span>
+<span class="c"># every key can only have one value</span>
+<span class="n">other</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">'Blake'</span><span class="p">,</span> <span class="s">'city'</span><span class="p">:</span> <span class="s">'Brooklyn'</span><span class="p">,</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">'Blakester'</span> <span class="p">}</span>
+<span class="k">print</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<p><strong>Lists</strong> are a bit different. They ARE ordered (and therefore will print the same way each time).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># this is a list</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span> <span class="s">'Blake'</span><span class="p">,</span> <span class="s">'Blakie'</span><span class="p">,</span> <span class="s">'Blakester'</span><span class="p">,</span> <span class="s">'Mister Blake'</span><span class="p">,</span> <span class="s">'Professor Blakesburg'</span> <span class="p">]</span>
+
+<span class="c"># prints them all, pretty good</span>
+<span class="c"># programming languages always start counting from zero</span>
+<span class="k">print</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">names</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="c"># This is how we get the first one in the list</span>
+<span class="k">print</span><span class="p">(</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<p>In the code above, we are printing by specifying the <strong>index</strong>, or position, of an item in our list. In programming, we count starting with 0 (so the first index position is 0). Forgetting this can lead to the ever popular <strong>off-by-one error</strong>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># we don't do these things in Python:</span>
+<span class="c"># names.len</span>
+<span class="c"># names.length</span>
+<span class="c"># names.length()</span>
+
+<span class="c"># instead we do this:</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">))</span>
+
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">87</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">9</span> <span class="p">]</span>
+</code></pre>
+</div>
+
+<h3 id="functions--methods">Functions &amp; Methods</h3>
+
+<p>Functions and methods are ways of interacting with your data.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+<span class="c"># Length of the list</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">))</span>
+<span class="c"># Biggest of the list</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">numbers</span><span class="p">))</span>
+<span class="c"># Smallest from the list</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">numbers</span><span class="p">))</span>
+
+<span class="c"># These are called FUNCTIONS!!!!!!!</span>
+<span class="c"># Functions are like factories</span>
+<span class="c"># You send a list to the min factory and get back the smallest</span>
+
+<span class="k">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">numbers</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+<span class="n">sorted_numbers</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"sorted:"</span><span class="p">,</span> <span class="n">sorted_numbers</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"unsorted:"</span><span class="p">,</span> <span class="n">numbers</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># This is called a METHOD</span>
+<span class="k">print</span><span class="p">(</span><span class="n">numbers</span><span class="o">.</span><span class="n">sort</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">numbers</span><span class="o">.</span><span class="n">sort</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s">"Soma"</span>
+<span class="k">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="c"># You like quiet</span>
+<span class="k">print</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+<span class="c"># I like yellin'</span>
+<span class="k">print</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+<span class="c"># Let's see a crazy thing</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Ten Things I Hate About You"</span><span class="o">.</span><span class="n">swapcase</span><span class="p">())</span>
+
+<span class="c"># What's the method for figuring out how many</span>
+<span class="c"># o's are in "Google" (a Python string)</span>
+<span class="n">word</span> <span class="o">=</span> <span class="s">"Google"</span>
+<span class="n">number_of_os</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">'o'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"There are"</span><span class="p">,</span> <span class="n">number_of_os</span><span class="p">,</span> <span class="s">"o's in "</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>
+
+<span class="n">cats</span> <span class="o">=</span> <span class="p">[</span> <span class="s">"Smushface"</span><span class="p">,</span> <span class="s">"Callery"</span><span class="p">,</span> <span class="s">"Naples"</span> <span class="p">]</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">cats</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">cats</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">cats</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">cats</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<h3 id="for-loops">For Loops</h3>
+
+<p><strong>For Loops</strong> are used to loop through a list of things. It basically says, “for each item in my list, do something to each item.”</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># This is called a for loop</span>
+<span class="c"># it... loops through stuff</span>
+<span class="c"># "Flow control" "language construct"</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"THIS IS THE CAT IN CATS ONE:"</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">cats</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">cat</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>The code above basically says, for each cat in my list of cats, print that cat! But, just because we called out list ‘cats’ doesn’t mean that we have to refer to each item/cat in that list as a cat in our for loop.</p>
+
+<p>This still works:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="s">"THIS IS THE AIRPLANE ONE:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">airplane</span> <span class="ow">in</span> <span class="n">cats</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">airplane</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Our structure is: <code class="highlighter-rouge">For [arbitrary_name] in [list_name]:</code>. Be careful about using variable names you’ve already used before though! That will not work so well.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># This should still be "Soma"</span>
+<span class="k">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"THIS IS THE NAME IN CATS ONE:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cats</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s">"Smushface"</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Here's some food, my fattest cat"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Sorry it looks like we're out of food, I guess?"</span><span class="p">)</span>
+
+<span class="c">#print(name)</span>
+</code></pre>
+</div>
+
+<p>You can also have a <strong>list of dictionaries</strong>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">cat_info</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">'Smushface'</span><span class="p">,</span> <span class="s">'age'</span><span class="p">:</span> <span class="mi">6</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">'Callery'</span><span class="p">,</span> <span class="s">'age'</span><span class="p">:</span> <span class="mi">2</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">'Naples'</span><span class="p">,</span> <span class="s">'age'</span><span class="p">:</span> <span class="s">'unknown'</span> <span class="p">}</span>
+<span class="p">]</span>
+</code></pre>
+</div>
+
+<p>You can pull out information from your list of dictionaries by using what you know about list indices and dictionary keys! Use the following structure: <code class="highlighter-rouge">list_name[list_index][dictionary_key]</code>. Examples below:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># prints the first dictionary in your list</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cat_info</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c"># prints the value associated with the 'name' key in the second dictionary in your list</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cat_info</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">'name'</span><span class="p">])</span>
+
+<span class="n">callery_the_cat</span> <span class="o">=</span> <span class="n">cat_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">callery_the_cat</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span>
+
+<span class="n">cat</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">'Stranger cat'</span><span class="p">}</span>
+<span class="n">cat</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span>
+</code></pre>
+</div>
+
+<p>If you have a list of dictionaries, you can also use a for loop to loop through the data contained inside. <strong>Get really accustomed to this! This is literally like the most important thing ever.</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">cat_info</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">'Smushface'</span><span class="p">,</span> <span class="s">'age'</span><span class="p">:</span> <span class="mi">6</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">'Callery'</span><span class="p">,</span> <span class="s">'age'</span><span class="p">:</span> <span class="mi">2</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">'Naples'</span><span class="p">,</span> <span class="s">'age'</span><span class="p">:</span> <span class="s">'unknown'</span> <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">cat_info</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">cat</span><span class="p">[</span><span class="s">'age'</span><span class="p">])</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">'unknown'</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"NO ONE KNOWS HOW OLD"</span><span class="p">,</span> <span class="n">cat</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s">"IS"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">cat</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s">"is"</span><span class="p">,</span> <span class="n">cat</span><span class="p">[</span><span class="s">'age'</span><span class="p">],</span> <span class="s">"years old"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="common-errors">Common Errors</h2>
+
+<ul>
+  <li>Don’t forget to <strong>save</strong> before re-running your script!</li>
+  <li>Are you in the right folder? Atom tells you where your file is located if you look at the top of your window.</li>
+  <li>Indentation is super import – be sure that the indentation of your for loops and if-statements are what you’d like them to be.</li>
+</ul>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

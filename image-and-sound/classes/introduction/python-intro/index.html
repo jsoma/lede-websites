@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Python basics</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/image-and-sound/classes/introduction/python-intro/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Python basics">
+  <meta property="twitter:title" content="Python basics">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Image and Sound, Data, CJS 2017</a> &gt;  Python basics</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Python basics</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="a-video">A video</h2>
+
+<p>If you’d rather spend a half-hour listening and watching than reading, here’s a video version of (approximately) the content below.</p>
+
+<div class="videowrapper">
+<iframe width="100%" src="https://www.youtube.com/embed/L7zZrP-brxI" frameborder="0" allowfullscreen=""></iframe>
+</div>
+
+<p>You’ll definitely want to fullscreen it.</p>
+
+<h2 id="how-to-write-and-run-python-scripts">How to write and run Python scripts</h2>
+
+<ol>
+  <li>Open up your text editor and create a new file: <code class="highlighter-rouge">File &gt; Save</code> with the name <code class="highlighter-rouge">intro.py</code></li>
+  <li>In the shell, <code class="highlighter-rouge">cd</code> into the folder where you saved intro.py.</li>
+  <li>Type <code class="highlighter-rouge">mkvirtualenv introductions</code> into your shell to create a <strong>Python 3 virtual environment</strong> called <code class="highlighter-rouge">introductions</code>.</li>
+  <li>You’re automatically inside of the new virtual environment, but type <code class="highlighter-rouge">workon introductions</code> to practice selecting one anyway.</li>
+  <li>Now let’s edit <code class="highlighter-rouge">intro.py</code> in Atom so that our script actually does things!</li>
+</ol>
+
+<blockquote>
+  <p><strong>Note:</strong> There is seriously no reason to use a virtual environment here, but when you’re like 65 you’ll find out that they’re actually useful.</p>
+</blockquote>
+
+<p>In order to run your new Python script</p>
+
+<ol>
+  <li>Open up Terminal</li>
+  <li>Use <code class="highlighter-rouge">cd</code> to move to wherever you save your <code class="highlighter-rouge">intro.py</code></li>
+  <li>Use the <code class="highlighter-rouge">python</code> command to run the script by typing <code class="highlighter-rouge">python intro.py</code></li>
+</ol>
+
+<h3 id="printing">Printing</h3>
+
+<blockquote>
+  <p><strong>Note:</strong> Any lines that start with a <code class="highlighter-rouge">#</code> are called <strong>comments</strong>, and they’re just notes for you to read - Python ignores them! Commenting your code is a great way to ensure you remember what different parts do later on.</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="s">"Hello world"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Hello world'</span><span class="p">)</span>
+<span class="c"># Double-quotes and single-quotes work the same in python</span>
+<span class="c"># But don't mix them!</span>
+
+
+<span class="c"># These print statements won't print a space between "Hello" and "World"</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span> <span class="o">+</span> <span class="s">"world"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="s">"world"</span><span class="p">)</span>
+
+<span class="c"># These will:</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span> <span class="o">+</span> <span class="s">" world"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="s">" world"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="arithmetic--casting">Arithmetic &amp; Casting</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># This will make your computer mad because it can't add a string to an integer.</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'10'</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="c"># Strings and integers are different data types!</span>
+<span class="c"># Cast your string into an int(eger)</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="s">'10'</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span>
+<span class="c"># Output is 20.</span>
+
+<span class="c"># Or cast your int into a string:</span>
+<span class="k">print</span> <span class="p">(</span><span class="s">'10'</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="c"># Output is 1010</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">'Hello'</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="c"># This gives you "Hello10" back.</span>
+</code></pre>
+</div>
+
+<h3 id="variables--taking-input">Variables &amp; Taking Input</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Store things in variables!</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s">"Dennis"</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello, "</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+
+<span class="c"># Don't use spaces in variable names</span>
+<span class="n">last_name</span> <span class="o">=</span> <span class="n">Soma</span> <span class="c"># This is okay</span>
+<span class="n">last</span> <span class="n">name</span> <span class="o">=</span> <span class="n">Soma</span> <span class="c"># This will not work</span>
+<span class="n">lastName</span> <span class="o">=</span> <span class="n">Soma</span> <span class="c"># Works!</span>
+
+
+<span class="c"># Store user input in a variable!</span>
+<span class="n">name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"What's your name?"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello, "</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="if-statements">If-Statements</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">year_of_birth</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"What year were you born in? "</span><span class="p">)</span>
+<span class="n">age</span> <span class="o">=</span> <span class="mi">2016</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">year_of_birth</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"You are roughly "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">age</span><span class="p">)</span> <span class="o">+</span> <span class="s">" years old"</span><span class="p">)</span>
+
+<span class="c"># Sample if-statement</span>
+<span class="k">if</span> <span class="n">age</span> <span class="o">==</span> <span class="mi">33</span> <span class="ow">or</span> <span class="n">age</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"So cool!!!! You get a free beer unit!!!!"</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">21</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Here's your beer unit"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Nope, sorry"</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"Goodbye"</span><span class="p">)</span>
+
+<span class="c"># Note that we don't use '=' in comparisons, we use '=='</span>
+<span class="c"># Indentation is meaningful! If something is not indented underneath the if/elif/else, it isn't associated with that particular condition.</span>
+<span class="c"># Only the first condition that is TRUE will be run -- it doesn't matter if another condition is also true further down the if-statement.</span>
+</code></pre>
+</div>
+
+<p>Now, type <code class="highlighter-rouge">python intro.py</code> into your shell to run your very first Python script! If there are errors in your Python script, don’t worry! Your shell will definitely let you know.</p>
+
+<p><code class="highlighter-rouge">deactivate</code> to shut down your virtual environment when you are done.</p>
+
+<h2 id="common-errors">Common Errors</h2>
+
+<blockquote>
+  <p><strong>TIP:</strong> Pay attention to the errors you get when you run your Python script! Terminal will probably tell you exactly where you went wrong (the line number or character nearest to the error).</p>
+</blockquote>
+
+<ul>
+  <li>Make sure you have spelled and capitalized everything correctly!</li>
+  <li>Make sure you’re in the correct folder; <code class="highlighter-rouge">pwd</code> all the time/pay attention to the folder Terminal says you’re in.</li>
+  <li>Make sure you saved your Python script where you think you did.</li>
+  <li>Make sure you’re running Python 3! Run <code class="highlighter-rouge">python --version</code> to check
+    <ul>
+      <li>If you’re not running Python 3, you probably forgot to start up your virtual environment <code class="highlighter-rouge">mkvirtualenv [name]</code></li>
+      <li>You can name your virtual environment anything you want.</li>
+      <li>When you’re done, close out of your virtual environment using <code class="highlighter-rouge">deactivate</code></li>
+    </ul>
+  </li>
+  <li>When writing code, make sure you don’t call a variable before you tell your code what the variable is! For example:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># This will work:</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s">"Soma"</span>
+<span class="k">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<span class="c"># This will not work:</span>
+<span class="k">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s">"Soma"</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>In if-statements, make sure you’re ending ALL conditions with <code class="highlighter-rouge">:</code></li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="n">do</span> <span class="n">something</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">do</span> <span class="n">something</span> <span class="n">different</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>In if-statements, make sure you are indenting correctly! If your “do something”’s aren’t indented underneath your condition, the logic of your code may not be what you think it is!</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># These two if-statements will print different things!</span>
+
+<span class="c"># If statement #1</span>
+<span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"n is less than 5."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"n is greater than 5."</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Pick a smaller number."</span><span class="p">)</span>
+
+<span class="c"># If statement #2</span>
+<span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"n is less than 5."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"n is greater than 5."</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Pick a smaller number."</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>You can also chain together multiple <code class="highlighter-rouge">if</code> statements with <code class="highlighter-rouge">elif</code>!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"n is less than 5"</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"n is between 5-9"</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"n is between 10-99"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"n is 100 or greater"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

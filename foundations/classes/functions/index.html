@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Functions</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/functions/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Functions">
+  <meta property="twitter:title" content="Functions">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Foundations, Lede 2016</a> &gt;  Functions</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Functions</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations/classes/functions.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="class-9-functions">Class 9: Functions</h1>
+
+<h2 id="a-painful-analogy">A painful analogy</h2>
+
+<p>What do you do when you wake up in the morning?</p>
+
+<p>I don’t know about you, but I <strong>get ready.</strong></p>
+
+<p>“Obviously,” you say, a little too snidely for my liking. You’re particular,
+very detail-oriented, and need more information out of me.</p>
+
+<p>Fine, then. Since you’re going to be nitpicky, I might be able to break it down
+a little bit more for you…</p>
+
+<ol>
+  <li>I get out of bed</li>
+  <li>I take a shower</li>
+  <li>I get dressed</li>
+  <li><strong>I eat breakfast</strong></li>
+</ol>
+
+<p>Unfortunately that’s not good enough for you. “But how do you eat breakfast?”
+Well, maybe I…</p>
+
+<ol>
+  <li>Get a bowl out of a cabinet</li>
+  <li>Get some cereal out of the pantry</li>
+  <li>Get some milk out of the fridge</li>
+  <li>Pour some cereal into a bowl</li>
+  <li>Pour some milk into the bowl</li>
+  <li>Sit down at the table and start eating</li>
+</ol>
+
+<p>“Are you eating with a spoon?” you interrupt. “When did you get the spoon out?
+Was that after the milk, or before the bowl?”</p>
+
+<p>It’s annoying people like this that make us have <strong>functions.</strong></p>
+
+<blockquote>
+  <p><strong>FUN FACT:</strong> The joke’s on you, because <strong>I don’t even actually eat cereal.</strong>
+Maybe I don’t even get ready in the morning, either.</p>
+</blockquote>
+
+<h2 id="what-is-a-function">What is a function?</h2>
+
+<p>Functions are chunks of code that do something. They’re different than the code
+we’ve written so far because <strong>they have names</strong>.</p>
+
+<p>Instead of detailing each and every step involved in eating breakfast, I just
+use “I eat breakfast” as a shorthand for many, many detailed steps. Functions
+are the same - they allow us to take complicated parts of code, give it a name,
+and type <strong><code class="highlighter-rouge">just_eat_breakfast()</code></strong> every morning instead of twenty-five lines
+of code.</p>
+
+<h2 id="what-are-some-examples-of-functions">What are some examples of functions?</h2>
+
+<p>We’ve used a lot of functions in our time with Python. You remember our good
+buddy <code class="highlighter-rouge">len</code>? It’s a <strong>function</strong> that gives back the length of whatever you send
+its way, e.g. <code class="highlighter-rouge">len("ghost")</code> is <code class="highlighter-rouge">5</code> and <code class="highlighter-rouge">len("cartography")</code> is 11.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nb">len</span></code></pre></figure>
+
+<p><strong>Almost everything useful is a function.</strong> Python has <a href="https://docs.python.org/2/library/functions.html">a ton of other built-in
+functions</a>!</p>
+
+<p>Along with <code class="highlighter-rouge">len</code>,  a couple you might have seen are:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">abs(...)</code> takes a number and returns the absolute value of the number</li>
+  <li><code class="highlighter-rouge">int(...)</code> takes a string or float and returns it as an integer</li>
+  <li><code class="highlighter-rouge">round(...)</code> takes a float and returns a rounded version of it</li>
+  <li><code class="highlighter-rouge">sum(...)</code> takes a list and returns the sum of all of its elements</li>
+  <li><code class="highlighter-rouge">max(...)</code> takes a list and returns the largest of all of its selements</li>
+  <li><code class="highlighter-rouge">print(...)</code> takes whatever you want to give it and displays it on the screen</li>
+</ul>
+
+<p>Functions can also come from packages and libraries. The <code class="highlighter-rouge">.get</code> part of
+<code class="highlighter-rouge">requests.get</code> is a function, too!</p>
+
+<p>And here, to prove it to you?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nb">max</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">requests</span><span class="o">.</span><span class="n">get</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># And if we just wanted to use them, for some reason</span>
+<span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="mi">34</span>
+<span class="k">print</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="s">"in absolute value is"</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"We can add after casting to int:"</span><span class="p">,</span> <span class="mi">55</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="s">"55"</span><span class="p">))</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mf">4.4847</span>
+<span class="k">print</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="s">"can be rounded to"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="s">"can also be rounded to 2 decimal points"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">54</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"The total of the list is"</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">))</span></code></pre></figure>
+
+<p><strong>See? Functions make the world run.</strong></p>
+
+<p>One useful role they play is <strong>functions hide code that you wouldn’t want to
+type a thousand times.</strong> For example, you might have used <code class="highlighter-rouge">urlretrieve</code> from
+<code class="highlighter-rouge">urllib</code> to download files from around the internet. If you <em>didn’t</em> use
+<code class="highlighter-rouge">urlretrieve</code> you’d have to type all of this:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">reporthook</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">url_type</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">splittype</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">closing</span><span class="p">(</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+
+        <span class="c"># Just return the local path and the "headers" for file://</span>
+        <span class="c"># URLs. No sense in performing a copy unless requested.</span>
+        <span class="k">if</span> <span class="n">url_type</span> <span class="o">==</span> <span class="s">"file"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">headers</span>
+
+        <span class="c"># Handle temporary file setup.</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">tfp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tfp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">_url_tempfiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">tfp</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">filename</span><span class="p">,</span> <span class="n">headers</span>
+            <span class="n">bs</span> <span class="o">=</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">8</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">read</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">blocknum</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="s">"content-length"</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">:</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">headers</span><span class="p">[</span><span class="s">"Content-Length"</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">reporthook</span><span class="p">:</span>
+                <span class="n">reporthook</span><span class="p">(</span><span class="n">blocknum</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="n">block</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">bs</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">block</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="n">read</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+                <span class="n">tfp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+                <span class="n">blocknum</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">reporthook</span><span class="p">:</span>
+                    <span class="n">reporthook</span><span class="p">(</span><span class="n">blocknum</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">size</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">read</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ContentTooShortError</span><span class="p">(</span>
+            <span class="s">"retrieval incomplete: got only </span><span class="si">%</span><span class="s">i out of </span><span class="si">%</span><span class="s">i bytes"</span>
+            <span class="o">%</span> <span class="p">(</span><span class="n">read</span><span class="p">,</span> <span class="n">size</span><span class="p">),</span> <span class="n">result</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></code></pre></figure>
+
+<p>Horrifying, right? Thank goodness for functions.</p>
+
+<h2 id="writing-your-own-functions">Writing your own functions</h2>
+
+<p>I’ve always been kind of jealous of <code class="highlighter-rouge">len(...)</code> and its crowd. It seemed unfair
+that Python made a list of cool, important functions, and neither me nor you had
+any say in the matter. What if I want a function that turns all of the periods
+in a sentence into exclamation points, or prints out a word a hundred million
+times?</p>
+
+<p>Well, turns out <strong>that isn’t a problem</strong>. We can do that. Easily! <em>And we will</em>.
+If you can type <code class="highlighter-rouge">def</code> and use a colon, you can write a function.</p>
+
+<p>A function that you write yourself looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># A function to multiply a number by two</span></code></pre></figure>
+
+<p>It has a handful of parts:</p>
+
+<ol>
+  <li><strong><code class="highlighter-rouge">def</code></strong> - tells Python “hey buddy, we’re about to define a function! Get
+ready.” And Python appropriately prepares itself.</li>
+  <li><strong><code class="highlighter-rouge">double</code></strong> - is the <strong>name</strong> of the function, and it’s how you’ll refer to
+the function later on. For example, <code class="highlighter-rouge">len</code>’s function name is (obviously) <code class="highlighter-rouge">len</code>.</li>
+  <li><strong><code class="highlighter-rouge">(number)</code></strong> - defines the <strong>parameters</strong> that the function “takes.” You
+can see that this function is called <code class="highlighter-rouge">double</code>, and you send it one parameter
+that will be called <code class="highlighter-rouge">number</code>.</li>
+  <li><strong><code class="highlighter-rouge">return bigger</code></strong> - is called the <strong>return statement</strong>. If the function is
+a factory, this is the shipping department - <strong>return</strong> tells you what to send
+back to the main program.</li>
+</ol>
+
+<p>You’ll see it doesn’t <em>do</em> anything, though. That’s because we haven’t
+<strong>called</strong> the function, which is a programmer’s way of saying <strong>use</strong> the
+function. Let’s use it!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="s">"2 times two is"</span><span class="p">,</span> <span class="n">double</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"10 times two is"</span><span class="p">,</span> <span class="n">double</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"56 times two is"</span><span class="p">,</span> <span class="n">double</span><span class="p">(</span><span class="mi">56</span><span class="p">))</span>
+<span class="n">age</span> <span class="o">=</span> <span class="mi">76</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Double your age is"</span><span class="p">,</span> <span class="n">double</span><span class="p">(</span><span class="n">age</span><span class="p">))</span></code></pre></figure>
+
+<h2 id="function-naming">Function Naming</h2>
+
+<p>Your function name has to be <strong>unique</strong>, otherwise Python will get confused. No
+other functions or variabels can share its name!</p>
+
+<p>For example, if you call it <code class="highlighter-rouge">len</code> it’ll forget about the built-in <code class="highlighter-rouge">len</code>
+function, and if you give one of your variables the name <code class="highlighter-rouge">print</code> suddenly Python
+won’t understand how <code class="highlighter-rouge">print(...)</code> works anymore.</p>
+
+<p>If you end up doing this, you’ll get errors like the one below</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">"Hello "</span> <span class="o">+</span> <span class="n">name</span>
+
+<span class="c"># This one works</span>
+<span class="k">print</span><span class="p">(</span><span class="n">greet</span><span class="p">(</span><span class="s">"Soma"</span><span class="p">))</span>
+
+<span class="c"># Overwrite the function greet with a string</span>
+<span class="n">greet</span> <span class="o">=</span> <span class="s">"blah"</span>
+
+<span class="c"># Trying the function again breaks</span>
+<span class="k">print</span><span class="p">(</span><span class="n">greet</span><span class="p">(</span><span class="s">"Soma"</span><span class="p">))</span></code></pre></figure>
+
+<h2 id="parameters">Parameters</h2>
+
+<p>In our function <code class="highlighter-rouge">double</code>, we have a parameter called <code class="highlighter-rouge">number</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">double</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="n">bigger</span> <span class="o">=</span> <span class="n">number</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">bigger</span>
+</code></pre>
+</div>
+<p>Notice in the last example up above, though, we called <code class="highlighter-rouge">double(age)</code>. Those
+don’t match!!!</p>
+
+<p>The thing is, <strong>your function doesn’t care what the variable you send it is
+called</strong>. Whatever you send it, it will rename. It’s like if someone adopted my
+cat <em>Smushface</em>, they might think calling her <em>Petunia</em> would be a little bit
+nicer (it wouldn’t be, but I wouldn’t do anything about it).</p>
+
+<p>Here’s an example with my favorite variable name <code class="highlighter-rouge">potato_soup</code></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">exclaim</span><span class="p">(</span><span class="n">potato_soup</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">potato_soup</span> <span class="o">+</span> <span class="s">"!!!!!!!!!!"</span>
+
+<span class="n">invitation</span> <span class="o">=</span> <span class="s">"I hope you can come to my wedding"</span>
+<span class="k">print</span><span class="p">(</span><span class="n">exclaim</span><span class="p">(</span><span class="n">invitation</span><span class="p">))</span>
+
+<span class="n">line</span> <span class="o">=</span> <span class="s">"I am sorry to hear you have the flu"</span>
+<span class="k">print</span><span class="p">(</span><span class="n">exclaim</span><span class="p">(</span><span class="n">line</span><span class="p">))</span></code></pre></figure>
+
+<p><code class="highlighter-rouge">invitation</code> and <code class="highlighter-rouge">line</code> both get renamed to <code class="highlighter-rouge">potato_soup</code> inside of the
+function, so you can reuse the function with <strong>any</strong> variable of <strong>any</strong> name.</p>
+
+<p>Let’s say I have a function that does some <strong>intense calculations</strong>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sum_times_two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="n">added</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+    <span class="k">return</span> <span class="n">added</span> <span class="o">*</span> <span class="mi">2</span>
+</code></pre>
+</div>
+
+<p>To reiterate: <strong><code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> have nothing to do with the values outside of the
+function</strong>. You don’t have to make variables called <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> and then send
+them to the function, the function takes care of that by itself. For example,
+the below examples are perfectly fine.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">sum_times_two</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">sum_times_two</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>When you’re outside of the function, you almost <strong>never have to think about
+what’s inside the function.</strong> You don’t care about what variabels are called or
+<em>anything</em>. It’s a magic box. Think about how you don’t know what <code class="highlighter-rouge">len</code> looks
+like inside, or <code class="highlighter-rouge">print</code>, but you use them all of the time!</p>
+
+<h2 id="why-functions">Why functions?</h2>
+
+<p>Two reasons to use functions, since maybe you’ll ask:</p>
+
+<p><strong>Don’t Repeat Yourself</strong> - If you find yourself writing the same code again and
+again, it’s a good time to put that code into a function. <code class="highlighter-rouge">len(...)</code> is a
+function because Python people decided that you shouldn’t have to write length-
+calculating code every time you wanted to see how many characters were in a
+string.</p>
+
+<p><strong>Code Modularity</strong> - sometimes it’s just nice to <em>organize</em> your code. All of
+your parts that deal with counting dog names can go over here, and all of the
+stuff that has to do with boroughs goes over there. In the end it can make for
+more readable and maintanable code. (Maintainable code = code you can edit in
+the future without thinking real hard)</p>
+
+<p>Those reasons probably don’t mean much to you right now, and I sure don’t blame
+you. Abstract programming concepts are just dumb abstract things until you
+actually start using them.</p>
+
+<p>Let’s say I wanted to greet someone and then tell them how long their name is,
+because I’m pedantic.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">name</span> <span class="o">=</span> <span class="s">"Nancy"</span>
+<span class="n">name_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s">"your name is"</span><span class="p">,</span> <span class="n">name_length</span><span class="p">,</span> <span class="s">"letters long"</span><span class="p">)</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s">"Brick"</span>
+<span class="n">name_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s">"your name is"</span><span class="p">,</span> <span class="n">name_length</span><span class="p">,</span> <span class="s">"letters long"</span><span class="p">)</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s">"Saint Augustine"</span>
+<span class="n">name_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s">"your name is"</span><span class="p">,</span> <span class="n">name_length</span><span class="p">,</span> <span class="s">"letters long"</span><span class="p">)</span></code></pre></figure>
+
+<p><strong>Do you know how exhausted I got typing all of that out?</strong> And how it makes no
+sense at all? Luckily, functions save us: all of our code goes into one place so
+we don’t have to repeat ourselves, <em>and</em> we can give it a descriptive name.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">weird_greeting</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="n">name_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s">"your name is"</span><span class="p">,</span> <span class="n">name_length</span><span class="p">,</span> <span class="s">"letters long"</span><span class="p">)</span>
+
+<span class="n">weird_greeting</span><span class="p">(</span><span class="s">"Nancy"</span><span class="p">)</span>
+<span class="n">weird_greeting</span><span class="p">(</span><span class="s">"Brick"</span><span class="p">)</span>
+<span class="n">weird_greeting</span><span class="p">(</span><span class="s">"Saint Augustine"</span><span class="p">)</span></code></pre></figure>
+
+<h1 id="return"><code class="highlighter-rouge">return</code></h1>
+
+<p>The role of a function is generally <strong>to do something and then send the result
+back to us</strong>. <code class="highlighter-rouge">len</code> sends us back the length of the string, <code class="highlighter-rouge">requests.get</code> sends
+us back the web page we requested.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">double</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="mi">2</span>
+</code></pre>
+</div>
+
+<p><strong>This is called the <code class="highlighter-rouge">return</code> statement.</strong> You don’t <em>have</em> to send something
+back (<code class="highlighter-rouge">print</code> doesn’t) but you usually want to.</p>
+
+<h1 id="writing-a-custom-function">Writing a custom function</h1>
+
+<p>Let’s say we have some code that compares the number of boats you have to the
+number of cars you have.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="n">boat_count</span> <span class="o">&gt;</span> <span class="n">car_count</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">"Larger"</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">"Smaller"</span>
+</code></pre>
+</div>
+
+<p>Simple, right? But unfortunately we’re at a rich people convention where they’re
+always comparing the number of boats to the number of cars to the number of
+planes etc etc etc. If we have to check <em>again and again and again and again</em>
+for all of those people and always print <em>Larger</em> or <em>Smaller</em> I’m sure we’d get
+bored of typing all that. So let’s convert it to a function!</p>
+
+<p>Let’s give our function a <strong>name</strong> of <code class="highlighter-rouge">size_comparison</code>. Remember: We can name
+our functions whatever we want, <em>as long as it’s unique</em>.</p>
+
+<p>Our function will take <strong>two parameters</strong>. they’re <code class="highlighter-rouge">boat_coat</code> and <code class="highlighter-rouge">car_count</code>
+above, but we want generic, re-usable names, so maybe like, uh, <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code>?</p>
+
+<p>For our function’s <strong>return value</strong>, let’s have it send back <code class="highlighter-rouge">"Larger"</code> or
+<code class="highlighter-rouge">"Smaller"</code>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Our cool function</span>
+<span class="k">def</span> <span class="nf">size_comparison</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"Larger"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"Smaller"</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">size_comparison</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">size_comparison</span><span class="p">(</span><span class="mi">65</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">size_comparison</span><span class="p">(</span><span class="mf">34.2</span><span class="p">,</span> <span class="mi">33</span><span class="p">))</span></code></pre></figure>
+
+<h1 id="your-turn">Your Turn</h1>
+
+<p>This is a do-now even though it’s not the beginning of class!</p>
+
+<h3 id="a-driving-speed">1a. Driving Speed</h3>
+
+<p>With the code below, it tells you how fast you’re driving. I figure that a lot
+of people are more familiar with kilometers an hour, though, so let’s write a
+function that does the conversion. I wrote a skeleton, now you can fill in the
+conversion.</p>
+
+<p>Make it display a whole number.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">to_kmh</span><span class="p">(</span><span class="n">speeed</span><span class="p">):</span>
+    <span class="s">"YOUR CODE HERE"</span>
+
+<span class="n">mph</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"You are driving"</span><span class="p">,</span> <span class="n">mph</span><span class="p">,</span> <span class="s">"in mph"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"You are driving"</span><span class="p">,</span> <span class="n">to_kmh</span><span class="p">(</span><span class="n">mph</span><span class="p">),</span> <span class="s">"in kmh"</span><span class="p">)</span></code></pre></figure>
+
+<h3 id="b-driving-speed-part-ii">1b. Driving Speed Part II</h3>
+
+<p>Now write a function called <code class="highlighter-rouge">to_mpm</code> that, when given miles per hour, computes
+the meters per minute.</p>
+
+<h3 id="c-driving-speed-part-iii">1c. Driving Speed Part III</h3>
+
+<p>Rewrite <code class="highlighter-rouge">to_mpm</code> to use the <code class="highlighter-rouge">to_kmh</code> function. <strong>D.R.Y.</strong>!</p>
+
+<h3 id="broken-function">2. Broken Function</h3>
+
+<p>The code below won’t work. Why not?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># You have to wash ten cars on every street, along with the cars in your driveway.</span>
+<span class="c"># With the following list of streets, how many cars do we have?</span>
+
+<span class="k">def</span> <span class="nf">total</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">10</span>
+
+<span class="c"># Here are the streets</span>
+<span class="n">streets</span> <span class="o">=</span> <span class="p">[</span><span class="s">'10th Ave'</span><span class="p">,</span> <span class="s">'11th Street'</span><span class="p">,</span> <span class="s">'45th Ave'</span><span class="p">]</span>
+
+<span class="c"># Let's count them up</span>
+<span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">streets</span><span class="p">)</span>
+
+<span class="c"># And add one</span>
+<span class="n">count</span> <span class="o">=</span> <span class="n">total</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="c"># And see how many we have</span>
+<span class="k">print</span><span class="p">(</span><span class="n">total</span><span class="p">(</span><span class="n">count</span><span class="p">))</span></code></pre></figure>
+
+<h3 id="data-converter">3. Data converter</h3>
+
+<p>We have a bunch of data in different formats, and we need to normalize it! The
+data looks like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">var</span> <span class="n">first</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'measurement'</span><span class="p">:</span> <span class="mf">3.4</span><span class="p">,</span> <span class="s">'scale'</span><span class="p">:</span> <span class="s">'kilometer'</span> <span class="p">}</span>
+<span class="n">var</span> <span class="n">second</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'measurement'</span><span class="p">:</span> <span class="mf">9.1</span><span class="p">,</span> <span class="s">'scale'</span><span class="p">:</span> <span class="s">'mile'</span> <span class="p">}</span>
+<span class="n">var</span> <span class="n">third</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'measurement'</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s">'scale'</span><span class="p">:</span> <span class="s">'meter'</span> <span class="p">}</span>
+<span class="n">var</span> <span class="n">fourth</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'measurement'</span><span class="p">:</span> <span class="mf">9.0</span><span class="p">,</span> <span class="s">'scale'</span><span class="p">:</span> <span class="s">'inches'</span> <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Write a function called <code class="highlighter-rouge">to_meters(...)</code>. When you send it a dictionary, have it
+examine the <code class="highlighter-rouge">measurement</code> and <code class="highlighter-rouge">scale</code> and return the adjusted value. For the
+values above, 3.4 kilometers should be 3400.0 meters, 9.1 miles should be around
+14600, and 9 inches should be apprxoimately 0.23.</p>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

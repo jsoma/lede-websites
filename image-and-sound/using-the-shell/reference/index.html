@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Command Reference</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/image-and-sound/using-the-shell/reference/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Command Reference">
+  <meta property="twitter:title" content="Command Reference">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../..">Lede</a> &gt; <a href="../..">Image and Sound, Data, CJS 2017</a> &gt;  Command Reference</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Command Reference</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <blockquote>
+  <p><strong>Note</strong> Don’t type the <code class="highlighter-rouge">[]</code> brackets when using the command - <code class="highlighter-rouge">cd [dirname]</code> means you’ll type <code class="highlighter-rouge">cd Documents</code>.</p>
+</blockquote>
+
+<h2 id="being-lazy">Being lazy</h2>
+
+<ul>
+  <li>Instead of typing out a long file/directory name, type the first few letters and <strong>then press tab</strong>. It will automatically fill in the rest of the filename. <strong>Use this every time you’re typing <em>anything</em> on the command line.</strong></li>
+  <li><strong>Press ↑ and ↓ to scroll through previous commands.</strong> It can save you a lot of typing.</li>
+  <li>On a mac, you can drag a file or folder from Finder onto the Terminal and it will <em>automatically type the full path</em></li>
+</ul>
+
+<h2 id="navigating-your-directoriesfolders">Navigating your directories/folders</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">pwd</code>: prints working directory — use this to check that you’re in the directory you want</li>
+  <li><code class="highlighter-rouge">cd [dirname]</code>: changes directory, moves you into the folder named <code class="highlighter-rouge">dirname</code></li>
+  <li><code class="highlighter-rouge">cd ..</code>: moves you up one directory, e.g. from <code class="highlighter-rouge">Desktop/foundations/class-1</code> to <code class="highlighter-rouge">Desktop/foundations</code>.</li>
+  <li><code class="highlighter-rouge">ls</code>: lists subdirectories (and files). <code class="highlighter-rouge">ls -lah</code> is nicer, though.</li>
+  <li><code class="highlighter-rouge">locate [filename]</code>: tries to find a file called <code class="highlighter-rouge">filename</code> and tell you where it’s at. It uses a database that isn’t updated too often, so it can’t always find new files.</li>
+  <li><code class="highlighter-rouge">find</code>: tries to find a file without waiting for the database to update - can search by name, size, date modified, etc. <a href="https://www.digitalocean.com/community/tutorials/how-to-use-find-and-locate-to-search-for-files-on-a-linux-vps">This is a good reference</a></li>
+</ul>
+
+<h2 id="movingeditingdownloading-files">Moving/editing/downloading files</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">mv [source] [destination]</code> moves a file from one place to another</li>
+  <li><code class="highlighter-rouge">cp [source] [destination]</code> copies a file from one place to another (so now you have two)</li>
+  <li><code class="highlighter-rouge">rm [file]</code> deletes (removes) a file</li>
+  <li><code class="highlighter-rouge">mkdir [directoryname]</code> creates a directory</li>
+  <li><code class="highlighter-rouge">rmdir [directoryname]</code> deletes (removes) a directory</li>
+  <li><code class="highlighter-rouge">tar cvf [filename] [filename] [filename]...</code> compresses (zips) files up into a <code class="highlighter-rouge">.tar.gz</code> file</li>
+  <li><code class="highlighter-rouge">tar xvf [filename]</code> extracts (unzips) a <code class="highlighter-rouge">.tar.gz</code> file</li>
+  <li><code class="highlighter-rouge">curl [url]</code> downloads a file, but streams it into your terminal window</li>
+  <li><code class="highlighter-rouge">curl -O [url]</code> downloads a file, saving it</li>
+  <li><code class="highlighter-rouge">wget [url]</code> downloads a file, saving it (yes, <code class="highlighter-rouge">curl</code> and <code class="highlighter-rouge">wget</code> are pretty similar)</li>
+</ul>
+
+<h2 id="looking-at-individual-files">Looking at individual files</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">cat [filename]</code>: displays the contents of a file</li>
+  <li><code class="highlighter-rouge">wc [filename]</code>: displays the word count of a file</li>
+  <li><code class="highlighter-rouge">wc -l [filename]</code>: displays the line count of a file</li>
+  <li><code class="highlighter-rouge">head -n 10 [filename]</code>: displays the first 10 lines of a file</li>
+  <li><code class="highlighter-rouge">tail -n 20 [filename]</code>: displays the last 20 lines of a file</li>
+  <li><code class="highlighter-rouge">more [filename]</code>: displays the contents of a file one screen at a time (spacebar to continue)</li>
+  <li><code class="highlighter-rouge">grep [text] [filename]</code>: show all of the lines in <code class="highlighter-rouge">filename</code> that contain <code class="highlighter-rouge">text</code>.</li>
+  <li><code class="highlighter-rouge">sort</code>: sorts the lines of a file</li>
+  <li><code class="highlighter-rouge">uniq</code>: removes duplicate <strong>adjacent</strong> lines of a file</li>
+</ul>
+
+<h2 id="amusing-ones-to-look-up">Amusing ones to look up</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">banner</code></li>
+  <li><code class="highlighter-rouge">cowsay</code></li>
+  <li><code class="highlighter-rouge">say</code></li>
+</ul>
+
+<h2 id="others-you-might-find-useful-if-you-love-the-command-line">Others you might find useful if you love the command line</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">sed</code></li>
+  <li><code class="highlighter-rouge">awk</code></li>
+  <li><code class="highlighter-rouge">vi</code>/<code class="highlighter-rouge">vim</code></li>
+</ul>
+
+<h2 id="escaping-commands">Escaping commands</h2>
+
+<p>Has something gone wrong? Taking too long? Hold down <code class="highlighter-rouge">Control</code> and hit <code class="highlighter-rouge">C</code>, a.k.a. <code class="highlighter-rouge">Ctrl+C</code>.</p>
+
+<h2 id="learning-morefinding-more">Learning more/finding more</h2>
+
+<p><code class="highlighter-rouge">man</code> pages are <strong>manuals</strong> that you can use from the command line.</p>
+
+<p><code class="highlighter-rouge">man grep</code> would give you the entry for grep, and then you’d use the <code class="highlighter-rouge">d</code> and <code class="highlighter-rouge">u</code> to navigate up and down. You should probably just google <strong>grep man page</strong> or <strong>grep examples</strong>, though.</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

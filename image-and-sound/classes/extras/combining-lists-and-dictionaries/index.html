@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Combining lists and dictionaries</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/image-and-sound/classes/extras/combining-lists-and-dictionaries/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Combining lists and dictionaries">
+  <meta property="twitter:title" content="Combining lists and dictionaries">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Image and Sound, Data, CJS 2017</a> &gt;  Combining lists and dictionaries</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Combining lists and dictionaries</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/image-and-sound/classes/extras/combining-lists-and-dictionaries.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <p>Dealing with <strong>lists of dictionaries</strong> and <strong>dictionaries with lists inside</strong>
+can sometimes be confusing, even if we understand how each work separately.
+Let’s break them all down.</p>
+
+<h2 id="a-little-review">A little review</h2>
+
+<h3 id="lists">Lists</h3>
+
+<p>First, we have <strong>lists</strong>. We can do two major things with lists:</p>
+
+<ul>
+  <li>We can grab specific elements, and</li>
+  <li>we can loop through each element of the list</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># A list of a few numbers</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">]</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Get the first number and print it</span>
+<span class="n">first_number</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">first_number</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>5
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Use a for loop to print every number</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+  <span class="k">print</span><span class="p">(</span><span class="n">number</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>5
+32
+-3
+</code></pre>
+</div>
+
+<h3 id="dictionaries">Dictionaries</h3>
+
+<p>Then we have <strong>dictionaries</strong>. We can do a few things with lists</p>
+
+<ul>
+  <li>We can grab a specific value using a key</li>
+  <li>We can grab all of the keys</li>
+  <li>We can grab all of the values (you probably don’t do this often)</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># A dictionary about the film Maid in Manhattan</span>
+<span class="n">movie</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">'name'</span><span class="p">:</span> <span class="s">'Maid in Manhattan'</span><span class="p">,</span>
+  <span class="s">'starring'</span><span class="p">:</span> <span class="s">'Jennifer Lopez'</span><span class="p">,</span>
+  <span class="s">'year'</span><span class="p">:</span> <span class="mi">2002</span>
+<span class="p">}</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Print the name of the movie using the 'name' key</span>
+<span class="k">print</span><span class="p">(</span><span class="n">movie</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Maid in Manhattan
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># View all the keys of the dictionary (name, starring, year) </span>
+<span class="k">print</span><span class="p">(</span><span class="n">movie</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>dict_keys(['year', 'starring', 'name'])
+</code></pre>
+</div>
+
+<h2 id="lists-of-dictionaries">Lists of dictionaries</h2>
+
+<p>Now that we’ve looked at the two separately, let’s <strong>combine the two</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># A list of three Heath Ledger movies</span>
+<span class="n">movies</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">'name'</span><span class="p">:</span> <span class="s">'Ten Things I Hate About You'</span><span class="p">,</span>
+    <span class="s">'starring'</span><span class="p">:</span> <span class="s">'Heath Ledger'</span><span class="p">,</span>
+    <span class="s">'year'</span><span class="p">:</span> <span class="mi">1999</span><span class="p">,</span>
+    <span class="s">'rating'</span><span class="p">:</span> <span class="mi">61</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">'name'</span><span class="p">:</span> <span class="s">'Brokeback Mountain'</span><span class="p">,</span>
+    <span class="s">'starring'</span><span class="p">:</span> <span class="s">'Heath Ledger'</span><span class="p">,</span>
+    <span class="s">'year'</span><span class="p">:</span> <span class="mi">2005</span><span class="p">,</span>
+    <span class="s">'rating'</span><span class="p">:</span> <span class="mi">87</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">'name'</span><span class="p">:</span> <span class="s">'The Dark Knight'</span><span class="p">,</span>
+    <span class="s">'starring'</span><span class="p">:</span> <span class="s">'Heath Ledger'</span><span class="p">,</span>
+    <span class="s">'year'</span><span class="p">:</span> <span class="mi">2008</span><span class="p">,</span>
+    <span class="s">'rating'</span><span class="p">:</span> <span class="mi">94</span>
+  <span class="p">}</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>Don’t think of <code class="highlighter-rouge">movies</code> as a list of dictionaries - <strong>just think of it as a
+list</strong>, ignore what’s inside. What can we do with a list?</p>
+
+<ul>
+  <li>Get specific elements (the first, the last, etc)</li>
+  <li>Loop through each element of the list</li>
+</ul>
+
+<p>So, well, let’s do those!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Get the first movie and print it</span>
+<span class="n">movie</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">movie</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="err">'rating':</span><span class="w"> </span><span class="err">61,</span><span class="w"> </span><span class="err">'year':</span><span class="w"> </span><span class="err">1999,</span><span class="w"> </span><span class="err">'starring':</span><span class="w"> </span><span class="err">'Heath</span><span class="w"> </span><span class="err">Ledger',</span><span class="w"> </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Ten</span><span class="w"> </span><span class="err">Things</span><span class="w"> </span><span class="err">I</span><span class="w"> </span><span class="err">Hate</span><span class="w"> </span><span class="err">About</span><span class="w"> </span><span class="err">You'</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>Okay, so it printed out <strong>the entire first dictionary</strong>. The same thing will
+happen if we loop through each element.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Loop through each movie</span>
+<span class="k">for</span> <span class="n">movie</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+  <span class="k">print</span><span class="p">(</span><span class="n">movie</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="err">'rating':</span><span class="w"> </span><span class="err">61,</span><span class="w"> </span><span class="err">'year':</span><span class="w"> </span><span class="err">1999,</span><span class="w"> </span><span class="err">'starring':</span><span class="w"> </span><span class="err">'Heath</span><span class="w"> </span><span class="err">Ledger',</span><span class="w"> </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Ten</span><span class="w"> </span><span class="err">Things</span><span class="w"> </span><span class="err">I</span><span class="w"> </span><span class="err">Hate</span><span class="w"> </span><span class="err">About</span><span class="w"> </span><span class="err">You'</span><span class="p">}</span><span class="w">
+</span><span class="p">{</span><span class="err">'rating':</span><span class="w"> </span><span class="err">87,</span><span class="w"> </span><span class="err">'year':</span><span class="w"> </span><span class="err">2005,</span><span class="w"> </span><span class="err">'starring':</span><span class="w"> </span><span class="err">'Heath</span><span class="w"> </span><span class="err">Ledger',</span><span class="w"> </span><span class="err">'name':</span><span class="w"> </span><span class="err">'Brokeback</span><span class="w"> </span><span class="err">Mountain'</span><span class="p">}</span><span class="w">
+</span><span class="p">{</span><span class="err">'rating':</span><span class="w"> </span><span class="err">94,</span><span class="w"> </span><span class="err">'year':</span><span class="w"> </span><span class="err">2008,</span><span class="w"> </span><span class="err">'starring':</span><span class="w"> </span><span class="err">'Heath</span><span class="w"> </span><span class="err">Ledger',</span><span class="w"> </span><span class="err">'name':</span><span class="w"> </span><span class="err">'The</span><span class="w"> </span><span class="err">Dark</span><span class="w"> </span><span class="err">Knight'</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>This usually isn’t helpful, since we normally only want to deal with one or two
+aspects of our data (maybe the rating or the name). But think about it - each
+time we pull out a <strong>specific element</strong> or each time we’re <strong>inside the loop</strong>,
+<code class="highlighter-rouge">movie</code> is a dictionary. What are our favorite things to do with a dictionary?</p>
+
+<ul>
+  <li>We can grab a specific value using a key</li>
+  <li>We can grab all of the keys</li>
+</ul>
+
+<p>So let’s <strong>combine the two steps</strong>, first dealing with the list on the outside,
+then the dictionary on the inside.</p>
+
+<ol>
+  <li>We have a list, so we can pull out a specific element</li>
+  <li>That specific element is a dictionary, so we can get its keys</li>
+  <li>Which means we can also use those keys to get data!</li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># MOVIES is a list, so we can get the first movie using [0]</span>
+<span class="n">movie</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c"># MOVIE is a dictionary, so we can find the keys using .keys()</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"The movie has the keys"</span><span class="p">,</span> <span class="n">movie</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="c"># MOVIE is a dictionary, so we can get data using a key</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"The movie's name is"</span><span class="p">,</span> <span class="n">movie</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>The movie has the keys dict_keys(['rating', 'year', 'starring', 'name'])
+The movie's name is Ten Things I Hate About You
+</code></pre>
+</div>
+
+<p>But maybe you want to deal with <strong>all of the elements</strong>, like maybe we want to
+see the ratings? Let’s combine again.</p>
+
+<ol>
+  <li>We have a list, so we can loop through all of the elements</li>
+  <li>Each element is a dictionary, so we can get data using a key</li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># movies is a list, so we can loop through all of the elements</span>
+<span class="k">for</span> <span class="n">movie</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+    <span class="c"># What's inside the list? a DICTIONARY. So we can use keys to get data!</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">movie</span><span class="p">[</span><span class="s">'name'</span><span class="p">],</span> <span class="s">"had a rating of"</span><span class="p">,</span> <span class="n">movie</span><span class="p">[</span><span class="s">'rating'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Ten Things I Hate About You had a rating of 61
+Brokeback Mountain had a rating of 87
+The Dark Knight had a rating of 94
+</code></pre>
+</div>
+
+<h2 id="dictionaries-with-lists-inside">Dictionaries with lists inside</h2>
+
+<p>Another version of this is when you have a dictionary with a list inside.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Lauren is indecisive and has many favorites</span>
+<span class="n">lauren</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'age'</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="s">'favorite_numbers'</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+    <span class="s">'favorite_colors'</span><span class="p">:</span> <span class="p">[</span><span class="s">'blue'</span><span class="p">,</span> <span class="s">'green'</span><span class="p">,</span> <span class="s">'purple'</span><span class="p">]</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Since <code class="highlighter-rouge">lauren</code> is just a dictionary, you can do dictionary things to it.</p>
+
+<ul>
+  <li>We can grab a specific value using a key</li>
+  <li>We can grab all of the keys</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># This value is boring</span>
+<span class="k">print</span><span class="p">(</span><span class="n">lauren</span><span class="p">[</span><span class="s">'age'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>12
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># This value is more exciting!</span>
+<span class="k">print</span><span class="p">(</span><span class="n">lauren</span><span class="p">[</span><span class="s">'favorite_colors'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>['blue', 'green', 'purple']
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># You can even what data type things are using 'type'</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">lauren</span><span class="p">[</span><span class="s">'age'</span><span class="p">]))</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">lauren</span><span class="p">[</span><span class="s">'favorite_colors'</span><span class="p">]))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;class 'int'&gt;
+&lt;class 'list'&gt;
+</code></pre>
+</div>
+
+<p>Now that we’ve found a list, we can do list things.</p>
+
+<ul>
+  <li>Get specific elements (the first, the last, etc)</li>
+  <li>Loop through each element of the list</li>
+</ul>
+
+<p>So we ‘ll have two steps</p>
+
+<ol>
+  <li>We have a dictionary, so specific data out using a key</li>
+  <li>We then a list, so use <code class="highlighter-rouge">[...]</code> indices or <code class="highlighter-rouge">for</code> loops to go through each
+element</li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># STEP ONE: Use a key to get something out of the dictionary</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">lauren</span><span class="p">[</span><span class="s">'favorite_colors'</span><span class="p">]</span>
+<span class="c"># STEP TWO: It's a list, so let's get the first one</span>
+<span class="k">print</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c"># STEP ONE + STEP TWO all at once</span>
+<span class="k">print</span><span class="p">(</span><span class="n">lauren</span><span class="p">[</span><span class="s">'favorite_colors'</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>blue
+blue
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># STEP ONE: Use a key to get something out of the dictionary</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">lauren</span><span class="p">[</span><span class="s">'favorite_colors'</span><span class="p">]</span>
+
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">colors</span><span class="p">))</span>
+
+<span class="c"># STEP TWO: It's a list, so let's loop through them</span>
+<span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">color</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;class 'list'&gt;
+blue
+green
+purple
+</code></pre>
+</div>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

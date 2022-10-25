@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Advanced Scraping - Form Submissions (completed)</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/friday%20sessions/advanced-scraping-form-submissions-completed/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Advanced Scraping - Form Submissions (completed)">
+  <meta property="twitter:title" content="Advanced Scraping - Form Submissions (completed)">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt;  Advanced Scraping - Form Submissions (completed)</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Advanced Scraping - Form Submissions (completed)</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations/classes/friday%20sessions/advanced-scraping-form-submissions-completed.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span></code></pre></figure>
+
+<h1 id="normal-scraping">Normal scraping</h1>
+
+<p>By now we all know how to scrape normal sites (kind of, mostly, somewhat).</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Grab the NYT's homepage</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"http://nytimes.com"</span><span class="p">)</span>
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'html.parser'</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Snag all of the headlines (h3 tags with 'story-heading' class)</span>
+<span class="n">headlines</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">"h3"</span><span class="p">,</span> <span class="p">{</span> <span class="s">'class'</span><span class="p">:</span> <span class="s">'story-heading'</span><span class="p">}</span> <span class="p">)</span>
+
+<span class="c"># Getting the headline text out using list comprehensions</span>
+<span class="c"># is a lot more fun but I guess you just learned those</span>
+<span class="c"># like a day ago, so we'll go ahead and use a for loop.</span>
+<span class="c"># But for the curious:</span>
+<span class="c">#   [headline.text.strip() for headline in headlines]</span>
+
+<span class="c"># Print the text of the headlines</span>
+<span class="k">for</span> <span class="n">headline</span> <span class="ow">in</span> <span class="n">headlines</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">headline</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Jo Cox, Member of British Parliament, Is Killed in Attack
+Common Sense: Microsoft-LinkedIn Deal Ignites Twitter Speculation
+Op-Ed Contributor: Let Me Compete in Rio
+In Orlando, a Son of a Muslim Immigrant Rushed to Heal Pain Caused by Another
+The First Big Company to Say It’s Serving the Legal Marijuana Trade? Microsoft.
+Review: In ‘Finding Dory,’ a Forgetful Fish and a Warm Celebration of Differences
+News Analysis: Why the Orlando Shooting Is Unlikely to Lead to Major New Gun Laws
+Noted: Two Men Kiss, an Act of Love and Activism
+Review: In ‘Finding Dory,’ a Forgetful Fish and a Warm Celebration of Differences
+De Blasio’s $325 Million Ferry Push: Rides to 5 Boroughs, at Subway Price
+Sports of The Times: In Russian Doping Scandal, Time for a Punishment to Fit the Crime
+Is ‘Shrew’ Worth Taming? Female Directors Keep Trying
+Fighting ISIS With an Algorithm, Physicists Try to Predict Attacks
+Melvin Dwork, Once Cast From Navy for Being Gay, Dies at 94
+Critic's Notebook: After Orlando Shooting, Talk Show Hosts Suggest Talk Is Not Enough
+C.D.C. Reports 234 Pregnant Women in U.S. With Zika
+4 Roller Coasters That Put the Theme in Theme Park
+Books of The Times: Review: Annie Proulx’s ‘Barkskins’ Is an Epic Tale of Logging and Doom
+Race/Related: Moving to Make Amends, Georgetown President Meets With Descendant of Slaves
+Hungry City: The Secret to District Saigon’s Broths: Slow Cooking
+Judith Shulevitz: How to Fix Feminism
+The Hunt: In Brooklyn, a Home and Home Brewery
+Public Health: Soda Tax Passes in Philadelphia. Advocates Ask: Who’s Next?
+Feature: The Parasite Underground
+Wheels: Skeptics of Self-Driving Cars Span Generations
+When the Family Business is a Gallery
+Looking Back: 1948-2016 | A Times Art Treasure Comes to an Omaha Library
+</code></pre>
+</div>
+
+<h1 id="but-forms">But… forms!</h1>
+
+<p>So the issue is that sometimes you need to submit <em>forms</em> on a web site. Why?
+Well, let’s look at an example.</p>
+
+<p>This example is going to come from <a href="https://twitter.com/dancow">Dan Nguyen</a>’s
+incredible <a href="https://github.com/compjour/search-script-
+scrape">Search, Script, Scrape</a>, 101 scraping exercises.</p>
+
+<blockquote>
+  <p>The number of FDA-approved, but now discontinued drug products that contain
+Fentanyl as an active ingredient</p>
+
+  <p>Related URL: <a href="http://www.accessdata.fda.gov/scripts/cder/ob/docs/queryai.cfm">http://www.accessdata.fda.gov/scripts/cder/ob/docs/queryai.cfm</a></p>
+</blockquote>
+
+<p>When you visit that URL, you’re going to type in “Fentanyl,” and select “Disc
+(Discontinued Drug Products).” Then you’ll hit <strong>search</strong>.</p>
+
+<p>Hooray, results! Now <strong>look at the URL.</strong></p>
+
+<blockquote>
+  <p>http://www.accessdata.fda.gov/scripts/cder/ob/docs/tempai.cfm</p>
+</blockquote>
+
+<p>Does anything about that URL say “Fentanyl” or “Discontinued Drug Products”?
+Nope! And if you <a href="http://www.accessdata.fda.gov/scripts/cder/ob/docs/tempai.cfm">straight up visit
+it</a> (might need
+to open an Incognito window) you’ll end up being redirected back to a different
+page.</p>
+
+<p>This means <strong><code class="highlighter-rouge">requests.get</code> just isn’t going to cut it.</strong> If you tell <code class="highlighter-rouge">requests</code>
+to download that page it’s going to get a whooole lot of uselessness.</p>
+
+<p>Be my guest if you want to try it!</p>
+
+<h1 id="submitting-forms-with-requests">Submitting forms with <code class="highlighter-rouge">requests</code></h1>
+
+<p>There are two kinds of forms, <code class="highlighter-rouge">GET</code> forms and <code class="highlighter-rouge">POST</code> forms (…this is 99%
+true).</p>
+
+<h2 id="get-forms"><code class="highlighter-rouge">GET</code> forms</h2>
+
+<p>A <code class="highlighter-rouge">GET</code> form is one where you can see parameters in the URL. For example, if you
+searched for images of animals surfing on Bing you’d end up here:</p>
+
+<blockquote>
+  <p><code class="highlighter-rouge">http://www.bing.com/images/search?q=animals+surfing&amp;FORM=HDRSC2</code></p>
+</blockquote>
+
+<p>It has a couple parameters - <code class="highlighter-rouge">q</code> and <code class="highlighter-rouge">FORM</code>. <code class="highlighter-rouge">FORM</code> is some sort of weird
+analytics thing that doesn’t affect the page, but <code class="highlighter-rouge">q</code> is definitely the term
+you’re searching for. <strong>With a <code class="highlighter-rouge">GET</code> form, the data you put into the form is
+kept in the URL.</strong></p>
+
+<p>Just for kicks, if we looked at the HTML for a <code class="highlighter-rouge">GET</code> form it might look like
+this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"GET"</span> <span class="na">action=</span><span class="s">"/search"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"q"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre>
+</div>
+
+<p>It might also leave the whole <code class="highlighter-rouge">method</code> part off, too - <code class="highlighter-rouge">GET</code> is the default.</p>
+
+<p>A fun part about <code class="highlighter-rouge">GET</code> forms you can share the URL to share the results. If you
+don’t believe me, visit <a href="http://www.bing.com/images/search?q=animals+surfing&amp;FORM=HDRSC2">http://www.bing.com/images/search?q=animals+surfing&amp;FOR
+M=HDRSC2</a> to
+see animals surfing.</p>
+
+<p><code class="highlighter-rouge">GET</code> is how most web pages work. You’ve used it every time you invoke the
+unholy powers of <code class="highlighter-rouge">requests.get</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://api.spotify.com/v1/search?query=90s&amp;offset=20&amp;limit=20&amp;typ</span><span class="err">
+</span><span class="s">e=playlist"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">GET</code> is nice. <code class="highlighter-rouge">GET</code> is easy. <strong>But <code class="highlighter-rouge">GET</code> is not all there is.</strong></p>
+
+<h2 id="post-forms"><code class="highlighter-rouge">POST</code> forms</h2>
+
+<p>The other kind of forms are <code class="highlighter-rouge">POST</code> forms. <code class="highlighter-rouge">POST</code> forms are not friendly!</p>
+
+<p>Unlike <code class="highlighter-rouge">GET</code> forms, <strong>you can’t share the URL to get the same information.</strong> The
+parameters - the <code class="highlighter-rouge">q</code> for your search, for example - aren’t in the URL, they’re
+hidden in <em>the actual request</em>.</p>
+
+<p>What this means is that <strong>every time you request something from a <code class="highlighter-rouge">POST</code>-based
+form, you have to pretend you filled out the form and clicked the button.</strong></p>
+
+<h3 id="grabbing-the-parameters">Grabbing the parameters</h3>
+
+<p>First we need to find out what parameters we’re going to hunt down. To do this,
+first make your way to the form, then <strong>get prepared.</strong></p>
+
+<p>1) In Chrome, <code class="highlighter-rouge">View</code> &gt; <code class="highlighter-rouge">Developer</code> &gt; <code class="highlighter-rouge">Developer Tools</code>
+2) Click the <strong>Network</strong> tab
+3) Fill the form out, and submit it
+4) Scroll up to the top of the Network pane, select the segment of the URL
+you’re at (I’m at <code class="highlighter-rouge">tempai.cfm</code>)
+5) Click it
+6) Select <strong>Headers</strong> on the right
+7) Scroll down until you see <strong>Form Data</strong></p>
+
+<p>Okay, that seemed like a <em>lot of work,</em> but I promise it was actually simple and
+easy and you’re living life in a grand grand way. Two parameters are listed for
+the search we’re doing:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Generic_Name:Fentanyl
+table1:OB_Disc
+</code></pre>
+</div>
+
+<p>Seems simple enough! Now let’s put them to work.</p>
+
+<h3 id="submitting-post-forms-with-requestspost">Submitting <code class="highlighter-rouge">POST</code> forms with <code class="highlighter-rouge">requests.post</code></h3>
+
+<p>This is going to be <em>so easy</em> you might have a <em>heart attack</em> as a result of
+your body being <em>so amazed</em> that it doesn’t have to do anything strenuous. All
+you have to do is</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"http://whatever.com/url/to/something"</span><span class="p">,</span> <span class="p">{</span> <span class="s">"param1"</span><span class="p">:</span> <span class="s">"val1"</span><span class="p">,</span>
+<span class="s">"param2"</span><span class="p">:</span> <span class="s">"val2"</span> <span class="p">})</span>
+</code></pre>
+</div>
+
+<p>and treat it like a normal response! Here, I’ll prove it.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Just in case you didn't run it up there, I'll import again</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">'http://www.accessdata.fda.gov/scripts/cder/ob/docs/tempai.cfm'</span>
+<span class="n">post_params</span> <span class="o">=</span> <span class="p">{</span><span class="s">'Generic_Name'</span><span class="p">:</span> <span class="s">'Fentanyl'</span><span class="p">,</span> <span class="s">'table1'</span><span class="p">:</span> <span class="s">'OB_Disc'</span><span class="p">}</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">post_params</span><span class="p">)</span>
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'html.parser'</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Using .select instead of .find is a little more</span>
+<span class="c"># readable to people from the web dev world, maybe?</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">".actual tbody tr"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">"td"</span><span class="p">)</span>
+    <span class="c"># Let's titlecase them SO THEY AREN'T ALL CAPS</span>
+    <span class="n">drug_name</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+    <span class="n">company_name</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">drug_name</span><span class="p">,</span> <span class="s">"was produced by the company"</span><span class="p">,</span> <span class="n">company_name</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Fentanyl Citrate And Droperidol was produced by the company Astrazeneca
+Fentanyl Citrate And Droperidol was produced by the company Astrazeneca
+Fentanyl Citrate And Droperidol was produced by the company Astrazeneca
+Fentanyl Citrate And Droperidol was produced by the company Hospira
+Innovar was produced by the company Akorn Mfg
+Fentanyl-100 was produced by the company Noven
+Fentanyl-25 was produced by the company Noven
+Fentanyl-50 was produced by the company Noven
+Fentanyl-75 was produced by the company Noven
+Onsolis was produced by the company Biodelivery Sci Intl
+Onsolis was produced by the company Biodelivery Sci Intl
+Onsolis was produced by the company Biodelivery Sci Intl
+Onsolis was produced by the company Biodelivery Sci Intl
+Onsolis was produced by the company Biodelivery Sci Intl
+Fentanyl Citrate was produced by the company Abbott
+Fentanyl Citrate was produced by the company Abbott
+Fentanyl Citrate was produced by the company Watson Labs
+Fentanyl Citrate Preservative Free was produced by the company Watson Labs Inc
+Fentanyl Citrate was produced by the company Watson Labs
+Fentanyl Citrate was produced by the company Watson Labs
+Fentanyl Citrate was produced by the company Watson Labs
+Fentanyl Citrate was produced by the company Watson Labs
+Fentanyl Citrate was produced by the company Watson Labs
+Fentora was produced by the company Cephalon
+Fentanyl was produced by the company Cephalon
+Fentanyl was produced by the company Cephalon
+Fentanyl was produced by the company Cephalon
+Fentanyl was produced by the company Cephalon
+</code></pre>
+</div>
+
+<p>It’s magic, I swear!</p>
+
+<h1 id="but-then">But then…</h1>
+
+<p>Sometimes <code class="highlighter-rouge">requests.get</code> just isn’t enough. Why? It mostly has to do with
+JavaScript or complicated forms - when a site reacts and changes without loading
+a new page, you can’t use <code class="highlighter-rouge">requests</code> for that (think “Load more” buttons on
+Instagram).</p>
+
+<p>For those sites you need <strong>Selenium!</strong> Selenium = you put your browser on
+autopilot. As in, literally, it takes control over your browser. There are
+“headless” versions that use invisible browsers but if you don’t like to install
+a bunch of stuff, the normal version is usually fine.</p>
+
+<h2 id="installing-selenium">Installing Selenium</h2>
+
+<p>Selenium isn’t just a Python package, but you’ll need to install <strong>python
+bindings</strong> in order to have Python talk to Selenium.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip install selenium
+</code></pre>
+</div>
+
+<p>You’ll also need the <a href="https://www.mozilla.org/en-US/firefox">Firefox browser</a>,
+since that’s the browser we’re going to be controlling.</p>
+
+<p>Selenium is built on <strong>WebDrivers</strong>, which are libraries that let you… drive a
+browser. I believe it comes with a Firefox WebDriver, whereas Safari/Chrome/etc
+take a little more effort to set up.</p>
+
+<h2 id="using-selenium">Using Selenium</h2>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Imports, of course</span>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support.ui</span> <span class="kn">import</span> <span class="n">Select</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support.ui</span> <span class="kn">import</span> <span class="n">WebDriverWait</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Initialize a Firefox webdriver</span>
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Grab the web page</span>
+<span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://app.hpla.doh.dc.gov/Weblookup/"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># You'll use selenium.webdriver.support.ui.Select</span>
+<span class="c"># that we imported above to grab the Seelct element called </span>
+<span class="c"># t_web_lookup__license_type_name, then select Acupuncturists</span>
+
+<span class="c"># We use .find_element_by_name here because we know the name</span>
+<span class="n">dropdown</span> <span class="o">=</span> <span class="n">Select</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_name</span><span class="p">(</span><span class="s">"t_web_lookup__license_type_name"</span><span class="p">))</span>
+<span class="n">dropdown</span><span class="o">.</span><span class="n">select_by_value</span><span class="p">(</span><span class="s">"ACUPUNCTURIST"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># We use .find_element_by_id here because we know the id</span>
+<span class="n">text_input</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">"t_web_lookup__first_name"</span><span class="p">)</span>
+
+<span class="c"># Then we'll fake typing into it</span>
+<span class="n">text_input</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">"KATHERINE"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Now we can grab the search button and click it</span>
+<span class="n">search_button</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">"sch_button"</span><span class="p">)</span>
+<span class="n">search_button</span><span class="o">.</span><span class="n">click</span><span class="p">()</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Instead of using requests.get, we just look at .page_source of the driver</span>
+<span class="n">driver</span><span class="o">.</span><span class="n">page_source</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'<span class="cp">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"&gt;</span>\n<span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">"http://www.w3.org/1999/xhtml"</span><span class="nt">&gt;&lt;head&gt;</span>\n\t\t<span class="nt">&lt;title&gt;</span>SearchResults<span class="nt">&lt;/title&gt;</span>\n\t\t<span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"stylesheets/elicense2000.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="nt">/&gt;</span>\n\t<span class="nt">&lt;script </span><span class="na">language=</span><span class="s">"javascript"</span><span class="nt">&gt;</span><span class="err">\</span><span class="nx">nfunction</span> <span class="nx">SetValue</span><span class="p">(</span><span class="nx">agencyID</span><span class="p">,</span><span class="nx">licenseID</span><span class="p">)</span><span class="err">\</span><span class="nx">n</span><span class="p">{</span><span class="err">\</span><span class="nx">n</span><span class="err">\</span><span class="nx">tvar</span> <span class="nx">href</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">opener</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">;</span><span class="err">\</span><span class="nx">n</span><span class="err">\</span><span class="nx">tvar</span> <span class="nx">form</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">opener</span><span class="p">.</span><span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="err">\</span><span class="nx">n</span><span class="err">\</span><span class="nx">tform</span><span class="p">.</span><span class="nx">elements</span><span class="p">[</span><span class="s2">"license_id"</span><span class="p">].</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">licenseID</span><span class="p">;</span><span class="err">\</span><span class="nx">n</span><span class="err">\</span><span class="nx">tform</span><span class="p">.</span><span class="nx">elements</span><span class="p">[</span><span class="s2">"tempAgencyID"</span><span class="p">].</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">agencyID</span><span class="p">;</span><span class="err">\</span><span class="nx">n</span><span class="c1">//\tvar action = href.substring(0,href.indexOf("?"));\n//\tform.action = action + \'?action=lu&amp;amp;agency_id=\' + agencyID + \'&amp;amp;license_id=\' + licenseID;\n\tform.submit();\n\twindow.close();\n}\n\t</span><span class="nt">&lt;/script&gt;&lt;/head&gt;</span>\n\t\n\t<span class="nt">&lt;body&gt;</span>\n\t\t<span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">"TheForm"</span> <span class="na">action=</span><span class="s">"SearchResults.aspx"</span> <span class="na">method=</span><span class="s">"post"</span> <span class="na">name=</span><span class="s">"TheForm"</span><span class="nt">&gt;</span>\n<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">value=</span><span class="s">""</span> <span class="na">id=</span><span class="s">"__EVENTTARGET"</span> <span class="na">name=</span><span class="s">"__EVENTTARGET"</span> <span class="nt">/&gt;</span>\n<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">value=</span><span class="s">""</span> <span class="na">id=</span><span class="s">"__EVENTARGUMENT"</span> <span class="na">name=</span><span class="s">"__EVENTARGUMENT"</span> <span class="nt">/&gt;</span>\n<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">value=</span><span class="s">"/wEPDwUJNzM2NTgwNzkyD2QWAgIBD2QWAmYPZBYCAgEPZBYCAgEPZBYCAgEPZBYCAgMPZBYCZg9kFgJmDxQrAAsPFhYeCVBhZ2VDb3VudAIBHhNBdXRvR2VuZXJhdGVDb2x1bW5zaB4IUGFnZVNpemUCKB4TVXNlQWNjZXNzaWJsZUhlYWRlcmceFV8hRGF0YVNvdXJjZUl0ZW1Db3VudAIEHghEYXRhS2V5cxYAHhBDdXJyZW50U29ydE9yZGVyBQ1mdWxsX25hbWUgQVNDHgxBbGxvd1NvcnRpbmdnHglmdWxsX25hbWUFBERFU0MeC18hSXRlbUNvdW50AgQeC0FsbG93UGFnaW5nZxYEHgVXaWR0aAUDOTYlHgVjbGFzcwULbW9kdWxlbGFiZWxkFgweCFBvc2l0aW9uCyonU3lzdGVtLldlYi5VSS5XZWJDb250cm9scy5QYWdlclBvc2l0aW9uAB4ETW9kZQsqI1N5c3RlbS5XZWIuVUkuV2ViQ29udHJvbHMuUGFnZXJNb2RlAR4PUGFnZUJ1dHRvbkNvdW50AigeCUJhY2tDb2xvcgnIoIP/HglGb3JlQ29sb3IKpAEeBF8hU0ICjICgBhYEHxAJyKCD/x8SAghkZGRkZGRkZGSIEw/cNbJxXUvombaLhwB7OaELE3j/8735+JXDjjDl1w=="</span> <span class="na">id=</span><span class="s">"__VIEWSTATE"</span> <span class="na">name=</span><span class="s">"__VIEWSTATE"</span> <span class="nt">/&gt;</span>\n\n<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span><span class="err">\</span><span class="nx">n</span><span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="o">!--</span><span class="err">\</span><span class="nx">nvar</span> <span class="nx">theForm</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="err">\</span><span class="s1">'TheForm\'</span><span class="p">];</span><span class="err">\</span><span class="nx">nif</span> <span class="p">(</span><span class="o">!</span><span class="nx">theForm</span><span class="p">)</span> <span class="p">{</span><span class="err">\</span><span class="nx">n</span>    <span class="nx">theForm</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">TheForm</span><span class="p">;</span><span class="err">\</span><span class="nx">n</span><span class="p">}</span><span class="err">\</span><span class="nx">nfunction</span> <span class="nx">__doPostBack</span><span class="p">(</span><span class="nx">eventTarget</span><span class="p">,</span> <span class="nx">eventArgument</span><span class="p">)</span> <span class="p">{</span><span class="err">\</span><span class="nx">n</span>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">theForm</span><span class="p">.</span><span class="nx">onsubmit</span> <span class="o">||</span> <span class="p">(</span><span class="nx">theForm</span><span class="p">.</span><span class="nx">onsubmit</span><span class="p">()</span> <span class="o">!=</span> <span class="kc">false</span><span class="p">))</span> <span class="p">{</span><span class="err">\</span><span class="nx">n</span>        <span class="nx">theForm</span><span class="p">.</span><span class="nx">__EVENTTARGET</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">eventTarget</span><span class="p">;</span><span class="err">\</span><span class="nx">n</span>        <span class="nx">theForm</span><span class="p">.</span><span class="nx">__EVENTARGUMENT</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">eventArgument</span><span class="p">;</span><span class="err">\</span><span class="nx">n</span>        <span class="nx">theForm</span><span class="p">.</span><span class="nx">submit</span><span class="p">();</span><span class="err">\</span><span class="nx">n</span>    <span class="p">}</span><span class="err">\</span><span class="nx">n</span><span class="p">}</span><span class="err">\</span><span class="nx">n</span><span class="c1">// --&amp;gt;\n</span><span class="nt">&lt;/script&gt;</span>\n\n\n<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">value=</span><span class="s">"/wEWAwLU8a+SDwLHlavPBALHlb+qDcvadpJP4En4SIP0Wcqc7vac2W7GvimAE4UBJUh9MPev"</span> <span class="na">id=</span><span class="s">"__EVENTVALIDATION"</span> <span class="na">name=</span><span class="s">"__EVENTVALIDATION"</span> <span class="nt">/&gt;&lt;table</span> <span class="na">width=</span><span class="s">"100%"</span> <span class="na">cellspacing=</span><span class="s">"0"</span> <span class="na">cellpadding=</span><span class="s">"0"</span> <span class="na">border=</span><span class="s">"0"</span> <span class="na">align=</span><span class="s">"left"</span> <span class="na">class=</span><span class="s">"layout"</span> <span class="na">role=</span><span class="s">"presentation"</span><span class="nt">&gt;</span>\n\t<span class="nt">&lt;tbody&gt;&lt;tr&gt;</span>\n\t\t<span class="nt">&lt;td</span> <span class="na">width=</span><span class="s">"100%"</span> <span class="na">height=</span><span class="s">"10"</span> <span class="na">colspan=</span><span class="s">"2"</span> <span class="na">rowspan=</span><span class="s">"1"</span><span class="nt">&gt;&lt;table</span> <span class="na">width=</span><span class="s">"100%"</span> <span class="na">cellspacing=</span><span class="s">"0"</span> <span class="na">align=</span><span class="s">"center"</span> <span class="na">role=</span><span class="s">"presentation"</span><span class="nt">&gt;</span>\n\t\t\t<span class="nt">&lt;tbody&gt;&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">height=</span><span class="s">"10px"</span> <span class="na">colspan=</span><span class="s">"8"</span> <span class="na">rowspan=</span><span class="s">"1"</span> <span class="na">style=</span><span class="s">"background-color:#29498C"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"blue_bar"</span><span class="nt">&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">align=</span><span class="s">"right"</span> <span class="na">colspan=</span><span class="s">"7"</span> <span class="na">rowspan=</span><span class="s">"1"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"top_row_links"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">class=</span><span class="s">"bannerLinkTop"</span> <span class="na">href=</span><span class="s">"http://311.dc.gov/"</span><span class="nt">&gt;</span>311 Online<span class="nt">&lt;/a&gt;</span> <span class="nt">&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">class=</span><span class="s">"bannerLinkTop"</span> <span class="na">href=</span><span class="s">"http://dc.gov/directory"</span><span class="nt">&gt;</span>Agency Directory<span class="nt">&lt;/a&gt;</span> <span class="nt">&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">class=</span><span class="s">"bannerLinkTop"</span> <span class="na">href=</span><span class="s">"http://dc.gov/online-services"</span><span class="nt">&gt;</span>Online Services<span class="nt">&lt;/a&gt;</span> <span class="nt">&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">class=</span><span class="s">"bannerLinkTop"</span> <span class="na">href=</span><span class="s">"http://dc.gov/page/dcgov-accessibility-policy"</span><span class="nt">&gt;</span>Accessibility<span class="nt">&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"8"</span> <span class="na">rowspan=</span><span class="s">"1"</span><span class="nt">&gt;&lt;span</span> <span class="na">cellpadding=</span><span class="s">"0"</span> <span class="na">cellspacing=</span><span class="s">"0"</span> <span class="na">id=</span><span class="s">"banner_image"</span><span class="nt">&gt;&lt;img</span> <span class="na">alt=</span><span class="s">"DC Logo"</span> <span class="na">src=</span><span class="s">"images/DC_pictures/dcgov_logo.jpg"</span> <span class="nt">/&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"8"</span> <span class="na">rowspan=</span><span class="s">"1"</span><span class="nt">&gt;&lt;span</span> <span class="na">style=</span><span class="s">"font-weight:bold; font-size:large"</span> <span class="na">id=</span><span class="s">"banner_label"</span><span class="nt">&gt;</span>Department of Health<span class="nt">&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">height=</span><span class="s">"10px"</span> <span class="na">colspan=</span><span class="s">"8"</span> <span class="na">rowspan=</span><span class="s">"1"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"spacer_1"</span><span class="nt">&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">height=</span><span class="s">"5px"</span> <span class="na">colspan=</span><span class="s">"8"</span> <span class="na">rowspan=</span><span class="s">"1"</span> <span class="na">style=</span><span class="s">"background-color: #CECFCE"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"gray_bar"</span><span class="nt">&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">height=</span><span class="s">"10px"</span> <span class="na">colspan=</span><span class="s">"8"</span> <span class="na">rowspan=</span><span class="s">"1"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"spacer_2"</span><span class="nt">&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"1"</span> <span class="na">class=</span><span class="s">"bannerbar"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"link_1"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">class=</span><span class="s">"bannerBarLink"</span> <span class="na">href=</span><span class="s">"http://doh.dc.gov/"</span><span class="nt">&gt;</span>DOH Home<span class="nt">&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"1"</span> <span class="na">class=</span><span class="s">"bannerbar"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"link_2"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">class=</span><span class="s">"bannerBarLink"</span> <span class="na">href=</span><span class="s">"http://doh.dc.gov/services"</span><span class="nt">&gt;</span>Services<span class="nt">&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"1"</span> <span class="na">class=</span><span class="s">"bannerbar"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"link_3"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">class=</span><span class="s">"bannerBarLink"</span> <span class="na">href=</span><span class="s">"http://doh.dc.gov/service/health-professionals"</span><span class="nt">&gt;</span>Health Professionals<span class="nt">&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"1"</span> <span class="na">style=</span><span class="s">"width:150px;"</span> <span class="na">class=</span><span class="s">"bannerbar"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"link_4"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">class=</span><span class="s">"bannerBarLink"</span> <span class="na">href=</span><span class="s">"http://doh.dc.gov/service/infants-children-teens-and-school-health"</span><span class="nt">&gt;</span>Infants, Children and Teens<span class="nt">&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"1"</span> <span class="na">class=</span><span class="s">"bannerbar"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"link_5"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">class=</span><span class="s">"bannerBarLink"</span> <span class="na">href=</span><span class="s">"http://doh.dc.gov/HIV/AIDS%20Services"</span><span class="nt">&gt;</span>HIV/AIDS<span class="nt">&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"1"</span> <span class="na">class=</span><span class="s">"bannerbar"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"link_6"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">class=</span><span class="s">"bannerBarLink"</span> <span class="na">href=</span><span class="s">"http://doh.dc.gov/page/resources-01"</span><span class="nt">&gt;</span>Resources<span class="nt">&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"1"</span> <span class="na">class=</span><span class="s">"bannerbar"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"link_7"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">class=</span><span class="s">"bannerBarLink"</span> <span class="na">href=</span><span class="s">"http://doh.dc.gov/service/vital-records"</span><span class="nt">&gt;</span>Vital Records<span class="nt">&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"1"</span> <span class="na">class=</span><span class="s">"bannerbar"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"link_8"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">class=</span><span class="s">"bannerBarLink"</span> <span class="na">href=</span><span class="s">"http://doh.dc.gov/page/about-doh"</span><span class="nt">&gt;</span>About DOH<span class="nt">&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t<span class="nt">&lt;/tbody&gt;&lt;/table&gt;</span>\n\t\t<span class="nt">&lt;/td&gt;</span>\n\t<span class="nt">&lt;/tr&gt;</span>\n\t<span class="nt">&lt;tr&gt;</span>\n\t\t<span class="nt">&lt;td&gt;&lt;/td&gt;</span>\n\t\t<span class="nt">&lt;td</span> <span class="na">valign=</span><span class="s">"top"</span> <span class="na">align=</span><span class="s">"left"</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"1"</span> <span class="na">cellpadding=</span><span class="s">"0"</span> <span class="na">cellspacing=</span><span class="s">"0"</span><span class="nt">&gt;&lt;table</span> <span class="na">width=</span><span class="s">"100%"</span> <span class="na">cellspacing=</span><span class="s">"0"</span> <span class="na">cellpadding=</span><span class="s">"0"</span> <span class="na">border=</span><span class="s">"0"</span> <span class="na">role=</span><span class="s">"presentation"</span><span class="nt">&gt;</span>\n\t\t<span class="nt">&lt;/table&gt;</span>\n\t\t<span class="nt">&lt;table</span> <span class="na">width=</span><span class="s">"90%"</span> <span class="na">cellspacing=</span><span class="s">"0"</span> <span class="na">cellpadding=</span><span class="s">"0"</span> <span class="na">border=</span><span class="s">"0"</span> <span class="na">align=</span><span class="s">"center"</span> <span class="na">role=</span><span class="s">"presentation"</span><span class="nt">&gt;</span>\n\t\t\t<span class="nt">&lt;tbody&gt;&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">width=</span><span class="s">"10"</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"20"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"col_spacer"</span><span class="nt">&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">valign=</span><span class="s">"top"</span> <span class="na">align=</span><span class="s">"left"</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"0"</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">"moduleLabel"</span> <span class="na">id=</span><span class="s">"Title"</span><span class="nt">&gt;</span>Search Results<span class="nt">&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"1"</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">"instructions"</span> <span class="na">id=</span><span class="s">"Back_to_Search"</span><span class="nt">&gt;</span>For a more detailed view of a licensee\'s background, select the licensee name from the alphabetical list below. Click the numbers below the grid to see additional pages of licensees. To return to the Search page, use the Search Again button below. (Do not use the browser Back key.)<span class="nt">&lt;br</span> <span class="nt">/&gt;&lt;img</span> <span class="na">width=</span><span class="s">"650"</span> <span class="na">border=</span><span class="s">"0"</span> <span class="na">height=</span><span class="s">"10"</span> <span class="na">src=</span><span class="s">"images/dot.gif"</span> <span class="na">alt=</span><span class="s">""</span> <span class="nt">/&gt;&lt;br</span> <span class="nt">/&gt;&lt;input</span> <span class="na">type=</span><span class="s">"reset"</span> <span class="na">onclick=</span><span class="s">"javascript:document.location.href=\'Search.aspx\' "</span> <span class="na">maxlength=</span><span class="s">"9"</span> <span class="na">id=</span><span class="s">"my_button"</span> <span class="na">value=</span><span class="s">"Search Again"</span> <span class="na">name=</span><span class="s">"my_button"</span> <span class="nt">/&gt;&lt;br</span> <span class="nt">/&gt;&lt;img</span> <span class="na">width=</span><span class="s">"650"</span> <span class="na">border=</span><span class="s">"0"</span> <span class="na">height=</span><span class="s">"10"</span> <span class="na">src=</span><span class="s">"images/dot.gif"</span> <span class="na">alt=</span><span class="s">""</span> <span class="nt">/&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"2"</span> <span class="na">rowspan=</span><span class="s">"0"</span><span class="nt">&gt;&lt;table</span> <span class="na">width=</span><span class="s">"96%"</span> <span class="na">cellspacing=</span><span class="s">"0"</span> <span class="na">border=</span><span class="s">"1"</span> <span class="na">style=</span><span class="s">"border-collapse:collapse;"</span> <span class="na">id=</span><span class="s">"datagrid_results"</span> <span class="na">class=</span><span class="s">"modulelabel"</span> <span class="na">rules=</span><span class="s">"all"</span><span class="nt">&gt;</span>\n\t\t\t\t\t<span class="nt">&lt;tbody&gt;&lt;tr</span> <span class="na">style=</span><span class="s">"background-color:#83A0C8;"</span><span class="nt">&gt;</span>\n\t\t\t\t\t\t<span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">"javascript:__doPostBack(\'datagrid_results$_ctl2$_ctl0\',\'\')"</span><span class="nt">&gt;&lt;font</span> <span class="na">size=</span><span class="s">"2"</span> <span class="na">color=</span><span class="s">"white"</span> <span class="na">face=</span><span class="s">"Arial"</span><span class="nt">&gt;&lt;b&gt;</span>Full Name<span class="nt">&lt;/b&gt;&lt;/font&gt;&lt;/a&gt;&lt;/th&gt;&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">"javascript:__doPostBack(\'datagrid_results$_ctl2$_ctl1\',\'\')"</span><span class="nt">&gt;&lt;font</span> <span class="na">size=</span><span class="s">"2"</span> <span class="na">color=</span><span class="s">"white"</span> <span class="na">face=</span><span class="s">"Arial"</span><span class="nt">&gt;&lt;b&gt;</span>Number<span class="nt">&lt;/b&gt;&lt;/font&gt;&lt;/a&gt;&lt;/th&gt;&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;&lt;font</span> <span class="na">size=</span><span class="s">"2"</span> <span class="na">color=</span><span class="s">"white"</span> <span class="na">face=</span><span class="s">"Arial"</span><span class="nt">&gt;&lt;b&gt;</span>Profession<span class="nt">&lt;/b&gt;&lt;/font&gt;&lt;/th&gt;&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;&lt;font</span> <span class="na">size=</span><span class="s">"2"</span> <span class="na">color=</span><span class="s">"white"</span> <span class="na">face=</span><span class="s">"Arial"</span><span class="nt">&gt;&lt;b&gt;</span>Type<span class="nt">&lt;/b&gt;&lt;/font&gt;&lt;/th&gt;&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;&lt;font</span> <span class="na">size=</span><span class="s">"2"</span> <span class="na">color=</span><span class="s">"white"</span> <span class="na">face=</span><span class="s">"Arial"</span><span class="nt">&gt;&lt;b&gt;</span>Status<span class="nt">&lt;/b&gt;&lt;/font&gt;&lt;/th&gt;&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;&lt;font</span> <span class="na">size=</span><span class="s">"2"</span> <span class="na">color=</span><span class="s">"white"</span> <span class="na">face=</span><span class="s">"Arial"</span><span class="nt">&gt;&lt;b&gt;</span>City<span class="nt">&lt;/b&gt;&lt;/font&gt;&lt;/th&gt;&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;&lt;font</span> <span class="na">size=</span><span class="s">"2"</span> <span class="na">color=</span><span class="s">"white"</span> <span class="na">face=</span><span class="s">"Arial"</span><span class="nt">&gt;&lt;b&gt;</span>State<span class="nt">&lt;/b&gt;&lt;/font&gt;&lt;/th&gt;</span>\n\t\t\t\t\t<span class="nt">&lt;/tr&gt;&lt;tr&gt;</span>\n\t\t\t\t\t\t<span class="nt">&lt;td</span> <span class="na">id=</span><span class="s">"datagrid_results__ctl3_result"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">href=</span><span class="s">"Details.aspx?result=e37a7c27-0910-4478-9e63-4af93e5a4117"</span> <span class="na">id=</span><span class="s">"datagrid_results__ctl3_hl"</span><span class="nt">&gt;</span>KATHERINE A. SALE<span class="nt">&lt;/a&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>AC30086<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>MEDICINE<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>ACUPUNCTURIST<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>Expired<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>ARNOLD<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>MD<span class="nt">&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t\t\t<span class="nt">&lt;/tr&gt;&lt;tr&gt;</span>\n\t\t\t\t\t\t<span class="nt">&lt;td</span> <span class="na">id=</span><span class="s">"datagrid_results__ctl4_result"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">href=</span><span class="s">"Details.aspx?result=39420388-2cd0-4c88-b078-942713c2c4b5"</span> <span class="na">id=</span><span class="s">"datagrid_results__ctl4_hl"</span><span class="nt">&gt;</span>KATHERINE F SEARS<span class="nt">&lt;/a&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>AC30023<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>MEDICINE<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>ACUPUNCTURIST<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>Active<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>Unknown<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>NA<span class="nt">&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t\t\t<span class="nt">&lt;/tr&gt;&lt;tr&gt;</span>\n\t\t\t\t\t\t<span class="nt">&lt;td</span> <span class="na">id=</span><span class="s">"datagrid_results__ctl5_result"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">href=</span><span class="s">"Details.aspx?result=fdcbea2e-dd68-44c1-8a1e-6bad4df28699"</span> <span class="na">id=</span><span class="s">"datagrid_results__ctl5_hl"</span><span class="nt">&gt;</span>KATHERINE J KAPUSNIK<span class="nt">&lt;/a&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>AC500105<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>MEDICINE<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>ACUPUNCTURIST<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>Expired<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>Unknown<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>NA<span class="nt">&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t\t\t<span class="nt">&lt;/tr&gt;&lt;tr&gt;</span>\n\t\t\t\t\t\t<span class="nt">&lt;td</span> <span class="na">id=</span><span class="s">"datagrid_results__ctl6_result"</span><span class="nt">&gt;&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">href=</span><span class="s">"Details.aspx?result=02928cdf-eed1-49ba-b7b5-d67e8c9bfb23"</span> <span class="na">id=</span><span class="s">"datagrid_results__ctl6_hl"</span><span class="nt">&gt;</span>KATHERINE S. YONKERS<span class="nt">&lt;/a&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>AC30057<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>MEDICINE<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>ACUPUNCTURIST<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>Active<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>WASHINGTON<span class="nt">&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span&gt;</span>DC<span class="nt">&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t\t\t<span class="nt">&lt;/tr&gt;&lt;tr</span> <span class="na">style=</span><span class="s">"color:White;background-color:#83A0C8;"</span><span class="nt">&gt;</span>\n\t\t\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"7"</span><span class="nt">&gt;&lt;span&gt;</span>1<span class="nt">&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;/tbody&gt;&lt;/table&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td&gt;&lt;/td&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"1"</span> <span class="na">rowspan=</span><span class="s">"1"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"footer_spacer"</span><span class="nt">&gt;&lt;img</span> <span class="na">width=</span><span class="s">"10"</span> <span class="na">border=</span><span class="s">"0"</span> <span class="na">height=</span><span class="s">"5"</span> <span class="na">src=</span><span class="s">"images/dot.gif"</span> <span class="na">alt=</span><span class="s">""</span> <span class="nt">/&gt;&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t\t<span class="nt">&lt;tr&gt;</span>\n\t\t\t\t<span class="nt">&lt;td</span> <span class="na">align=</span><span class="s">"center"</span> <span class="na">colspan=</span><span class="s">"4"</span> <span class="na">rowspan=</span><span class="s">"1"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"footer"</span><span class="nt">&gt;</span>  <span class="nt">&lt;br</span> <span class="nt">/&gt;&lt;br</span> <span class="nt">/&gt;&lt;hr</span> <span class="nt">/&gt;</span> <span class="nt">&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">href=</span><span class="s">"http://doh.dc.gov/page/dcgov-accessibility-policy"</span><span class="nt">&gt;</span>Accessibility<span class="nt">&lt;/a&gt;</span>\xa0\xa0\xa0<span class="nt">&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">href=</span><span class="s">"http://doh.dc.gov/page/privacy-and-security"</span><span class="nt">&gt;</span>Privacy and Security<span class="nt">&lt;/a&gt;</span>\xa0\xa0\xa0<span class="nt">&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">href=</span><span class="s">"http://doh.dc.gov/page/terms-and-conditions-use"</span><span class="nt">&gt;</span>Terms and Conditions<span class="nt">&lt;/a&gt;</span>\xa0\xa0\xa0<span class="nt">&lt;a</span> <span class="na">target=</span><span class="s">"_blank"</span> <span class="na">href=</span><span class="s">"http://dc.gov/page/about-district-government-website"</span><span class="nt">&gt;</span>About DC.Gov<span class="nt">&lt;/a&gt;</span>\n                <span class="nt">&lt;/span&gt;&lt;/td&gt;</span>\n\t\t\t<span class="nt">&lt;/tr&gt;</span>\n\t\t<span class="nt">&lt;/tbody&gt;&lt;/table&gt;</span>\n\t\t<span class="nt">&lt;/td&gt;</span>\n\t<span class="nt">&lt;/tr&gt;</span>\n<span class="nt">&lt;/tbody&gt;&lt;/table&gt;</span>\n<span class="nt">&lt;/form&gt;</span>\n\t\n\n<span class="nt">&lt;/body&gt;&lt;/html&gt;</span>'
+</code></pre>
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># We can feed that into Beautiful Soup</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">page_source</span><span class="p">,</span> <span class="s">"html.parser"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># It's a tricky table, but this grabs the linked names inside of the A</span>
+<span class="c">#rows = doc.select("#datagrid_results tr")</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'table'</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s">'datagrid_results'</span><span class="p">)</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'tr'</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">'class'</span><span class="p">:</span> <span class="bp">None</span><span class="p">})</span>
+
+<span class="n">doctors</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+    <span class="c"># print(row.attrs)</span>
+    <span class="c"># Find the ones that don't have 'style' as an attribute</span>
+    <span class="k">if</span> <span class="s">'style'</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
+        <span class="c"># Skip it! It's a header or footer row</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cells</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">"td"</span><span class="p">)</span>
+        <span class="n">doctor</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">'name'</span><span class="p">:</span> <span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+            <span class="s">'number'</span><span class="p">:</span> <span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+            <span class="s">'profession'</span><span class="p">:</span> <span class="n">cells</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+            <span class="s">'type'</span><span class="p">:</span> <span class="n">cells</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+            <span class="s">'status'</span><span class="p">:</span> <span class="n">cells</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+            <span class="s">'city'</span><span class="p">:</span> <span class="n">cells</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+            <span class="s">'state'</span><span class="p">:</span> <span class="n">cells</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+        <span class="p">}</span>
+        <span class="n">doctors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">doctor</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">doctors</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[{'city': 'ARNOLD',
+  'name': 'KATHERINE A. SALE',
+  'number': 'AC30086',
+  'profession': 'MEDICINE',
+  'state': 'MD',
+  'status': 'Expired',
+  'type': 'ACUPUNCTURIST'},
+ {'city': 'Unknown',
+  'name': 'KATHERINE F SEARS',
+  'number': 'AC30023',
+  'profession': 'MEDICINE',
+  'state': 'NA',
+  'status': 'Active',
+  'type': 'ACUPUNCTURIST'},
+ {'city': 'Unknown',
+  'name': 'KATHERINE J KAPUSNIK',
+  'number': 'AC500105',
+  'profession': 'MEDICINE',
+  'state': 'NA',
+  'status': 'Expired',
+  'type': 'ACUPUNCTURIST'},
+ {'city': 'WASHINGTON',
+  'name': 'KATHERINE S. YONKERS',
+  'number': 'AC30057',
+  'profession': 'MEDICINE',
+  'state': 'DC',
+  'status': 'Active',
+  'type': 'ACUPUNCTURIST'}]
+</code></pre>
+</div>
+
+<h2 id="closing-the-webdriver">Closing the webdriver</h2>
+
+<p>Once we have all the data we want, we can close our webdriver.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Close the webdriver</span>
+<span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></figure>
+
+<h1 id="saving-our-data">Saving our data</h1>
+
+<p>Now what are we going to do with our list of dictionaries? We <em>could</em> use a
+<code class="highlighter-rouge">csv.DictWriter</code> like in <a href="http://stackoverflow.com/questions/3086973/how-do-i-convert-this-list-of-
+dictionaries-to-a-csv-file-python">this
+post</a>, but it’s actually quicker to do it with
+<code class="highlighter-rouge">pandas</code>.</p>
+
+<h3 id="step-one-import-pandas">Step One: import pandas</h3>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span></code></pre></figure>
+
+<h3 id="step-two-turn-list-into-a-dataframe">Step Two: Turn list into a DataFrame</h3>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">doctors_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">doctors</span><span class="p">)</span>
+<span class="n">doctors_df</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>city</th>
+      <th>name</th>
+      <th>number</th>
+      <th>profession</th>
+      <th>state</th>
+      <th>status</th>
+      <th>type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ARNOLD</td>
+      <td>KATHERINE A. SALE</td>
+      <td>AC30086</td>
+      <td>MEDICINE</td>
+      <td>MD</td>
+      <td>Expired</td>
+      <td>ACUPUNCTURIST</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Unknown</td>
+      <td>KATHERINE F SEARS</td>
+      <td>AC30023</td>
+      <td>MEDICINE</td>
+      <td>NA</td>
+      <td>Active</td>
+      <td>ACUPUNCTURIST</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Unknown</td>
+      <td>KATHERINE J KAPUSNIK</td>
+      <td>AC500105</td>
+      <td>MEDICINE</td>
+      <td>NA</td>
+      <td>Expired</td>
+      <td>ACUPUNCTURIST</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>WASHINGTON</td>
+      <td>KATHERINE S. YONKERS</td>
+      <td>AC30057</td>
+      <td>MEDICINE</td>
+      <td>DC</td>
+      <td>Active</td>
+      <td>ACUPUNCTURIST</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="step-three-save-it-to-a-csv">Step Three: Save it to a CSV</h3>
+
+<p>While you’re saving it, set <code class="highlighter-rouge">index=False</code> or else it will include <code class="highlighter-rouge">0</code>, <code class="highlighter-rouge">1</code>, <code class="highlighter-rouge">2</code>,
+etc from the further-left column (the index, of course).</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">doctors_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">"../doctors.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+<h3 id="step-four-party-down">Step Four: Party down</h3>
+
+<p>I don’t have directions for this one</p>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

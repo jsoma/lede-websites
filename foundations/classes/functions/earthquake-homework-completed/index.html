@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Earthquake Homework (completed)</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations/classes/functions/earthquake-homework-completed/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Earthquake Homework (completed)">
+  <meta property="twitter:title" content="Earthquake Homework (completed)">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2016</a> &gt; <a href="..">Functions</a> &gt;  Earthquake Homework (completed)</p>
+
+
+
+                      <div class="post notebook">
+
+  <header class="post-header">
+    <h1 class="post-title">Earthquake Homework (completed)</h1>
+  </header>
+
+  <p class="notebook-notice">This page is based on a Jupyter/IPython Notebook: <a class="notebook-download-link" href="/lede/foundations/classes/functions/earthquake-homework-completed.ipynb">download the original .ipynb</a></p>
+
+  <article class="post-content">
+    <h1 id="homework-9">Homework 9</h1>
+
+<p>We’re going to make a Lil’ QuakeBot!!!! Please write this code as a .py file,
+not a Notebook.</p>
+
+<h2 id="first-tips">First, tips:</h2>
+
+<p>Be careful that you’re doing all of your math with ints or floats instead of
+strings that look like ints or floats.
+When you write your functions, you can pass either the entire dictionary to the
+function OR just the part you’re curious about (e.g., when you’re getting the
+day you could send the whole earthquake dictionary or just what’s in the ‘time’
+key.)</p>
+
+<p>Writing empty functions that always return the same thing are a great way to
+start off. You can start saying every earthquake is shallow and then fill in the
+actual code later.</p>
+
+<p>Find out what each column name in the database means by visiting
+http://earthquake.usgs.gov/earthquakes/feed/v1.0/csv.php and clicking the links
+for each column.</p>
+
+<h2 id="part-zero-overall-description">PART ZERO: Overall description</h2>
+
+<p>Given an earthquake defined like this…</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>earthquake = {
+  'rms': '1.85',
+  'updated': '2014-06-11T05:22:21.596Z',
+  'type': 'earthquake',
+  'magType': 'mwp',
+  'longitude': '-136.6561',
+  'gap': '48',
+  'depth': '10',
+  'dmin': '0.811',
+  'mag': '5.7',
+  'time': '2014-06-04T11:58:58.200Z',
+  'latitude': '59.0001',
+  'place': '73km WSW of Haines, Alaska',
+  'net': 'us',
+  'nst': '',
+  'id': 'usc000rauc'}
+</code></pre>
+</div>
+
+<p>I want to be able to run</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>print(eq_to_sentence(earthquake))
+</code></pre>
+</div>
+
+<p>and get the following:</p>
+
+<blockquote>
+  <p>A <strong>DEPTH</strong> <strong>POWER</strong>, <strong>MAGNITUDE</strong> earthquake was reported <strong>DAY</strong>
+<strong>TIME_OF_DAY</strong> on <strong>DATE</strong> <strong>LOCATION</strong>.</p>
+</blockquote>
+
+<p>So, for example, “A <strong>deep</strong>, <strong>huge</strong> <strong>4.5</strong> magnitude earthquake was reported
+<strong>Monday</strong> <strong>morning</strong> on <strong>June 22</strong> <strong>73km WSW of Haines, Alaska</strong>”.</p>
+
+<p><strong>DEPTH</strong>, <strong>POWER</strong>, <strong>MAGNITUDE</strong>, <strong>DAY</strong>, and <strong>TIME_OF_DAY</strong> should all
+come from separate functions. More details are in <strong>PART ONE</strong> and <strong>PART TWO</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Start by saving the sample earthquake</span>
+<span class="n">earthquake</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">'rms'</span><span class="p">:</span> <span class="s">'1.85'</span><span class="p">,</span>
+  <span class="s">'updated'</span><span class="p">:</span> <span class="s">'2014-06-11T05:22:21.596Z'</span><span class="p">,</span>
+  <span class="s">'type'</span><span class="p">:</span> <span class="s">'earthquake'</span><span class="p">,</span>
+  <span class="s">'magType'</span><span class="p">:</span> <span class="s">'mwp'</span><span class="p">,</span>
+  <span class="s">'longitude'</span><span class="p">:</span> <span class="s">'-136.6561'</span><span class="p">,</span>
+  <span class="s">'gap'</span><span class="p">:</span> <span class="s">'48'</span><span class="p">,</span>
+  <span class="s">'depth'</span><span class="p">:</span> <span class="s">'10'</span><span class="p">,</span>
+  <span class="s">'dmin'</span><span class="p">:</span> <span class="s">'0.811'</span><span class="p">,</span>
+  <span class="s">'mag'</span><span class="p">:</span> <span class="s">'5.7'</span><span class="p">,</span>
+  <span class="s">'time'</span><span class="p">:</span> <span class="s">'2014-06-04T11:58:58.200Z'</span><span class="p">,</span>
+  <span class="s">'latitude'</span><span class="p">:</span> <span class="s">'59.0001'</span><span class="p">,</span>
+  <span class="s">'place'</span><span class="p">:</span> <span class="s">'73km WSW of Haines, Alaska'</span><span class="p">,</span>
+  <span class="s">'net'</span><span class="p">:</span> <span class="s">'us'</span><span class="p">,</span>
+  <span class="s">'nst'</span><span class="p">:</span> <span class="s">''</span><span class="p">,</span>
+  <span class="s">'id'</span><span class="p">:</span> <span class="s">'usc000rauc'</span><span class="p">}</span></code></pre></figure>
+
+<h2 id="part-one-write-your-few-tiny-functions">PART ONE: Write your few tiny functions</h2>
+
+<p>First you’ll need to write a few functions to help describe an earthquake. Try
+out each of these functions individually. You will probably require:</p>
+
+<ul>
+  <li><strong><code class="highlighter-rouge">depth_to_words</code></strong> will describe the earthquake’s depth</li>
+  <li><strong><code class="highlighter-rouge">magnitude_to_words</code></strong> will describe the earthquake’s power</li>
+  <li><strong><code class="highlighter-rouge">day_in_words</code></strong> should be the day of the week</li>
+  <li><strong><code class="highlighter-rouge">time_in_words</code></strong> should be “morning”, “afternoon”, “evening” or “night”</li>
+  <li><strong><code class="highlighter-rouge">date_in_words</code></strong> should be “Monthname day”, e.g. “June 22”</li>
+  <li>Any other functions as necessary</li>
+</ul>
+
+<p><strong>DEPTH</strong> can be determined from the USGS website -
+http://earthquake.usgs.gov/learn/topics/seismology/determining_depth.php - it
+should be either ‘shallow’, ‘intermediate’ or ‘deep’</p>
+
+<p><strong>POWER</strong> should be evocative words like like ‘easily ignored’ or ‘huge’ or
+‘very destructive’ (feel free to pick your own) - look on Google Image Search
+for “richter scale” to see some possible descriptors.</p>
+
+<p><strong>MAGNITUDE</strong> should be the actual numerical magnitude.</p>
+
+<p><strong>DAY</strong> should be the day of the week.</p>
+
+<p><strong>TIME_OF_DAY</strong> should be morning, afternoon, evening or night.</p>
+
+<p><strong>DATE</strong> should be “Monthname day”, e.g. “June 22”.</p>
+
+<p><strong>TIP:</strong> You probably (a.k.a. definitely) need to convert ‘time’ - which is a
+string - into a Python datetime object which can do <strong><code class="highlighter-rouge">.hour</code></strong>, <strong><code class="highlighter-rouge">.day</code></strong>,
+<strong><code class="highlighter-rouge">.strftime("%Y %b %d")</code></strong> and other fun things. Convert it and test the
+conversion like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">dateutil.parser</span>
+<span class="n">timestring</span> <span class="o">=</span> <span class="s">'2014-06-04T11:58:58.200Z'</span>
+<span class="n">yourdate</span> <span class="o">=</span> <span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">timestring</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"The hour is"</span><span class="p">,</span> <span class="n">yourdate</span><span class="o">.</span><span class="n">hour</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"We can do things with strftime like"</span><span class="p">,</span> <span class="n">yourdate</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="s">Y </span><span class="si">%</span><span class="s">b"</span><span class="p">))</span>
+</code></pre>
+</div>
+
+<p>You’ll need to <strong><code class="highlighter-rouge">pip install dateutils</code></strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># I hate running command line tools in the notebook, but let's do it anyway...</span>
+<span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">dateutils</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">dateutils</span></code></pre></figure>
+
+<h2 id="our-first-function-depthtowords">Our first function: <strong><code class="highlighter-rouge">depth_to_words</code></strong></h2>
+
+<p>There are a few different ways to build <code class="highlighter-rouge">depth_to_words</code>. Let’s take a look at a
+few.</p>
+
+<ul>
+  <li><strong><code class="highlighter-rouge">depth_to_words</code></strong> will describe the earthquake’s depth</li>
+  <li><strong>DEPTH</strong> can be determined from the USGS website -
+http://earthquake.usgs.gov/learn/topics/seismology/determining_depth.php  - it
+should be either ‘shallow’, ‘intermediate’ or ‘deep’</li>
+</ul>
+
+<p>From that URL:</p>
+
+<blockquote>
+  <p>Shallow earthquakes are between 0 and 70 km deep; intermediate earthquakes, 70
+- 300 km deep; and deep earthquakes, 300 - 700 km deep.</p>
+</blockquote>
+
+<h3 id="attempt-one">Attempt One</h3>
+
+<p>We’ll take an integer, and just follow what the text says.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">depth_to_words</span><span class="p">(</span><span class="n">depth</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="mi">70</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"shallow"</span>
+    <span class="k">elif</span> <span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">70</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"intermediate"</span>
+    <span class="k">elif</span> <span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">300</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="mi">700</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"shallow"</span>
+
+<span class="c"># You would call it like this</span>
+<span class="n">depth_to_words</span><span class="p">(</span><span class="mi">70</span><span class="p">)</span>
+
+<span class="c"># Now let's test it with some sample values</span>
+<span class="n">test_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">test_values</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s">"gives us"</span><span class="p">,</span> <span class="n">depth_to_words</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>30 gives us shallow
+100 gives us intermediate
+70 gives us None
+0 gives us None
+1000 gives us None
+-1 gives us None
+</code></pre>
+</div>
+
+<p>70, 0, 1000 and -1 all give us <strong><code class="highlighter-rouge">None</code></strong> as our depth! This is because we
+listened a little too closely to the description given to us by USGS.</p>
+
+<ul>
+  <li>Shallow: ABOVE 0 and BELOW 70</li>
+  <li>Intermediate: ABOVE 70 and BELOW 300</li>
+  <li>Deep: ABOVE 300 and BELOW 700</li>
+</ul>
+
+<p>Unfortunately 70 slipped through the cracks (we looked for BELOW 70 and ABOVE
+70) as did values outside of 0-700. Should a 70km earthquake be shallow or
+intermediate? Should a 1000km earthquake be considered deep, or should it
+encounter an error? How about 0km, or negative values?</p>
+
+<p>Sometimes decisions like this take more research, and sometimes it takes you
+making a decision.</p>
+
+<ul>
+  <li>0km and negative-km earthquakes are generally explosions at the surface, but
+there can also be slight errors in measurement. I think making them shallow
+isn’t a big deal.</li>
+  <li>Is the 70km cutoff for shallow/intermediate an official term? I’m going to say
+<strong>no</strong> (even though I didn’t check!), so we can count it as either.</li>
+  <li>1000km earthquakes seem deep to me, so let’s consider them deep.</li>
+</ul>
+
+<h3 id="version-two-taking-care-with-edge-cases">Version Two: Taking care with edge cases</h3>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">depth_to_words</span><span class="p">(</span><span class="n">depth</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="mi">70</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"shallow"</span>
+    <span class="k">elif</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"intermediate"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"shallow"</span>
+
+<span class="c"># You would call it like this</span>
+<span class="n">depth_to_words</span><span class="p">(</span><span class="mi">70</span><span class="p">)</span>
+
+<span class="c"># Now let's test it with some sample values</span>
+<span class="n">test_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">test_values</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s">"gives us"</span><span class="p">,</span> <span class="n">depth_to_words</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>30 gives us shallow
+100 gives us intermediate
+70 gives us intermediate
+0 gives us shallow
+1000 gives us shallow
+-1 gives us shallow
+</code></pre>
+</div>
+
+<p>That looks a little better. <strong>Opening up the ends</strong> instead of being firm gives
+us a little flexibility with our input. Whether that’s a good or bad idea
+depends on what your data is!</p>
+
+<p>We do have one big problem, though, and it shows up when we start working with
+our real data</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">depth_to_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">[</span><span class="s">'depth'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>---------------------------------------------------------------------------
+
+TypeError                                 Traceback (most recent call last)
+
+&lt;ipython-input-19-68eff4faf19b&gt; in &lt;module&gt;()
+----&gt; 1 depth_to_words(earthquake['depth'])
+
+
+&lt;ipython-input-18-44d0f6dabc90&gt; in depth_to_words(depth)
+      1 def depth_to_words(depth):
+----&gt; 2     if depth &lt; 70:
+      3         return "shallow"
+      4     elif depth &lt; 300:
+      5         return "intermediate"
+
+
+TypeError: unorderable types: str() &lt; int()
+</code></pre>
+</div>
+
+<p>Uh oh, turns out <strong><code class="highlighter-rouge">earthquake['depth']</code></strong> is actually a <code class="highlighter-rouge">string</code>, which you
+can’t compare to an integer. Guess we need to convert that.</p>
+
+<h3 id="attempt-three-preparing-our-input">Attempt Three: Preparing our input</h3>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">depth_to_words</span><span class="p">(</span><span class="n">str_depth</span><span class="p">):</span>
+    <span class="n">depth</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">str_depth</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="mi">70</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"shallow"</span>
+    <span class="k">elif</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"intermediate"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"shallow"</span>
+
+<span class="c"># You would call it like this</span>
+<span class="n">depth_to_words</span><span class="p">(</span><span class="mi">70</span><span class="p">)</span>
+
+<span class="c"># Now let's test it with some sample values</span>
+<span class="n">test_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">test_values</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s">"gives us"</span><span class="p">,</span> <span class="n">depth_to_words</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>30 gives us shallow
+100 gives us intermediate
+70 gives us intermediate
+0 gives us shallow
+1000 gives us shallow
+-1 gives us shallow
+</code></pre>
+</div>
+
+<p>Luckily there isn’t a problem with converting an integer into an integer:
+<code class="highlighter-rouge">int(70)</code> just becomes <code class="highlighter-rouge">70</code> - it doesn’t have to be int(“70”). Now let’s try it
+with our data.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">depth_to_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">[</span><span class="s">'depth'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'shallow'
+</code></pre>
+</div>
+
+<h3 id="attempt-three-passing-a-dictionary">Attempt three: Passing a dictionary</h3>
+
+<p>Now you get to make an <strong>executive decision</strong>. Which one of the following looks
+better to you?</p>
+
+<ul>
+  <li><code class="highlighter-rouge">depth_to_words(earthquake['depth'])</code></li>
+  <li><code class="highlighter-rouge">depth_to_words(earthquake)</code></li>
+</ul>
+
+<p>I like the second one, it moves more of the “magic” out into the function. So
+let’s rewrite our function <strong>to accept a dictionary instead of a number.</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">depth_to_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">):</span>
+    <span class="n">depth</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">earthquake</span><span class="p">[</span><span class="s">'depth'</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="mi">70</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"shallow"</span>
+    <span class="k">elif</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"intermediate"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"shallow"</span>
+
+<span class="c"># You would call it like this</span>
+<span class="n">depth_to_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'shallow'
+</code></pre>
+</div>
+
+<p>This <strong>looks far nicer</strong>, but is also <strong>much more difficult to test</strong>.</p>
+
+<p>Before we could just try things out by sending integers (or even strings) to the
+function. But now if we wanted to test a bunch of different depths, we need to
+create a bunch of <strong>fake earthquakes</strong>.</p>
+
+<p>At least we only need to give them the <code class="highlighter-rouge">depth</code> key, since that’s the only key we
+use in our function.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">test_earthquakes</span> <span class="o">=</span> <span class="p">[{</span><span class="s">'depth'</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span> <span class="p">{</span><span class="s">'depth'</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s">'depth'</span><span class="p">:</span> <span class="mi">70</span><span class="p">},</span> <span class="p">{</span><span class="s">'depth'</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span> <span class="p">{</span><span class="s">'depth'</span><span class="p">:</span> <span class="mi">1000</span><span class="p">},</span> <span class="p">{</span><span class="s">'depth'</span><span class="p">:</span> <span class="mi">0</span><span class="p">}]</span>
+<span class="k">for</span> <span class="n">test_earthquake</span> <span class="ow">in</span> <span class="n">test_earthquakes</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test_earthquake</span><span class="p">[</span><span class="s">'depth'</span><span class="p">],</span> <span class="s">"gives us"</span><span class="p">,</span> <span class="n">depth_to_words</span><span class="p">(</span><span class="n">test_earthquake</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>30 gives us shallow
+100 gives us intermediate
+70 gives us intermediate
+0 gives us shallow
+1000 gives us shallow
+0 gives us shallow
+</code></pre>
+</div>
+
+<p>We could also create the dictionary just at the moment we’re calling the
+function, which is a little cleaner-looking.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">test_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">test_values</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s">"gives us"</span><span class="p">,</span> <span class="n">depth_to_words</span><span class="p">({</span><span class="s">'depth'</span><span class="p">:</span> <span class="n">value</span><span class="p">}))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>30 gives us shallow
+100 gives us intermediate
+70 gives us intermediate
+0 gives us shallow
+1000 gives us shallow
+-1 gives us shallow
+</code></pre>
+</div>
+
+<p>I personally think testing with real data is the way to go - I’d give a few
+tests myself, then plug it into the real data that comes in Part Two.</p>
+
+<h2 id="function-two-magnitudeinwords">Function two: <strong><code class="highlighter-rouge">magnitude_in_words</code></strong></h2>
+
+<ul>
+  <li><strong><code class="highlighter-rouge">magnitude_to_words</code></strong> will describe the earthquake’s power</li>
+  <li><strong>POWER</strong> should be evocative words like like ‘easily ignored’ or ‘huge’ or
+‘very destructive’ (feel free to pick your own) - look on Google Image Search
+for “richter scale” to see some possible descriptors.</li>
+</ul>
+
+<p>I’m going to use this image: http://wiki.ubc.ca/images/e/ea/Richterscale.png</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Range</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0-2</td>
+      <td>Never felt</td>
+    </tr>
+    <tr>
+      <td>2-3</td>
+      <td>Minor</td>
+    </tr>
+    <tr>
+      <td>3-4</td>
+      <td>Minor</td>
+    </tr>
+    <tr>
+      <td>4-5</td>
+      <td>Light</td>
+    </tr>
+    <tr>
+      <td>5-6</td>
+      <td>Moderate</td>
+    </tr>
+    <tr>
+      <td>6-7</td>
+      <td>Strong</td>
+    </tr>
+    <tr>
+      <td>7-8</td>
+      <td>Major</td>
+    </tr>
+    <tr>
+      <td>8-9</td>
+      <td>Great</td>
+    </tr>
+    <tr>
+      <td>9-10</td>
+      <td>Great</td>
+    </tr>
+    <tr>
+      <td>10+</td>
+      <td>Epic</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>It doesn’t seem like the <em>best</em> set of descriptions, but we’ll go with it.</p>
+
+<p>After the lessons learned with the last function, we’re going to make sure to
+<strong>convert to a float</strong> (not an integer, since the decimals matter) and <strong>accept
+a dictionary</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">magnitude_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">):</span>
+    <span class="n">mag</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">earthquake</span><span class="p">[</span><span class="s">'mag'</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">mag</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"unnoticeable"</span>
+    <span class="k">elif</span> <span class="n">mag</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"minor"</span>
+    <span class="k">elif</span> <span class="n">mag</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"light"</span>
+    <span class="k">elif</span> <span class="n">mag</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"moderate"</span>
+    <span class="k">elif</span> <span class="n">mag</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"strong"</span>
+    <span class="k">elif</span> <span class="n">mag</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"major"</span>
+    <span class="k">elif</span> <span class="n">mag</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"great"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"epic"</span>
+
+<span class="c"># And we'll test it with our sample</span>
+<span class="k">print</span><span class="p">(</span><span class="n">earthquake</span><span class="p">[</span><span class="s">'mag'</span><span class="p">],</span> <span class="s">"registers as"</span><span class="p">,</span> <span class="n">magnitude_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>5.7 registers as moderate
+</code></pre>
+</div>
+
+<p>Looks good to me, on to the next one.</p>
+
+<h2 id="function-three-day-of-the-week">Function Three: Day of the Week</h2>
+
+<ul>
+  <li><strong><code class="highlighter-rouge">day_in_words</code></strong> should be the day of the week</li>
+  <li><strong>DAY</strong> should be the day of the week.</li>
+  <li><strong>TIP:</strong> You probably (a.k.a. definitely) need to convert ‘time’ - which is a
+string - into a Python datetime object which can do .hour, .day, .strftime(“%Y
+%b %d”) and other fun things. Convert it and test the conversion like this:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">dateutil.parser</span>
+<span class="n">timestring</span> <span class="o">=</span> <span class="s">'2014-06-04T11:58:58.200Z'</span>
+<span class="n">yourdate</span> <span class="o">=</span> <span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">timestring</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"The hour is"</span><span class="p">,</span> <span class="n">yourdate</span><span class="o">.</span><span class="n">hour</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"We can do things with strftime like"</span><span class="p">,</span> <span class="n">yourdate</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="s">Y </span><span class="si">%</span><span class="s">b"</span><span class="p">))</span>
+</code></pre>
+</div>
+
+<p>Let’s look at our earthquake’s <strong><code class="highlighter-rouge">time</code></strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">earthquake</span><span class="p">[</span><span class="s">'time'</span><span class="p">]</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'2014-06-04T11:58:58.200Z'
+</code></pre>
+</div>
+
+<p>Now let’s try out the sample code from up above with our earthquake’s <strong><code class="highlighter-rouge">time</code></strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">dateutil.parser</span>
+<span class="n">yourdate</span> <span class="o">=</span> <span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">earthquake</span><span class="p">[</span><span class="s">'time'</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"The hour is"</span><span class="p">,</span> <span class="n">yourdate</span><span class="o">.</span><span class="n">hour</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"We can do things with strftime like"</span><span class="p">,</span> <span class="n">yourdate</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="s">Y </span><span class="si">%</span><span class="s">b"</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>The hour is 11
+We can do things with strftime like 2014 Jun
+</code></pre>
+</div>
+
+<p>If we’re trying to get the day, and we can use <strong><code class="highlighter-rouge">.hour</code></strong>, can we use…
+<strong><code class="highlighter-rouge">.day</code></strong>?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">yourdate</span><span class="o">.</span><span class="n">day</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>4
+</code></pre>
+</div>
+
+<p>Uh, not really, I guess. <strong>This is where <code class="highlighter-rouge">strftime</code> comes into play.</strong> It will
+convert a <strong>Python representation of time</strong> into a <strong>string</strong>. We can use the
+<a href="http://strftime.org/">handy reference on strftime.org</a> to know what the secret
+codes are when using <strong><code class="highlighter-rouge">.strftime</code></strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">yourdate</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="s">A"</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'Wednesday'
+</code></pre>
+</div>
+
+<p>Worked like a charm, so now all we need to do is make a function that <strong>accepts
+the earthquake dictionary</strong> and <strong>returns the day name</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">day_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">):</span>
+    <span class="n">parsed_date</span> <span class="o">=</span> <span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">earthquake</span><span class="p">[</span><span class="s">'time'</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">parsed_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="s">A"</span><span class="p">)</span>
+
+<span class="n">day_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'Wednesday'
+</code></pre>
+</div>
+
+<p>Beautiful! On to the next one.</p>
+
+<h2 id="function-four-timeinwords">Function Four: <code class="highlighter-rouge">time_in_words</code></h2>
+
+<ul>
+  <li>time_in_words should be “morning”, “afternoon”, “evening” or “night”</li>
+</ul>
+
+<p>Unfortunately we <em>can’t</em> use <strong><code class="highlighter-rouge">strftime</code></strong> for this. What we can do, though, is
+think about <strong>what makes morning, afternoon, evening and night?</strong></p>
+
+<p>The hour. And we have the hour!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">yourdate</span> <span class="o">=</span> <span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">earthquake</span><span class="p">[</span><span class="s">'time'</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"The hour is"</span><span class="p">,</span> <span class="n">yourdate</span><span class="o">.</span><span class="n">hour</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>The hour is 11
+</code></pre>
+</div>
+
+<p><strong>Time for some decisions.</strong> Morning is probably before 12pm, afternoon is
+before 6pm, evening is 6-8, and night is after that.</p>
+
+<p>We won’t see this unless we test specific times, <strong>but what about 2am?</strong> You
+could either have been out all night (still nighttime) or waking up early for a
+flight (which seems like morning). What do you pick?</p>
+
+<p>In this case, it’s really your choice. Decisions like this are what make
+computer-generated stories <em>seem</em> independent but show that they’re really just
+as human-being-written as any other story. I’m going to say 3am is the beginning
+of morning.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">time_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">):</span>
+    <span class="n">parsed_date</span> <span class="o">=</span> <span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">earthquake</span><span class="p">[</span><span class="s">'time'</span><span class="p">])</span>
+    <span class="n">hour</span> <span class="o">=</span> <span class="n">parsed_date</span><span class="o">.</span><span class="n">hour</span>
+    <span class="k">if</span> <span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"night"</span>
+    <span class="k">elif</span> <span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"morning"</span>
+    <span class="k">elif</span> <span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"afternoon"</span>
+    <span class="k">elif</span> <span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"evening"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"night"</span>
+        
+<span class="k">print</span><span class="p">(</span><span class="n">earthquake</span><span class="p">[</span><span class="s">'time'</span><span class="p">])</span>
+<span class="n">time_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>2014-06-04T11:58:58.200Z
+
+
+
+
+
+'morning'
+</code></pre>
+</div>
+
+<p>Yup, 11AM is morning, so that sounds good.</p>
+
+<p>I made a choice to have <strong>two separate returns for night</strong>. I could have done
+<code class="highlighter-rouge">if hour &lt; 3 or hour &gt;= 8</code> but I felt that keeping the times in order was
+important. It also would have been easy to do <code class="highlighter-rouge">if hour &lt; 3 or hour &gt; 8</code> and
+accidentally miss out on 8pm.</p>
+
+<h2 id="function-five-dateinwords">Function Five: <code class="highlighter-rouge">date_in_words</code></h2>
+
+<ul>
+  <li>date_in_words should be “Monthname day”, e.g. “June 22”</li>
+</ul>
+
+<p>This is easy, it’s just another <strong><code class="highlighter-rouge">strftime</code></strong> one! Hop on over to
+<a href="strftime.org">strftime.org</a> and we’ll be good to go. You’ll just want to be
+careful you don’t use <code class="highlighter-rouge">%d</code>, which would give “04” instead of <code class="highlighter-rouge">%-d</code>, which gives
+“4”.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">date_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">):</span>
+    <span class="n">parsed_date</span> <span class="o">=</span> <span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">earthquake</span><span class="p">[</span><span class="s">'time'</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">parsed_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="s">B </span><span class="si">%-</span><span class="s">d"</span><span class="p">)</span>
+
+<span class="n">date_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'June 4'
+</code></pre>
+</div>
+
+<h2 id="part-two-write-the-eqtosentence-function">PART TWO: Write the <code class="highlighter-rouge">eq_to_sentence</code> function</h2>
+
+<p>Write a function called <code class="highlighter-rouge">eq_to_sentence</code> that, when called, returns the whole
+sentence mentioned above, “A DEPTH, POWER MAGNITUDE earthquake was reported DAY
+TIME_OF_DAY on DATE LOCATION.”</p>
+
+<p>Print out the result for the sample earthquake.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">eq_to_sentence</span><span class="p">(</span><span class="n">earthquake</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"A"</span><span class="p">,</span> <span class="n">depth_to_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span> <span class="n">magnitude_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'mag'</span><span class="p">],</span> <span class="s">"earthquake was reported"</span><span class="p">,</span> <span class="n">day_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span> <span class="n">time_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span> <span class="s">"on"</span><span class="p">,</span> <span class="n">date_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'place'</span><span class="p">])</span>
+
+<span class="n">eq_to_sentence</span><span class="p">(</span><span class="n">earthquake</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>A shallow moderate 5.7 earthquake was reported Wednesday morning on June 4 73km WSW of Haines, Alaska
+</code></pre>
+</div>
+
+<p>This isn’t what I asked for, though! I asked for something that <em>returns a
+string</em>, and then the <em>string gets printed</em>. It’s just a matter of moving
+<strong><code class="highlighter-rouge">print</code></strong>, maybe?</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">eq_to_sentence</span><span class="p">(</span><span class="n">earthquake</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">"A"</span><span class="p">,</span> <span class="n">depth_to_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span> <span class="n">magnitude_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'mag'</span><span class="p">],</span> <span class="s">"earthquake was reported"</span><span class="p">,</span> <span class="n">day_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span> <span class="n">time_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span> <span class="s">"on"</span><span class="p">,</span> <span class="n">date_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'place'</span><span class="p">]</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">eq_to_sentence</span><span class="p">(</span><span class="n">earthquake</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>('A', 'shallow', 'moderate', '5.7', 'earthquake was reported', 'Wednesday', 'morning', 'on', 'June 4', '73km WSW of Haines, Alaska')
+</code></pre>
+</div>
+
+<p>Hmmm, doesn’t look beautiful. Now, what you <strong>could do</strong> is use the <strong><code class="highlighter-rouge">+</code></strong> to
+stick all of those together, or maybe treat them as a list and use <code class="highlighter-rouge">' '.join</code> to
+join them all together with spaces. I’m going to show you a secret trick,
+though, called <strong><code class="highlighter-rouge">.format</code></strong>!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">name</span> <span class="o">=</span> <span class="s">"Smushface"</span>
+<span class="n">animal</span> <span class="o">=</span> <span class="s">"cat"</span>
+<span class="s">"My name is {} and I am a {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">animal</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'My name is Smushface and I am a cat'
+</code></pre>
+</div>
+
+<p><strong><code class="highlighter-rouge">.format</code></strong> allows you to do a “fill in the blanks” with variables when
+creating a string. It’s pretty useful!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">depthwords</span> <span class="o">=</span> <span class="n">depth_to_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">)</span>
+<span class="n">magwords</span> <span class="o">=</span> <span class="n">magnitude_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">)</span>
+<span class="n">daywords</span> <span class="o">=</span> <span class="n">day_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">)</span>
+<span class="n">timewords</span> <span class="o">=</span> <span class="n">time_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">)</span>
+<span class="n">datewords</span> <span class="o">=</span> <span class="n">date_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">)</span>
+<span class="s">"A {} {} {} earthquake was reported {} {} on {}, {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">depthwords</span><span class="p">,</span> <span class="n">magwords</span><span class="p">,</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'mag'</span><span class="p">],</span> <span class="n">daywords</span><span class="p">,</span> <span class="n">timewords</span><span class="p">,</span> <span class="n">datewords</span><span class="p">,</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'place'</span><span class="p">])</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'A shallow moderate 5.7 earthquake was reported Wednesday morning on June 4, 73km WSW of Haines, Alaska'
+</code></pre>
+</div>
+
+<p>If we want to get even crazier, you can use a dictionary with <strong><code class="highlighter-rouge">.format</code></strong> so
+that you don’t have to pay attention to order.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">eq_words</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'depthwords'</span><span class="p">:</span> <span class="n">depth_to_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span>
+    <span class="s">'magwords'</span><span class="p">:</span> <span class="n">magnitude_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span>
+    <span class="s">'daywords'</span><span class="p">:</span> <span class="n">day_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span>
+    <span class="s">'timewords'</span><span class="p">:</span> <span class="n">time_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span>
+    <span class="s">'datewords'</span><span class="p">:</span> <span class="n">date_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span>
+    <span class="s">'location'</span><span class="p">:</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'place'</span><span class="p">],</span>
+    <span class="s">'magnitude'</span><span class="p">:</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'mag'</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="s">"A {depthwords} {magwords} {magnitude} earthquake was reported {daywords} {timewords} on {location}, {magnitude}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">eq_words</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'A shallow moderate 5.7 earthquake was reported Wednesday morning on 73km WSW of Haines, Alaska, 5.7'
+</code></pre>
+</div>
+
+<p>Whichever version you choose, now you can pop it into a function.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">eq_to_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">):</span>
+    <span class="n">eq_words</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'depthwords'</span><span class="p">:</span> <span class="n">depth_to_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span>
+        <span class="s">'magwords'</span><span class="p">:</span> <span class="n">magnitude_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span>
+        <span class="s">'daywords'</span><span class="p">:</span> <span class="n">day_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span>
+        <span class="s">'timewords'</span><span class="p">:</span> <span class="n">time_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span>
+        <span class="s">'datewords'</span><span class="p">:</span> <span class="n">date_in_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">),</span>
+        <span class="s">'location'</span><span class="p">:</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'place'</span><span class="p">],</span>
+        <span class="s">'magnitude'</span><span class="p">:</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'mag'</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="s">"A {depthwords} {magwords} {magnitude} earthquake was reported {daywords} {timewords} on {location}, {magnitude}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">eq_words</span><span class="p">)</span>
+
+<span class="n">eq_to_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">)</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'A shallow moderate 5.7 earthquake was reported Wednesday morning on 73km WSW of Haines, Alaska, 5.7'
+</code></pre>
+</div>
+
+<p>Looking good!</p>
+
+<h2 id="part-three-doing-it-in-bulk">PART THREE: Doing it in bulk</h2>
+
+<p>Read in the csv of the past 30 days of 1.0+ earthquke activity from
+http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.csv (tip:
+read_csv works with URLs!)</p>
+
+<p>Because we haven’t covered looping through pandas, use the following code to
+convert a pandas DataFrame into a list of dictionaries that you can loop
+through.</p>
+
+<p>earthquakes_df = pd.read_csv(“../1.0_month.csv”)
+earthquakes = earthquakes_df.to_dict(‘records’)</p>
+
+<p>(If you really want to do it with pandas, it’s for index, row in
+earthquakes_df.iterrows():)</p>
+
+<p>Loop through each earthquake, printing sentence descriptions for the ones that
+are above or equal to 4.0 on the Richter scale.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="n">earthquakes_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.csv"</span><span class="p">)</span>
+<span class="n">earthquakes_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>time</th>
+      <th>latitude</th>
+      <th>longitude</th>
+      <th>depth</th>
+      <th>mag</th>
+      <th>magType</th>
+      <th>nst</th>
+      <th>gap</th>
+      <th>dmin</th>
+      <th>rms</th>
+      <th>...</th>
+      <th>updated</th>
+      <th>place</th>
+      <th>type</th>
+      <th>horizontalError</th>
+      <th>depthError</th>
+      <th>magError</th>
+      <th>magNst</th>
+      <th>status</th>
+      <th>locationSource</th>
+      <th>magSource</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2016-06-26T11:55:51.850Z</td>
+      <td>37.506168</td>
+      <td>-118.797333</td>
+      <td>-1.19</td>
+      <td>1.47</td>
+      <td>md</td>
+      <td>10.0</td>
+      <td>219.0</td>
+      <td>0.06295</td>
+      <td>0.03</td>
+      <td>...</td>
+      <td>2016-06-26T12:18:03.754Z</td>
+      <td>22km SE of Mammoth Lakes, California</td>
+      <td>earthquake</td>
+      <td>0.72</td>
+      <td>2.26</td>
+      <td>0.080</td>
+      <td>10.0</td>
+      <td>automatic</td>
+      <td>nc</td>
+      <td>nc</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2016-06-26T11:50:06.540Z</td>
+      <td>34.832000</td>
+      <td>-118.922167</td>
+      <td>13.50</td>
+      <td>1.99</td>
+      <td>ml</td>
+      <td>43.0</td>
+      <td>36.0</td>
+      <td>0.05095</td>
+      <td>0.25</td>
+      <td>...</td>
+      <td>2016-06-26T12:00:31.920Z</td>
+      <td>2km ENE of Frazier Park, CA</td>
+      <td>earthquake</td>
+      <td>0.34</td>
+      <td>0.57</td>
+      <td>0.196</td>
+      <td>26.0</td>
+      <td>automatic</td>
+      <td>ci</td>
+      <td>ci</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2016-06-26T11:41:38.920Z</td>
+      <td>38.793167</td>
+      <td>-122.759163</td>
+      <td>1.09</td>
+      <td>1.13</td>
+      <td>md</td>
+      <td>17.0</td>
+      <td>69.0</td>
+      <td>0.02014</td>
+      <td>0.02</td>
+      <td>...</td>
+      <td>2016-06-26T12:07:02.715Z</td>
+      <td>1km N of The Geysers, California</td>
+      <td>earthquake</td>
+      <td>0.19</td>
+      <td>0.53</td>
+      <td>0.100</td>
+      <td>6.0</td>
+      <td>automatic</td>
+      <td>nc</td>
+      <td>nc</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2016-06-26T11:17:11.690Z</td>
+      <td>39.486700</td>
+      <td>73.325200</td>
+      <td>15.50</td>
+      <td>6.40</td>
+      <td>mww</td>
+      <td>NaN</td>
+      <td>57.0</td>
+      <td>1.17600</td>
+      <td>1.17</td>
+      <td>...</td>
+      <td>2016-06-26T12:18:32.170Z</td>
+      <td>27km SSE of Sary-Tash, Kyrgyzstan</td>
+      <td>earthquake</td>
+      <td>5.80</td>
+      <td>1.80</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>reviewed</td>
+      <td>us</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2016-06-26T11:13:00.970Z</td>
+      <td>33.009667</td>
+      <td>-116.485000</td>
+      <td>10.52</td>
+      <td>1.10</td>
+      <td>ml</td>
+      <td>34.0</td>
+      <td>77.0</td>
+      <td>0.11830</td>
+      <td>0.17</td>
+      <td>...</td>
+      <td>2016-06-26T11:24:18.280Z</td>
+      <td>13km SE of Julian, CA</td>
+      <td>earthquake</td>
+      <td>0.21</td>
+      <td>0.45</td>
+      <td>0.204</td>
+      <td>27.0</td>
+      <td>automatic</td>
+      <td>ci</td>
+      <td>ci</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 22 columns</p>
+</div>
+
+<p>Now all we need to do is convert the dataframe into a list of dictionaries and
+pass them to our function, and suddenly we have a hundred sentences without
+doing much more work at all!</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">earthquakes</span> <span class="o">=</span> <span class="n">earthquakes_df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s">'records'</span><span class="p">)</span>
+<span class="c"># I'm just going to slice off the first 100</span>
+<span class="k">for</span> <span class="n">earthquake</span> <span class="ow">in</span> <span class="n">earthquakes</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">100</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">eq_to_words</span><span class="p">(</span><span class="n">earthquake</span><span class="p">))</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>A shallow unnoticeable 1.47 earthquake was reported Sunday morning on 22km SE of Mammoth Lakes, California, 1.47
+A shallow unnoticeable 1.99 earthquake was reported Sunday morning on 2km ENE of Frazier Park, CA, 1.99
+A shallow unnoticeable 1.13 earthquake was reported Sunday morning on 1km N of The Geysers, California, 1.13
+A shallow strong 6.4 earthquake was reported Sunday morning on 27km SSE of Sary-Tash, Kyrgyzstan, 6.4
+A shallow unnoticeable 1.1 earthquake was reported Sunday morning on 13km SE of Julian, CA, 1.1
+A shallow unnoticeable 1.2 earthquake was reported Sunday morning on 27km ENE of Cantwell, Alaska, 1.2
+A shallow unnoticeable 1.04 earthquake was reported Sunday morning on 8km E of Mammoth Lakes, California, 1.04
+A shallow unnoticeable 1.9 earthquake was reported Sunday morning on 83km E of Sutton-Alpine, Alaska, 1.9
+A shallow unnoticeable 1.0 earthquake was reported Sunday morning on 81km NNW of Valdez, Alaska, 1.0
+A intermediate minor 2.2 earthquake was reported Sunday morning on 25km NNE of Culebra, Puerto Rico, 2.2
+A shallow unnoticeable 1.0 earthquake was reported Sunday morning on 20km E of Julian, CA, 1.0
+A shallow unnoticeable 1.8 earthquake was reported Sunday morning on 5km E of Espino, Puerto Rico, 1.8
+A shallow light 4.6 earthquake was reported Sunday morning on 126km NNW of Dobo, Indonesia, 4.6
+A shallow unnoticeable 1.1 earthquake was reported Sunday morning on 118km W of Cantwell, Alaska, 1.1
+A intermediate minor 2.9 earthquake was reported Sunday morning on 84km NE of Chignik Lake, Alaska, 2.9
+A shallow unnoticeable 1.1 earthquake was reported Sunday morning on 103km WNW of Talkeetna, Alaska, 1.1
+A intermediate moderate 5.0 earthquake was reported Sunday morning on 20km E of Farkhar, Afghanistan, 5.0
+A shallow unnoticeable 1.8 earthquake was reported Sunday morning on 46km N of Sterling, Alaska, 1.8
+A shallow unnoticeable 1.0 earthquake was reported Sunday morning on 68km SSW of Tok, Alaska, 1.0
+A shallow light 4.9 earthquake was reported Sunday morning on Reykjanes Ridge, 4.9
+A shallow unnoticeable 1.6 earthquake was reported Sunday morning on 22km S of Charlotte Amalie, U.S. Virgin Islands, 1.6
+A shallow unnoticeable 1.2 earthquake was reported Sunday morning on 59km SSE of Cantwell, Alaska, 1.2
+A shallow moderate 5.0 earthquake was reported Sunday morning on West of Macquarie Island, 5.0
+A intermediate light 4.3 earthquake was reported Sunday morning on 145km NNE of Tobelo, Indonesia, 4.3
+A intermediate light 4.3 earthquake was reported Sunday morning on 77km SSW of Calama, Chile, 4.3
+A shallow unnoticeable 1.0 earthquake was reported Sunday morning on 36km ESE of Bridgeport, California, 1.0
+A shallow unnoticeable 1.3 earthquake was reported Sunday morning on 60km WNW of Willow, Alaska, 1.3
+A intermediate minor 2.0 earthquake was reported Sunday morning on 53km NNE of Redoubt Volcano, Alaska, 2.0
+A shallow light 4.2 earthquake was reported Sunday morning on 93km S of Kuh Sefid, Iran, 4.2
+A shallow unnoticeable 1.42 earthquake was reported Sunday morning on 18km E of Big Bear City, CA, 1.42
+A shallow moderate 5.1 earthquake was reported Sunday morning on 253km ESE of Yigo Village, Guam, 5.1
+A shallow light 4.8 earthquake was reported Sunday morning on West of Macquarie Island, 4.8
+A shallow minor 3.0 earthquake was reported Sunday morning on 69km N of Charlotte Amalie, U.S. Virgin Islands, 3.0
+A shallow unnoticeable 1.0 earthquake was reported Sunday morning on 61km NW of Ester, Alaska, 1.0
+A intermediate light 4.0 earthquake was reported Sunday morning on 94km W of Willow, Alaska, 4.0
+A shallow minor 2.8 earthquake was reported Sunday morning on 54km NNE of Road Town, British Virgin Islands, 2.8
+A shallow minor 2.72 earthquake was reported Sunday night on 9km WNW of Cobb, California, 2.72
+A intermediate light 4.9 earthquake was reported Sunday night on 241km NW of Saumlaki, Indonesia, 4.9
+A shallow unnoticeable 1.86 earthquake was reported Sunday night on 20km NNE of Upper Lake, California, 1.86
+A shallow minor 2.5 earthquake was reported Sunday night on 86km N of Road Town, British Virgin Islands, 2.5
+A shallow unnoticeable 1.01 earthquake was reported Sunday night on 12km SSW of Ocotillo Wells, CA, 1.01
+A intermediate minor 2.6 earthquake was reported Sunday night on 52km N of Charlotte Amalie, U.S. Virgin Islands, 2.6
+A shallow unnoticeable 1.98 earthquake was reported Sunday night on 4km ENE of San Marcos, CA, 1.98
+A shallow unnoticeable 1.3 earthquake was reported Sunday night on 26km N of Yucca Valley, CA, 1.3
+A shallow unnoticeable 1.9 earthquake was reported Sunday night on 120km NNW of Kodiak Station, Alaska, 1.9
+A shallow unnoticeable 1.9 earthquake was reported Sunday night on 110km NNW of Kodiak Station, Alaska, 1.9
+A shallow unnoticeable 1.5 earthquake was reported Sunday night on 114km W of Cantwell, Alaska, 1.5
+A shallow unnoticeable 1.82 earthquake was reported Sunday night on 8km ESE of Mammoth Lakes, California, 1.82
+A shallow light 4.8 earthquake was reported Sunday night on West of Macquarie Island, 4.8
+A shallow minor 2.9 earthquake was reported Sunday night on 84km N of Road Town, British Virgin Islands, 2.9
+A shallow minor 2.88 earthquake was reported Sunday night on 26km ESE of Hawaiian Ocean View, Hawaii, 2.88
+A shallow unnoticeable 1.34 earthquake was reported Sunday night on 5km NW of The Geysers, California, 1.34
+A shallow unnoticeable 1.28 earthquake was reported Sunday night on 4km WSW of Banning, CA, 1.28
+A shallow unnoticeable 1.67 earthquake was reported Sunday night on 16km N of Morgan Hill, California, 1.67
+A shallow minor 2.69 earthquake was reported Saturday night on 27km NE of Ucluelet, Canada, 2.69
+A shallow unnoticeable 1.3 earthquake was reported Saturday night on 18km NE of Fairbanks, Alaska, 1.3
+A shallow unnoticeable 1.52 earthquake was reported Saturday night on 6km NE of Little Lake, CA, 1.52
+A shallow minor 2.33 earthquake was reported Saturday night on 26km SE of Hawaiian Ocean View, Hawaii, 2.33
+A shallow minor 3.4 earthquake was reported Saturday night on 181km WNW of Haines Junction, Canada, 3.4
+A shallow unnoticeable 1.97 earthquake was reported Saturday night on 2km NE of Lakeland South, Washington, 1.97
+A shallow minor 2.6 earthquake was reported Saturday night on 8km SSW of Cheney, Kansas, 2.6
+A shallow unnoticeable 1.2 earthquake was reported Saturday night on 70km S of Deltana, Alaska, 1.2
+A shallow unnoticeable 1.8 earthquake was reported Saturday night on 92km N of Redoubt Volcano, Alaska, 1.8
+A shallow unnoticeable 1.0 earthquake was reported Saturday night on 41km N of Cold Springs, Nevada, 1.0
+A shallow minor 2.1 earthquake was reported Saturday night on 74km NNE of Kiska Volcano, Alaska, 2.1
+A shallow unnoticeable 1.09 earthquake was reported Saturday night on 10km NNE of Trabuco Canyon, CA, 1.09
+A shallow minor 2.3 earthquake was reported Saturday night on 16km E of Y, Alaska, 2.3
+A shallow minor 2.9 earthquake was reported Saturday night on 141km SE of Akutan, Alaska, 2.9
+A shallow light 4.7 earthquake was reported Saturday night on Reykjanes Ridge, 4.7
+A intermediate unnoticeable 1.9 earthquake was reported Saturday night on 12km SSW of Adak, Alaska, 1.9
+A shallow minor 2.2 earthquake was reported Saturday night on 59km NE of Road Town, British Virgin Islands, 2.2
+A shallow minor 2.04 earthquake was reported Saturday night on 5km E of Pahala, Hawaii, 2.04
+A shallow minor 2.0 earthquake was reported Saturday night on 49km E of Lazy Mountain, Alaska, 2.0
+A intermediate unnoticeable 1.0 earthquake was reported Saturday night on 43km SSW of Cantwell, Alaska, 1.0
+A shallow unnoticeable 1.0 earthquake was reported Saturday night on 24km S of Gerlach-Empire, Nevada, 1.0
+A shallow unnoticeable 1.7 earthquake was reported Saturday night on 9km SSE of Volcano, Hawaii, 1.7
+A shallow unnoticeable 1.62 earthquake was reported Saturday night on 3km SSE of North Tustin, CA, 1.62
+A shallow light 4.6 earthquake was reported Saturday night on Reykjanes Ridge, 4.6
+A shallow unnoticeable 1.66 earthquake was reported Saturday night on 4km NE of Hollywood, CA, 1.66
+A shallow minor 2.9 earthquake was reported Saturday night on 152km SE of Akutan, Alaska, 2.9
+A shallow moderate 5.1 earthquake was reported Saturday night on 143km SSW of Merizo Village, Guam, 5.1
+A shallow unnoticeable 1.06 earthquake was reported Saturday night on 8km ESE of Mammoth Lakes, California, 1.06
+A shallow minor 3.1 earthquake was reported Saturday night on 91km N of Road Town, British Virgin Islands, 3.1
+A shallow minor 2.7 earthquake was reported Saturday night on 105km N of Vieques, Puerto Rico, 2.7
+A shallow minor 2.04 earthquake was reported Saturday night on 25km E of Honaunau-Napoopoo, Hawaii, 2.04
+A shallow minor 2.5 earthquake was reported Saturday night on 89km N of Redoubt Volcano, Alaska, 2.5
+A shallow minor 2.6 earthquake was reported Saturday night on 20km NW of Hawthorne, Nevada, 2.6
+A shallow minor 2.9 earthquake was reported Saturday night on 148km SE of Akutan, Alaska, 2.9
+A shallow minor 2.14 earthquake was reported Saturday night on 6km NE of Little Lake, CA, 2.14
+A shallow unnoticeable 1.3 earthquake was reported Saturday night on 31km WNW of Anchorage, Alaska, 1.3
+A shallow unnoticeable 1.94 earthquake was reported Saturday night on 4km SSW of Volcano, Hawaii, 1.94
+A shallow minor 3.1 earthquake was reported Saturday night on 8km SSE of Caldwell, Kansas, 3.1
+A shallow moderate 5.1 earthquake was reported Saturday night on Reykjanes Ridge, 5.1
+A shallow minor 2.3 earthquake was reported Saturday night on 19km S of Indios, Puerto Rico, 2.3
+A shallow minor 2.8 earthquake was reported Saturday night on 21km WSW of Mendota, California, 2.8
+A shallow unnoticeable 1.65 earthquake was reported Saturday night on 13km SSE of Manila, Arkansas, 1.65
+A shallow unnoticeable 1.06 earthquake was reported Saturday night on 4km NW of The Geysers, California, 1.06
+A shallow unnoticeable 1.32 earthquake was reported Saturday night on 8km E of Mammoth Lakes, California, 1.32
+A shallow minor 2.2 earthquake was reported Saturday night on 76km NW of New Allakaket, Alaska, 2.2
+A intermediate minor 3.3 earthquake was reported Saturday night on 94km WSW of Cantwell, Alaska, 3.3
+</code></pre>
+</div>
+
+<h2 id="part-four-the-other-bits">PART FOUR: The other bits</h2>
+
+<p>If the earthquake is anything other than an earthquake (e.g. explosion or quarry
+blast), print</p>
+
+<p>There was also a magnitude MAGNITUDE TYPE_OF_EVENT on DATE LOCATION.</p>
+
+<p>For example,</p>
+
+<p>There was also a magnitude 1.29 quarry blast on June 19 12km SE of Tehachapi,
+California.</p>
+
+<p>with TYPE_OF_EVENT being explosion, quarry blast, etc and LOCATION being ‘place’
+- e.g. ‘0km N of The Geysers, California’.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Just add in an 'if' statement - we COULD make another function to build that string... but I'm not doing it.</span>
+
+<span class="n">earthquakes</span> <span class="o">=</span> <span class="n">earthquakes_df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s">'records'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">earthquake</span> <span class="ow">in</span> <span class="n">earthquakes</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'type'</span><span class="p">]</span> <span class="o">!=</span> <span class="s">'earthquake'</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"There was also a magnitude"</span><span class="p">,</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'mag'</span><span class="p">],</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'type'</span><span class="p">],</span> <span class="s">"at"</span><span class="p">,</span> <span class="n">earthquake</span><span class="p">[</span><span class="s">'place'</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># I'm going to comment out the earthquakes just so we can make sure quarry blasts etc show up</span>
+        <span class="c">#print(eq_to_words(earthquake))</span>
+        <span class="k">pass</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>There was also a magnitude 1.58 quarry blast at 45km NNW of Los Algodones, B.C., MX
+There was also a magnitude 1.73 explosion at 3km SSE of Princeton, Canada
+There was also a magnitude 1.19 quarry blast at 8km SSW of Mojave, CA
+There was also a magnitude 1.78 quarry blast at 10km NNW of Big Bear Lake, CA
+There was also a magnitude 1.25 explosion at 13km NE of Abbotsford, Canada
+There was also a magnitude 1.84 explosion at 5km E of White Salmon, Washington
+There was also a magnitude 1.11 quarry blast at 1km SE of Quarry near Aromas, CA
+There was also a magnitude 1.31 quarry blast at 13km SE of Tehachapi, CA
+There was also a magnitude 1.22 quarry blast at 11km E of Quarry near Portola Valley, CA
+There was also a magnitude 1.34 quarry blast at 11km E of Quarry near Portola Valley, CA
+There was also a magnitude 1.08 explosion at 2km ENE of Eatonville, Washington
+There was also a magnitude 1.94 quarry blast at 5km ENE of Butte, Montana
+There was also a magnitude 1.27 explosion at 7km SSE of Eatonville, Washington
+There was also a magnitude 1.62 explosion at 3km S of Princeton, Canada
+There was also a magnitude 1.64 explosion at 30km ESE of Florence, Oregon
+There was also a magnitude 1.87 quarry blast at 6km W of Colonial Heights, Tennessee
+There was also a magnitude 1.8 explosion at 15km S of Princeton, Canada
+There was also a magnitude 1.44 explosion at 5km SE of Gold Bar, Washington
+There was also a magnitude 1.06 quarry blast at 6km SSW of Mojave, CA
+There was also a magnitude 1.92 quarry blast at 11km N of Oroville, California
+There was also a magnitude 1.98 explosion at 4km NNW of Bend, Oregon
+There was also a magnitude 1.44 quarry blast at 46km NE of Holtville, CA
+There was also a magnitude 1.71 explosion at 3km WSW of Sweet Home, Oregon
+There was also a magnitude 1.33 quarry blast at 11km E of Quarry near Portola Valley, CA
+There was also a magnitude 1.85 explosion at 2km E of Granite Falls, Washington
+There was also a magnitude 1.23 quarry blast at 13km W of Mojave, CA
+There was also a magnitude 1.77 quarry blast at 7km SSE of Home Gardens, CA
+There was also a magnitude 1.25 quarry blast at 4km ENE of Tehachapi, CA
+There was also a magnitude 1.29 other event at 10km SW of Bridgeport, Washington
+There was also a magnitude 1.95 explosion at 1km SSW of Princeton, Canada
+There was also a magnitude 1.36 other event at 10km SW of Bridgeport, Washington
+There was also a magnitude 1.27 other event at 30km ESE of Sweet Home, Oregon
+There was also a magnitude 1.74 explosion at 9km S of Princeton, Canada
+There was also a magnitude 1.22 explosion at 8km E of Yacolt, Washington
+There was also a magnitude 1.99 explosion at 26km WSW of Cheney, Washington
+There was also a magnitude 1.57 explosion at 8km WNW of Junction City, Oregon
+There was also a magnitude 1.48 quarry blast at 4km SE of Home Gardens, CA
+There was also a magnitude 1.66 explosion at 14km NNW of Philomath, Oregon
+There was also a magnitude 1.85 quarry blast at 4km ENE of Butte, Montana
+There was also a magnitude 1.63 quarry blast at 0km E of Quarry near Salinas, CA
+There was also a magnitude 1.27 quarry blast at 10km NNW of Big Bear City, CA
+There was also a magnitude 1.36 quarry blast at 2km SE of Home Gardens, CA
+There was also a magnitude 1.24 quarry blast at 11km E of Quarry near Portola Valley, CA
+There was also a magnitude 1.48 quarry blast at 0km SE of Quarry near Vallejo, CA
+There was also a magnitude 1.35 explosion at 28km SW of Morton, Washington
+There was also a magnitude 1.16 quarry blast at 6km SSW of Mojave, CA
+There was also a magnitude 1.09 explosion at 28km SW of Morton, Washington
+There was also a magnitude 2.08 quarry blast at 16km SW of Kemmerer, Wyoming
+There was also a magnitude 1.15 explosion at 25km SW of Morton, Washington
+There was also a magnitude 1.3 explosion at 25km SW of Morton, Washington
+There was also a magnitude 1.07 quarry blast at 13km WNW of Searles Valley, CA
+There was also a magnitude 1.33 quarry blast at 12km WNW of Whitehall, Montana
+There was also a magnitude 2.14 explosion at 5km S of Princeton, Canada
+There was also a magnitude 1.56 quarry blast at 1km NW of Quarry near Salinas, CA
+There was also a magnitude 1.29 quarry blast at 4km SSE of Home Gardens, CA
+There was also a magnitude 1.25 quarry blast at 5km ENE of Butte, Montana
+There was also a magnitude 1.12 quarry blast at 2km SW of Quarry near San Rafael, CA
+There was also a magnitude 1.35 explosion at 14km WSW of Cashmere, Washington
+There was also a magnitude 1.1 explosion at 4km N of Fern Prairie, Washington
+There was also a magnitude 1.57 quarry blast at 46km NE of Holtville, CA
+There was also a magnitude 1.44 quarry blast at 11km E of Quarry near Portola Valley, CA
+There was also a magnitude 1.33 quarry blast at 3km SSE of Quarry near Aromas, CA
+There was also a magnitude 1.35 quarry blast at 4km ENE of Rancho San Diego, CA
+There was also a magnitude 1.03 quarry blast at 10km ESE of Coto De Caza, CA
+There was also a magnitude 1.17 quarry blast at 6km SSW of Mojave, CA
+There was also a magnitude 1.36 quarry blast at 13km SE of Tehachapi, CA
+There was also a magnitude 1.05 explosion at 5km E of Yoncalla, Oregon
+There was also a magnitude 1.11 quarry blast at 5km NNW of Boron, CA
+There was also a magnitude 1.13 explosion at 10km NNW of Philomath, Oregon
+There was also a magnitude 2.18 quarry blast at 46km NE of Holtville, CA
+There was also a magnitude 2.38 explosion at 1km WNW of Princeton, Canada
+There was also a magnitude 1.65 quarry blast at 1km W of Tijuana, B.C., MX
+There was also a magnitude 1.26 explosion at 13km S of Morton, Washington
+There was also a magnitude 1.09 quarry blast at 5km S of Mojave, CA
+There was also a magnitude 1.75 quarry blast at 5km E of Butte, Montana
+There was also a magnitude 1.53 quarry blast at 9km NNW of Big Bear Lake, CA
+There was also a magnitude 2.02 explosion at 2km NNE of Princeton, Canada
+There was also a magnitude 1.48 quarry blast at 4km SE of Home Gardens, CA
+There was also a magnitude 2.01 explosion at 9km S of Princeton, Canada
+There was also a magnitude 1.19 quarry blast at 13km SE of Tehachapi, CA
+There was also a magnitude 1.41 quarry blast at 44km NNW of Los Algodones, B.C., MX
+There was also a magnitude 1.45 quarry blast at 11km E of Quarry near Portola Valley, CA
+There was also a magnitude 1.11 quarry blast at 13km W of Mojave, CA
+There was also a magnitude 1.9 explosion at 1km S of Princeton, Canada
+There was also a magnitude 1.42 quarry blast at 7km SSW of Mojave, CA
+There was also a magnitude 1.45 quarry blast at 1km SSE of Quarry near Aromas, CA
+There was also a magnitude 1.55 quarry blast at 28km SE of Virginia City, Montana
+There was also a magnitude 1.63 explosion at 23km NNW of Baker City, Oregon
+There was also a magnitude 1.72 quarry blast at 47km NE of Holtville, CA
+There was also a magnitude 1.93 explosion at 6km SSW of Princeton, Canada
+There was also a magnitude 1.3 quarry blast at 11km E of Quarry near Portola Valley, CA
+There was also a magnitude 1.0 explosion at 16km ESE of Enumclaw, Washington
+There was also a magnitude 1.57 explosion at 5km SW of Napavine, Washington
+There was also a magnitude 1.8 quarry blast at 7km SSE of Home Gardens, CA
+There was also a magnitude 1.55 quarry blast at 0km N of Quarry near Portola Valley, CA
+There was also a magnitude 1.28 explosion at 3km E of West Side Highway, Washington
+There was also a magnitude 2.1 explosion at 1km WSW of Princeton, Canada
+There was also a magnitude 1.95 explosion at 32km E of Shady Cove, Oregon
+There was also a magnitude 1.44 quarry blast at 0km E of Quarry near Atascadero, CA
+There was also a magnitude 1.6 quarry blast at 8km W of Townsend, Montana
+There was also a magnitude 1.63 quarry blast at 43km NNW of Los Algodones, B.C., MX
+There was also a magnitude 1.35 quarry blast at 5km NNW of Boron, CA
+There was also a magnitude 1.47 quarry blast at 11km E of Quarry near Portola Valley, CA
+There was also a magnitude 1.77 quarry blast at 4km E of Butte, Montana
+There was also a magnitude 1.1 quarry blast at 2km SW of Quarry near San Rafael, CA
+There was also a magnitude 1.09 quarry blast at 13km SE of Tehachapi, CA
+There was also a magnitude 2.0 explosion at 6km SSE of Princeton, Canada
+There was also a magnitude 1.93 explosion at 3km S of Princeton, Canada
+There was also a magnitude 1.09 explosion at 5km N of Fern Prairie, Washington
+There was also a magnitude 1.76 quarry blast at 46km NNW of Los Algodones, B.C., MX
+There was also a magnitude 1.82 explosion at 0km SW of Dundee, Oregon
+There was also a magnitude 1.52 quarry blast at 4km SE of Home Gardens, CA
+There was also a magnitude 1.38 quarry blast at 13km W of Mojave, CA
+There was also a magnitude 1.84 quarry blast at 5km ENE of Butte, Montana
+There was also a magnitude 1.24 quarry blast at 2km WSW of Quarry near Clayton, CA
+There was also a magnitude 1.53 explosion at 22km NNE of Pasco, Washington
+There was also a magnitude 1.07 quarry blast at 6km ENE of Tehachapi, CA
+There was also a magnitude 1.37 quarry blast at 11km E of Quarry near Portola Valley, CA
+There was also a magnitude 2.0 explosion at 25km SW of Cheney, Washington
+There was also a magnitude 2.08 explosion at 2km NE of Coos Bay, Oregon
+There was also a magnitude 1.02 quarry blast at 3km SSE of San Marcos, CA
+There was also a magnitude 1.05 quarry blast at 6km SSW of Mojave, CA
+There was also a magnitude 1.53 quarry blast at 20km S of Quarry near Atascadero, CA
+There was also a magnitude 1.33 quarry blast at 7km ESE of Butte, Montana
+There was also a magnitude 1.35 explosion at 5km E of Buckley, Washington
+There was also a magnitude 1.34 quarry blast at 12km SE of Tehachapi, CA
+There was also a magnitude 1.56 quarry blast at 5km NNW of Boron, CA
+There was also a magnitude 1.42 explosion at 14km S of Leavenworth, Washington
+There was also a magnitude 1.34 quarry blast at 3km SSE of Home Gardens, CA
+There was also a magnitude 1.81 explosion at 12km S of Princeton, Canada
+There was also a magnitude 1.01 quarry blast at 7km E of Lebec, CA
+There was also a magnitude 1.4 quarry blast at 7km SE of Bonita, CA
+There was also a magnitude 2.3 quarry blast at 17km N of Orofino, Idaho
+There was also a magnitude 1.26 quarry blast at 4km SE of Home Gardens, CA
+There was also a magnitude 1.35 quarry blast at 6km SSE of Valley Center, CA
+There was also a magnitude 1.21 explosion at 16km W of Winston, Oregon
+There was also a magnitude 1.18 explosion at 3km E of Kelso, Washington
+There was also a magnitude 1.56 quarry blast at 8km ESE of Bonita, CA
+There was also a magnitude 1.41 quarry blast at 45km NE of Holtville, CA
+There was also a magnitude 1.23 quarry blast at 12km E of Quarry near Portola Valley, CA
+There was also a magnitude 1.57 explosion at 2km SSW of Princeton, Canada
+There was also a magnitude 1.41 quarry blast at 4km N of Norco, CA
+There was also a magnitude 2.04 quarry blast at 28km N of Orofino, Idaho
+There was also a magnitude 1.2 quarry blast at 7km SSW of Mojave, CA
+There was also a magnitude 2.23 explosion at 10km S of Princeton, Canada
+There was also a magnitude 1.66 explosion at 2km S of Princeton, Canada
+There was also a magnitude 1.84 explosion at 7km NE of Abbotsford, Canada
+There was also a magnitude 1.55 explosion at 3km SW of Drain, Oregon
+There was also a magnitude 1.2 quarry blast at 0km S of Quarry near Vallejo, CA
+There was also a magnitude 1.79 explosion at 5km SSE of Princeton, Canada
+There was also a magnitude 1.37 quarry blast at 7km SSW of Mojave, CA
+There was also a magnitude 1.48 quarry blast at 6km ESE of Butte, Montana
+There was also a magnitude 1.31 quarry blast at 11km E of Quarry near Portola Valley, CA
+</code></pre>
+</div>
+
+
+  </article>
+
+</div>
+
+<link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>

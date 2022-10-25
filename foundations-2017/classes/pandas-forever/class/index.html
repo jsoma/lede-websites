@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Text and opening files and formatting strings</title>
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="/css/new.css">
+  
+  <link rel="canonical" href="http://jonathansoma.com/lede/foundations-2017/classes/pandas-forever/class/">
+  <link rel="alternate" type="application/rss+xml" title="Things by Jonathan Soma" href="../../../../../feed.xml" />
+  <link rel="stylesheet" href="/css/pygments/zenburn.css"></link>
+  
+  <meta property=”og:description” content=”” />
+  <meta property="og:title" content="Text and opening files and formatting strings">
+  <meta property="twitter:title" content="Text and opening files and formatting strings">
+  <meta property=”twitter:creator:id” content=”15921550” />
+  <meta property=”twitter:description” content=”” />
+  <meta property=”twitter:creator” content=”dangerscarf” />
+</head>
+
+
+  <body>
+    <div id="wrapper">
+      <div class="top-nav">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <strong><a href="/">Jonathan Soma</a></strong> 
+              <div class="pull-right">
+                <a target="_new" href="http://twitter.com/dangerscarf"><i class="fa fa-twitter fa-lg"></i></a>
+                <a target="_new" href="https://instagram.com/dangerscarf"><i class="fa fa-instagram fa-lg"></i></a>
+                <a target="_new" href="https://github.com/jsoma"><i class="fa fa-github fa-lg"></i></a>
+                <a target="_new" href="https://tinyletter.com/jsoma"><i class="fa fa-pencil fa-lg"></i></a>
+                <a target="_new" href="mailto:jonathan.soma@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+          
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                      
+                      
+<p class="breadcrumbs"><a href="/">Home</a> &gt; <a href="../../../..">Lede</a> &gt; <a href="../../..">Foundations, Lede 2017</a> &gt;  Text and opening files and formatting strings</p>
+
+
+
+                      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Text and opening files and formatting strings</h1>
+  </header>
+
+  <article class="post-content">
+    
+    <h2 id="opening-files">Opening files</h2>
+
+<h3 id="opening-excel-files">Opening Excel files</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s">"../filename.xlsx"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="opening-excel-files-to-specific-sheets">Opening Excel files to specific sheets</h3>
+
+<p>We didn’t talk about this in class, but sometimes you have an excel file with multiple sheets. If you don’t want the “default” sheet, you’ll need to specify the sheet name with <code class="highlighter-rouge">sheetname</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s">"filename.xlsx"</span><span class="p">,</span> <span class="n">sheetname</span><span class="o">=</span><span class="s">"Summary Data"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="ignoring-the-first-few-rows">Ignoring the first few rows</h3>
+
+<p>Sometimes the first few rows of a CSV or Excel file aren’t data, they’re notes or titles or even the data dictionary! To get around this, use <code class="highlighter-rouge">skiprows=</code> when reading in your file.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"something.csv"</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>You can skip rows in Excel files, too!</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s">"something.xlsx"</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="changing-how-pandas-displays-things">Changing how pandas displays things</h2>
+
+<p>You have the ability to set a lot of different display options in pandas, <a href="https://pandas.pydata.org/pandas-docs/stable/options.html#available-options">here’s a list of them</a> but some command commands are below.</p>
+
+<h3 id="changing-the-number-of-rows-displayed">Changing the number of rows displayed</h3>
+
+<p>Pandas doesn’t display every row of your dataframe when you do <code class="highlighter-rouge">df</code>, it usually cuts off some in the middle with a <code class="highlighter-rouge">...</code>. Instead of a <code class="highlighter-rouge">...</code>, sometimes you want to see more of your data! You can use <code class="highlighter-rouge">display.max_rows</code> to change the number of rows pandas displays.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Show 100 rows at a time</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s">"display.max_rows"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="changing-the-number-of-columns-displayed">Changing the number of columns displayed</h3>
+
+<p>Similar to the above, pandas won’t show every single column if it thinks you have too many. If you see a <code class="highlighter-rouge">...</code> in your column listings, it’s because pandas has hidden some! Fix it with the code below.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s">"display.max_columns"</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="changing-the-way-floats-are-formatted">Changing the way floats are formatted</h3>
+
+<p>I hate scientific notation, and maybe you do, too! This prevents <code class="highlighter-rouge">.describe()</code> from showing you ugly <code class="highlighter-rouge">e</code> all over the place.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Show floats with two decimal points after</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s">"display.float_format"</span><span class="p">,</span> <span class="s">"{:.2f}"</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Show floats with zero decimal points, and a comma separator</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s">"display.float_format"</span><span class="p">,</span> <span class="s">"{:,.0f}"</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Beware that this will make your years ugly, but that’s life I guess!</p>
+
+<h2 id="only-selecting-a-few-columns">Only selecting a few columns</h2>
+
+<p>While we used <code class="highlighter-rouge">display.max_columns</code> to increase the number of columns displayed at a time, you can also have pandas only select a subset of columns.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Only show 'age' 'height' and 'name' columns</span>
+<span class="c"># Even if there are hundreds more!</span>
+<span class="n">df</span><span class="p">[[</span><span class="s">'age'</span><span class="p">,</span> <span class="s">'height'</span><span class="p">,</span> <span class="s">'name'</span><span class="p">]]</span>
+</code></pre>
+</div>
+
+<p>You can even save this into a new dataframe!</p>
+
+<h2 id="searching-for-strings">Searching for strings</h2>
+
+<h3 id="dealing-with-nanmissing-data-when-using-strcontains">Dealing with <code class="highlighter-rouge">NaN</code>/missing data when using <code class="highlighter-rouge">.str.contains</code></h3>
+
+<p>Let’s say we were searching for middle names that begin with <code class="highlighter-rouge">Steph</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="p">[</span><span class="s">'middle_name'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"^Steph"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>It would be <code class="highlighter-rouge">True</code> for <code class="highlighter-rouge">Stephan</code> and <code class="highlighter-rouge">False</code> for <code class="highlighter-rouge">Hanami</code>, but what if someone <em>didn’t have a middle name?</em> In this case, it gives back <code class="highlighter-rouge">NaN</code>.</p>
+
+<p><strong>This causes a big problem when selecting inside of dataframes</strong>. Basically, pandas needs to either say YES we want missing data or NO we don’t want missing data. Any time you get an error like <code class="highlighter-rouge">cannot index with vector containing NA / NaN values</code> you need to fix this.</p>
+
+<p>Luckily when you use <code class="highlighter-rouge">.str.contains</code>, you can say “here is what I want you to do with missing data.” Usually you want to exclude missing data.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Count missing data as "NO it doesn't start with Steph"</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'middle_name'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"^Steph"</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Sometimes you want to include rows with missing data, though, so you’ll use <code class="highlighter-rouge">na=True</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Count missing data as "YES it starts with Steph"</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'middle_name'</span><span class="p">]</span><span class="o">.</span><span class="nb">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"^Steph"</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="converting-things-to-ints-and-floats">Converting things to ints and floats</h2>
+
+<p>If you try to use <code class="highlighter-rouge">.astype(int)</code> to convert something to an integer, it <strong>will not work if there are <code class="highlighter-rouge">NaN</code> values in the column.</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Error if missing data!</span>
+<span class="n">df</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>In order to turn a column with missing data into a number, you need to do <code class="highlighter-rouge">.astype(float)</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Works okay if missing data!</span>
+<span class="n">df</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p><em>Usually</em> a number is a number is a number, so floats are just as good as integers. If not, there is probably another way to work around your problem.</p>
+
+<h2 id="histograms">Histograms</h2>
+
+<h3 id="histograms-vs-value-counts">Histograms vs. value counts</h3>
+
+<p><strong>You never do a histogram of a value_counts()</strong>. First off, <code class="highlighter-rouge">value_counts</code> is for categorical columns and <code class="highlighter-rouge">hist</code> is for numeric data. Also, <code class="highlighter-rouge">hist</code> does the counting for you!</p>
+
+<p>If you ever find yourself typing <code class="highlighter-rouge">.value_counts().hist()</code> you probably just want <code class="highlighter-rouge">.hist()</code>, or maybe <code class="highlighter-rouge">.value_counts().plot()</code>.</p>
+
+<h3 id="specifying-the-number-of-bins">Specifying the number of bins</h3>
+
+<p>You can use <code class="highlighter-rouge">bins</code> to specify the number of groups that your data is put into.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="specifying-specific-bin-ranges">Specifying specific bin ranges</h3>
+
+<p>When you use <code class="highlighter-rouge">bins</code>, you can also give it a list of breaks. to use when dividing up your data. The only gotcha is that <strong>you have to give it an upper range</strong>, otherwise it will leave off additional data.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">])</span>
+</code></pre>
+</div>
+
+<p>A sneaky way to do this automatically would use <code class="highlighter-rouge">df.age.max()</code>.</p>
+
+<h2 id="rolling-averages">Rolling averages</h2>
+
+<p><strong>A rolling average takes an average across a window of time.</strong> Instead of just looking at the value in 1995, you might look at values from 1990-2000 to even things out a bit. For 1996 you’d look at 1991-2001, etc.</p>
+
+<p>In pandas you can use <code class="highlighter-rouge">df.rolling</code> to compute all sorts of aggregates over time - means, medians, sums, cumulative sums, etc.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s">'year'</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>The code above computes a rolling mean for the dataframe <code class="highlighter-rouge">df</code> with a 10-measurement window, using the <strong>year</strong> column to order everything. If it doesn’t find 5 measurements in a row, it just gives <code class="highlighter-rouge">NaN</code>.</p>
+
+<p>The result of <code class="highlighter-rouge">df.rolling</code> is just a normal dataframe, so you don’t be able to do <code class="highlighter-rouge">.mean().plot()</code> - you’ll need to actually use <code class="highlighter-rouge">.plot</code> and select the columns you’re interested in with <code class="highlighter-rouge">x='..', y='..'</code>.</p>
+
+  </article>
+
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        <div class="newsletter-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+       <p><strong>Want to hear when I release new things?</strong><br />My infrequent and sporadic newsletter can help with that.</p>
+       <form style="" action="https://tinyletter.com/jsoma" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/jsoma', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><p><input type="text" placeholder="email@example.com" name="email" id="tlemail" /> <input type="submit" value="Get updates" /><input type="hidden" value="1" name="embed"/></p></form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+    <div class="footer">
+       <div class="container">
+         <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <p><strong>Hi, I'm Soma</strong></p>
+            <p>I run a <a href="http://brooklynbrainery.com">fake school in Brooklyn</a> and a <a href="http://ledeprogram.com">data journalism program</a> at Columbia University's Journalism School.</p>
+            <p>I also co-host talks about food science and culture in a semi-monthly lecture series called <a href="http://omgmsg.com">Masters of Social Gastronomy</a>. We <a href="https://soundcloud.com/msgpodcast">have a podcast</a> that doesn't get updated nearly often enough, too.</p>
+            <p><a href="http://tinyletter.com/jsoma">Sign up for my newsletter</a> and I will <em>definitely</em> disappoint you.</p>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Track me down</strong></p>
+        <ul class="social-media-list">
+          
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>
+          </li>
+
+          <li>
+            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            <a href="mailto:soma@brooklynbrainery.com">soma@brooklynbrainery.com</a>
+          </li>
+
+          
+          <li>
+            <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>
+            <a href="https://twitter.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-instagram fa-lg" aria-hidden="true"></i>
+            <a href="https://instagram.com/dangerscarf">
+              <span class="username">dangerscarf</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+
+            <a href="https://github.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+          
+
+          <li>
+            <i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>
+            <a href="https://tinyletter.com/jsoma">
+              <span class="username">jsoma</span>
+            </a>
+          </li>
+
+        </ul>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <p><strong>Miscellaneous projects</strong></p>
+            <ul>
+              <li><a target="_new" href="http://www.handsomeatlas.com/">Handsome Atlas</a></li>
+              <li><a target="_new" href="https://dabbles.in/">Dabbler</a></li>
+              <li><a target="_new" href="http://vintagevisualizations.com/">Vintage Visualizations</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/singles/">Interactive Singles Map</a></li>
+              <li><a target="_new" href="http://visualizing.nyc/">visualizing.nyc</a></li>
+              <li><a target="_new" href="http://jonathansoma.com/open-source-language-map/">Open-Source Language Map</a></li>
+          </div>
+        </div>
+       </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</footer>
+    </div>
+
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5541738-17', 'jonathansoma.com');
+      ga('send', 'pageview');
+
+    </script>
+      <script>
+    function setIframeHeight() {
+      var remaining = false,
+          iframes = document.getElementsByClassName("iframe-demo");
+
+      for(var i = 0; i < iframes.length; i++) {
+        var iframe = iframes[i],
+            doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        if(doc.readyState == 'complete') {
+          // console.log(doc.body.scrollHeight);
+          // console.log(doc.body.offsetHeight);
+          // I don't know why scrollHeight gives 150 always
+          // but suddenly offsetHeight won't work?
+          // 8 pixels padding isn't factored into height?
+          iframe.height = doc.body.offsetHeight + 16;
+          // iframe.height = doc.body.scrollHeight;
+          iframe.width = doc.body.scrollWidth;
+        } else {
+          console.log("Not ready yet");
+          remaining = true;
+        }
+      }
+
+      setTimeout(setIframeHeight, 1500);
+
+    }
+
+    document.addEventListener("DOMContentReady", setIframeHeight)
+    window.addEventListener( "load", setIframeHeight, false );
+
+    </script>
+
+  </body>
+
+</html>
